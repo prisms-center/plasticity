@@ -1,6 +1,6 @@
 //base class for elliptic boundary value problem implementation
-#ifndef ELLIPTICPDE_H
-#define ELLIPTICPDE_H
+#ifndef ELLIPTICBVP_H
+#define ELLIPTICBVP_H
 
 //general headers
 #include <fstream>
@@ -9,101 +9,93 @@
 //dealii headers
 #include "dealIIheaders.h"
 
+using namespace dealii;
+
 //define data types  
 typedef PETScWrappers::MPI::Vector vectorType;
+typedef PETScWrappers::MPI::SparseMatrix matrixType;
+//LA::MPI::SparseMatrix
+//LA::MPI::Vector
 
-using namespace dealii;
+#define feOrder   1
+#define quadOrder 2 
+#define meshRefineFactor 2
+#define writeOutput true
+#define solverType PETScWrappers::SolverCG
+#define maxSolverIterations 5000
+#define relSolverTolerance  1.0e-8
 
 //
 //base class for elliptic PDE's
 //
 template <int dim>
-class EllipticBVP:public Subscriptor
+class ellipticBVP
 {
  public:
-  EllipticBVP(); 
-  ~EllipticBVP(); 
-  void init  ();
-  void solve ();
+  ellipticBVP(); 
+  ~ellipticBVP(); 
+  void run   ();
 
  protected:
-  void assemble (bool firstIteration);
-  void solve ();
-  void outputResults  ();
-
+  //parallel objects
+  MPI_Comm   mpi_communicator;
+  IndexSet   locally_owned_dofs;
+  IndexSet   locally_relevant_dofs;
+  
+  //FE data structres
   parallel::distributed::Triangulation<dim> triangulation;
-  std::vector<FESystem<dim>*>          FESet;
-  std::vector<const ConstraintMatrix*> constraintsSet;
-  std::vector<const DoFHandler<dim>*>  dofHandlersSet;
-  std::vector<const IndexSet*>         locally_relevant_dofsSet;
-  std::vector<vectorType*>             solutionSet, residualSet;
+  FESystem<dim>      FE;
+  ConstraintMatrix   constraints;
+  DoFHandler<dim>    dofHandler;
+    
+  //internal methods
+  void mesh();
+  void init();
+  void assemble();
+  void solveIncrement();
+  void solve();
+  void output();
 
-  //matrix free objects
-  MatrixFree<dim,double>               matrixFreeObject;
-  vectorType                           invM;
-  
-  //matrix free methods
-  unsigned int implicitFieldIndex;
-  void computeInvM();
-  void updateRHS();
-  void computeRHS(const MatrixFree<dim,double> &data, 
-		  std::vector<vectorType*> &dst, 
-		  const std::vector<vectorType*> &src,
-		  const std::pair<unsigned int,unsigned int> &cell_range) const;
-  template <typename T>
-    void computeLHS(const MatrixFree<dim,double> &data, 
-		    vectorType &dst, 
-		    const vectorType &src,
-		    const std::pair<unsigned int,unsigned int> &cell_range) const;
-  
-  //virtual methods to be implemented in derived classe
-  //methods to calculate RHS (implicit/explicit), LHS(implicit)
-  virtual void getRHS(std::map<std::string, typeScalar*>  valsScalar,	\
-		      std::map<std::string, typeVector*>  valsVector,	\
-		      unsigned int q) const = 0;  
-  virtual void getLHS(typeScalar& vals, unsigned int q) const;  
-  virtual void getLHS(typeVector& vals, unsigned int q) const;  
-  
-  //methods to apply dirichlet BC's
-  virtual void markBoundaries();
-  virtual void applyDirichletBCs();
-  virtual void applyInitialConditions();
+  //virtual methods to be implemented in derived class
+  //methods to calculate elemental Jacobian and Residual
+  //virtual void getElementalResidual() = 0;
+  //virtual void getElementalJacobian() = 0;
 
-  //utility functions
-  //return index of given field name if exists, else throw error
-  unsigned int getFieldIndex(std::string _name);
-
-  //residual, matrix-vector computation variables
-  std::map<std::string,bool> getValue, setValue;
-  std::map<std::string,bool> getGradient, setGradient;
-
-  //variables for time dependent problems 
-  //isTimeDependentBVP flag is used to see if invM, time steppping in
-  //run(), etc are necessary
-  bool isTimeDependentBVP;
-  double timeStep, currentTime, finalTime;
-  unsigned int currentIncrement, totalIncrements;
+  //methods to apply dirichlet BC's and initial conditions
+  //virtual void markBoundaries();
+  //virtual void applyDirichletBCs();
+  //virtual void applyInitialConditions();
   
+  //parallel data structures
+  vectorType solution, residual;
+  matrixType jacobian;
+
+  //misc variables
+  unsigned int currentIteration, currentIncrement;
+  unsigned int totalIncrements;
+
   //parallel message stream
   ConditionalOStream  pcout;  
-  //compute time log
+  
+  //compute-time logger
   TimerOutput computing_timer;
+
+  //output variables
+  //solution name array                                                                                                                                                
+  std::vector<std::string> nodal_solution_names;
+  std::vector<DataComponentInterpretation::DataComponentInterpretation> nodal_data_component_interpretation;
 };
 
-//other matrixFree headers 
+//other ellipticBVP headers 
 //(these are source files, which will are temporarily treated as
 //header files till library packaging scheme is finalized)
-#include "../src/matrixfree/matrixFreePDE.cc"
-#include "../src/matrixfree/init.cc"
-#include "../src/matrixfree/invM.cc"
-#include "../src/matrixfree/computeLHS.cc"
-#include "../src/matrixfree/computeRHS.cc"
-#include "../src/matrixfree/solve.cc"
-#include "../src/matrixfree/solveIncrement.cc"
-#include "../src/matrixfree/outputResults.cc"
-#include "../src/matrixfree/markBoundaries.cc"
-#include "../src/matrixfree/boundaryConditions.cc"
-#include "../src/matrixfree/initialConditions.cc"
-#include "../src/matrixfree/utilities.cc"
+#include "../src/ellipticBVP/ellipticBVP.cc"
+#include "../src/ellipticBVP/run.cc"
+#include "../src/ellipticBVP/mesh.cc"
+#include "../src/ellipticBVP/init.cc"
+#include "../src/ellipticBVP/assemble.cc"
+#include "../src/ellipticBVP/solveIncrement.cc"
+#include "../src/ellipticBVP/solve.cc"
+#include "../src/ellipticBVP/output.cc"
 
 #endif

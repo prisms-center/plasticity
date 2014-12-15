@@ -1,59 +1,31 @@
-//solve() method for MatrixFreePDE class
+//solve method for ellipticBVP class
 
-#ifndef SOLVE_MATRIXFREE_H
-#define SOLVE_MATRIXFREE_H
+#ifndef SOLVE_ELLIPTICBVP_H
+#define SOLVE_ELLIPTICBVP_H
 //this source file is temporarily treated as a header file (hence
 //#ifndef's) till library packaging scheme is finalized
 
-//solve BVP
+//loop over increments and solve each increment 
 template <int dim>
-void MatrixFreePDE<dim>::solve(){
-  //log time
-  computing_timer.enter_section("matrixFreePDE: solve"); 
-  pcout << "solving...\n\n";
+void ellipticBVP<dim>::solve(){
+  pcout << "begin solve...\n\n";
 
-  //time dependent BVP
-  if (isTimeDependentBVP){
-    //initialize time step variables
-    timeStep=timeStepV;
-    finalTime=finalTimeV;
-    totalIncrements=totalIncrementsV;    
-    //output initial conditions for time dependent BVP
-    if (writeOutput) outputResults();
+  //increments
+  for (;currentIncrement<totalIncrements; ++currentIncrement){
+    pcout << "increment: " 
+	  << currentIncrement 
+	  << std::endl;
     
-    //time step
-    for (currentIncrement=1; currentIncrement<totalIncrements; ++currentIncrement){
-      //increment current time
-      currentTime+=timeStep;
-      pcout << "\ntime increment:" << currentIncrement << "  time: " << currentTime << "\n";
-      if (currentTime>=finalTime){
-	pcout << "\ncurrentTime>=finalTime. Ending time stepping\n";
-	break;
-      }
-      //solve time increment
-      solveIncrement();
-      //output results to file
-      if ((writeOutput) && (currentIncrement%skipOutputSteps==0)){
-	outputResults();
-      }
-    }
-  }
-  //time independent BVP
-  else{
-    if (totalIncrementsV>1){
-      pcout << "solve.h: this problem has only ELLIPTIC fields, hence neglecting totalIncrementsV>1 \n";
-    }
-    totalIncrements=1;  
-    //solve
+    //solve time increment
+    computing_timer.enter_section("solve");
     solveIncrement();
-    //output results to file
-    if ((writeOutput) && (currentIncrement%skipOutputSteps==0)){
-      outputResults();
-    }
-  }
+    computing_timer.exit_section("solve");
 
-  //log time
-  computing_timer.exit_section("matrixFreePDE: solve"); 
+    //output results to file
+    computing_timer.enter_section("postprocess");
+    if (writeOutput) output();
+    computing_timer.exit_section("postprocess");
+  }
 }
 
 #endif

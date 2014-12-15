@@ -1,76 +1,36 @@
-//solveIncrement() method for MatrixFreePDE class
+//solve increment method for ellipticBVP class
 
-#ifndef SOLVEINCREMENT_MATRIXFREE_H
-#define SOLVEINCREMENT_MATRIXFREE_H
+#ifndef SOLVEINC_ELLIPTICBVP_H
+#define SOLVEINC_ELLIPTICBVP_H
 //this source file is temporarily treated as a header file (hence
 //#ifndef's) till library packaging scheme is finalized
 
-//solve each time increment
+//solve linear system of equations AX=b using iterative solver
 template <int dim>
-void MatrixFreePDE<dim>::solveIncrement(){
-  //log time
-  computing_timer.enter_section("matrixFreePDE: solveIncrements");
-  Timer time; 
-  //updateRHS
-  updateRHS();
-  
-  //solve for each field
-  for(unsigned int fieldIndex=0; fieldIndex<fields.size(); fieldIndex++){
-    
-    //Parabolic (first order derivatives in time) fields
-    if (fields[fieldIndex].pdetype==PARABOLIC){
-      //explicit-time step each DOF
-      for (unsigned int dof=0; dof<solutionSet[fieldIndex]->local_size(); ++dof){
-	solutionSet[fieldIndex]->local_element(dof)+=			\
-	  invM.local_element(dof)*residualSet[fieldIndex]->local_element(dof);
-      }
-      char buffer[200];
-      sprintf(buffer, "field '%s' [explicit solve]: current solution: %12.6e, current residual:%12.6e\n", \
-	      fields[fieldIndex].name.c_str(),				\
-	      solutionSet[fieldIndex]->l2_norm(),			\
-	      residualSet[fieldIndex]->l2_norm()); 
-      pcout<<buffer; 
-    }
-    
-    //Elliptic (time-independent) fields
-    else if (fields[fieldIndex].pdetype==ELLIPTIC){
-
-      //implicit solve
+void ellipticBVP<dim>::solveIncrement(){
+  vectorType completely_distributed_solution (locally_owned_dofs, mpi_communicator);
 #ifdef solverType
-      SolverControl solver_control(maxSolverIterations, relSolverTolerance*residualSet[fieldIndex]->l2_norm());
-      solverType<vectorType> solver(solver_control);
-      //set implicitFieldIndex to mark field which is being implicitly
-      //solved (required in the computeLHS() method)
-      implicitFieldIndex=fieldIndex;
-      try{
-	solver.solve(*this, *solutionSet[fieldIndex], *residualSet[fieldIndex], IdentityMatrix(solutionSet[fieldIndex]->size()));
-      }
-      catch (...) {
-	pcout << "\nWarning: solver did not converge as per set tolerances. consider increasing maxSolverIterations or decreasing relSolverTolerance.\n";
-      }
-      char buffer[200];
-      sprintf(buffer, "field '%s' [implicit solve]: initial residual:%12.6e, current residual:%12.6e, nsteps:%u, tolerance criterion:%12.6e\n",\
-	      fields[fieldIndex].name.c_str(),				\
-	      solver_control.initial_value(),				\
-	      solver_control.last_value(),				\
-	      solver_control.last_step(), solver_control.tolerance()); 
-      pcout<<buffer; 
-#else
-      pcout << "\nError: solverType not defined. This is required for ELLIPTIC fields.\n\n";
-      exit (-1);
-#endif
-    }
-    
-    //Hyperbolic (second order derivatives in time) fields and general
-    //non-linear PDE types not yet implemented
-    else{
-      pcout << "matrixFreePDE.h: unknown field pdetype\n";
-      exit(-1);
-    }
+  SolverControl solver_control(maxSolverIterations, relSolverTolerance*residual.l2_norm());
+  solverType solver(solver_control, mpi_communicator);
+  PETScWrappers::PreconditionBlockJacobi preconditioner(jacobian);
+  try{
+    solver.solve (jacobian, completely_distributed_solution, residual, preconditioner);
+    pcout << "solved in " 
+	  <<  solver_control.last_step()
+	  << " iterations.\n";
   }
-  pcout << "wall time: " << time.wall_time() << "s\n";
-  //log time
-  computing_timer.exit_section("matrixFreePDE: solveIncrements"); 
+  catch (...) {
+    pcout << "\nWarning: solver did not converge in "
+	  << solver_control.last_step()
+	  << " iterations as per set tolerances. consider increasing maxSolverIterations or decreasing relSolverTolerance.\n";     
+  }
+  constraints.distribute (completely_distributed_solution);
+  solution = completely_distributed_solution;
+  
+#else
+  pcout << "\nError: solverType not defined. This is required for ELLIPTIC BVP.\n\n";
+  exit (-1);
+#endif
 }
 
 #endif
