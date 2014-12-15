@@ -8,6 +8,7 @@
 #define meshRefineFactor 2
 #define writeOutput true
 #define solverType PETScWrappers::SolverCG
+#define totalNumIncrements 1
 #define maxSolverIterations 5000
 #define relSolverTolerance  1.0e-8
 

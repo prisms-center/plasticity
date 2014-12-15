@@ -18,7 +18,7 @@ ellipticBVP<dim>::ellipticBVP ()
   dofHandler (triangulation),
   currentIteration(0),
   currentIncrement(0),
-  totalIncrements(1),
+  totalIncrements(totalNumIncrements),
   pcout (std::cout, Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0),
   computing_timer (pcout, TimerOutput::summary, TimerOutput::wall_times)
 {
