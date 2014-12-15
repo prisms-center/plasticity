@@ -48,26 +48,26 @@ class ellipticBVP
   ConstraintMatrix   constraints;
   DoFHandler<dim>    dofHandler;
     
-  //internal methods
+  //methods
   void mesh();
   void init();
   void assemble();
   void solveIncrement();
   void solve();
   void output();
-
+ 
   //virtual methods to be implemented in derived class
-  //methods to calculate elemental Jacobian and Residual
-  //virtual void getElementalResidual() = 0;
-  //virtual void getElementalJacobian() = 0;
+  //method to calculate elemental Jacobian and Residual
+  virtual void getElementalValues(FullMatrix<double>& elementalJacobian,
+				  Vector<double>&     elementalResidual) = 0;
 
   //methods to apply dirichlet BC's and initial conditions
-  //virtual void markBoundaries();
-  //virtual void applyDirichletBCs();
-  //virtual void applyInitialConditions();
+  virtual void markBoundaries();
+  virtual void applyDirichletBCs();
+  virtual void applyInitialConditions();
   
   //parallel data structures
-  vectorType solution, residual;
+  vectorType solution, solutionLocal, residual;
   matrixType jacobian;
 
   //misc variables
@@ -93,6 +93,9 @@ class ellipticBVP
 #include "../src/ellipticBVP/run.cc"
 #include "../src/ellipticBVP/mesh.cc"
 #include "../src/ellipticBVP/init.cc"
+#include "../src/ellipticBVP/markBoundaries.cc"
+#include "../src/ellipticBVP/initialConditions.cc"
+#include "../src/ellipticBVP/boundaryConditions.cc"
 #include "../src/ellipticBVP/assemble.cc"
 #include "../src/ellipticBVP/solveIncrement.cc"
 #include "../src/ellipticBVP/solve.cc"

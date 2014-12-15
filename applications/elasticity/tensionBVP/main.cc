@@ -4,7 +4,7 @@
 #include <sstream>
 
 //dealIIheaders
-#include "../../../include/ellipticBVP.h"
+#include "../../../src/materialModels/elasticity/StVenant–Kirchhoff.cc"
 
 //mechanics problem headers
 //#include "parameters.h"
@@ -72,7 +72,7 @@ int main (int argc, char **argv)
   try
     {
       deallog.depth_console(0);
-      ellipticBVP<3> problem;
+      StVenantKirchhoff_Elastic<3> problem;
       problem.run ();
     }
   catch (std::exception &exc)

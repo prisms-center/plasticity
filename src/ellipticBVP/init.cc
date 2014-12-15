@@ -30,9 +30,10 @@ void ellipticBVP<dim>::init(){
   constraints.close ();
 
   //initialize global data structures
-  solution.reinit (locally_owned_dofs, locally_relevant_dofs, mpi_communicator);
+  solution.reinit (locally_owned_dofs, mpi_communicator); solution=0;
   residual.reinit (locally_owned_dofs, mpi_communicator); residual=0;
-  
+  solutionLocal.reinit (locally_owned_dofs, locally_relevant_dofs, mpi_communicator);
+
   CompressedSimpleSparsityPattern csp (locally_relevant_dofs);
   DoFTools::make_sparsity_pattern (dofHandler, csp, constraints, false);
   SparsityTools::distribute_sparsity_pattern (csp,
@@ -40,6 +41,12 @@ void ellipticBVP<dim>::init(){
 					      mpi_communicator,
 					      locally_relevant_dofs);
   jacobian.reinit (locally_owned_dofs, locally_owned_dofs, csp, mpi_communicator);
+
+  //mark boundaries
+  markBoundaries();
+  //apply initial conditions
+  applyInitialConditions();
+  solutionLocal=solution;
 }
 
 #endif

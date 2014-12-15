@@ -21,7 +21,10 @@ void ellipticBVP<dim>::assemble(){
   FullMatrix<double>   elementalJacobian (dofs_per_cell, dofs_per_cell);
   Vector<double>       elementalResidual (dofs_per_cell);
   std::vector<types::global_dof_index> local_dof_indices (dofs_per_cell);
-
+  
+  //apply Dirichlet BC's
+  applyDirichletBCs();  
+  
   //parallel loop over all elements
   typename DoFHandler<dim>::active_cell_iterator cell = dofHandler.begin_active(), endc = dofHandler.end();
   unsigned int cellID=0;
@@ -33,11 +36,9 @@ void ellipticBVP<dim>::assemble(){
       //Compute values for the current element
       fe_values.reinit (cell);
       
-      //loop over quadrature points
-      for (unsigned int q_point=0; q_point<num_quad_points;++q_point){
-	
-      }
-
+      //get elemental jacobian and residual
+      getElementalValues(elementalJacobian, elementalResidual);
+      
       cell->get_dof_indices (local_dof_indices);
       constraints.distribute_local_to_global(elementalJacobian, 
 					     elementalResidual,

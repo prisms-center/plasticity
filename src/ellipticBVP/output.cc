@@ -10,7 +10,7 @@ template <int dim>
 void ellipticBVP<dim>::output(){
   DataOut<dim> data_out;
   data_out.attach_dof_handler (dofHandler);
-  data_out.add_data_vector (solution, 
+  data_out.add_data_vector (solutionLocal, 
 			    nodal_solution_names, 
 			    DataOut<dim>::type_dof_data, 
 			    nodal_data_component_interpretation);
