@@ -14,7 +14,7 @@ void ellipticBVP<dim>::mesh(){
   triangulation.refine_global (meshRefineFactor);
 
   //Output image of the mesh in eps format                                                                                                                             
-  if (triangulation.n_active_cells()<1000){
+  if ((triangulation.n_global_active_cells()<1000) and (Utilities::MPI::n_mpi_processes(mpi_communicator)==1)){
     std::ofstream out ("mesh.eps");
     GridOut grid_out;
     grid_out.write_eps (triangulation, out);
