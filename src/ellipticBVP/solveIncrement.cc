@@ -17,11 +17,11 @@ void ellipticBVP<dim>::solveIncrement(){
     solver.solve (jacobian, completely_distributed_solution, residual, preconditioner);
     char buffer[200];
     sprintf(buffer, 
-	    "solved in %3u iterations (final residual: %10.4e, initial residual: %10.4e, tol: %10.4e)\n",
+	    "solved in %3u iterations (final residual: %8.2e, initial residual: %8.2e, tol criterion: %8.2e)\n",
 	    solver_control.last_step(),
 	    solver_control.last_value(),
 	    solver_control.initial_value(),
-	    solver_control.tolerance());
+	    relSolverTolerance);
     pcout << buffer;
   }
   catch (...) {

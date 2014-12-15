@@ -17,14 +17,6 @@ typedef PETScWrappers::MPI::SparseMatrix matrixType;
 //LA::MPI::SparseMatrix
 //LA::MPI::Vector
 
-#define feOrder   1
-#define quadOrder 2 
-#define meshRefineFactor 2
-#define writeOutput true
-#define solverType PETScWrappers::SolverCG
-#define maxSolverIterations 5000
-#define relSolverTolerance  1.0e-8
-
 //
 //base class for elliptic PDE's
 //
@@ -57,8 +49,12 @@ class ellipticBVP
   void output();
  
   //virtual methods to be implemented in derived class
-  //method to calculate elemental Jacobian and Residual
-  virtual void getElementalValues(FullMatrix<double>& elementalJacobian,
+  //method to calculate elemental Jacobian and Residual,
+  //which should be implemented in the derived material model class
+  virtual void getElementalValues(FEValues<dim>& fe_values,
+				  unsigned int dofs_per_cell,
+				  unsigned int num_quad_points,
+				  FullMatrix<double>& elementalJacobian,
 				  Vector<double>&     elementalResidual) = 0;
 
   //methods to apply dirichlet BC's and initial conditions

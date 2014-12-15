@@ -37,7 +37,7 @@ void ellipticBVP<dim>::assemble(){
       fe_values.reinit (cell);
       
       //get elemental jacobian and residual
-      getElementalValues(elementalJacobian, elementalResidual);
+      getElementalValues(fe_values, dofs_per_cell, num_quad_points, elementalJacobian, elementalResidual);
       
       cell->get_dof_indices (local_dof_indices);
       constraints.distribute_local_to_global(elementalJacobian, 

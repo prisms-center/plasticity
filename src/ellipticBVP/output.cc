@@ -21,11 +21,14 @@ void ellipticBVP<dim>::output(){
   data_out.build_patches ();
 
   //write to results file
+  unsigned int incrementDigits= (totalIncrements<10000 ? 4 : std::ceil(std::log10(totalIncrements))+1);
+  unsigned int domainDigits   = (Utilities::MPI::n_mpi_processes(mpi_communicator)<10000 ? 4 : std::ceil(std::log10(Utilities::MPI::n_mpi_processes(mpi_communicator)))+1);
+
   const std::string filename = ("solution-" +
-				Utilities::int_to_string (currentIncrement, std::ceil(std::log10(totalIncrements))+1) + 
+				Utilities::int_to_string (currentIncrement,incrementDigits) +
 				"." +
 				Utilities::int_to_string (triangulation.locally_owned_subdomain(), 
-							  std::ceil(std::log10(Utilities::MPI::n_mpi_processes(mpi_communicator)))+1));
+							  domainDigits));
   std::ofstream outputFile ((filename + ".vtu").c_str());
   data_out.write_vtu (outputFile);
   
@@ -34,14 +37,17 @@ void ellipticBVP<dim>::output(){
     std::vector<std::string> filenames;
     for (unsigned int i=0;i<Utilities::MPI::n_mpi_processes (MPI_COMM_WORLD); ++i)
       filenames.push_back ("solution-" +
-			   Utilities::int_to_string (currentIncrement, std::ceil(std::log10(totalIncrements))+1) + 
+			   Utilities::int_to_string (currentIncrement, incrementDigits) + 
 			   "." +
-			   Utilities::int_to_string (triangulation.locally_owned_subdomain(), 
-						     std::ceil(std::log10(Utilities::MPI::n_mpi_processes(mpi_communicator)))+1)
+			   Utilities::int_to_string (i, domainDigits) +
 			   + ".vtu");
-    std::ofstream master_output ((filename + ".pvtu").c_str());
+    const std::string filenamepvtu = ("solution-" +
+				      Utilities::int_to_string (currentIncrement,incrementDigits) +
+				      ".pvtu");
+
+    std::ofstream master_output (filenamepvtu.c_str());
     data_out.write_pvtu_record (master_output, filenames);
-    pcout << "output written to: " << (filename + ".pvtu").c_str() << "\n\n";
+    pcout << "output written to: " << filenamepvtu.c_str() << "\n\n";
   }
 }
 
