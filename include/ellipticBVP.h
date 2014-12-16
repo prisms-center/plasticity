@@ -44,7 +44,8 @@ class ellipticBVP
   void mesh();
   void init();
   void assemble();
-  void solveIncrement();
+  void solveLinearSystem();
+  void solveNonLinearSystem();
   void solve();
   void output();
  
@@ -56,6 +57,13 @@ class ellipticBVP
 				  unsigned int num_quad_points,
 				  FullMatrix<double>& elementalJacobian,
 				  Vector<double>&     elementalResidual) = 0;
+  
+  //methods to allow for pre/post iteration updates
+  virtual void updateBeforeIteration();
+  virtual void updateAfterIteration();
+  //methods to allow for pre/post increment updates
+  virtual void updateBeforeIncrement();
+  virtual void updateAfterIncrement();
 
   //methods to apply dirichlet BC's and initial conditions
   virtual void markBoundaries();
@@ -63,7 +71,7 @@ class ellipticBVP
   virtual void applyInitialConditions();
   
   //parallel data structures
-  vectorType solution, solutionLocal, residual;
+  vectorType solution, solutionWithGhosts, residual;
   matrixType jacobian;
 
   //misc variables
@@ -93,8 +101,11 @@ class ellipticBVP
 #include "../src/ellipticBVP/initialConditions.cc"
 #include "../src/ellipticBVP/boundaryConditions.cc"
 #include "../src/ellipticBVP/assemble.cc"
-#include "../src/ellipticBVP/solveIncrement.cc"
 #include "../src/ellipticBVP/solve.cc"
+#include "../src/ellipticBVP/solveNonLinearSystem.cc"
+#include "../src/ellipticBVP/solveLinearSystem.cc"
+#include "../src/ellipticBVP/iterationUpdates.cc"
+#include "../src/ellipticBVP/incrementUpdates.cc"
 #include "../src/ellipticBVP/output.cc"
 
 #endif

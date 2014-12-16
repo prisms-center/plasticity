@@ -32,7 +32,7 @@ void ellipticBVP<dim>::init(){
   //initialize global data structures
   solution.reinit (locally_owned_dofs, mpi_communicator); solution=0;
   residual.reinit (locally_owned_dofs, mpi_communicator); residual=0;
-  solutionLocal.reinit (locally_owned_dofs, locally_relevant_dofs, mpi_communicator);
+  solutionWithGhosts.reinit (locally_owned_dofs, locally_relevant_dofs, mpi_communicator);
 
   CompressedSimpleSparsityPattern csp (locally_relevant_dofs);
   DoFTools::make_sparsity_pattern (dofHandler, csp, constraints, false);
@@ -46,7 +46,7 @@ void ellipticBVP<dim>::init(){
   markBoundaries();
   //apply initial conditions
   applyInitialConditions();
-  solutionLocal=solution;
+  solutionWithGhosts=solution;
 }
 
 #endif

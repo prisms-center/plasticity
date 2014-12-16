@@ -7,21 +7,25 @@
 #define quadOrder 2 
 #define meshRefineFactor 2
 #define writeOutput true
-#define solverType PETScWrappers::SolverCG
+#define linearSolverType PETScWrappers::SolverCG
 #define totalNumIncrements 1
-#define maxSolverIterations 5000
-#define relSolverTolerance  1.0e-8
+#define maxLinearSolverIterations 5000
+#define relLinearSolverTolerance  1.0e-8
+#define maxNonLinearIterations 30
+#define absNonLinearTolerance 1.0e-15
+#define relNonLinearTolerance 1.0e-10
+#define stopOnConvergenceFailure true
 
 //material properties
 #define lambda_value 1.0
 #define mu_value 1.0
 
 //dealIIheaders
-#include "../../../src/materialModels/elasticity/StVenant–Kirchhoff.cc"
+#include "../../../src/materialModels/elasticity/elasticity.cc"
  
 //Mark boundaries for applying Dirichlet BC's
 template <int dim>
-void StVenantKirchhoff_Elastic<dim>::markBoundaries(){
+void elasticity<dim>::markBoundaries(){
   typename DoFHandler<dim>::active_cell_iterator 
     cell = this->dofHandler.begin_active(), 
     endc = this->dofHandler.end();
@@ -60,7 +64,7 @@ class BCFunction : public Function<dim>{
 
 //Apply Dirchlet BCs for tension BVP
 template <int dim>
-void StVenantKirchhoff_Elastic<dim>::applyDirichletBCs(){
+void elasticity<dim>::applyDirichletBCs(){
   this->constraints.clear ();
   this->constraints.reinit (this->locally_relevant_dofs);
   DoFTools::make_hanging_node_constraints (this->dofHandler, this->constraints);
@@ -88,7 +92,7 @@ int main (int argc, char **argv)
   try
     {
       deallog.depth_console(0);
-      StVenantKirchhoff_Elastic<3> problem;
+      elasticity<3> problem;
       problem.run ();
     }
   catch (std::exception &exc)

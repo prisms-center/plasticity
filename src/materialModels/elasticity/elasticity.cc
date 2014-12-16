@@ -1,18 +1,19 @@
-//implementation of the Saint Venant-Kirchhoff elastic material model
-#ifndef STVENANTKIRSHHOFF_H
-#define STVENANTKIRCHHOFF_H
+//implementation of the elastic (Saint Venant-Kirchhoff) material model
+//more elastic material models on their way
+#ifndef ELASTIC_H
+#define ELASTIC_H
 
 //dealii headers
 #include "../../../include/ellipticBVP.h"
 
 //
-//material model class for Saint Venant-Kirchhoff elastic model
+//material model class for elastic (Saint Venant-Kirchhoff) material model
 //derives from ellipticBVP base abstract class
 template <int dim>
-class StVenantKirchhoff_Elastic : public ellipticBVP<dim>
+class elasticity : public ellipticBVP<dim>
 {
 public:
-  StVenantKirchhoff_Elastic();
+  elasticity();
 private:
   void markBoundaries();
   void applyDirichletBCs();
@@ -25,13 +26,13 @@ private:
 
 //constructor
 template <int dim>
-StVenantKirchhoff_Elastic<dim>::StVenantKirchhoff_Elastic() : 
+elasticity<dim>::elasticity() : 
 ellipticBVP<dim>()
 {}
 
 //implementation of the getElementalValues virtual method
 template <int dim>
-void StVenantKirchhoff_Elastic<dim>::getElementalValues(FEValues<dim>& fe_values,
+void elasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 							unsigned int dofs_per_cell,
 							unsigned int num_quad_points,
 							FullMatrix<double>& elementalJacobian,
@@ -64,7 +65,7 @@ void StVenantKirchhoff_Elastic<dim>::getElementalValues(FEValues<dim>& fe_values
 	  *
 	  fe_values.JxW(q_point);
       }
-      elementalResidual(i) +=0.0;
+      elementalResidual(i) += - (0);
     }
   }
 }

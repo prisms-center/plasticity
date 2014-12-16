@@ -15,11 +15,14 @@ void ellipticBVP<dim>::solve(){
     pcout << "increment: " 
 	  << currentIncrement 
 	  << std::endl;
-    
+    //call updateBeforeIncrement, if any
+    updateBeforeIncrement();
+
     //solve time increment
-    computing_timer.enter_section("solve");
-    solveIncrement();
-    computing_timer.exit_section("solve");
+    solveNonLinearSystem();
+
+    //call updateAfterIncrement, if any
+    updateAfterIncrement();
 
     //output results to file
     computing_timer.enter_section("postprocess");

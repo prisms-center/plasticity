@@ -15,11 +15,6 @@ void ellipticBVP<dim>::run(){
   init();
   computing_timer.exit_section("mesh and initialization");
 
-  //assembly
-  computing_timer.enter_section("assembly");
-  assemble();
-  computing_timer.exit_section("assembly");
-
   //solve();
   solve();
 }
