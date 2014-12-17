@@ -7,20 +7,8 @@ See "Improved versions of assumed enhanced strain," Simo & Armero*/
 #define ENHANCEDSTRAIN_H
 
 
-//Data structures and solvers
-#include <deal.II/lac/vector.h>
-#include <deal.II/lac/full_matrix.h>
-#include <deal.II/base/quadrature_lib.h>
-#include <deal.II/base/tensor_function.h>
-#include <deal.II/base/conditional_ostream.h>
-//Mesh related classes
-#include <deal.II/dofs/dof_handler.h>
-#include <deal.II/dofs/dof_accessor.h>
-#include <deal.II/dofs/dof_tools.h>
-//Finite element implementation classes
-#include <deal.II/fe/fe_system.h>
-#include <deal.II/fe/fe_values.h>
-#include <deal.II/fe/fe_q.h>
+//dealii headers
+#include "../../include/dealIIheaders.h"
 //Static condensation
 #include "../utilityObjects/staticCondensation.cc"
 
@@ -28,10 +16,15 @@ using namespace dealii;
 
 template <int dim>
 class  enhancedStrain{
+
+template <int _dim>
+friend class ContinuumPlasticity;
+
 public:
   enhancedStrain(const FiniteElement<dim, dim> &fe, const Quadrature<dim> &quad_formula);
   ~enhancedStrain();
-  
+ 
+private: 
   void reinit(Vector<double> Ulocal_temp, typename DoFHandler<dim>::active_cell_iterator elem);
   Tensor<1,dim,double> tilde_grad(unsigned int function_no, unsigned int point_no);
   Tensor<1,dim,double> bar_grad(unsigned int function_no, unsigned int point_no, Tensor<1,dim,double> alpha_4);
@@ -44,7 +37,6 @@ public:
   unsigned int enhanced_dofs_per_cell();	
   unsigned int primary_enhanced_dofs_per_cell();
 
-  //private:
   void init_enh_dofs(unsigned int n_local_elems);
   Vector<double> Ulocal;
   typename DoFHandler<dim>::active_cell_iterator currentElem;
@@ -279,7 +271,9 @@ void enhancedStrain<dim>::create_block_mat_vec(FullMatrix<double> F, FullMatrix<
 	}
 
 	//Transform enhanced gradients to current configuration
-	std::vector<Tensor<1,dim,double> > bar_del(dofs_per_elem), center_del(dofs_per_elem), tilde_del(prim_enh_dofs_per_elem);
+	std::vector<Tensor<1,dim,double> > bar_del(dofs_per_elem),
+																		 center_del(dofs_per_elem),
+																		 tilde_del(prim_enh_dofs_per_elem);
 	for (unsigned int d=0; d<dofs_per_elem; ++d){
 		bar_del[d] = bar_grad(d,q,alpha_4)*Fenh_inv;
 		center_del[d] = center_grad(d)*Fenh_inv;

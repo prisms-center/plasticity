@@ -51,6 +51,9 @@ void ellipticBVP<dim>::solveNonLinearSystem(){
     solveLinearSystem();
     computing_timer.exit_section("solve");
     currentIteration++;
+
+		//call updateAfterIteration, if any
+		updateAfterIteration();
   }
   
   //check if maxNonLinearIterations reached
@@ -60,7 +63,5 @@ void ellipticBVP<dim>::solveNonLinearSystem(){
     else {pcout << "stopOnConvergenceFailure==false, so marching ahead\n";}
   }
 
-  //call updateAfterIteration, if any
-  updateAfterIteration();
 }
 #endif

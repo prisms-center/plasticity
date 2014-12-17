@@ -32,6 +32,7 @@ void ellipticBVP<dim>::assemble(){
     if (cell->is_locally_owned()){
       elementalJacobian = 0;
       elementalResidual = 0;
+			cell->set_user_index(cellID++);
 
       //Compute values for the current element
       fe_values.reinit (cell);
@@ -45,6 +46,7 @@ void ellipticBVP<dim>::assemble(){
 					     local_dof_indices,
 					     jacobian, 
 					     residual);
+
     }
   }
   //MPI operation to sync data 

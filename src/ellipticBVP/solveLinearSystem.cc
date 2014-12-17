@@ -8,7 +8,7 @@
 //solve linear system of equations AX=b using iterative solver
 template <int dim>
 void ellipticBVP<dim>::solveLinearSystem(){
-  vectorType completely_distributed_solution (locally_owned_dofs, mpi_communicator);
+  vectorType completely_distributed_solutionInc (locally_owned_dofs, mpi_communicator);
 #ifdef linearSolverType
   SolverControl solver_control(maxLinearSolverIterations, relLinearSolverTolerance*residual.l2_norm());
   linearSolverType solver(solver_control, mpi_communicator);
@@ -19,7 +19,7 @@ void ellipticBVP<dim>::solveLinearSystem(){
 #endif
   //solve Ax=b
   try{
-    solver.solve (jacobian, completely_distributed_solution, residual, preconditioner);
+    solver.solve (jacobian, completely_distributed_solutionInc, residual, preconditioner);
     char buffer[200];
     sprintf(buffer, 
 	    "linear system solved in %3u iterations [final norm: %8.2e, initial norm: %8.2e, tol criterion: %8.2e]\n",
@@ -34,8 +34,9 @@ void ellipticBVP<dim>::solveLinearSystem(){
 	  << solver_control.last_step()
 	  << " iterations as per set tolerances. consider increasing maxSolverIterations or decreasing relSolverTolerance.\n";     
   }
-  constraints.distribute (completely_distributed_solution);
-  solution+=completely_distributed_solution;
+  constraints.distribute (completely_distributed_solutionInc);
+	solutionIncWithGhosts=completely_distributed_solutionInc;
+  solution+=completely_distributed_solutionInc; 
   solutionWithGhosts=solution;
 }
 

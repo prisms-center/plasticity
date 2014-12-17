@@ -71,7 +71,8 @@ class ellipticBVP
   virtual void applyInitialConditions();
   
   //parallel data structures
-  vectorType solution, solutionWithGhosts, residual;
+  vectorType solution, residual;
+  vectorType solutionWithGhosts, solutionIncWithGhosts;
   matrixType jacobian;
 
   //misc variables
