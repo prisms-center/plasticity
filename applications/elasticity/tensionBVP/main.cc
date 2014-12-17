@@ -17,8 +17,8 @@
 #define stopOnConvergenceFailure true
 
 //material properties
-#define lambda_value 1.0
-#define mu_value 1.0
+#define lambda_val 1.0
+#define mu_val 1.0
 
 //dealIIheaders
 #include "../../../src/materialModels/elasticity/elasticity.cc"
@@ -93,6 +93,10 @@ int main (int argc, char **argv)
     {
       deallog.depth_console(0);
       elasticity<3> problem;
+			
+			//load material properties
+			problem.properties.lambda=lambda_val;
+			problem.properties.mu=mu_val;	 
       problem.run ();
     }
   catch (std::exception &exc)

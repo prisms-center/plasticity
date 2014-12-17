@@ -6,6 +6,11 @@
 #include "../../../include/ellipticBVP.h"
 #include "../../../src/enrichmentModels/enhancedStrain.cc"
 
+typedef struct {
+double lambda, mu, tau_y;
+std::string yieldModel, strainEnergyModel;
+} materialProperties;
+
 //
 //material model class for continuum plasticity
 //derives from ellipticBVP base abstract class

@@ -6,6 +6,12 @@
 //dealii headers
 #include "../../../include/ellipticBVP.h"
 
+typedef struct {
+double lambda, mu;
+std::string strainEnergyModel;
+} materialProperties;
+
+
 //
 //material model class for elastic (Saint Venant-Kirchhoff) material model
 //derives from ellipticBVP base abstract class
@@ -14,6 +20,7 @@ class elasticity : public ellipticBVP<dim>
 {
 public:
   elasticity();
+	materialProperties properties;
 private:
   void markBoundaries();
   void applyDirichletBCs();
@@ -50,16 +57,16 @@ void elasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 	  (
 	   (fe_values.shape_grad(i,q_point)[component_i] *
 	    fe_values.shape_grad(j,q_point)[component_j] *
-	    lambda_value)
+	    properties.lambda)
 	   +
 	   (fe_values.shape_grad(i,q_point)[component_j] *
 	    fe_values.shape_grad(j,q_point)[component_i] *
-	    mu_value)
+	    properties.mu)
 	   +
 	   ((component_i == component_j) ?
 	    (fe_values.shape_grad(i,q_point) *
 	     fe_values.shape_grad(j,q_point) *
-	     mu_value)  :
+	     properties.mu)  :
 	    0)
 	   )
 	  *
