@@ -1,0 +1,34 @@
+{
+ "material": {
+    "lame_lambda": 100.6582e9,
+    "lame_mu": 45.6473e9,
+    "yield_stress": 33.014025e6,
+    "strain_hardening": 2.0259e9,
+    "kinematic_hardening": 0.0,
+    "strain_energy": {
+      "source":"~/plasticity/Library/quadlog.hh",
+      "name":"quadlog",
+      "var": [
+           "lame_lambda", 
+           "lame_mu", 
+           "lambda1", 
+           "lambda2", 
+           "lambda3", 
+					 "K",
+					 "alpha"
+       ]
+    },
+    "yield_function": {
+      "source":"~/plasticity/Library/von_mises.hh",
+      "name":"von_mises",
+      "var": [
+           "beta1", 
+           "beta2", 
+           "beta3", 
+           "tau_y", 
+           "q"
+       ]
+    }
+  }
+
+}

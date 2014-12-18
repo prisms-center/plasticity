@@ -375,12 +375,6 @@ void continuumPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 		//Update block matrices and vectors in enhanced strain
 		enhStrain.create_block_mat_vec(F, tau, c, q);
 
-/*this->pcout << "Cell: " << cellID << "Klocal[0][0]: " << enhStrain.Klocal[0][0] << std::endl;
-this->pcout << "Cell: " << cellID << "Glocal[0][0]: " << enhStrain.Glocal[0][0] << std::endl;
-this->pcout << "Cell: " << cellID << "Mlocal[0][0]: " << enhStrain.Mlocal[0][0] << std::endl;
-this->pcout << "Cell: " << cellID << "Flocal[0]: " << enhStrain.Flocal[0] << std::endl;
-this->pcout << "Cell: " << cellID << "Hlocal[0]: " << enhStrain.Hlocal[0] << std::endl;*/
-
 		//Pass local matrices and vectors to static condensation
 		enhStrain.staticCondensationData[cellID].K.add(enhStrain.fe_values.JxW(q),enhStrain.Klocal);
 		enhStrain.staticCondensationData[cellID].G.add(enhStrain.fe_values.JxW(q),enhStrain.Glocal);
@@ -390,9 +384,7 @@ this->pcout << "Cell: " << cellID << "Hlocal[0]: " << enhStrain.Hlocal[0] << std
 	}
 	enhStrain.staticCondensationData[cellID].staticCondense();
 	elementalJacobian = enhStrain.staticCondensationData[cellID].K2;
-//this->pcout << "Cell: " << cellID << "Klocal[0][0]: " << elementalJacobian[0][0] << std::endl;
 	elementalResidual.equ(-1.,enhStrain.staticCondensationData[cellID].F2);
-//this->pcout << "Cell: " << cellID << "Rlocal: " << elementalResidual << std::endl;
 }
 
 //implementation of the getElementalValues method
