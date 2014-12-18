@@ -18,10 +18,10 @@ template <int dim>
 class  enhancedStrain{
 
 template <int _dim>
-friend class ContinuumPlasticity;
+friend class continuumPlasticity;
 
 public:
-  enhancedStrain(const FiniteElement<dim, dim> &fe, const Quadrature<dim> &quad_formula);
+  enhancedStrain(const FiniteElement<dim, dim> &fe, ConditionalOStream  pcout_temp);
   ~enhancedStrain();
  
 private: 
@@ -32,7 +32,7 @@ private:
   void get_F_enh(unsigned int q, FullMatrix<double> &F);
   void create_block_mat_vec(FullMatrix<double> F, FullMatrix<double> tau, Tensor<4,dim,double> c_ep, unsigned int q);
 		
-  void updateAlpha(Vector<double> dUlocal, unsigned int ElemNum);
+  void updateAlpha(Vector<double> dUlocal, unsigned int cellID);
   unsigned int enhanced_system_to_component_index(unsigned int enhanced_elem_dof);
   unsigned int enhanced_dofs_per_cell();	
   unsigned int primary_enhanced_dofs_per_cell();
@@ -40,8 +40,8 @@ private:
   void init_enh_dofs(unsigned int n_local_elems);
   Vector<double> Ulocal;
   typename DoFHandler<dim>::active_cell_iterator currentElem;
-  ConditionalOStream	 pcout;
-  QGauss<dim> 	center_quad;
+  QGauss<dim> center_quad;
+  QGauss<dim>	quad_formula;
   FEValues<dim> fe_values;
   FEValues<dim> center_values;
   Vector<double> Alpha; //Global vectors
@@ -53,18 +53,19 @@ private:
   Tensor<2,dim> J_0, J_0inv;
   double j_0;
   bool enh_dofs_initialized;
+
+  ConditionalOStream  *pcout;
 };
 
 template <int dim>
-enhancedStrain<dim>::enhancedStrain(const FiniteElement<dim, dim> &fe, const Quadrature<dim> &quad_formula)
+enhancedStrain<dim>::enhancedStrain(const FiniteElement<dim, dim> &fe, ConditionalOStream  pcout_temp)
 	:
-	pcout (std::cout),
 	center_quad(1),
+	quad_formula(quadOrder),
 	fe_values (fe, quad_formula, update_values   | update_gradients | update_quadrature_points | update_jacobians | update_JxW_values),
 	center_values (fe, center_quad, update_values   | update_gradients | update_jacobians | update_quadrature_points | update_JxW_values)
 	{
-
-  	pcout.set_condition(Utilities::MPI::this_mpi_process(MPI_COMM_WORLD) == 0);
+		pcout = &pcout_temp;
 
 		unsigned int dofs_per_elem = fe.dofs_per_cell;
 		unsigned int enh_dofs_per_elem = enhanced_dofs_per_cell();
@@ -96,7 +97,7 @@ void enhancedStrain<dim>::init_enh_dofs(unsigned int n_local_elems){
 template <int dim>
 void enhancedStrain<dim>::reinit(Vector<double> Ulocal_temp, typename DoFHandler<dim>::active_cell_iterator elem) {
 	if(enh_dofs_initialized == false){
-		pcout << "Error: enhanced dofs not yet initialized.\n";
+		*pcout << "Error: enhanced dofs not yet initialized.\n";
 		exit(1);
 	}
 
@@ -116,7 +117,7 @@ Tensor<1,dim,double> enhancedStrain<dim>::tilde_grad(unsigned int function_no, u
 	//Enhanced strain gradient functions for the four incompatible shape functions
 
 	if(enh_dofs_initialized == false){
-		pcout << "Error: enhanced dofs not yet initialized.\n";
+		*pcout << "Error: enhanced dofs not yet initialized.\n";
 		exit(1);
 	}
 
@@ -141,7 +142,7 @@ Tensor<1,dim,double> enhancedStrain<dim>::tilde_grad(unsigned int function_no, u
 		grad[2] = xi(0)*xi(1);
 	}
 	else{
-		pcout << "Error: invalid function number.\n";
+		*pcout << "Error: invalid function number.\n";
 		exit(1);
 	}
 
@@ -155,7 +156,7 @@ Tensor<1,dim,double> enhancedStrain<dim>::bar_grad(unsigned int function_no, uns
 	//Enhanced strain gradient functions to replace the standard basis function gradients
 
 	if(enh_dofs_initialized == false){
-		pcout << "Error: enhanced dofs not yet initialized.\n";
+		*pcout << "Error: enhanced dofs not yet initialized.\n";
 		exit(1);
 	}
 
@@ -194,7 +195,7 @@ template <int dim>
 void enhancedStrain<dim>::get_F_enh(unsigned int q, FullMatrix<double> &F){
 
 	if(enh_dofs_initialized == false){
-		pcout << "Error: enhanced dofs not yet initialized.\n";
+		*pcout << "Error: enhanced dofs not yet initialized.\n";
 		exit(1);
 	}
 
@@ -239,7 +240,7 @@ template <int dim>
 void enhancedStrain<dim>::create_block_mat_vec(FullMatrix<double> F, FullMatrix<double> tau, Tensor<4,dim,double> c_ep, unsigned int q){
 
 	if(enh_dofs_initialized == false){
-		pcout << "Error: enhanced dofs not yet initialized.\n";
+		*pcout << "Error: enhanced dofs not yet initialized.\n";
 		exit(1);
 	}
 
@@ -363,25 +364,25 @@ void enhancedStrain<dim>::create_block_mat_vec(FullMatrix<double> F, FullMatrix<
 
 //Update the Alpha vector
 template <int dim>
-void enhancedStrain<dim>::updateAlpha(Vector<double> dUlocal, unsigned int ElemNum){
+void enhancedStrain<dim>::updateAlpha(Vector<double> dUlocal, unsigned int cellID){
 
 	if(enh_dofs_initialized == false){
-		pcout << "Error: enhanced dofs not yet initialized.\n";
+		*pcout << "Error: enhanced dofs not yet initialized.\n";
 		exit(1);
 	}
 
 	//loop over elements
 	const unsigned int dofs_per_elem = fe_values.get_fe().dofs_per_cell;
 	for (unsigned int n=0; n<dofs_per_elem; ++n){
-		staticCondensationData[ElemNum].d(n) = dUlocal[n];
+		staticCondensationData[cellID].d(n) = dUlocal[n];
 	}
 
 	//Compute delta_Alpha
-	staticCondensationData[ElemNum].recover();
+	staticCondensationData[cellID].recover();
 
 	//Add delta_Alpha to Alpha
 	for(unsigned int n=0; n<4*dim; n++){
-		Alpha(4*dim*ElemNum+n) += staticCondensationData[ElemNum].s(n);
+		Alpha(4*dim*cellID+n) += staticCondensationData[cellID].s(n);
 	}
 }
 

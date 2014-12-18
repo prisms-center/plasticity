@@ -5,25 +5,29 @@
 //dealii headers
 #include "../../../include/ellipticBVP.h"
 #include "../../../src/enrichmentModels/enhancedStrain.cc"
+#include "PFunction.hh"
+#include "models/PLibrary.hh"
+
 
 typedef struct {
 double lambda, mu, tau_y;
 std::string yieldModel, strainEnergyModel;
 } materialProperties;
 
-//
 //material model class for continuum plasticity
 //derives from ellipticBVP base abstract class
 template <int dim>
-class ContinuumPlasticity : public ellipticBVP<dim>
+class continuumPlasticity : public ellipticBVP<dim>
 {
 public:
-  ContinuumPlasticity();
+  continuumPlasticity();
+	materialProperties properties;
 private:
+	void init(unsigned int num_quad_points);
   void markBoundaries();
   void applyDirichletBCs();
-	void calculatePlasticity(unsigned int elemNum,
-				unsigned int quadNum);
+	void calculatePlasticity(unsigned int cellID,
+				unsigned int quadPtID);
   void getElementalValues(FEValues<dim>& fe_values,
 			  unsigned int dofs_per_cell,
 			  unsigned int num_quad_points,
@@ -42,8 +46,9 @@ private:
   std::vector< std::vector< FullMatrix<double> > > histInvCP_iter;
   std::vector< std::vector< double > > histAlpha_conv;
   std::vector< std::vector< double > > histAlpha_iter;
-  unsigned int plasticOnset; //Marker to show when plasticity first occurs
-  std::vector<double> varSE, varYF, varIH; //Vector of variables/parameter for the strain energy, yield function, and isotropic hardening
+  bool plasticOnset; //Marker to show when plasticity first occurs
+	bool initCalled;
+  std::vector<double> varStrainEnergy, varYield, varIsoHardening; //Vector of variables/parameter for the strain energy, yield function, and isotropic hardening
   PRISMS::PFunction< std::vector<double>, double> strain_energy;
   PRISMS::PFunction< std::vector<double>, double> yield;
   PRISMS::PFunction< std::vector<double>, double> harden;
@@ -51,17 +56,29 @@ private:
 
 //constructor
 template <int dim>
-ContinuumPlasticity<dim>::ContinuumPlasticity() : 
-ellipticBVP<dim>()
+continuumPlasticity<dim>::continuumPlasticity() : 
+ellipticBVP<dim>(),
+enhStrain(this->FE,
+					this->pcout)
 {
+	initCalled = false;
+}
+
+template <int dim>
+void continuumPlasticity<dim>::init(unsigned int num_quad_points)
+{
+	unsigned int num_local_cells = this->triangulation.n_locally_owned_active_cells();
+
 	F.reinit(dim, dim);
 	tau.reinit(dim, dim);
 
-	if(constLaw == "quadlog" || constLaw == "neohook" || constLaw == "stvenkir"){
-  	PRISMS::PLibrary::checkout(constLaw, strain_energy);	
+	if(properties.strainEnergyModel == "quadlog" || 
+			properties.strainEnergyModel == "neohook" || 
+			properties.strainEnergyModel == "stvenkir"){
+  	PRISMS::PLibrary::checkout(properties.strainEnergyModel, strain_energy);	
 	}
 	else{
-		pcout << "Error: Constitutive law not recognized.\n";
+		this->pcout << "Error: Constitutive law not recognized.\n";
 		exit(1);
 	}
 
@@ -73,14 +90,13 @@ ellipticBVP<dim>()
   3: "Second principle stretch"
   4: "Third principle stretch"
   */
-	varSE.resize(5,1.);
-	varSE[0] = lambda;
-	varSE[1] = mu;
+	varStrainEnergy.resize(5,1.);
+	varStrainEnergy[0] = properties.lambda;
+	varStrainEnergy[1] = properties.mu;
 
   PRISMS::PLibrary::checkout("hardening", harden);
 
-	varIH.resize(1,0.);
-//	varIH[1] = kay;		
+	varIsoHardening.resize(1,0.);	
 		
 	/*yield function inputs:
 	beta1 beta2 beta3 tau_y q
@@ -90,37 +106,38 @@ ellipticBVP<dim>()
 	3: "Yield stress"
 	4: "Conjugate stress-like quantity"*/
 
-	if(yieldName == "von_mises"){
-	  PRISMS::PLibrary::checkout(yieldName, yield);
+	if(properties.yieldModel == "von_mises"){
+	  PRISMS::PLibrary::checkout(properties.yieldModel, yield);
 	}
 	else{
-		pcout << "Error: Yield function not recognized.\n";
+		this->pcout << "Error: Yield function not recognized.\n";
 		exit(1);
 	}
 
-	varYF.resize(5,0.);
-	varYF[3] = tau_y;
+	varYield.resize(5,0.);
+	varYield[3] = properties.tau_y;
 
 	//Resize the vectors of history variables
-	histInvCP_conv.resize(numElem,std::vector<FullMatrix<double> >(n_q_pts,IdentityMatrix(dim)));
-	histAlpha_conv.resize(numElem,std::vector<double>(n_q_pts,0));
-	histInvCP_iter.resize(numElem,std::vector<FullMatrix<double> >(n_q_pts,IdentityMatrix(dim)));
-	histAlpha_iter.resize(numElem,std::vector<double>(n_q_pts,0));
+	histInvCP_conv.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,IdentityMatrix(dim)));
+	histAlpha_conv.resize(num_local_cells,std::vector<double>(num_quad_points,0));
+	histInvCP_iter.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,IdentityMatrix(dim)));
+	histAlpha_iter.resize(num_local_cells,std::vector<double>(num_quad_points,0));
 
-	plasticOnset = 0;
+	plasticOnset = false;
+	initCalled = true;
 }
 
 template <int dim>
-void ContinuumPlasticity<dim>::calculatePlasticity(unsigned int elemNum,
-							unsigned int quadNum)
+void continuumPlasticity<dim>::calculatePlasticity(unsigned int cellID,
+							unsigned int quadPtID)
 {
 	double alpha, alpha_TR;
   FullMatrix<double> F_inv, b_e, invCp_TR, invCp, Identity;
 	F_inv=0; c=0; invCp=0; tau=0; b_e=0;
 	Identity = IdentityMatrix(dim);
 
-	invCp_TR = histInvCP_conv[elemNum][quadNum];
-	alpha_TR = histAlpha_conv[elemNum][quadNum];
+	invCp_TR = histInvCP_conv[cellID][quadPtID];
+	alpha_TR = histAlpha_conv[cellID][quadPtID];
 
 	Vector<double> Ident_vec(3); Ident_vec = 0.; Ident_vec.add(1.); //"Identity" vector
 
@@ -165,29 +182,29 @@ void ContinuumPlasticity<dim>::calculatePlasticity(unsigned int elemNum,
 	//If elastic, trial values hold
 	Vector<double> epsTRe(dim), eps_e(dim), beta(dim), nu_bar(dim);
 	for(unsigned int i=0; i<dim; i++){
-		varSE[2+i] = sqrt(eigTR(i));
+		varStrainEnergy[2+i] = sqrt(eigTR(i));
 		epsTRe(i) = 0.5*log(eigTR(i));
 	}
 	double gamma_Dt = 0.;
 	eps_e = epsTRe;
 	for(unsigned int i=0; i<dim; i++){
-		varYF[i] = strain_energy.grad(varSE,2+i)*varSE[2+i]; //Beta
-		beta(i) = varYF[i];
+		varYield[i] = strain_energy.grad(varStrainEnergy,2+i)*varStrainEnergy[2+i]; //Beta
+		beta(i) = varYield[i];
 	}
 	alpha = alpha_TR;
-	varIH[0] = alpha;
-	varYF[4] = harden(varIH); //q
-	double yield_TR = yield(varYF);
+	varIsoHardening[0] = alpha;
+	varYield[4] = harden(varIsoHardening); //q
+	double yield_TR = yield(varYield);
 	if(yield_TR > 0){ //Plastic
 		//Report onset of plasticity
-		if(plasticOnset == 0){
-			pcout << "Onset of plasticity\n";
-			plasticOnset = 1;
+		if(plasticOnset == false){
+			this->pcout << "Onset of plasticity\n";
+			plasticOnset = true;
 		}
 
 		//Newton-Raphson routine to solve for alpha, Beta => eps_e
 		if(alpha_TR == 0){
-			varIH[0] = 1.e-4; //So that the derivativate of the hardening function isn't undefined.
+			varIsoHardening[0] = 1.e-4; //So that the derivativate of the hardening function isn't undefined.
 		}
 		const double Tolerance = 1.e-12;
 		Vector<double> Function(1+dim), product(1+dim);
@@ -200,19 +217,19 @@ void ContinuumPlasticity<dim>::calculatePlasticity(unsigned int elemNum,
 			for (unsigned int B=0; B<dim; ++B){
 				for (unsigned int A=0; A<dim; ++A){
 					for (unsigned int C=0; C<dim; ++C){
-						jacobian[A][B] -= gamma_Dt*yield.hess(varYF,A,C)*(strain_energy.grad(varSE,2+C)*(B==C) + 
-															strain_energy.hess(varSE,2+B,2+C)*varSE[2+C]);
+						jacobian[A][B] -= gamma_Dt*yield.hess(varYield,A,C)*(strain_energy.grad(varStrainEnergy,2+C)*(B==C) + 
+															strain_energy.hess(varStrainEnergy,2+B,2+C)*varStrainEnergy[2+C]);
 					}
-					jacobian[A][B] -= 1./varSE[2+A]*(A==B);
-					jacobian[3][A] += yield.grad(varYF,B)*(strain_energy.grad(varSE,2+B)*(A==B) + 
-														strain_energy.hess(varSE,2+A,2+B)*varSE[2+B]);	
+					jacobian[A][B] -= 1./varStrainEnergy[2+A]*(A==B);
+					jacobian[3][A] += yield.grad(varYield,B)*(strain_energy.grad(varStrainEnergy,2+B)*(A==B) + 
+														strain_energy.hess(varStrainEnergy,2+A,2+B)*varStrainEnergy[2+B]);	
 				}
-				jacobian[B][3] = -(1./yield.grad(varYF,4) - (varIH[0] - alpha_TR)*pow(yield.grad(varYF,4),-2.)*
-													yield.hess(varYF,4,4)*harden.grad(varIH,0))*yield.grad(varYF,B);
-				Function(B) = epsTRe(B) - gamma_Dt*yield.grad(varYF,B) - log(varSE[2+B]);
+				jacobian[B][3] = -(1./yield.grad(varYield,4) - (varIsoHardening[0] - alpha_TR)*pow(yield.grad(varYield,4),-2.)*
+													yield.hess(varYield,4,4)*harden.grad(varIsoHardening,0))*yield.grad(varYield,B);
+				Function(B) = epsTRe(B) - gamma_Dt*yield.grad(varYield,B) - log(varStrainEnergy[2+B]);
 			}
-			jacobian[3][3] = yield.grad(varYF,4)*harden.grad(varIH,0);
-			Function(3) = yield(varYF);
+			jacobian[3][3] = yield.grad(varYield,4)*harden.grad(varIsoHardening,0);
+			Function(3) = yield(varYield);
 
 			//Invert jacobian matrix
 			jacobian.gauss_jordan();
@@ -220,31 +237,31 @@ void ContinuumPlasticity<dim>::calculatePlasticity(unsigned int elemNum,
 
 			//Update Newton-Raphson variables
 			for(unsigned int i = 0; i < dim; i++){
-				varSE[2+i] -= product(i); //lambda_e(i)
+				varStrainEnergy[2+i] -= product(i); //lambda_e(i)
 			}
 
 			//Update other variables
 			for(unsigned int i = 0; i < dim; i++){
-				varYF[i] = strain_energy.grad(varSE,2+i)*varSE[2+i]; //beta(i)
+				varYield[i] = strain_energy.grad(varStrainEnergy,2+i)*varStrainEnergy[2+i]; //beta(i)
 			}
-			varIH[0] -= product(3); //alpha
-			varYF[4] = harden(varIH); //q
-			gamma_Dt = (varIH[0] - alpha_TR)/yield.grad(varYF,4);
+			varIsoHardening[0] -= product(3); //alpha
+			varYield[4] = harden(varIsoHardening); //q
+			gamma_Dt = (varIsoHardening[0] - alpha_TR)/yield.grad(varYield,4);
 
 			if(product.l2_norm() < Tolerance){break;}
 			if(iter>30){
-				pcout << "  Maximum number of iterations reached without convergence. \n";
+				this->pcout << "  Maximum number of iterations reached without convergence. \n";
 				break;
 			}
 			iter++;
 		}
 		gamma_Dt *= 1 - 1.e-8;
-		alpha = alpha_TR + gamma_Dt*yield.grad(varYF,4);
-		varIH[0] = alpha;
-		varYF[4] = harden(varIH);
+		alpha = alpha_TR + gamma_Dt*yield.grad(varYield,4);
+		varIsoHardening[0] = alpha;
+		varYield[4] = harden(varIsoHardening);
 		for(unsigned int i = 0; i < dim; i++){
-			beta(i) = varYF[i];
-			nu_bar(i) = yield.grad(varYF,i);
+			beta(i) = varYield[i];
+			nu_bar(i) = yield.grad(varYield,i);
 		}
 		eps_e.equ(1.,epsTRe,-gamma_Dt,nu_bar);
 	}
@@ -254,15 +271,15 @@ void ContinuumPlasticity<dim>::calculatePlasticity(unsigned int elemNum,
 	F_inv.mmult(invCp,be_FinvT);
 
 	//Store history variables for this iteration
-	histInvCP_iter[elemNum][quadNum] = invCp;
-	histAlpha_iter[elemNum][quadNum] = alpha;
+	histInvCP_iter[cellID][quadPtID] = invCp;
+	histAlpha_iter[cellID][quadPtID] = alpha;
 
 	//Determine algorithmic elastoplastic tangent
 	FullMatrix<double> a_ep(dim,dim), a_e(dim,dim);
 	for (unsigned int A=0; A<dim; ++A){
 		for (unsigned int B=0; B<dim; ++B){
-			a_e[A][B] = strain_energy.hess(varSE,2+A,2+B)*varSE[2+A]*varSE[2+B] + 
-									strain_energy.grad(varSE,2+A)*varSE[2+A]*(A==B);
+			a_e[A][B] = strain_energy.hess(varStrainEnergy,2+A,2+B)*varStrainEnergy[2+A]*varStrainEnergy[2+B] + 
+									strain_energy.grad(varStrainEnergy,2+A)*varStrainEnergy[2+A]*(A==B);
 		}
 	}
 	if(yield_TR < 0){ //Elastic
@@ -273,7 +290,7 @@ void ContinuumPlasticity<dim>::calculatePlasticity(unsigned int elemNum,
 		a_eInv.invert(a_e);
 		for (unsigned int A=0; A<dim; ++A){
 			for (unsigned int B=0; B<dim; ++B){
-				f2_B[A][B] = yield.hess(varYF,A,B);
+				f2_B[A][B] = yield.hess(varYield,A,B);
 			}
 		}
 
@@ -285,15 +302,15 @@ void ContinuumPlasticity<dim>::calculatePlasticity(unsigned int elemNum,
 		h.vmult(h_nu_bar,nu_bar);
 	
 		a_ep.outer_product(h_nu_bar,h_nu_bar);
-		a_ep.equ(1.,h,-1./(nu_bar*h_nu_bar - pow(yield.grad(varYF,4),2.)/(1./harden.grad(varIH,0) - gamma_Dt*yield.hess(varYF,4,4))),a_ep);
+		a_ep.equ(1.,h,-1./(nu_bar*h_nu_bar - pow(yield.grad(varYield,4),2.)/(1./harden.grad(varIsoHardening,0) - gamma_Dt*yield.hess(varYield,4,4))),a_ep);
 
 	}
 	for (unsigned int i=0; i<dim; ++i){
 		for (unsigned int j=0; j<dim; ++j){
 			for (unsigned int k=0; k<dim; ++k){
 				for (unsigned int l=0; l<dim; ++l){
-					if(currentIncrement == 0 && currentIteration==0){
-						double lambda = varSE[0], mu = varSE[1];
+					if(this->currentIncrement == 0 && this->currentIteration==0){
+						double lambda = varStrainEnergy[0], mu = varStrainEnergy[1];
 						c[i][j][k][l] = lambda*(i==j)*(k==l) + mu*((i==k)*(j==l) + (i==l)*(j==k));
 						//c_{ijkl}=C_{IJKL} in the limit as stretches go to one
 					}
@@ -316,23 +333,28 @@ void ContinuumPlasticity<dim>::calculatePlasticity(unsigned int elemNum,
 
 //implementation of the getElementalValues method
 template <int dim>
-void ContinuumPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
+void continuumPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 							unsigned int dofs_per_cell,
 							unsigned int num_quad_points,
 							FullMatrix<double>& elementalJacobian,
 							Vector<double>&     elementalResidual)
 {
+	//Initialized history variables and pfunction variables if unititialized
+	if(initCalled == false){
+		init(num_quad_points);
+	}
+
 	unsigned int cellID = fe_values.get_cell()->user_index();
 
 	//Reset the vectors and matrices in static condensation to zero
 	enhStrain.staticCondensationData[cellID].reset();
 
-	std::vector<double> local_dof_indices(dofs_per_elem);
-	Vector<double> Ulocal(dofs_per_elem);
+	std::vector<double> local_dof_indices(dofs_per_cell);
+	Vector<double> Ulocal(dofs_per_cell);
 
 	fe_values.get_cell()->get_dof_indices (local_dof_indices);
-	for(unsigned int i=0; i<dofs_per_elem; i++){
-		Ulocal[i] = solutionWithGhosts[local_dof_indices[i]];
+	for(unsigned int i=0; i<dofs_per_cell; i++){
+		Ulocal[i] = this->solutionWithGhosts[local_dof_indices[i]];
 	}
 	enhStrain.reinit(Ulocal, fe_values.get_cell());
 
@@ -354,7 +376,7 @@ void ContinuumPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 		enhStrain.staticCondensationData[cellID].F.add(enhStrain.fe_values.JxW(q),enhStrain.Flocal);
 		enhStrain.staticCondensationData[cellID].H.add(enhStrain.fe_values.JxW(q),enhStrain.Hlocal);
 	}
-	enhStrain.staticCondensationData[elem->user_index()].staticCondense();
+	enhStrain.staticCondensationData[cellID].staticCondense();
 
 	elementalJacobian = enhStrain.staticCondensationData[cellID].K2;
 	elementalResidual.equ(-1.,enhStrain.staticCondensationData[cellID].F2);
@@ -362,15 +384,27 @@ void ContinuumPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 
 //implementation of the getElementalValues method
 template <int dim>
-void ContinuumPlasticity<dim>::updateAfterIteration()
+void continuumPlasticity<dim>::updateAfterIteration()
 {
-	//Update the enhanced degrees of freedom at each iteration
-	enhStrain.updateAlpha(dUlocal, ElemNum);
+	std::vector<unsigned int> local_dof_indices(this->FE.dofs_per_cell);
+	Vector<double> dUlocal(this->FE.dofs_per_cell);
+	typename DoFHandler<dim>::active_cell_iterator cell = this->dofHandler.begin_active(),
+																								 endc = this->dofHandler.end();
+  for (; cell!=endc; ++cell) {
+    if (cell->is_locally_owned()){
+			cell->get_dof_indices(local_dof_indices);
+			for(unsigned int i=0; i<dUlocal.size(); i++){
+				dUlocal[i] = this->solutionIncWithGhosts[local_dof_indices[i]];
+			}
+			//Update the enhanced degrees of freedom at each iteration
+			enhStrain.updateAlpha(dUlocal, cell->user_index());
+		}
+	}
 }
 
 //implementation of the getElementalValues method
-template <int dim>template <int dim>
-void ContinuumPlasticity<dim>::updateAfterIncrement()
+template <int dim>
+void continuumPlasticity<dim>::updateAfterIncrement()
 {
 	//Update the history variables when convergence is reached for the current increment
 	histInvCP_conv = histInvCP_iter;
