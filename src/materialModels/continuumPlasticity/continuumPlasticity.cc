@@ -68,6 +68,7 @@ template <int dim>
 void continuumPlasticity<dim>::init(unsigned int num_quad_points)
 {
 	unsigned int num_local_cells = this->triangulation.n_locally_owned_active_cells();
+	enhStrain.init_enh_dofs(num_local_cells);
 
 	F.reinit(dim, dim);
 	tau.reinit(dim, dim);
@@ -132,7 +133,7 @@ void continuumPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 							unsigned int quadPtID)
 {
 	double alpha, alpha_TR;
-  FullMatrix<double> F_inv, b_e, invCp_TR, invCp, Identity;
+  FullMatrix<double> F_inv(dim,dim), b_e(dim,dim), invCp_TR(dim,dim), invCp(dim,dim), Identity(dim,dim);
 	F_inv=0; c=0; invCp=0; tau=0; b_e=0;
 	Identity = IdentityMatrix(dim);
 
@@ -140,7 +141,6 @@ void continuumPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 	alpha_TR = histAlpha_conv[cellID][quadPtID];
 
 	Vector<double> Ident_vec(3); Ident_vec = 0.; Ident_vec.add(1.); //"Identity" vector
-
 	F_inv.invert(F);
 
 	//Elastic trial left C-G tensor (b_eTR) at n+1
@@ -339,24 +339,30 @@ void continuumPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 							FullMatrix<double>& elementalJacobian,
 							Vector<double>&     elementalResidual)
 {
+
 	//Initialized history variables and pfunction variables if unititialized
 	if(initCalled == false){
 		init(num_quad_points);
 	}
 
 	unsigned int cellID = fe_values.get_cell()->user_index();
-
 	//Reset the vectors and matrices in static condensation to zero
 	enhStrain.staticCondensationData[cellID].reset();
 
-	std::vector<double> local_dof_indices(dofs_per_cell);
+	std::vector<unsigned int> local_dof_indices(dofs_per_cell);
 	Vector<double> Ulocal(dofs_per_cell);
 
-	fe_values.get_cell()->get_dof_indices (local_dof_indices);
+	typename DoFHandler<dim>::active_cell_iterator cell(& this->triangulation,
+															fe_values.get_cell()->level(),
+															fe_values.get_cell()->index(),
+															& this->dofHandler);
+	cell->set_user_index(fe_values.get_cell()->user_index());
+	cell->get_dof_indices (local_dof_indices);
+
 	for(unsigned int i=0; i<dofs_per_cell; i++){
 		Ulocal[i] = this->solutionWithGhosts[local_dof_indices[i]];
 	}
-	enhStrain.reinit(Ulocal, fe_values.get_cell());
+	enhStrain.reinit(Ulocal, cell);
 
 	//loop over quadrature points
 	for (unsigned int q=0; q<num_quad_points; ++q){
@@ -369,6 +375,12 @@ void continuumPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 		//Update block matrices and vectors in enhanced strain
 		enhStrain.create_block_mat_vec(F, tau, c, q);
 
+/*this->pcout << "Cell: " << cellID << "Klocal[0][0]: " << enhStrain.Klocal[0][0] << std::endl;
+this->pcout << "Cell: " << cellID << "Glocal[0][0]: " << enhStrain.Glocal[0][0] << std::endl;
+this->pcout << "Cell: " << cellID << "Mlocal[0][0]: " << enhStrain.Mlocal[0][0] << std::endl;
+this->pcout << "Cell: " << cellID << "Flocal[0]: " << enhStrain.Flocal[0] << std::endl;
+this->pcout << "Cell: " << cellID << "Hlocal[0]: " << enhStrain.Hlocal[0] << std::endl;*/
+
 		//Pass local matrices and vectors to static condensation
 		enhStrain.staticCondensationData[cellID].K.add(enhStrain.fe_values.JxW(q),enhStrain.Klocal);
 		enhStrain.staticCondensationData[cellID].G.add(enhStrain.fe_values.JxW(q),enhStrain.Glocal);
@@ -377,9 +389,10 @@ void continuumPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 		enhStrain.staticCondensationData[cellID].H.add(enhStrain.fe_values.JxW(q),enhStrain.Hlocal);
 	}
 	enhStrain.staticCondensationData[cellID].staticCondense();
-
 	elementalJacobian = enhStrain.staticCondensationData[cellID].K2;
+//this->pcout << "Cell: " << cellID << "Klocal[0][0]: " << elementalJacobian[0][0] << std::endl;
 	elementalResidual.equ(-1.,enhStrain.staticCondensationData[cellID].F2);
+//this->pcout << "Cell: " << cellID << "Rlocal: " << elementalResidual << std::endl;
 }
 
 //implementation of the getElementalValues method

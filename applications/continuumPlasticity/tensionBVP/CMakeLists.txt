@@ -58,6 +58,6 @@ DEAL_II_SETUP_TARGET(${TARGET})
 TARGET_LINK_LIBRARIES(${TARGET} ${DEAL_II_LIBRARIES} PLibrary)
 
 ADD_CUSTOM_TARGET(run
-  COMMAND ${TARGET} -pc_type hypre
+  COMMAND ${TARGET} -pc_type jacobi
   COMMENT "Run ${TARGET} with ${CMAKE_BUILD_TYPE} configuration"
   )

@@ -5,12 +5,12 @@
 
 #define feOrder   1
 #define quadOrder 2 
-#define meshRefineFactor 2
+#define meshRefineFactor 1
 #define writeOutput true
 #define linearSolverType PETScWrappers::SolverCG
-#define totalNumIncrements 10
+#define totalNumIncrements 1
 #define maxLinearSolverIterations 5000
-#define relLinearSolverTolerance  1.0e-8
+#define relLinearSolverTolerance  1.0e-12
 #define maxNonLinearIterations 30
 #define absNonLinearTolerance 1.0e-15
 #define relNonLinearTolerance 1.0e-10
@@ -95,7 +95,7 @@ int main (int argc, char **argv)
       continuumPlasticity<3> problem;
 			
 			//load material properties
-			std::ifstream is("material.json");
+			std::ifstream is("materialProperties.json");
 			json_spirit::Value value;
 			json_spirit::read_stream(is,value);
 			std::vector< json_spirit::Pair > material, strainEnergy, yield;
