@@ -9,7 +9,6 @@
 template <int dim>
 void ellipticBVP<dim>::assemble(){
   //initialize global data structures to zero
-  solution=0.0; 
   residual=0.0; 
   jacobian=0.0;
 

@@ -29,10 +29,11 @@ void ellipticBVP<dim>::solveNonLinearSystem(){
     relNorm=currentNorm/initialNorm;
     //print iteration information
     sprintf(buffer, 
-	    "nonlinear iteration %3u [current residual: %8.2e, initial residual: %8.2e]\n",
+	    "nonlinear iteration %3u [current residual: %8.2e, initial residual: %8.2e, relative residual: %8.2e]\n",
 	    currentIteration,
 	    currentNorm,
-	    initialNorm);
+	    initialNorm,
+	    relNorm);
     pcout << buffer;
 
     //check for convergence in abs tolerance

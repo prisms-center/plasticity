@@ -17,8 +17,8 @@
 #define stopOnConvergenceFailure true
 
 //Read json input 
-#include "json_spirit.h"
-#include "json_spirit_reader_template.h"
+#include "../../../utils/json/json_spirit.h"
+#include "../../../utils/json/json_spirit_reader_template.h"
 
 //dealIIheaders
 #include "../../../src/materialModels/continuumPlasticity/continuumPlasticity.cc"
@@ -77,11 +77,20 @@ void continuumPlasticity<dim>::applyDirichletBCs(){
 					    this->constraints,
 					    allComponenents);
   //u=0.01 along X=1.00
-  VectorTools::interpolate_boundary_values (this->dofHandler,
-					    2, 
-					    BCFunction<dim>(),
-					    this->constraints,
-					    xComponenent);
+  if (this->currentIteration==0){
+    VectorTools::interpolate_boundary_values (this->dofHandler,
+					      2, 
+					      BCFunction<dim>(),
+					      this->constraints,
+					      xComponenent);
+  }
+  else{
+    VectorTools::interpolate_boundary_values (this->dofHandler,
+					      2, 
+					      ZeroFunction<dim>(dim),
+					      this->constraints,
+					      xComponenent);
+  }
   this->constraints.close ();
 }
 

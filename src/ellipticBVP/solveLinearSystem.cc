@@ -12,7 +12,7 @@ void ellipticBVP<dim>::solveLinearSystem(){
 #ifdef linearSolverType
   SolverControl solver_control(maxLinearSolverIterations, relLinearSolverTolerance*residual.l2_norm());
   linearSolverType solver(solver_control, mpi_communicator);
-  PETScWrappers::PreconditionBlockJacobi preconditioner(jacobian);
+  PETScWrappers::PreconditionJacobi preconditioner(jacobian);
 #else
   pcout << "\nError: solverType not defined. This is required for ELLIPTIC BVP.\n\n";
   exit (-1);

@@ -198,7 +198,7 @@ void continuumPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 	if(yield_TR > 0){ //Plastic
 		//Report onset of plasticity
 		if(plasticOnset == false){
-			this->pcout << "Onset of plasticity\n";
+			this->pcout << "\ncontinummPlasticity: Onset of plasticity\n\n";
 			plasticOnset = true;
 		}
 
