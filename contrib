@@ -1,8 +1,10 @@
-This file lists people who contributed code/documentation to plasticity@PRISMS
+This file lists people who contributed code/documentation to PRISMS-Plasticity
 
 Code development
 ================
-
+Gregory Teichert (Continuum Plasticity)
+Sriram Ganesan   (Crystal Plasticity)
+Shiva Rudraraju  (Elasticity & ElipticBVP) 
 
 Documentation
 ================
