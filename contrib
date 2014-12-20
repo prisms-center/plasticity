@@ -4,7 +4,8 @@ Code development
 ================
 Gregory Teichert (Continuum Plasticity)
 Sriram Ganesan   (Crystal Plasticity)
-Shiva Rudraraju  (Elasticity & ElipticBVP) 
+Shiva Rudraraju  (EllipticBVP) 
+Brian Puchala    (utils/IntegrationTools)
 
 Documentation
 ================
