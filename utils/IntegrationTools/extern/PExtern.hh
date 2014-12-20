@@ -1,14 +1,14 @@
 
-#ifndef PEXTERN_HH
-#define PEXTERN_HH
+#ifndef PExtern_HH
+#define PExtern_HH
 
 #include<cstring>
 #include<iostream>
 #include<vector>
 #include<cstdlib>
 
-#include "PFunction.hh"
-#include "PLibrary.hh"
+#include "../PFunction.hh"
+#include "../PField.hh"
 
 // In future, might have more complicated OutType, 
 //   so make all have 'void' return and pass everything by reference
@@ -243,6 +243,41 @@ extern "C"
     void PSeriesFunction_dsis_get_tensor_basis_grad(PRISMS::PSeriesFunction<double,double,double*,int*>* f, int* term, int di, double &val);
     
     void PSeriesFunction_dsis_get_tensor_basis_hess(PRISMS::PSeriesFunction<double,double,double*,int*>* f, int* term, int di, int dj, double &val);
+
+    
+    
+    // Functions for using constructing a 2D PRISMS::Body externally (say Python or Fortran),
+    //   allowing access to PFields
+    //   written for Coordinate=double*, DIM=2
+    
+    void Body2D_new(char* vtkfile, PRISMS::Body<double*,2>* &b);
+    
+    void Body2D_delete(PRISMS::Body<double*,2>* &b);
+    
+    
+    // Functions for using a 2D scalar PField externally (say Python or Fortran), as a PFunction.
+    //   From a Body pointer, returns a pointer to a PFuncBase
+    //   written for Coordinate=double*, OutType=double, DIM=2
+    
+    void ScalarField2D(char* name, PRISMS::Body<double*,2>* b, PRISMS::PFuncBase<double*,double>* &f);
+    
+    
+    
+    // Functions for using constructing a 3D PRISMS::Body externally (say Python or Fortran),
+    //   allowing access to PFields
+    //   written for Coordinate=double*, DIM=3
+    
+    void Body3D_new(char* vtkfile, PRISMS::Body<double*,3>* &b);
+    
+    void Body3D_delete(PRISMS::Body<double*,3>* &b);
+    
+    
+    // Functions for using a 3D scalar PField externally (say Python or Fortran), as a PFunction.
+    //   From a Body pointer, returns a pointer to a PFuncBase
+    //   written for Coordinate=double*, OutType=double, DIM=3
+    
+    void ScalarField3D(char* name, PRISMS::Body<double*,3>* b, PRISMS::PFuncBase<double*,double>* &f);
+    
     
 }
 
