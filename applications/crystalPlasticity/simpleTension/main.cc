@@ -4,8 +4,6 @@
 #include <sstream>
 using namespace std;
 
-
-
 #define feOrder   1
 #define quadOrder 2 
 #define meshRefineFactor 4
@@ -19,9 +17,6 @@ using namespace std;
 #define relNonLinearTolerance 1.0e-10
 #define stopOnConvergenceFailure false
 
-//Read json input 
-#include "../../../utils/json/json_spirit.h"
-#include "../../../utils/json/json_spirit_reader_template.h"
 
 //dealIIheaders
 #include "../../../src/materialModels/crystalPlasticity/crystalPlasticity.cc"
