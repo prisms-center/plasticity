@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 //implementation of the continuum plasticity material model
+=======
+//implementation of the crystal plasticity material model
+>>>>>>> crystalPlasticity
 #ifndef CRYSTALPLASTICITY_H
 #define CRYSTALPLASTICITY_H
 
@@ -10,6 +14,7 @@
 
 typedef struct {
 
+<<<<<<< HEAD
 	unsigned int n_orientations, n_slip_systems; //No. of orientations and No. of slip systems
 	double q1,q2,a,h0,s_s,s0,C11,C12,C44;
 	FullMatrix<double> rot, m_alpha,n_alpha;	
@@ -17,6 +22,15 @@ typedef struct {
 } materialProperties;
 
 //material model class for continuum plasticity
+=======
+	unsigned int n_slip_systems; //No. of slip systems
+	double q1,q2,a,h0,s_s,s0,C11,C12,C44;
+	FullMatrix<double> m_alpha,n_alpha;	
+
+} materialProperties;
+
+//material model class for crystal plasticity
+>>>>>>> crystalPlasticity
 //derives from ellipticBVP base abstract class
 template <int dim>
 class crystalPlasticity : public ellipticBVP<dim>
@@ -24,6 +38,7 @@ class crystalPlasticity : public ellipticBVP<dim>
 public:
 	crystalPlasticity();
 
+<<<<<<< HEAD
 	void updateHistory();
 	void reorient();
 	void write_orient(); 
@@ -42,6 +57,13 @@ public:
 
 
 	materialProperties properties;
+=======
+	void reorient();
+	void tangent_modulus(FullMatrix<double> &F_trial, FullMatrix<double> &Fpn_inv, FullMatrix<double> &SCHMID_TENSOR1, FullMatrix<double> &A,FullMatrix<double> &A_PA,FullMatrix<double> &B,FullMatrix<double> &T_tau, FullMatrix<double> &PK1_Stiff, Vector<double> &active, Vector<double> &resolved_shear_tau_trial, Vector<double> &x_beta, Vector<double> &PA, int &n_PA, double &det_F_tau, double &det_FE_tau );
+	void inactive_slip_removal(Vector<double> &inactive,Vector<double> &active, Vector<double> &x_beta, int &n_PA, Vector<double> &PA, Vector<double> b,FullMatrix<double> A,FullMatrix<double> A_PA);
+	materialProperties properties;
+
+>>>>>>> crystalPlasticity
 private:
 	void init(unsigned int num_quad_points);
 	void markBoundaries();
@@ -56,6 +78,7 @@ private:
 	void updateAfterIncrement();
 
 
+<<<<<<< HEAD
 	FullMatrix<double> odfpoint(Vector<double> r);
 	Vector<double> vecform(FullMatrix<double> A);
 	FullMatrix<double> matform(Vector<double> Av);
@@ -64,20 +87,41 @@ private:
 	FullMatrix<double> left(FullMatrix<double> elm);
 	FullMatrix<double> ElasticProd(FullMatrix<double> elm, FullMatrix<double> ElasticityTensor);
 	FullMatrix<double> tracev(FullMatrix<double> elm, FullMatrix<double> B);
+=======
+	void odfpoint(FullMatrix <double> &OrientationMatrix,Vector<double> r);
+	Vector<double> vecform(FullMatrix<double> A);
+	void matform(FullMatrix<double> &A, Vector<double> Av); 
+	void right(FullMatrix<double> &Aright,FullMatrix<double> elm);
+	void symmf(FullMatrix<double> &A,FullMatrix<double> elm); 
+	void left(FullMatrix<double> &Aleft,FullMatrix<double> elm);
+	void ElasticProd(FullMatrix<double> &stress,FullMatrix<double> elm, FullMatrix<double> ElasticityTensor);
+	void tracev(FullMatrix<double> &Atrace, FullMatrix<double> elm, FullMatrix<double> B);
+	
+>>>>>>> crystalPlasticity
 
 
 	FullMatrix<double> F,F_tau,FP_tau,FE_tau,T,P;
 	Tensor<4,dim,double> dP_dF;
 	double No_Elem, N_qpts;
+<<<<<<< HEAD
 	//ConditionalOStream	 pcout;
 
 
+=======
+
+	//Store crystal orientations
+	std::vector<std::vector<  Vector<double> > >  rot;
+	std::vector<std::vector<  Vector<double> > >  rotnew;
+
+	//Store history variables
+>>>>>>> crystalPlasticity
 	std::vector< std::vector< FullMatrix<double> > >   Fp_iter;
 	std::vector< std::vector< FullMatrix<double> > > Fp_conv;
 	std::vector< std::vector< FullMatrix<double> > >   Fe_iter;
 	std::vector< std::vector< FullMatrix<double> > > Fe_conv;
 	std::vector<std::vector<  Vector<double> > >  s_alpha_iter;
 	std::vector<std::vector<  Vector<double> > >  s_alpha_conv;
+<<<<<<< HEAD
 	std::vector<std::vector<  Vector<double> > >  rot;
 	std::vector<std::vector<  Vector<double> > >  rotnew;
 
@@ -86,6 +130,10 @@ private:
 	//Store history variables
 
 	unsigned int n_orientations; //No. of orientations
+=======
+
+
+>>>>>>> crystalPlasticity
 	unsigned int n_slip_systems; //No. of slip systems
 	FullMatrix<double> m_alpha,n_alpha,q,sres,Dmat;
 	Vector<double> sres_tau;
@@ -114,7 +162,10 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
 	unsigned int num_local_cells = this->triangulation.n_locally_owned_active_cells();
 	F.reinit(dim, dim);
 
+<<<<<<< HEAD
 	n_orientations=properties.n_orientations;
+=======
+>>>>>>> crystalPlasticity
 	n_slip_systems=properties.n_slip_systems;
 	m_alpha.reinit(properties.n_slip_systems,dim);
 	n_alpha.reinit(properties.n_slip_systems,dim);
@@ -170,10 +221,18 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 												 unsigned int quadPtID)
 {
 
+<<<<<<< HEAD
 	F_tau=F;
 
 	FullMatrix<double> FE_t(dim,dim),FP_t(dim,dim);
 	Vector<double> s_alpha_t(n_slip_systems),rot1(dim);
+=======
+	F_tau=F; // Deformation Gradient
+	FullMatrix<double> FE_t(dim,dim),FP_t(dim,dim);  //Elastic and Plastic deformation gradient 
+	Vector<double> s_alpha_t(n_slip_systems); // Slip resistance
+	Vector<double> rot1(dim);// Crystal orientation (Rodrigues representation)
+
+>>>>>>> crystalPlasticity
 	FE_t=Fe_conv[cellID][quadPtID];
 	FP_t=Fp_conv[cellID][quadPtID];
 	s_alpha_t=s_alpha_conv[cellID][quadPtID];
@@ -181,9 +240,15 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
 	// Rotation matrix of the crystal orientation
 	FullMatrix<double> rotmat(dim,dim);
+<<<<<<< HEAD
 	rotmat.fill(odfpoint(rot1));
 
 	FullMatrix<double> temp(dim,dim);
+=======
+	odfpoint(rotmat,rot1);
+
+	FullMatrix<double> temp(dim,dim),temp1(dim,dim),temp2(dim,dim),temp3(dim,dim); // Temporary matrices 
+>>>>>>> crystalPlasticity
 
 	//convert to crystal coordinates F_tau=R'*F_tau*R
 	temp=0.0;
@@ -213,7 +278,11 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 	// Calculation of Schmid Tensors  and B= symm(FE_tau_trial'*FE_tau_trial*S_alpha)	
 	FullMatrix<double> SCHMID_TENSOR1(n_slip_systems*dim,dim),B(n_slip_systems*dim,dim);
 	Vector<double> m1(dim),n1(dim);
+<<<<<<< HEAD
 	FullMatrix<double> temp1(dim,dim),temp2(dim,dim),temp3(dim,dim);
+=======
+
+>>>>>>> crystalPlasticity
 	for(unsigned int i=0;i<n_slip_systems;i++){
 		for (unsigned int j=0;j<dim;j++){
 			m1(j)=m_alpha[i][j];
@@ -242,7 +311,11 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 	FullMatrix<double> T_star_tau_trial(dim,dim);
 	tempv1=0.0;
 	Dmat.vmult(tempv1, vecform(Ee_tau_trial));
+<<<<<<< HEAD
 	T_star_tau_trial = matform(tempv1);
+=======
+	matform(T_star_tau_trial,tempv1);
+>>>>>>> crystalPlasticity
 
 	//% % % % % STEP 3 % % % % % 
 	// Calculate the trial resolved shear stress resolved_shear_tau_trial for each slip system
@@ -276,7 +349,11 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 					PA(j)=PA_temp(j);
 				}
 				PA(n_PA-1)=i;	
+<<<<<<< HEAD
 				PA_temp.reinit(n_PA);     //%%%%% POTENTIALLY ACTIVE SLIP SYSTEMS
+=======
+				PA_temp.reinit(n_PA);     //%%%%% Potentially active slip systems
+>>>>>>> crystalPlasticity
 			} 
 		}
 		resolved_shear_tau(i)=fabs(resolved_shear_tau_trial(i));	
@@ -304,14 +381,19 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 	// Calculate the Stiffness Matrix A
 	for(unsigned int i=0;i<n_slip_systems;i++){
 		for(unsigned int j=0;j<n_slip_systems;j++){
+<<<<<<< HEAD
 			temp1.reinit(dim,dim);
 			temp1=0.0;	
+=======
+			temp1.reinit(dim,dim); temp1=0.0;	
+>>>>>>> crystalPlasticity
 
 			for(unsigned int k=0;k<dim;k++){
 				for(unsigned int l=0;l<dim;l++){
 					temp[k][l]=SCHMID_TENSOR1(dim*j+k,l);
 				}
 			}
+<<<<<<< HEAD
 			temp2.reinit(dim,dim);
 			CE_tau_trial.mmult(temp2,temp);
 			temp2.symmetrize();		
@@ -319,6 +401,12 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 			Dmat.vmult(tempv1, vecform(temp2));
 			temp3=0.0;
 			temp3 = matform(tempv1);	
+=======
+			temp2.reinit(dim,dim); CE_tau_trial.mmult(temp2,temp);
+			temp2.symmetrize();		
+			tempv1=0.0; Dmat.vmult(tempv1, vecform(temp2));
+			temp3=0.0; matform(temp3,tempv1);	
+>>>>>>> crystalPlasticity
 
 			for(unsigned int k=0;k<dim;k++){
 				for(unsigned int l=0;l<dim;l++){
@@ -337,13 +425,18 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 	FullMatrix<double> T_tau(dim,dim),P_tau(dim,dim);
 	Vector<double> s_alpha_tau;
 	FP_tau=FP_t;
+<<<<<<< HEAD
 
 	FE_tau.reinit(dim,dim);
 
+=======
+	FE_tau.reinit(dim,dim);
+>>>>>>> crystalPlasticity
 	F_tau.mmult(FE_tau,Fpn_inv);
 
 	double det_FE_tau,det_F_tau, det_FP_tau;
 	det_FE_tau=FE_tau.determinant();
+<<<<<<< HEAD
 	temp.reinit(dim,dim);
 	FE_tau.mmult(temp,T_star_tau_trial);
 	temp.equ(1.0/det_FE_tau,temp);
@@ -351,6 +444,12 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 	det_F_tau=F_tau.determinant();
 	temp.invert(F_tau);
 	T_tau.mTmult(P_tau,temp);
+=======
+	temp.reinit(dim,dim); FE_tau.mmult(temp,T_star_tau_trial);
+	temp.equ(1.0/det_FE_tau,temp); temp.mTmult(T_tau,FE_tau);
+	det_F_tau=F_tau.determinant();
+	temp.invert(F_tau); T_tau.mTmult(P_tau,temp);
+>>>>>>> crystalPlasticity
 	P_tau.equ(det_F_tau,P_tau);
 	s_alpha_tau=s_alpha_t;
 
@@ -412,9 +511,14 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
 			CE_tau_trial.mmult(temp2,temp);
 			temp2.symmetrize();
+<<<<<<< HEAD
 			tempv1=0.0;
 			Dmat.vmult(tempv1, vecform(temp2));
 			temp3 = matform(tempv1);		
+=======
+			tempv1=0.0; Dmat.vmult(tempv1, vecform(temp2));
+			matform(temp3,tempv1);		
+>>>>>>> crystalPlasticity
 
 
 			for(unsigned int j=0;j<dim;j++){
@@ -433,6 +537,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
 		temp.reinit(dim,dim);
 		det_FE_tau=FE_tau.determinant();
+<<<<<<< HEAD
 		FE_tau.mmult(temp,T_star_tau);
 		temp.equ(1.0/det_FE_tau,temp);
 		temp.mTmult(T_tau,FE_tau);
@@ -440,6 +545,13 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 		det_F_tau=F_tau.determinant();
 		temp.invert(F_tau);
 		T_tau.mTmult(P_tau,temp);
+=======
+		FE_tau.mmult(temp,T_star_tau); temp.equ(1.0/det_FE_tau,temp);
+		temp.mTmult(T_tau,FE_tau);
+
+		det_F_tau=F_tau.determinant();
+		temp.invert(F_tau); T_tau.mTmult(P_tau,temp);
+>>>>>>> crystalPlasticity
 		P_tau.equ(det_F_tau,P_tau);
 
 		double h1=0;
@@ -452,8 +564,11 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 		}
 
 		//% see whether shear resistance is passed
+<<<<<<< HEAD
 		//%     resolved_shear_tau=zeros(1,size(m_alpha,1));
 
+=======
+>>>>>>> crystalPlasticity
 		for(unsigned int i=0;i<n_slip_systems;i++){
 			for(unsigned int j=0;j<n_slip_systems;j++){
 				temp.reinit(dim,dim);
@@ -462,6 +577,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 						temp[k][l]=SCHMID_TENSOR1(dim*j+k,l);
 					}
 				}
+<<<<<<< HEAD
 				temp2.reinit(dim,dim);
 				CE_tau_trial.mmult(temp2,temp);
 				temp2.symmetrize();
@@ -470,6 +586,13 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 				Dmat.vmult(tempv1, vecform(temp2));
 				temp3.reinit(dim,dim);
 				temp3 = matform(tempv1);
+=======
+				temp2.reinit(dim,dim); CE_tau_trial.mmult(temp2,temp);
+				temp2.symmetrize();
+				tempv1.reinit(2*dim); tempv1=0.0;
+				Dmat.vmult(tempv1, vecform(temp2));
+				temp3.reinit(dim,dim); 	matform(temp3,tempv1);
+>>>>>>> crystalPlasticity
 				temp.reinit(dim,dim);	
 
 				for(unsigned int k=0;k<dim;k++){
@@ -480,6 +603,10 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 					}
 				}
 
+<<<<<<< HEAD
+=======
+				//Update the resolved shear stress
+>>>>>>> crystalPlasticity
 				for(unsigned int k=0;k<dim;k++){
 					for(unsigned int l=0;l<dim;l++){
 						if((resolved_shear_tau_trial(i)<0.0)^(resolved_shear_tau_trial(j)<0.0))
@@ -497,6 +624,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
 	}
 
+<<<<<<< HEAD
 
 		FullMatrix<double> PK1_Stiff(dim*dim,dim*dim);
 		tangent_modulus(F_trial, Fpn_inv, SCHMID_TENSOR1,A,A_PA,B,T_tau, PK1_Stiff, active, resolved_shear_tau_trial, x_beta, PA, n_PA,det_F_tau,det_FE_tau );
@@ -555,6 +683,57 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
 		if(cellID ==0 && quadPtID==0)
 			this->pcout<<sres_tau(0)<<'\t'<<sres_tau(1)<<'\t'<<sres_tau(2)<<'\t'<<sres_tau(3)<<'\t';
+=======
+	FullMatrix<double> PK1_Stiff(dim*dim,dim*dim);
+	tangent_modulus(F_trial, Fpn_inv, SCHMID_TENSOR1,A,A_PA,B,T_tau, PK1_Stiff, active, resolved_shear_tau_trial, x_beta, PA, n_PA,det_F_tau,det_FE_tau );
+
+	temp.reinit(dim,dim); T_tau.mTmult(temp,rotmat);
+	rotmat.mmult(T_tau,temp);
+
+	temp.reinit(dim,dim); P_tau.mTmult(temp,rotmat);
+	rotmat.mmult(P_tau,temp);
+
+	dP_dF=0.0;
+	FullMatrix<double> L(dim,dim),mn(dim,dim);
+	L=0.0;
+	temp1.reinit(dim,dim); temp1=IdentityMatrix(dim);
+	rotmat.Tmmult(L,temp1);
+
+	// Transform the tangent modulus back to crystal frame 
+	for(unsigned int m=0;m<dim;m++){
+		for(unsigned int n=0;n<dim;n++){
+			for(unsigned int o=0;o<dim;o++){
+				for(unsigned int p=0;p<dim;p++){
+					for(unsigned int i=0;i<dim;i++){
+						for(unsigned int j=0;j<dim;j++){
+							for(unsigned int k=0;k<dim;k++){
+								for(unsigned int l=0;l<dim;l++){
+									dP_dF[m][n][o][p]=dP_dF[m][n][o][p]+PK1_Stiff(dim*i+j,dim*k+l)*L(i,m)*L(j,n)*L(k,o)*L(l,p);
+								}
+							}
+						}
+					}						
+				}
+			}
+		}
+	}
+
+	P.reinit(dim,dim);
+	P=P_tau;
+	T=T_tau;
+
+
+	sres_tau.reinit(n_slip_systems);
+	sres_tau = s_alpha_tau;
+
+	// Update the history variables
+	Fe_iter[cellID][quadPtID]=FE_tau;
+	Fp_iter[cellID][quadPtID]=FP_tau;
+	s_alpha_iter[cellID][quadPtID]=sres_tau;
+
+	if(cellID ==0 && quadPtID==0)
+		this->pcout<<sres_tau(0)<<'\t'<<sres_tau(1)<<'\t'<<sres_tau(2)<<'\t'<<sres_tau(3)<<'\t';
+>>>>>>> crystalPlasticity
 
 
 }
@@ -645,12 +824,16 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 	Fp_conv=Fp_iter;
 	s_alpha_conv=s_alpha_iter;
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> crystalPlasticity
 }
 
 
 template <int dim>
+<<<<<<< HEAD
 FullMatrix<double> crystalPlasticity<dim>::tracev(FullMatrix<double> elm, FullMatrix<double> B) {
 
 	FullMatrix<double> Atrace(dim*dim,dim*dim);
@@ -664,6 +847,18 @@ FullMatrix<double> crystalPlasticity<dim>::tracev(FullMatrix<double> elm, FullMa
 
 	for(unsigned int i=0;i<9;i++){
 
+=======
+void crystalPlasticity<dim>::tracev(FullMatrix<double> &Atrace, FullMatrix<double> elm, FullMatrix<double> B) {
+
+	Atrace.reinit(dim*dim,dim*dim);
+	Vector<double> C(dim*dim);
+
+	for(unsigned int i=0;i<9;i++){
+		C(i)=elm(0,i)+elm(4,i)+elm(8,i);
+	}
+
+	for(unsigned int i=0;i<9;i++){
+>>>>>>> crystalPlasticity
 		for(unsigned int j=0;j<dim;j++){
 			for(unsigned int k=0;k<dim;k++){
 				Atrace(dim*j+k, i) =  B(j, k) * C(i);
@@ -671,18 +866,28 @@ FullMatrix<double> crystalPlasticity<dim>::tracev(FullMatrix<double> elm, FullMa
 		}
 	}
 
+<<<<<<< HEAD
 
 	return Atrace;
+=======
+>>>>>>> crystalPlasticity
 }  
 
 
 
 
 template <int dim>
+<<<<<<< HEAD
 FullMatrix<double> crystalPlasticity<dim>::ElasticProd(FullMatrix<double> elm, FullMatrix<double> ElasticityTensor) {  
 
 	int index=0;
 	FullMatrix<double> stress(dim,dim);
+=======
+void crystalPlasticity<dim>::ElasticProd(FullMatrix<double> &stress,FullMatrix<double> elm, FullMatrix<double> ElasticityTensor) {  
+
+	int index=0;
+	stress.reinit(dim,dim);
+>>>>>>> crystalPlasticity
 	Vector<double> temp1(2*dim),temp2(2*dim);
 
 	for(unsigned int i=0;i<dim;i++){
@@ -712,8 +917,11 @@ FullMatrix<double> crystalPlasticity<dim>::ElasticProd(FullMatrix<double> elm, F
 	stress(2, 0) = stress(0, 2);
 	stress(2, 1) = stress(1, 2);
 
+<<<<<<< HEAD
 	return stress;
 
+=======
+>>>>>>> crystalPlasticity
 }
 
 
@@ -722,9 +930,15 @@ FullMatrix<double> crystalPlasticity<dim>::ElasticProd(FullMatrix<double> elm, F
 
 
 template <int dim>
+<<<<<<< HEAD
 FullMatrix<double> crystalPlasticity<dim>::right(FullMatrix<double> elm) {
 
 	FullMatrix<double> Aright(9,9);
+=======
+void crystalPlasticity<dim>::right(FullMatrix<double> &Aright,FullMatrix<double> elm) {
+
+	Aright.reinit(dim*dim,dim*dim);
+>>>>>>> crystalPlasticity
 
 	Aright=0.0;
 
@@ -738,14 +952,23 @@ FullMatrix<double> crystalPlasticity<dim>::right(FullMatrix<double> elm) {
 		}
 	}
 
+<<<<<<< HEAD
 	return Aright;
+=======
+>>>>>>> crystalPlasticity
 }
 
 
 template <int dim>
+<<<<<<< HEAD
 FullMatrix<double> crystalPlasticity<dim>::left(FullMatrix<double> elm) {
 
 	FullMatrix<double> Aleft(9,9);
+=======
+void crystalPlasticity<dim>::left(FullMatrix<double> &Aleft,FullMatrix<double> elm) {
+
+	Aleft.reinit(dim*dim,dim*dim);
+>>>>>>> crystalPlasticity
 
 	Aleft=0.0;
 
@@ -759,14 +982,23 @@ FullMatrix<double> crystalPlasticity<dim>::left(FullMatrix<double> elm) {
 		}
 	}
 
+<<<<<<< HEAD
 	return Aleft;
+=======
+>>>>>>> crystalPlasticity
 }
 
 
 template <int dim>
+<<<<<<< HEAD
 FullMatrix<double> crystalPlasticity<dim>::symmf(FullMatrix<double> elm) {
 
 	FullMatrix<double> A(9,9);
+=======
+void crystalPlasticity<dim>::symmf(FullMatrix<double> &A, FullMatrix<double> elm) {
+
+	A.reinit(dim*dim,dim*dim);
+>>>>>>> crystalPlasticity
 
 	for(unsigned int i=0;i<9;i++){
 
@@ -785,7 +1017,10 @@ FullMatrix<double> crystalPlasticity<dim>::symmf(FullMatrix<double> elm) {
 		}
 	}
 
+<<<<<<< HEAD
 	return A;
+=======
+>>>>>>> crystalPlasticity
 }
 
 
@@ -806,9 +1041,15 @@ Vector<double> crystalPlasticity<dim>::vecform(FullMatrix<double> A) {
 }
 
 template <int dim>
+<<<<<<< HEAD
 FullMatrix<double> crystalPlasticity<dim>::matform(Vector<double> Av) {
 
 	FullMatrix<double> A(dim,dim);
+=======
+void crystalPlasticity<dim>::matform(FullMatrix<double> &A, Vector<double> Av) {
+
+	A.reinit(dim,dim);
+>>>>>>> crystalPlasticity
 
 	A[0][0]=Av(0) ;
 	A[1][1]=Av(1) ;
@@ -820,11 +1061,18 @@ FullMatrix<double> crystalPlasticity<dim>::matform(Vector<double> Av) {
 	A[2][0]=Av(4) ;
 	A[1][0]=Av(5) ;
 
+<<<<<<< HEAD
 	return A;
 }
 
 template <int dim>
 FullMatrix<double> crystalPlasticity<dim>::odfpoint(Vector<double> r) {
+=======
+}
+
+template <int dim>
+void crystalPlasticity<dim>::odfpoint(FullMatrix <double> &OrientationMatrix,Vector<double> r) {
+>>>>>>> crystalPlasticity
 
 
 	//function OrientationMatrix = odfpoint(r)
@@ -840,7 +1088,11 @@ FullMatrix<double> crystalPlasticity<dim>::odfpoint(Vector<double> r) {
 	double term1 = 1.0 - (rdotr);
 	double term2 = 1.0 + (rdotr);
 
+<<<<<<< HEAD
 	FullMatrix <double> OrientationMatrix(dim,dim);OrientationMatrix = IdentityMatrix(dim);
+=======
+	OrientationMatrix.reinit(dim,dim);OrientationMatrix = IdentityMatrix(dim);
+>>>>>>> crystalPlasticity
 
 	for(unsigned int i=0;i<dim;i++){
 
@@ -869,6 +1121,7 @@ FullMatrix<double> crystalPlasticity<dim>::odfpoint(Vector<double> r) {
 		}
 	}
 
+<<<<<<< HEAD
 	return OrientationMatrix;
 
 }
@@ -907,6 +1160,10 @@ Tensor<4,dim,double> crystalPlasticity<dim>::get_dP_dF(){
 template <int dim>
 Vector<double> crystalPlasticity<dim>::get_sres(){
 	return sres_tau;
+=======
+
+
+>>>>>>> crystalPlasticity
 }
 
 
@@ -916,6 +1173,7 @@ void crystalPlasticity<dim>::tangent_modulus(FullMatrix<double> &F_trial, FullMa
 
 	int iter=0,iter1=0,iter2=0,iter3=0;
 	FullMatrix<double> temp(dim,dim),temp1(dim,dim),temp2(dim,dim),temp3(dim,dim);
+<<<<<<< HEAD
 
 	FullMatrix<double> Dmat2=Dmat;
 
@@ -927,6 +1185,13 @@ void crystalPlasticity<dim>::tangent_modulus(FullMatrix<double> &F_trial, FullMa
 
 	Vector<double> vec1(6), vec2(9);
 
+=======
+	FullMatrix<double> Dmat2=Dmat;
+	FullMatrix<double> ElasticityTensor(6,6), TM(9,9);
+	Vector<double> vec1(6), vec2(9);
+
+	Dmat2(3,3)=properties.C44; 	Dmat2(4,4)=properties.C44; 	Dmat2(5,5)=properties.C44;
+>>>>>>> crystalPlasticity
 	vec1(0)=0;vec1(1)=5;vec1(2)=4;vec1(3)=1;vec1(4)=3;vec1(5)=2;
 	vec2(0)=0;vec2(1)=5;vec2(2)=4;vec2(3)=5;vec2(4)=1;vec2(5)=3;vec2(6)=4;vec2(7)=3;vec2(8)=2;
 
@@ -946,17 +1211,28 @@ void crystalPlasticity<dim>::tangent_modulus(FullMatrix<double> &F_trial, FullMa
 	FullMatrix<double> F_temp(dim,dim);
 	F_temp=Fpn_inv;
 	FullMatrix<double> scratch_1,scratch_2,EtF;
+<<<<<<< HEAD
 	scratch_1 = right(F_temp);
+=======
+	right(scratch_1, F_temp);
+>>>>>>> crystalPlasticity
 	for(unsigned int i=0;i<dim;i++){
 		for(unsigned int j=0;j<dim;j++){
 			F_temp[i][j]=F_trial[j][i];
 		}
 	}
 
+<<<<<<< HEAD
 	scratch_2 = left(F_temp);
 	F_temp.reinit(9,9);
 	scratch_1.mmult(F_temp,scratch_2);
 	EtF=symmf(F_temp);
+=======
+	left(scratch_2,F_temp);
+	F_temp.reinit(9,9);
+	scratch_1.mmult(F_temp,scratch_2);
+	symmf(EtF,F_temp);
+>>>>>>> crystalPlasticity
 
 	FullMatrix<double> s(dim,dim),p(n_PA,dim*dim),dgammadEmat(dim,dim), dgammadEtrial(n_PA,dim*dim),dgammadF(n_PA,dim*dim);
 	Vector<double> P_as_vec3(dim*dim),s1(dim*dim),s2(dim*dim),temps2(dim*dim);
@@ -993,6 +1269,7 @@ void crystalPlasticity<dim>::tangent_modulus(FullMatrix<double> &F_trial, FullMa
 					}
 				}
 
+<<<<<<< HEAD
 				temp1.reinit(dim*dim,dim*dim);
 				temp2.reinit(dim*dim,dim*dim);
 				temp1=right(temp3);
@@ -1000,6 +1277,13 @@ void crystalPlasticity<dim>::tangent_modulus(FullMatrix<double> &F_trial, FullMa
 				temp1.add(1.0,temp2);
 				TM.mmult(temp2,temp1);
 				temp2.Tvmult(temps2,P_as_vec3);
+=======
+				temp1.reinit(dim*dim,dim*dim); temp2.reinit(dim*dim,dim*dim);
+				right(temp1,temp3); left(temp2,temp);
+				temp1.add(1.0,temp2);
+				TM.mmult(temp2,temp1); temp2.Tvmult(temps2,P_as_vec3);
+
+>>>>>>> crystalPlasticity
 				if((resolved_shear_tau_trial(iter)<0.0)^(resolved_shear_tau_trial(iter3)<0.0))
 					temps2.equ(-1.0*x_beta(iter3),temps2);
 				else
@@ -1023,6 +1307,7 @@ void crystalPlasticity<dim>::tangent_modulus(FullMatrix<double> &F_trial, FullMa
 			}
 		}
 
+<<<<<<< HEAD
 		temp.reinit(n_PA,n_PA);
 		temp.invert(A_PA);
 		temp.mmult(dgammadEtrial,p);
@@ -1032,6 +1317,14 @@ void crystalPlasticity<dim>::tangent_modulus(FullMatrix<double> &F_trial, FullMa
 
 	s.reinit(dim*dim,dim*dim);
 	s=0.0;
+=======
+		temp.reinit(n_PA,n_PA); temp.invert(A_PA);
+		temp.mmult(dgammadEtrial,p); dgammadEtrial.mmult(dgammadF,EtF);
+
+	}
+
+	s.reinit(dim*dim,dim*dim); s=0.0;
+>>>>>>> crystalPlasticity
 
 	int alpha=0;
 	if(n_PA>0){
@@ -1047,8 +1340,12 @@ void crystalPlasticity<dim>::tangent_modulus(FullMatrix<double> &F_trial, FullMa
 				}
 			}
 
+<<<<<<< HEAD
 			temp1.reinit(dim*dim,dim*dim);
 			temp1 = right(dgammadEmat);
+=======
+			temp1.reinit(dim*dim,dim*dim); right(temp1,dgammadEmat);
+>>>>>>> crystalPlasticity
 			temp.reinit(dim,dim);
 			for(unsigned int j=0;j<dim;j++){
 				for(unsigned int k=0;k<dim;k++){
@@ -1056,11 +1353,17 @@ void crystalPlasticity<dim>::tangent_modulus(FullMatrix<double> &F_trial, FullMa
 				}
 			}
 
+<<<<<<< HEAD
 			temp3.reinit(dim,dim);			
 			temp3=0.0;	
 			temp3=ElasticProd(temp,ElasticityTensor);	
 			temp2.reinit(dim*dim,dim*dim);
 			temp2=tracev(temp1,temp3);
+=======
+			temp3.reinit(dim,dim); temp3=0.0;	
+			ElasticProd(temp3,temp,ElasticityTensor);	
+			temp2.reinit(dim*dim,dim*dim); tracev(temp2,temp1,temp3);
+>>>>>>> crystalPlasticity
 
 			if(resolved_shear_tau_trial(alpha)>0){
 				temp2.add(-1.5,temp2);	 
@@ -1074,9 +1377,13 @@ void crystalPlasticity<dim>::tangent_modulus(FullMatrix<double> &F_trial, FullMa
 
 	FullMatrix<double> smat1(dim*dim,dim*dim),smat2(dim*dim,dim*dim), smat3(dim*dim,dim*dim);
 
+<<<<<<< HEAD
 	smat1=0.0;
 	smat1.add(1.0,s);
 	smat1.add(1.0,TM);
+=======
+	smat1=0.0; smat1.add(1.0,s); smat1.add(1.0,TM);
+>>>>>>> crystalPlasticity
 	smat3=0;
 
 	if(n_PA>0){
@@ -1091,8 +1398,13 @@ void crystalPlasticity<dim>::tangent_modulus(FullMatrix<double> &F_trial, FullMa
 				}
 			}	
 
+<<<<<<< HEAD
 			temp1=right(F_temp);
 			temp2=left(temp3);
+=======
+			right(temp1,F_temp);
+			left(temp2,temp3);
+>>>>>>> crystalPlasticity
 			temp1.add(1.0,temp2);
 			TM.mmult(temp2,temp1);
 			if(resolved_shear_tau_trial(alpha)>0){
@@ -1108,9 +1420,13 @@ void crystalPlasticity<dim>::tangent_modulus(FullMatrix<double> &F_trial, FullMa
 
 	FullMatrix<double> tangent_moduli(dim*dim,dim*dim),dgammadFmat(dim,dim);
 
+<<<<<<< HEAD
 	tangent_moduli=0.0;
 	tangent_moduli.add(1.0,smat1);
 	tangent_moduli.add(1.0,smat3);
+=======
+	tangent_moduli=0.0; tangent_moduli.add(1.0,smat1); tangent_moduli.add(1.0,smat3);
+>>>>>>> crystalPlasticity
 	smat2=0.0;	
 
 	if(n_PA>0){
@@ -1125,9 +1441,15 @@ void crystalPlasticity<dim>::tangent_modulus(FullMatrix<double> &F_trial, FullMa
 				}
 			}	
 
+<<<<<<< HEAD
 			temp1=right(dgammadFmat);
 			F_trial.mmult(temp3,temp2);
 			temp2=tracev(temp1,temp3);
+=======
+			right(temp1,dgammadFmat);
+			F_trial.mmult(temp3,temp2);
+			tracev(temp2,temp1,temp3);
+>>>>>>> crystalPlasticity
 			if(resolved_shear_tau_trial(alpha)>0){
 				temp2.equ(-1.0,temp2); 
 			}
@@ -1136,6 +1458,7 @@ void crystalPlasticity<dim>::tangent_modulus(FullMatrix<double> &F_trial, FullMa
 	}
 
 	temp2.reinit(dim,dim);
+<<<<<<< HEAD
 	smat1.reinit(dim*dim,dim*dim);
 	temp2.invert(FP_tau);
 	smat1=right(temp2);
@@ -1147,6 +1470,16 @@ void crystalPlasticity<dim>::tangent_modulus(FullMatrix<double> &F_trial, FullMa
 	FeF.add(1.0,smat2);
 	temp1.reinit(dim,dim);
 	temp1.invert(FE_tau);
+=======
+	smat1.reinit(dim*dim,dim*dim); 
+	temp2.invert(FP_tau);
+	right(smat1,temp2);
+
+
+	FullMatrix<double> FeF(dim*dim,dim*dim);
+	FeF=0.0; FeF.add(1.0,smat1); FeF.add(1.0,smat2);
+	temp1.reinit(dim,dim); temp1.invert(FE_tau);
+>>>>>>> crystalPlasticity
 	F_temp.reinit(dim,dim);
 
 
@@ -1154,12 +1487,20 @@ void crystalPlasticity<dim>::tangent_modulus(FullMatrix<double> &F_trial, FullMa
 	F_temp=temp1;
 	FullMatrix<double> C4(dim*dim,dim*dim);
 
+<<<<<<< HEAD
 	C4=right(F_temp);
 
 	FullMatrix<double> Term1(dim*dim,dim*dim),Term2(dim*dim,dim*dim),Term3(dim*dim,dim*dim),Term24(dim*dim,dim*dim);
 	Term3=tracev(C4,T_tau);
 	Term3.mmult(Term1,FeF);
 	Term1.equ(-1.0, Term1);
+=======
+	right(C4,F_temp);
+
+	FullMatrix<double> Term1(dim*dim,dim*dim),Term2(dim*dim,dim*dim),Term3(dim*dim,dim*dim),Term24(dim*dim,dim*dim);
+	tracev(Term3,C4,T_tau);
+	Term3.mmult(Term1,FeF); Term1.equ(-1.0, Term1);
+>>>>>>> crystalPlasticity
 
 	//term 3; Fe * dT_bar * FeT * (1/det(Fe)) = [Term3]{dF}
 
@@ -1167,6 +1508,7 @@ void crystalPlasticity<dim>::tangent_modulus(FullMatrix<double> &F_trial, FullMa
 	F_temp=FE_tau;	
 
 	FullMatrix<double> cauchy_Stiff(dim*dim,dim*dim);
+<<<<<<< HEAD
 	scratch_1.reinit(dim*dim,dim*dim);
 	scratch_1=left(F_temp);
 	temp1.reinit(dim,dim);
@@ -1183,10 +1525,22 @@ void crystalPlasticity<dim>::tangent_modulus(FullMatrix<double> &F_trial, FullMa
 	scratch_2.mmult(scratch_1,tangent_moduli);
 	Term3.reinit(dim*dim,dim*dim);
 	scratch_1.mmult(Term3,EtF);
+=======
+	scratch_1.reinit(dim*dim,dim*dim); left(scratch_1,F_temp);
+	temp1.reinit(dim,dim); temp1=IdentityMatrix(dim);
+
+	temp2.reinit(dim,dim); temp2=F_temp;
+	temp2.Tmmult(F_temp,temp1);
+
+	right(C4,F_temp); C4.mmult(scratch_2,scratch_1);
+	scratch_1.reinit(dim*dim,dim*dim); scratch_2.mmult(scratch_1,tangent_moduli);
+	Term3.reinit(dim*dim,dim*dim); scratch_1.mmult(Term3,EtF);
+>>>>>>> crystalPlasticity
 	Term3.equ(1.0/det_FE_tau, Term3); 
 
 	//term 2&4: (dFe * Fe_inv) * T + T * (dFe * Fe_inv)^T = 2Symm(dFe * Fe_inv * T) = [Term24]{dF}
 
+<<<<<<< HEAD
 	temp2.invert(FE_tau);
 	temp2.mmult(F_temp,T_tau);
 	C4=right(F_temp);
@@ -1239,6 +1593,32 @@ void crystalPlasticity<dim>::tangent_modulus(FullMatrix<double> &F_trial, FullMa
 	PK1_Stiff.equ(det_F_tau,PK1_Stiff);	
 
 
+=======
+	temp2.invert(FE_tau); temp2.mmult(F_temp,T_tau);
+	right(C4,F_temp);
+	temp3.reinit(dim*dim,dim*dim); temp3=C4;
+	symmf(C4,temp3);
+	Term24=0.0; C4.mmult(Term24,FeF); Term24.equ(2.0,Term24);
+	cauchy_Stiff=0.0; cauchy_Stiff.add(1.0, Term1); cauchy_Stiff.add(1.0, Term24); cauchy_Stiff.add(1.0, Term3);
+	temp1.reinit(dim,dim); temp1.invert(F_tau);
+
+	C4.reinit(dim*dim,dim*dim); right(C4,temp1);
+	Term1.reinit(dim*dim,dim*dim); tracev(Term1,C4,T_tau);
+
+	scratch_1.reinit(dim*dim,dim*dim); right(scratch_1,F_temp);
+	Term2.reinit(dim*dim,dim*dim); symmf(Term2,scratch_1);
+	Term2.equ(2.0,Term2); Term2.add(-1.0,scratch_1); Term2.equ(-1.0,Term2);
+
+	Term3.reinit(dim*dim,dim*dim); Term3=cauchy_Stiff;
+
+	PK1_Stiff=0.0; PK1_Stiff.add(1.0,Term1); PK1_Stiff.add(1.0,Term2); PK1_Stiff.add(1.0,Term3);
+	temp2.reinit(dim,dim); temp2=IdentityMatrix(dim);
+	temp3.reinit(dim,dim); temp3=temp1; temp3.Tmmult(temp1,temp2);
+	temp2.reinit(dim*dim,dim*dim); right(temp2,temp1);
+	temp3.reinit(dim*dim,dim*dim); temp3=PK1_Stiff;
+	temp3.mmult(PK1_Stiff,temp2);
+	PK1_Stiff.equ(det_F_tau,PK1_Stiff);	
+>>>>>>> crystalPlasticity
 
 }
 
@@ -1260,9 +1640,13 @@ void crystalPlasticity<dim>::inactive_slip_removal(Vector<double> &inactive,Vect
 			A_PA[i][j]=A[PA(i)][PA(j)];
 		}
 	}    
+<<<<<<< HEAD
 	temp.reinit(n_PA,n_PA); 
 	temp.invert(A_PA);
 
+=======
+	temp.reinit(n_PA,n_PA); temp.invert(A_PA);
+>>>>>>> crystalPlasticity
 	Vector<double> tempv3;	
 	temp.vmult(x_beta1,b_PA);	
 
@@ -1281,17 +1665,26 @@ void crystalPlasticity<dim>::inactive_slip_removal(Vector<double> &inactive,Vect
 
 	}    
 
+<<<<<<< HEAD
 	x_beta2=x_beta1;
 	x_beta1.reinit(n_slip_systems);
+=======
+	x_beta2=x_beta1; x_beta1.reinit(n_slip_systems);
+>>>>>>> crystalPlasticity
 	x_beta1=0;
 	for(unsigned int i=0;i<n_PA;i++){
 		x_beta1(PA(i))=x_beta2(i);
 	}
 
+<<<<<<< HEAD
 	Vector<double> row;
 	double n_IA_new;
 	Vector<double> PA_new;
 	Vector<double> inactive2;
+=======
+	Vector<double> row,PA_new,inactive2;
+	double n_IA_new;
+>>>>>>> crystalPlasticity
 
 	// Continue the process till removal of all inactive slip systems
 	while (flag1==0){
@@ -1316,8 +1709,12 @@ void crystalPlasticity<dim>::inactive_slip_removal(Vector<double> &inactive,Vect
 
 			n_IA_new=iter;
 			PA_new.reinit(n_PA-n_IA_new);
+<<<<<<< HEAD
 			iter2=0;
 			iter=0;
+=======
+			iter2=0; iter=0;
+>>>>>>> crystalPlasticity
 			for(unsigned int i=0;i<n_PA;i++){
 				for(unsigned int j=0;j<n_IA_new;j++){
 					if(PA(i) != row(j)){
@@ -1333,6 +1730,7 @@ void crystalPlasticity<dim>::inactive_slip_removal(Vector<double> &inactive,Vect
 
 			}
 
+<<<<<<< HEAD
 			PA.reinit(n_PA-n_IA_new);
 			PA=PA_new;
 
@@ -1341,6 +1739,12 @@ void crystalPlasticity<dim>::inactive_slip_removal(Vector<double> &inactive,Vect
 			inactive2=inactive;
 
 			inactive.reinit(n_slip_systems-n_PA+n_IA_new);
+=======
+			PA.reinit(n_PA-n_IA_new); PA=PA_new;
+			inactive2.reinit(n_slip_systems-n_PA); inactive2=inactive;
+			inactive.reinit(n_slip_systems-n_PA+n_IA_new);
+
+>>>>>>> crystalPlasticity
 			for(unsigned int i=0;i<(n_slip_systems-n_PA+n_IA_new);i++){
 				if(i<n_slip_systems-n_PA){
 					inactive(i)=inactive2(i);
@@ -1352,10 +1756,15 @@ void crystalPlasticity<dim>::inactive_slip_removal(Vector<double> &inactive,Vect
 				}
 			}
 
+<<<<<<< HEAD
 			A_PA.reinit(n_PA-n_IA_new,n_PA-n_IA_new);
 			A_PA=0.0;
 			b_PA.reinit(n_PA-n_IA_new);
 			b_PA=0.0;
+=======
+			A_PA.reinit(n_PA-n_IA_new,n_PA-n_IA_new); A_PA=0.0;
+			b_PA.reinit(n_PA-n_IA_new); b_PA=0.0;
+>>>>>>> crystalPlasticity
 
 
 			for(unsigned int i=0;i<(n_PA-n_IA_new);i++){
@@ -1364,6 +1773,7 @@ void crystalPlasticity<dim>::inactive_slip_removal(Vector<double> &inactive,Vect
 					A_PA[i][j]=A[PA(i)][PA(j)];
 				}
 			}
+<<<<<<< HEAD
 			temp.reinit(n_PA-n_IA_new,n_PA-n_IA_new);
 			temp.invert(A_PA);
 
@@ -1375,6 +1785,16 @@ void crystalPlasticity<dim>::inactive_slip_removal(Vector<double> &inactive,Vect
 			x_beta1.reinit(n_slip_systems);
 			x_beta1=0.0;
 			n_PA=n_PA-n_IA_new;
+=======
+			temp.reinit(n_PA-n_IA_new,n_PA-n_IA_new); temp.invert(A_PA);
+
+
+			x_beta1.reinit(n_PA-n_IA_new); temp.vmult(x_beta1,b_PA); 
+			x_beta2.reinit(n_PA-n_IA_new); x_beta2=x_beta1;
+			x_beta1.reinit(n_slip_systems);x_beta1=0.0;
+			n_PA=n_PA-n_IA_new;
+
+>>>>>>> crystalPlasticity
 			for(unsigned int i=0;i<n_PA;i++){
 				x_beta1(PA(i))=x_beta2(i);
 			}
@@ -1405,16 +1825,22 @@ void crystalPlasticity<dim>::inactive_slip_removal(Vector<double> &inactive,Vect
 	}
 
 
+<<<<<<< HEAD
 	active.reinit(n_PA);
 	active=PA;
 	x_beta.reinit(n_slip_systems);
 	x_beta=x_beta1;
+=======
+	active.reinit(n_PA); active=PA;
+	x_beta.reinit(n_slip_systems); x_beta=x_beta1;
+>>>>>>> crystalPlasticity
 
 
 }
 
 
 template <int dim>
+<<<<<<< HEAD
 void crystalPlasticity<dim>::updateHistory() {
 	//Update the history variables 
 	Fe_conv=Fe_iter;
@@ -1434,5 +1860,102 @@ void crystalPlasticity<dim>::updateHistory() {
 
 
 
+=======
+void crystalPlasticity<dim>::reorient() {
+	//Update the history variables 
+
+	LAPACKFullMatrix<double> C_old(dim,dim),C_new(dim,dim);
+
+	Vector<double> eigenvalues(dim);
+	FullMatrix<double> C_old_temp(dim,dim),C_new_temp(dim,dim),Fe_old(dim,dim), Fe_new(dim,dim), eigenvectors(dim,dim),Lambda(dim,dim),U_old(dim,dim),U_new(dim,dim),R_old(dim,dim),R_new(dim,dim),Omega(dim,dim),temp(dim,dim); 
+	Lambda=IdentityMatrix(dim);
+	Omega=0.0;
+	Vector<double> rot1(dim),Omega_vec(dim),rold(dim),dr(dim),rnew(dim);
+	FullMatrix<double> rotmat(dim,dim);
+	int itgno;
+	for(unsigned int i=0;i<No_Elem;i++){
+
+		for(unsigned int j=0;j<N_qpts;j++){
+
+
+			itgno=i*N_qpts+j;
+			C_old_temp=0.0;
+			C_old=0.0;
+
+			Fe_old=Fe_conv[i][j];
+			Fe_new=Fe_iter[i][j];
+			Fe_old.Tmmult(C_old_temp,Fe_old);  
+			C_old=C_old_temp;
+			C_old.compute_eigenvalues_symmetric(0.0,200000.0,1e-15,eigenvalues, eigenvectors);
+
+			for(unsigned int k=0;k<dim;k++){
+				Lambda(k,k)=sqrt(eigenvalues(k));
+			}
+
+			eigenvectors.mmult(U_old,Lambda);
+			temp=U_old; temp.mTmult(U_old,eigenvectors);
+			R_old.invert(U_old);
+			temp=R_old; Fe_old.mmult(R_old,temp);
+			Fe_new.Tmmult(C_new_temp,Fe_new);
+			C_new=C_new_temp;
+			C_new.compute_eigenvalues_symmetric(0.0,200000.0,1e-15,eigenvalues, eigenvectors);
+
+			for(unsigned int k=0;k<dim;k++){
+				Lambda(k,k)=sqrt(eigenvalues(k));
+			}
+
+			eigenvectors.mmult(U_new,Lambda);
+			temp=U_new; temp.mTmult(U_new,eigenvectors);
+			R_new.invert(U_new);
+			temp=R_new; Fe_new.mmult(R_new,temp);
+
+			Omega=0.0; Omega.add(1.0,R_new); Omega.add(-1.0,R_old);
+			temp=Omega; temp.mTmult(Omega,R_new);
+
+			for (unsigned int k=0;k<dim;k++){
+				rot1(k)=rot[itgno][k];
+			}
+
+			for (unsigned int k=0;k<dim;k++){
+				rold(k)=rotnew[itgno][k];
+			}
+
+			rotmat.fill(odfpoint(rot1));
+			if(itgno==1)
+
+
+				temp=Omega;
+			temp.mTmult(Omega,rotmat);
+			temp=Omega;
+			rotmat.mmult(Omega,temp);
+
+
+			Omega_vec(0)=-0.5*(Omega(1,2)-Omega(2,1));Omega_vec(1)=0.5*(Omega(0,2)-Omega(2,0));Omega_vec(2)=-0.5*(Omega(0,1)-Omega(1,0));
+
+			double dot;
+			dot=Omega_vec(0)*rold(0)+Omega_vec(1)*rold(1)+Omega_vec(2)*rold(2);
+			Vector<double> cross(dim),dot_term(dim);
+
+			dot_term(0)=dot*rold(0);dot_term(1)=dot*rold(1);dot_term(2)=dot*rold(2);
+
+			cross(0)=Omega_vec(1)*rold(2)-Omega_vec(2)*rold(1);
+			cross(1)=Omega_vec(2)*rold(0)-Omega_vec(0)*rold(2);
+			cross(2)=Omega_vec(0)*rold(1)-Omega_vec(1)*rold(0);
+
+			dr=0.0;	dr.add(1.0, Omega_vec); dr.add(1.0,dot_term); dr.add(1.0,cross); dr.equ(0.5,dr);
+
+			rnew=0.0; rnew.add(1.0,rold); rnew.add(1.0,dr);
+
+			for (unsigned int k=0;k<dim;k++){
+				rotnew[itgno][k]=rnew(k);
+			}
+
+
+		}
+	}
+
+}
+
+>>>>>>> crystalPlasticity
 
 #endif
