@@ -7,10 +7,10 @@ using namespace std;
 
 #define feOrder   1
 #define quadOrder 2 
-#define meshRefineFactor 3
+#define meshRefineFactor 4
 #define writeOutput true
 #define linearSolverType PETScWrappers::SolverCG
-#define totalNumIncrements 100
+#define totalNumIncrements 10
 #define maxLinearSolverIterations 5000
 #define relLinearSolverTolerance  1.0e-10
 #define maxNonLinearIterations 30
@@ -126,52 +126,21 @@ int main (int argc, char **argv)
       deallog.depth_console(0);
       crystalPlasticity<3> problem;
 			
-    FullMatrix<double>  rot, m_alpha,n_alpha;
+    FullMatrix<double> m_alpha,n_alpha;
 	const unsigned int n_slip_systems=12; 
-	//const unsigned int n_orientations=triangulation.n_active_cells()*quadrature_formula.size();
-	
-	const unsigned int n_orientations=2^6*8;
 		
-	
-	rot.reinit(n_orientations,3);
 	n_alpha.reinit(n_slip_systems,3);
 	m_alpha.reinit(n_slip_systems,3);
 	string line;
 	ifstream myfile;
 
-
-	myfile.open("orientations");
+	 myfile.open("slipNormals");
 	  int i=0;
 	  int j=0;
-	  if (myfile.is_open()){
-		  for (unsigned int k=0; k<3*n_orientations; k++){
-			  if(j==2){
-				  getline(myfile,line,'\n');
-			  }
-			  else
-				getline(myfile,line,'\t');
-				rot[i][j] = atof(line.c_str()); 
-				//pcout<<line.c_str()<<'\t';
-				j++;
-				if(j==3){
-				i=i+1;
-				j=0;
-				//pcout<<'\n';
-			}
-			
-	   }
-	 myfile.close();
-	  }
-	  else cout << "Unable to open orientations file"; 
-	  myfile.clear() ;
-	  myfile.open("slipNormals");
-	  i=0;
-	  j=0;
 	  if (myfile.is_open()){
 		for (unsigned int k=0; k<3*n_slip_systems; k++){	     
 			getline (myfile,line,'\t');
 			n_alpha[i][j] = atof(line.c_str()); 
-			//pcout<<line.c_str()<<'\n';  
 			j++;
 				if(j==3){
 					i=i+1;
@@ -182,6 +151,8 @@ int main (int argc, char **argv)
 	  }
 	  else cout << "Unable to open slipNormals file"; 
 	  myfile.clear() ;
+
+
   	  myfile.open("slipDirections");
 	  i=0;
 	  j=0;
@@ -189,7 +160,6 @@ int main (int argc, char **argv)
 		for (unsigned int k=0; k<3*n_slip_systems; k++){	     
 			getline (myfile,line,'\t');
 			m_alpha[i][j] = atof(line.c_str()); 
-			//pcout<<m_alpha[i][j]<<'\n';
 			j++;
 				if(j==3){
 					i=i+1;
@@ -200,8 +170,8 @@ int main (int argc, char **argv)
 	  }
 	  else cout << "Unable to open slipDirections file"; 
 	  myfile.clear() ;
+	
 	problem.properties.n_slip_systems=n_slip_systems;
-	problem.properties.n_orientations=n_orientations;
 	problem.properties.q1=1.4;
 	problem.properties.q2=1.0;
 	problem.properties.a=2.25;
@@ -210,7 +180,6 @@ int main (int argc, char **argv)
 	problem.properties.s0=16;
 	problem.properties.C11=170e3;
 	problem.properties.C12=124e3;	
-	problem.properties.rot=rot;
 	problem.properties.m_alpha=m_alpha;
 	problem.properties.n_alpha=n_alpha;
 		
