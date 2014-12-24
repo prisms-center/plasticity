@@ -18,12 +18,8 @@ using namespace std;
 #define relNonLinearTolerance 1.0e-10
 #define stopOnConvergenceFailure false
 
-//Read json input 
-#include "../../../utils/json/json_spirit.h"
-#include "../../../utils/json/json_spirit_reader_template.h"
-
 //dealIIheaders
-#include "../../../src/materialModels/crystalPlasticity/crystalPlasticity.cc"
+#include "../../../../src/materialModels/crystalPlasticity/crystalPlasticity.cc"
  
 //Mark boundaries for applying Dirichlet BC's
 template <int dim>
