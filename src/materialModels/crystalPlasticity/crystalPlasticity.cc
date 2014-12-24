@@ -4,9 +4,6 @@
 
 //dealii headers
 #include "../../../include/ellipticBVP.h"
-#include "PFunction.hh"
-#include "models/PLibrary.hh"
-
 
 typedef struct {
 
@@ -131,8 +128,8 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
 	}
 
 	for (unsigned int i=0;i<dim;i++){
-		rot_init(i)=0.1*i;;
-		rotnew_init(i)=0.1*i;
+		rot_init(i)=0.0;
+		rotnew_init(i)=0.0;
 	}
 
 	//Resize the vectors of history variables

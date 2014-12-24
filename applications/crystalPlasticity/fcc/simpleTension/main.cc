@@ -4,9 +4,10 @@
 #include <sstream>
 using namespace std;
 
+
 #define feOrder   1
 #define quadOrder 2 
-#define meshRefineFactor 4
+#define meshRefineFactor 3
 #define writeOutput true
 #define linearSolverType PETScWrappers::SolverCG
 #define totalNumIncrements 10
@@ -17,9 +18,8 @@ using namespace std;
 #define relNonLinearTolerance 1.0e-10
 #define stopOnConvergenceFailure false
 
-
 //dealIIheaders
-#include "../../../src/materialModels/crystalPlasticity/crystalPlasticity.cc"
+#include "../../../../src/materialModels/crystalPlasticity/crystalPlasticity.cc"
  
 //Mark boundaries for applying Dirichlet BC's
 template <int dim>
@@ -122,25 +122,24 @@ int main (int argc, char **argv)
       deallog.depth_console(0);
       crystalPlasticity<3> problem;
 			
-    FullMatrix<double> m_alpha,n_alpha;
-	const unsigned int n_slip_systems=12; 
+    FullMatrix<double> m_alpha,n_alpha; // Slip directions and Slip Normals
+	const unsigned int n_slip_systems=12; //No. of slip systems 
 		
 	n_alpha.reinit(n_slip_systems,3);
 	m_alpha.reinit(n_slip_systems,3);
 	string line;
 	ifstream myfile;
 
-	 myfile.open("slipNormals");
-	  int i=0;
-	  int j=0;
+	// Reading slip Normals 
+	  myfile.open("slipNormals");
+	  int i=0; int j=0;
 	  if (myfile.is_open()){
 		for (unsigned int k=0; k<3*n_slip_systems; k++){	     
 			getline (myfile,line,'\t');
 			n_alpha[i][j] = atof(line.c_str()); 
 			j++;
 				if(j==3){
-					i=i+1;
-					j=0;
+					i=i+1; j=0;
 				}
 		}
 		myfile.close();
@@ -148,7 +147,7 @@ int main (int argc, char **argv)
 	  else cout << "Unable to open slipNormals file"; 
 	  myfile.clear() ;
 
-
+	// Reading slip Normals 
   	  myfile.open("slipDirections");
 	  i=0;
 	  j=0;
@@ -158,8 +157,7 @@ int main (int argc, char **argv)
 			m_alpha[i][j] = atof(line.c_str()); 
 			j++;
 				if(j==3){
-					i=i+1;
-					j=0;
+					i=i+1; j=0;
 				}
 		}
 		myfile.close();
@@ -168,14 +166,19 @@ int main (int argc, char **argv)
 	  myfile.clear() ;
 	
 	problem.properties.n_slip_systems=n_slip_systems;
+	//Latent Hardening Ratio
 	problem.properties.q1=1.4;
 	problem.properties.q2=1.0;
+	//Slip Hardening Parameters
 	problem.properties.a=2.25;
 	problem.properties.h0=180;
 	problem.properties.s_s=148;
+	//Initial slip deformation resistance
 	problem.properties.s0=16;
+	//Elastic Parameters
 	problem.properties.C11=170e3;
 	problem.properties.C12=124e3;	
+	problem.properties.C44=75e3;
 	problem.properties.m_alpha=m_alpha;
 	problem.properties.n_alpha=n_alpha;
 		
