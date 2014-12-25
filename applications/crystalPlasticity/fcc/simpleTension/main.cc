@@ -7,7 +7,7 @@ using namespace std;
 
 #define feOrder   1
 #define quadOrder 2 
-#define meshRefineFactor 5
+#define meshRefineFactor 4
 #define writeOutput true
 #define linearSolverType PETScWrappers::SolverCG
 #define totalNumIncrements 10
