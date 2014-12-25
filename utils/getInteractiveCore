@@ -1,1 +1,0 @@
-qsub -I -V -A prismsprojectdebug_flux -l nodes=1:ppn=16:prisms:sandybridge,walltime=6:00:00,pmem=3800mb,qos=flux -q flux

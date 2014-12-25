@@ -4,13 +4,12 @@
 
 //dealii headers
 #include "../../../include/ellipticBVP.h"
+#include "../../../src/utilityObjects/crystalOrientationsIO.cc"
 
 typedef struct {
-
-	unsigned int n_slip_systems; //No. of slip systems
-	double q1,q2,a,h0,s_s,s0,C11,C12,C44;
-	FullMatrix<double> m_alpha,n_alpha;	
-
+  unsigned int n_slip_systems; //No. of slip systems
+  double q1,q2,a,h0,s_s,s0,C11,C12,C44;
+  FullMatrix<double> m_alpha,n_alpha;	
 } materialProperties;
 
 //material model class for crystal plasticity
@@ -19,61 +18,64 @@ template <int dim>
 class crystalPlasticity : public ellipticBVP<dim>
 {
 public:
-	crystalPlasticity();
-
-	void reorient();
-	void tangent_modulus(FullMatrix<double> &F_trial, FullMatrix<double> &Fpn_inv, FullMatrix<double> &SCHMID_TENSOR1, FullMatrix<double> &A,FullMatrix<double> &A_PA,FullMatrix<double> &B,FullMatrix<double> &T_tau, FullMatrix<double> &PK1_Stiff, Vector<double> &active, Vector<double> &resolved_shear_tau_trial, Vector<double> &x_beta, Vector<double> &PA, int &n_PA, double &det_F_tau, double &det_FE_tau );
-	void inactive_slip_removal(Vector<double> &inactive,Vector<double> &active, Vector<double> &x_beta, int &n_PA, Vector<double> &PA, Vector<double> b,FullMatrix<double> A,FullMatrix<double> A_PA);
-	materialProperties properties;
-
+  crystalPlasticity();
+  void mesh();
+  void reorient();
+  void tangent_modulus(FullMatrix<double> &F_trial, FullMatrix<double> &Fpn_inv, FullMatrix<double> &SCHMID_TENSOR1, FullMatrix<double> &A,FullMatrix<double> &A_PA,FullMatrix<double> &B,FullMatrix<double> &T_tau, FullMatrix<double> &PK1_Stiff, Vector<double> &active, Vector<double> &resolved_shear_tau_trial, Vector<double> &x_beta, Vector<double> &PA, int &n_PA, double &det_F_tau, double &det_FE_tau );
+  void inactive_slip_removal(Vector<double> &inactive,Vector<double> &active, Vector<double> &x_beta, int &n_PA, Vector<double> &PA, Vector<double> b,FullMatrix<double> A,FullMatrix<double> A_PA);
+  //material properties
+  materialProperties properties;
+  //orientation maps
+  crystalOrientationsIO<dim> orientations;  
 private:
-	void init(unsigned int num_quad_points);
-	void markBoundaries();
-	void applyDirichletBCs();
-	void calculatePlasticity(unsigned int cellID,
-		unsigned int quadPtID);
-	void getElementalValues(FEValues<dim>& fe_values,
-		unsigned int dofs_per_cell,
-		unsigned int num_quad_points,
-		FullMatrix<double>& elementalJacobian,
-		Vector<double>&     elementalResidual);
-	void updateAfterIncrement();
-
-
-	void odfpoint(FullMatrix <double> &OrientationMatrix,Vector<double> r);
-	Vector<double> vecform(FullMatrix<double> A);
-	void matform(FullMatrix<double> &A, Vector<double> Av); 
-	void right(FullMatrix<double> &Aright,FullMatrix<double> elm);
-	void symmf(FullMatrix<double> &A,FullMatrix<double> elm); 
-	void left(FullMatrix<double> &Aleft,FullMatrix<double> elm);
-	void ElasticProd(FullMatrix<double> &stress,FullMatrix<double> elm, FullMatrix<double> ElasticityTensor);
-	void tracev(FullMatrix<double> &Atrace, FullMatrix<double> elm, FullMatrix<double> B);
-	
-
-
-	FullMatrix<double> F,F_tau,FP_tau,FE_tau,T,P;
-	Tensor<4,dim,double> dP_dF;
-	double No_Elem, N_qpts;
-
-	//Store crystal orientations
-	std::vector<std::vector<  Vector<double> > >  rot;
-	std::vector<std::vector<  Vector<double> > >  rotnew;
-
-	//Store history variables
-	std::vector< std::vector< FullMatrix<double> > >   Fp_iter;
-	std::vector< std::vector< FullMatrix<double> > > Fp_conv;
-	std::vector< std::vector< FullMatrix<double> > >   Fe_iter;
-	std::vector< std::vector< FullMatrix<double> > > Fe_conv;
-	std::vector<std::vector<  Vector<double> > >  s_alpha_iter;
-	std::vector<std::vector<  Vector<double> > >  s_alpha_conv;
-
-
-	unsigned int n_slip_systems; //No. of slip systems
-	FullMatrix<double> m_alpha,n_alpha,q,sres,Dmat;
-	Vector<double> sres_tau;
-
-	bool initCalled;
-
+  void init(unsigned int num_quad_points);
+  void markBoundaries();
+  void applyDirichletBCs();
+  void calculatePlasticity(unsigned int cellID,
+			   unsigned int quadPtID);
+  void getElementalValues(FEValues<dim>& fe_values,
+			  unsigned int dofs_per_cell,
+			  unsigned int num_quad_points,
+			  FullMatrix<double>& elementalJacobian,
+			  Vector<double>&     elementalResidual);
+  void updateAfterIncrement();
+  
+  
+  void odfpoint(FullMatrix <double> &OrientationMatrix,Vector<double> r);
+  Vector<double> vecform(FullMatrix<double> A);
+  void matform(FullMatrix<double> &A, Vector<double> Av); 
+  void right(FullMatrix<double> &Aright,FullMatrix<double> elm);
+  void symmf(FullMatrix<double> &A,FullMatrix<double> elm); 
+  void left(FullMatrix<double> &Aleft,FullMatrix<double> elm);
+  void ElasticProd(FullMatrix<double> &stress,FullMatrix<double> elm, FullMatrix<double> ElasticityTensor);
+  void tracev(FullMatrix<double> &Atrace, FullMatrix<double> elm, FullMatrix<double> B);
+  
+  
+  
+  FullMatrix<double> F,F_tau,FP_tau,FE_tau,T,P;
+  Tensor<4,dim,double> dP_dF;
+  double No_Elem, N_qpts;
+  
+  //Store crystal orientations
+  std::vector<std::vector<  Vector<double> > >  rot;
+  std::vector<std::vector<  Vector<double> > >  rotnew;
+  
+  //Store history variables
+  std::vector< std::vector< FullMatrix<double> > >   Fp_iter;
+  std::vector< std::vector< FullMatrix<double> > > Fp_conv;
+  std::vector< std::vector< FullMatrix<double> > >   Fe_iter;
+  std::vector< std::vector< FullMatrix<double> > > Fe_conv;
+  std::vector<std::vector<  Vector<double> > >  s_alpha_iter;
+  std::vector<std::vector<  Vector<double> > >  s_alpha_conv;
+  
+  unsigned int n_slip_systems; //No. of slip systems
+  FullMatrix<double> m_alpha,n_alpha,q,sres,Dmat;
+  Vector<double> sres_tau;
+  bool initCalled;
+  
+  //orientatations data for each quadrature point
+  std::vector<std::vector<unsigned int> > quadratureOrientationsMap;  
+  void loadOrientations();
 };
 
 //constructor
@@ -87,13 +89,69 @@ FE_tau(dim,dim),
 T(dim,dim),
 P(dim,dim)
 {
-	initCalled = false;
+  initCalled = false;
 }
+
+template <int dim>
+void crystalPlasticity<dim>::loadOrientations(){
+  QGauss<dim>  quadrature(quadOrder);
+  const unsigned int num_quad_points = quadrature.size();
+  FEValues<dim> fe_values (this->FE, quadrature, update_quadrature_points);
+  //loop over elements
+  typename DoFHandler<dim>::active_cell_iterator cell = this->dofHandler.begin_active(), endc = this->dofHandler.end();
+  for (; cell!=endc; ++cell) {
+    if (cell->is_locally_owned()){
+      quadratureOrientationsMap.push_back(std::vector<unsigned int>(num_quad_points,0));
+      fe_values.reinit(cell);
+      //loop over quadrature points
+      for (unsigned int q=0; q<num_quad_points; ++q){
+	double pnt[3];
+	pnt[0]=fe_values.get_quadrature_points()[q][0];
+	pnt[1]=fe_values.get_quadrature_points()[q][1];
+	pnt[2]=fe_values.get_quadrature_points()[q][2];
+	//get orientation ID and store it in quadratureOrientationsMap
+	//this->pcout << pnt[0] << " " << pnt[1]<<" "<<pnt[2]<< " " << orientations.getMaterialID(pnt) << std::endl;
+	quadratureOrientationsMap.back()[q]=orientations.getMaterialID(pnt);
+	//now one can access the oreintation id for each quadrature point using quadratureOrientationsMap[cellID][q]
+      }      
+    }
+  }
+  
+  /*
+  //temporary code to show how to access orientations
+  //getting materialID for (x,y,z) quadrature point
+  double pnt[3];
+  pnt[0]=3.6; pnt[1]=3.6; pnt[2]=3.3;
+  this->pcout << orientations.getMaterialID(pnt) << std::endl;
+  pnt[0]=3.6*10; pnt[1]=3.6*10; pnt[2]=3.3*10;
+  this->pcout << orientations.getMaterialID(pnt) << std::endl;
+
+  //accesing euler angles
+  this->pcout << orientations.eulerAngles[1][0] << " " << orientations.eulerAngles[1][1] << " " <<  orientations.eulerAngles[1][2] << std::endl;
+  */
+
+  //writing to outputOrientations info;
+  std::vector<double> temp;
+  temp.push_back(1.0); temp.push_back(3.2); temp.push_back(11.0);
+  temp.push_back(0.33); temp.push_back(0.66); temp.push_back(0.33);
+  orientations.addToOutputOrientations(temp);
+  temp.clear();
+  temp.push_back(2.0); temp.push_back(1.2); temp.push_back(11.0);
+  temp.push_back(0.33); temp.push_back(0.66); temp.push_back(0.33);
+  orientations.addToOutputOrientations(temp);
+  
+  //call writeOutputOreintations when you need to write them to file
+  orientations.writeOutputOreintations();
+}
+
 
 template <int dim>
 void crystalPlasticity<dim>::init(unsigned int num_quad_points)
 {
-	unsigned int num_local_cells = this->triangulation.n_locally_owned_active_cells();
+  //call loadOrientations to load material orientations
+  loadOrientations();
+
+  unsigned int num_local_cells = this->triangulation.n_locally_owned_active_cells();
 	F.reinit(dim, dim);
 
 	n_slip_systems=properties.n_slip_systems;
@@ -144,6 +202,7 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
 
 
 	N_qpts=num_quad_points;
+	initCalled=true;
 }
 
 template <int dim>

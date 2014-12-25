@@ -41,7 +41,7 @@ class ellipticBVP
   DoFHandler<dim>    dofHandler;
     
   //methods
-  void mesh();
+  virtual void mesh();
   void init();
   void assemble();
   void solveLinearSystem();

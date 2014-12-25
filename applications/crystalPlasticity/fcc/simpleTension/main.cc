@@ -4,7 +4,6 @@
 #include <sstream>
 using namespace std;
 
-
 #define feOrder   1
 #define quadOrder 2 
 #define meshRefineFactor 5
@@ -20,7 +19,7 @@ using namespace std;
 
 //dealIIheaders
 #include "../../../../src/materialModels/crystalPlasticity/crystalPlasticity.cc"
- 
+
 //Mark boundaries for applying Dirichlet BC's
 template <int dim>
 void crystalPlasticity<dim>::markBoundaries(){

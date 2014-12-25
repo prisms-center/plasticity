@@ -1,3 +1,8 @@
+This directory contains part of the JSON Spirit code.
+
+This JSON Spirit code is available under the MIT License 
+quoted below.
+_________________________________________________________
 The MIT License
 
 Copyright (c) 2007 - 2009 John W. Wilkinson
