@@ -12,7 +12,7 @@ using namespace std;
 #define totalNumIncrements 10
 #define maxLinearSolverIterations 5000
 #define relLinearSolverTolerance  1.0e-10
-#define maxNonLinearIterations 30
+#define maxNonLinearIterations 2
 #define absNonLinearTolerance 1.0e-18
 #define relNonLinearTolerance 1.0e-10
 #define stopOnConvergenceFailure false

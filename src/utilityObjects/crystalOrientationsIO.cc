@@ -15,11 +15,11 @@ public:
   void loadEulerAngles(std::string _eulerFileName);
   unsigned int getMaterialID(double _coords[]);
   void addToOutputOrientations(std::vector<double>& _orientationsInfo);
-  void writeOutputOreintations();
+  void writeOutputOrientations();
   std::map<unsigned int, std::vector<double> > eulerAngles;
+  std::vector<std::vector<double> > outputOrientations;
 private:
   std::map<double,std::map<double, std::map<double, unsigned int> > > inputVoxelData;
-  std::vector<std::vector<double> > outputOrientations;
   ConditionalOStream  pcout;  
 };
 
@@ -37,7 +37,7 @@ void crystalOrientationsIO<dim>::addToOutputOrientations(std::vector<double>& _o
 
 //writeOutputOreintations writes outputOrientations to file
 template <int dim>
-void crystalOrientationsIO<dim>::writeOutputOreintations(){
+void crystalOrientationsIO<dim>::writeOutputOrientations(){
   pcout << "writing orientations data to file\n";
   std::string fileName("orientationsOutputProc");
   fileName += boost::to_string(Utilities::MPI::this_mpi_process(MPI_COMM_WORLD));
