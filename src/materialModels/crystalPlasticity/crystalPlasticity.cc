@@ -128,7 +128,7 @@ void crystalPlasticity<dim>::loadOrientations(){
 
   //accesing euler angles
   this->pcout << orientations.eulerAngles[1][0] << " " << orientations.eulerAngles[1][1] << " " <<  orientations.eulerAngles[1][2] << std::endl;
-  */
+  
 
   //writing to outputOrientations info;
   std::vector<double> temp;
@@ -142,6 +142,7 @@ void crystalPlasticity<dim>::loadOrientations(){
   
   //call writeOutputOreintations when you need to write them to file
   orientations.writeOutputOreintations();
+  */
 }
 
 
@@ -586,7 +587,7 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 
 	//Initialized history variables and pfunction variables if unititialized
 	if(initCalled == false){
-		init(num_quad_points);
+	  init(num_quad_points);
 	}
 
 	unsigned int cellID = fe_values.get_cell()->user_index();
