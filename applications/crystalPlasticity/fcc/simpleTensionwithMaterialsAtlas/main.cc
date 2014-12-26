@@ -12,7 +12,7 @@ using namespace std;
 #define totalNumIncrements 10
 #define maxLinearSolverIterations 5000
 #define relLinearSolverTolerance  1.0e-10
-#define maxNonLinearIterations 2
+#define maxNonLinearIterations 20
 #define absNonLinearTolerance 1.0e-18
 #define relNonLinearTolerance 1.0e-10
 #define stopOnConvergenceFailure false
@@ -50,7 +50,7 @@ void crystalPlasticity<dim>::markBoundaries(){
 					if (face_center[0] == 0.0){
 						cell->face(f)->set_boundary_indicator (1); //back boundary
 					}
-					else if(face_center[0] == 1.0){
+					else if(face_center[0] == 112*3.6){
 						cell->face(f)->set_boundary_indicator (2); //front boundary
 					}
 					else if(face_center[1] == 0.0){
@@ -73,7 +73,7 @@ class BCFunction : public Function<dim>{
   BCFunction(): Function<dim> (dim){}
   void vector_value (const Point<dim>   &p, Vector<double>   &values) const{
     Assert (values.size() == dim, ExcDimensionMismatch (values.size(), dim));    
-    values[0]=0.0001; // displacement along X-Direction
+    values[0]=0.04; // displacement along X-Direction
   }
 };
 

@@ -100,8 +100,8 @@ void crystalOrientationsIO<dim>::loadEulerAngles(std::string _eulerFileName){
       std::stringstream ss(line);
       unsigned int id; 
       ss >> id; 
-      double temp;
-      ss >> temp;
+      //double temp;
+      //ss >> temp;
       eulerAngles[id]=std::vector<double>(3);
       ss >> eulerAngles[id][0];
       ss >> eulerAngles[id][1];

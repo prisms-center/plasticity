@@ -125,11 +125,11 @@ void crystalPlasticity<dim>::loadOrientations(){
   this->pcout << orientations.getMaterialID(pnt) << std::endl;
   pnt[0]=3.6*10; pnt[1]=3.6*10; pnt[2]=3.3*10;
   this->pcout << orientations.getMaterialID(pnt) << std::endl;
-
+  */	
   //accesing euler angles
-  this->pcout << orientations.eulerAngles[1][0] << " " << orientations.eulerAngles[1][1] << " " <<  orientations.eulerAngles[1][2] << std::endl;
+  this->pcout << orientations.eulerAngles[8][0] << " " << orientations.eulerAngles[8][1] << " " <<  orientations.eulerAngles[8][2] << std::endl;
   
-
+  /*
   //writing to outputOrientations info;
   std::vector<double> temp;
   temp.push_back(1.0); temp.push_back(3.2); temp.push_back(11.0);
