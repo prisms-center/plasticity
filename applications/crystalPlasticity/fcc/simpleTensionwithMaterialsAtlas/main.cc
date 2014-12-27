@@ -9,7 +9,7 @@ using namespace std;
 #define meshRefineFactor 3
 #define writeOutput true
 #define linearSolverType PETScWrappers::SolverCG
-#define totalNumIncrements 10
+#define totalNumIncrements 100
 #define maxLinearSolverIterations 5000
 #define relLinearSolverTolerance  1.0e-10
 #define maxNonLinearIterations 20
@@ -25,9 +25,9 @@ template <int dim>
 void crystalPlasticity<dim>::mesh(){
   //creating mesh
   this->pcout << "generating problem mesh\n";
-  double spanX=112*3.6;
-  double spanY=79*3.6;
-  double spanZ=119*3.3;
+  double spanX=1.0;
+  double spanY=1.0;
+  double spanZ=1.0;
   GridGenerator::hyper_rectangle (this->triangulation, Point<dim>(), Point<dim>(spanX,spanY,spanZ));
   this->triangulation.refine_global (meshRefineFactor);
 } 
@@ -50,7 +50,7 @@ void crystalPlasticity<dim>::markBoundaries(){
 					if (face_center[0] == 0.0){
 						cell->face(f)->set_boundary_indicator (1); //back boundary
 					}
-					else if(face_center[0] == 112*3.6){
+					else if(face_center[0] == 1.0){
 						cell->face(f)->set_boundary_indicator (2); //front boundary
 					}
 					else if(face_center[1] == 0.0){
@@ -73,7 +73,7 @@ class BCFunction : public Function<dim>{
   BCFunction(): Function<dim> (dim){}
   void vector_value (const Point<dim>   &p, Vector<double>   &values) const{
     Assert (values.size() == dim, ExcDimensionMismatch (values.size(), dim));    
-    values[0]=0.04; // displacement along X-Direction
+    values[0]=-0.001; // displacement along X-Direction
   }
 };
 
@@ -142,7 +142,7 @@ int main (int argc, char **argv)
 	ifstream myfile;
 
 	// Reading slip Normals 
-	  myfile.open("slipNormals");
+	  myfile.open("slipNormals.txt");
 	  int i=0; int j=0;
 	  if (myfile.is_open()){
 		for (unsigned int k=0; k<3*n_slip_systems; k++){	     
@@ -159,7 +159,7 @@ int main (int argc, char **argv)
 	  myfile.clear() ;
 
 	// Reading slip Normals 
-  	  myfile.open("slipDirections");
+  	  myfile.open("slipDirections.txt");
 	  i=0;
 	  j=0;
 	  if (myfile.is_open()){
@@ -194,14 +194,14 @@ int main (int argc, char **argv)
 	problem.properties.n_alpha=n_alpha;
 		
 	//reading materials atlas files
-	unsigned int numPts[3]={112, 79, 119};
-	double stencil[3]={3.6, 3.6, 3.3};
-	problem.orientations.loadOrientations("AL6XN_grainID_NRL.txt",
+	unsigned int numPts[3]={10, 10, 6};
+	double stencil[3]={1.0/(numPts[0]-1), 1.0/(numPts[1]-1), 1.0/(numPts[2]-1)};
+	problem.orientations.loadOrientations("grainID.txt",
 					      12,
-					      "AL6XN_eulers_NRL.txt",
+					      "orientations.txt",
 					      numPts,
 					      stencil);
-	problem.orientations.loadEulerAngles("AL6XN_eulers_NRL.txt");
+	problem.orientations.loadEulerAngles("orientations.txt");
 	problem.run ();
     }
   catch (std::exception &exc)

@@ -12,7 +12,7 @@ public:
 			std::string _orientationFileName,
 			unsigned int _numPts[], 
 			double _stencil[]);
-  void loadEulerAngles(std::string _eulerFileName);
+  void loadOrientationVector(std::string _eulerFileName);
   unsigned int getMaterialID(double _coords[]);
   void addToOutputOrientations(std::vector<double>& _orientationsInfo);
   void writeOutputOrientations();
@@ -76,12 +76,12 @@ void crystalOrientationsIO<dim>::writeOutputOrientations(){
   }
 }
 
-//loadEulerAngles reads the orientation euler angles file   
+//loadOrientationVector reads the orientation euler angles file   
 template <int dim>
-void crystalOrientationsIO<dim>::loadEulerAngles(std::string _eulerFileName){
+void crystalOrientationsIO<dim>::loadOrientationVector(std::string _eulerFileName){
  //check if dim==3
   if (dim!=3) {
-    pcout << "loadEulerAngles only implemented for dim==3\n";
+    pcout << "loadOrientationVector only implemented for dim==3\n";
     exit(1);
   }
 
