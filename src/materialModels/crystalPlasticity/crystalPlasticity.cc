@@ -4,16 +4,12 @@
 
 //dealii headers
 #include "../../../include/ellipticBVP.h"
-#include "PFunction.hh"
-#include "models/PLibrary.hh"
-
+#include "../../../src/utilityObjects/crystalOrientationsIO.cc"
 
 typedef struct {
-
 	unsigned int n_slip_systems; //No. of slip systems
 	double q1,q2,a,h0,s_s,s0,C11,C12,C44;
 	FullMatrix<double> m_alpha,n_alpha;	
-
 } materialProperties;
 
 //material model class for crystal plasticity
@@ -23,12 +19,14 @@ class crystalPlasticity : public ellipticBVP<dim>
 {
 public:
 	crystalPlasticity();
-
+	void mesh();
 	void reorient();
 	void tangent_modulus(FullMatrix<double> &F_trial, FullMatrix<double> &Fpn_inv, FullMatrix<double> &SCHMID_TENSOR1, FullMatrix<double> &A,FullMatrix<double> &A_PA,FullMatrix<double> &B,FullMatrix<double> &T_tau, FullMatrix<double> &PK1_Stiff, Vector<double> &active, Vector<double> &resolved_shear_tau_trial, Vector<double> &x_beta, Vector<double> &PA, int &n_PA, double &det_F_tau, double &det_FE_tau );
 	void inactive_slip_removal(Vector<double> &inactive,Vector<double> &active, Vector<double> &x_beta, int &n_PA, Vector<double> &PA, Vector<double> b,FullMatrix<double> A,FullMatrix<double> A_PA);
+	//material properties
 	materialProperties properties;
-
+	//orientation maps
+	crystalOrientationsIO<dim> orientations;  
 private:
 	void init(unsigned int num_quad_points);
 	void markBoundaries();
@@ -51,7 +49,7 @@ private:
 	void left(FullMatrix<double> &Aleft,FullMatrix<double> elm);
 	void ElasticProd(FullMatrix<double> &stress,FullMatrix<double> elm, FullMatrix<double> ElasticityTensor);
 	void tracev(FullMatrix<double> &Atrace, FullMatrix<double> elm, FullMatrix<double> B);
-	
+
 
 
 	FullMatrix<double> F,F_tau,FP_tau,FE_tau,T,P;
@@ -70,13 +68,14 @@ private:
 	std::vector<std::vector<  Vector<double> > >  s_alpha_iter;
 	std::vector<std::vector<  Vector<double> > >  s_alpha_conv;
 
-
 	unsigned int n_slip_systems; //No. of slip systems
 	FullMatrix<double> m_alpha,n_alpha,q,sres,Dmat;
 	Vector<double> sres_tau;
-
 	bool initCalled;
 
+	//orientatations data for each quadrature point
+	std::vector<std::vector<unsigned int> > quadratureOrientationsMap;  
+	void loadOrientations();
 };
 
 //constructor
@@ -94,8 +93,37 @@ P(dim,dim)
 }
 
 template <int dim>
+void crystalPlasticity<dim>::loadOrientations(){
+	QGauss<dim>  quadrature(quadOrder);
+	const unsigned int num_quad_points = quadrature.size();
+	FEValues<dim> fe_values (this->FE, quadrature, update_quadrature_points);
+	//loop over elements
+	typename DoFHandler<dim>::active_cell_iterator cell = this->dofHandler.begin_active(), endc = this->dofHandler.end();
+	for (; cell!=endc; ++cell) {
+		if (cell->is_locally_owned()){
+			quadratureOrientationsMap.push_back(std::vector<unsigned int>(num_quad_points,0));
+			fe_values.reinit(cell);
+			//loop over quadrature points
+			for (unsigned int q=0; q<num_quad_points; ++q){
+				double pnt[3];
+				pnt[0]=fe_values.get_quadrature_points()[q][0];
+				pnt[1]=fe_values.get_quadrature_points()[q][1];
+				pnt[2]=fe_values.get_quadrature_points()[q][2];
+				//get orientation ID and store it in quadratureOrientationsMap
+				quadratureOrientationsMap.back()[q]=orientations.getMaterialID(pnt);
+				//now one can ac orientations.getMaterialID(pnt) << std::endlcess the oreintation id for each quadrature point using quadratureOrientationsMap[cellID][q]
+			}      
+		}
+	} 
+}
+
+
+template <int dim>
 void crystalPlasticity<dim>::init(unsigned int num_quad_points)
 {
+	//call loadOrientations to load material orientations
+	loadOrientations();
+
 	unsigned int num_local_cells = this->triangulation.n_locally_owned_active_cells();
 	F.reinit(dim, dim);
 
@@ -145,8 +173,18 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
 	rot.resize(num_local_cells,std::vector<Vector<double> >(num_quad_points,rot_init));
 	rotnew.resize(num_local_cells,std::vector<Vector<double> >(num_quad_points,rotnew_init));
 
-
+	//load rot and rotnew
+	for (unsigned int cell=0; cell<num_local_cells; cell++){
+		for (unsigned int q=0; q<num_quad_points; q++){
+			unsigned int materialID=quadratureOrientationsMap[cell][q];
+			for (unsigned int i=0; i<dim; i++){
+				rot[cell][q][i]=orientations.eulerAngles[materialID][i];
+				rotnew[cell][q][i]=orientations.eulerAngles[materialID][i];
+			}
+		}  
+	}
 	N_qpts=num_quad_points;
+	initCalled=true;
 }
 
 template <int dim>
@@ -340,6 +378,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
 	// Determination of active slip systems and shear increments
 	if (n_PA > 0){
+
 		Vector<double> inactive(n_slip_systems-n_PA); // Set of inactive slip systems
 
 		inactive_slip_removal(inactive,active,x_beta,n_PA, PA, b, A, A_PA);
@@ -513,10 +552,6 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 	Fp_iter[cellID][quadPtID]=FP_tau;
 	s_alpha_iter[cellID][quadPtID]=sres_tau;
 
-	if(cellID ==0 && quadPtID==0)
-		this->pcout<<sres_tau(0)<<'\t'<<sres_tau(1)<<'\t'<<sres_tau(2)<<'\t'<<sres_tau(3)<<'\t';
-
-
 }
 
 //implementation of the getElementalValues method
@@ -600,11 +635,40 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 template <int dim>
 void crystalPlasticity<dim>::updateAfterIncrement()
 {
+	reorient();
+
+	//copy rotnew to output 
+	orientations.outputOrientations.clear();
+	QGauss<dim>  quadrature(quadOrder);
+	const unsigned int num_quad_points = quadrature.size();
+	FEValues<dim> fe_values (this->FE, quadrature, update_quadrature_points | update_JxW_values);
+	//loop over elements
+	unsigned int cellID=0;
+	typename DoFHandler<dim>::active_cell_iterator cell = this->dofHandler.begin_active(), endc = this->dofHandler.end();
+	for (; cell!=endc; ++cell) {
+		if (cell->is_locally_owned()){
+			fe_values.reinit(cell);
+			//loop over quadrature points
+			for (unsigned int q=0; q<num_quad_points; ++q){
+				std::vector<double> temp;
+				temp.push_back(fe_values.get_quadrature_points()[q][0]);
+				temp.push_back(fe_values.get_quadrature_points()[q][1]);
+				temp.push_back(fe_values.get_quadrature_points()[q][2]);
+				temp.push_back(rotnew[cellID][q][0]);
+				temp.push_back(rotnew[cellID][q][1]);
+				temp.push_back(rotnew[cellID][q][2]);
+				temp.push_back(fe_values.JxW(q));
+				orientations.addToOutputOrientations(temp);
+			}      
+			cellID++;
+		}
+	}
+	orientations.writeOutputOrientations();
+
 	//Update the history variables when convergence is reached for the current increment
 	Fe_conv=Fe_iter;
 	Fp_conv=Fp_iter;
 	s_alpha_conv=s_alpha_iter;
-
 }
 
 
@@ -1263,13 +1327,12 @@ void crystalPlasticity<dim>::reorient() {
 	Omega=0.0;
 	Vector<double> rot1(dim),Omega_vec(dim),rold(dim),dr(dim),rnew(dim);
 	FullMatrix<double> rotmat(dim,dim);
-	int itgno;
-	for(unsigned int i=0;i<No_Elem;i++){
+	//int itgno;
+	unsigned int num_local_cells = this->triangulation.n_locally_owned_active_cells();
 
+	for (unsigned int i=0; i<num_local_cells; ++i) {
 		for(unsigned int j=0;j<N_qpts;j++){
 
-
-			itgno=i*N_qpts+j;
 			C_old_temp=0.0;
 			C_old=0.0;
 
@@ -1303,19 +1366,13 @@ void crystalPlasticity<dim>::reorient() {
 			Omega=0.0; Omega.add(1.0,R_new); Omega.add(-1.0,R_old);
 			temp=Omega; temp.mTmult(Omega,R_new);
 
-			for (unsigned int k=0;k<dim;k++){
-				rot1(k)=rot[itgno][k];
-			}
 
-			for (unsigned int k=0;k<dim;k++){
-				rold(k)=rotnew[itgno][k];
-			}
+			rot1=rot[i][j];
+			rold=rotnew[i][j];
+			rotmat=0.0;
+			odfpoint(rotmat,rot1);
 
-			rotmat.fill(odfpoint(rot1));
-			if(itgno==1)
-
-
-				temp=Omega;
+			temp=Omega;
 			temp.mTmult(Omega,rotmat);
 			temp=Omega;
 			rotmat.mmult(Omega,temp);
@@ -1337,13 +1394,13 @@ void crystalPlasticity<dim>::reorient() {
 
 			rnew=0.0; rnew.add(1.0,rold); rnew.add(1.0,dr);
 
-			for (unsigned int k=0;k<dim;k++){
-				rotnew[itgno][k]=rnew(k);
-			}
+
+			rotnew[i][j]=rnew;
 
 
 		}
 	}
+
 
 }
 

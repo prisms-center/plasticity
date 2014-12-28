@@ -31,6 +31,9 @@
 *#
 *.#
 *btr
+*orientationsOutput*
+*.nfs*
+
 
 #CMAKE files
 *.cmake

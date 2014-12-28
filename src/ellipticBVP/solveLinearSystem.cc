@@ -22,11 +22,8 @@ void ellipticBVP<dim>::solveLinearSystem(){
     solver.solve (jacobian, completely_distributed_solutionInc, residual, preconditioner);
     char buffer[200];
     sprintf(buffer, 
-	    "linear system solved in %3u iterations [final norm: %8.2e, initial norm: %8.2e, tol criterion: %8.2e]\n",
-	    solver_control.last_step(),
-	    solver_control.last_value(),
-	    solver_control.initial_value(),
-	    relLinearSolverTolerance);
+	    "linear system solved in %3u iterations\n",
+	    solver_control.last_step());
     pcout << buffer;
   }
   catch (...) {
