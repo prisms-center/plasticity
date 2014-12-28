@@ -1,4 +1,4 @@
-//implementation of the elastic (Saint Venant-Kirchhoff) material model
+//incomplete implementation of the elastic (Saint Venant-Kirchhoff) material model
 //more elastic material models on their way
 #ifndef ELASTIC_H
 #define ELASTIC_H

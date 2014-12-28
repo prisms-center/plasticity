@@ -1,4 +1,4 @@
-This directory contains part of the JSON Spirit code.
+This directory contains part of the open source JSON Spirit code.
 
 This JSON Spirit code is available under the MIT License 
 quoted below.

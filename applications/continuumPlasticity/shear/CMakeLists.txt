@@ -39,10 +39,7 @@ One or all of these are OFF in your installation but are required for this tutor
 ENDIF()
 DEAL_II_INITIALIZE_CACHED_VARIABLES()
 
-# Define the PFunction include path as an environment variable: PFUNCTION_INCLUDE_DIRS = path/to/IntegrationTools/include/PFunction
-
-INCLUDE_DIRECTORIES(${DEAL_II_INCLUDE_DIRS} $ENV{PFUNCTION_INCLUDE_DIRS})
-
+INCLUDE_DIRECTORIES(${DEAL_II_INCLUDE_DIRS} ${CMAKE_BINARY_DIR}/../../../utils)
 SET(CMAKE_BUILD_TYPE "Debug" CACHE STRING
 	"Choose the type of build, options are: Debug, Release"
 	)

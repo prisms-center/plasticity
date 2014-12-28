@@ -5,7 +5,7 @@
 //dealii headers
 #include "../../../include/ellipticBVP.h"
 #include "../../../src/enrichmentModels/enhancedStrain.cc"
-#include "PFunction.hh"
+#include "IntegrationTools/PFunction.hh"
 #include "models/PLibrary.hh"
 
 
