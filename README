@@ -1,7 +1,7 @@
 What is PRISMS-Plasticity?
 
   It is a Finite Element Method (FEM) code for solving boundary value 
-  problems in Continuum Plasticity and Crystal Plasticity. 
+  problems arising in Continuum Plasticity and Crystal Plasticity. 
   It is build on top of the deal.II open source finite element 
   library (http://www.dealii.org)
   
