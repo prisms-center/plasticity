@@ -1,21 +1,14 @@
-<<<<<<< HEAD
-// created: 2015-3-5 16:09:07
+// created: 2015-3-5 16:54:09
 // version: 0.1.0
 // url: git@github.com:prisms-center/IntegrationTools.git
 // commit: 947b873eb0296ab1631408af59ecf7768231ff63
-=======
-// created: 2014-12-20 0:31:57
-// version: develop
-// url: url
-// commit: id
->>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
 #ifndef stvenkir_HH
 #define stvenkir_HH
 
 #include <cmath>
 #include <cstdlib>
-#include "IntegrationTools/PFunction.hh"
+#include "PFunction.hh"
 
 namespace PRISMS
 {
@@ -24,40 +17,20 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-<<<<<<< HEAD
-            return  1.2500000000000000e-01*pow( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00,2.0000000000000000e+00)*var[0]+2.5000000000000000e-01*( -2.0000000000000000e+00*pow(var[4],2.0000000000000000e+00)+-2.0000000000000000e+00*pow(var[2],2.0000000000000000e+00)+pow(var[3],4.0000000000000000e+00)+pow(var[2],4.0000000000000000e+00)+-2.0000000000000000e+00*pow(var[3],2.0000000000000000e+00)+pow(var[4],4.0000000000000000e+00)+3.0000000000000000e+00)*var[1]+5.0000000000000000e-01*var[5]*pow(var[6],2.0000000000000000e+00);
+            return  5.0000000000000000e-01*var[5]*pow(var[6],2.0000000000000000e+00)+1.2500000000000000e-01*var[0]*pow( pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00,2.0000000000000000e+00)+2.5000000000000000e-01*( pow(var[4],4.0000000000000000e+00)+-2.0000000000000000e+00*pow(var[3],2.0000000000000000e+00)+pow(var[2],4.0000000000000000e+00)+-2.0000000000000000e+00*pow(var[2],2.0000000000000000e+00)+-2.0000000000000000e+00*pow(var[4],2.0000000000000000e+00)+pow(var[3],4.0000000000000000e+00)+3.0000000000000000e+00)*var[1];
         };
-=======
-            return  2.5000000000000000e-01*( pow(var[3],4.0000000000000000e+00)+pow(var[2],4.0000000000000000e+00)+-2.0000000000000000e+00*pow(var[4],2.0000000000000000e+00)+pow(var[4],4.0000000000000000e+00)+-2.0000000000000000e+00*pow(var[2],2.0000000000000000e+00)+-2.0000000000000000e+00*pow(var[3],2.0000000000000000e+00)+3.0000000000000000e+00)*var[1]+1.2500000000000000e-01*var[0]*pow( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00,2.0000000000000000e+00)+5.0000000000000000e-01*pow(var[6],2.0000000000000000e+00)*var[5];
-        }
->>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
         stvenkir_f()
         {
             this->_name = "stvenkir_f";
-        }
-
-        std::string csrc() const
-        {
-            return " 2.5000000000000000e-01*( pow(var[3],4.0000000000000000e+00)+pow(var[2],4.0000000000000000e+00)+-2.0000000000000000e+00*pow(var[4],2.0000000000000000e+00)+pow(var[4],4.0000000000000000e+00)+-2.0000000000000000e+00*pow(var[2],2.0000000000000000e+00)+-2.0000000000000000e+00*pow(var[3],2.0000000000000000e+00)+3.0000000000000000e+00)*var[1]+1.2500000000000000e-01*var[0]*pow( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00,2.0000000000000000e+00)+5.0000000000000000e-01*pow(var[6],2.0000000000000000e+00)*var[5]";
-        }
-
-        std::string sym() const
-        {
-            return "(0.125)*lambda*(-3.0+lambda3^(2.0)+lambda1^(2.0)+lambda2^(2.0))^(2.0)+(0.5)*K*alpha^(2.0)+(0.25)*(3.0+lambda2^(4.0)-(2.0)*lambda3^(2.0)+lambda1^(4.0)-(2.0)*lambda1^(2.0)+lambda3^(4.0)-(2.0)*lambda2^(2.0))*mu";
-        }
-
-        std::string latex() const
-        {
-            return "{(0.125)}  {(-3.0+lambda3^{{(2.0)}}+lambda1^{{(2.0)}}+lambda2^{{(2.0)}})}^{{(2.0)}} \\lambda+{(0.25)}  {(3.0+lambda2^{{(4.0)}}-{(2.0)} lambda3^{{(2.0)}}-{(2.0)} lambda1^{{(2.0)}}+lambda1^{{(4.0)}}-{(2.0)} lambda2^{{(2.0)}}+lambda3^{{(4.0)}})} \\mu+{(0.5)}  K \\alpha^{{(2.0)}}";
-        }
+        };
 
         stvenkir_f* clone() const
         {
             return new stvenkir_f(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -65,39 +38,20 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return 1.2500000000000000e-01*pow( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00,2.0000000000000000e+00);
-<<<<<<< HEAD
+            return 1.2500000000000000e-01*pow( pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00,2.0000000000000000e+00);
         };
-=======
-        }
->>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
         stvenkir_grad_0()
         {
             this->_name = "stvenkir_grad_0";
-        }
-
-        std::string csrc() const
-        {
-            return "1.2500000000000000e-01*pow( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00,2.0000000000000000e+00)";
-        }
-
-        std::string sym() const
-        {
-            return "(0.125)*(-3.0+lambda2^(2.0)+lambda3^(2.0)+lambda1^(2.0))^(2.0)";
-        }
-
-        std::string latex() const
-        {
-            return "{(0.125)}  {(-3.0+lambda2^{{(2.0)}}+lambda3^{{(2.0)}}+lambda1^{{(2.0)}})}^{{(2.0)}}";
-        }
+        };
 
         stvenkir_grad_0* clone() const
         {
             return new stvenkir_grad_0(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -105,40 +59,20 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-<<<<<<< HEAD
-            return  -5.0000000000000000e-01*pow(var[4],2.0000000000000000e+00)+-5.0000000000000000e-01*pow(var[2],2.0000000000000000e+00)+2.5000000000000000e-01*pow(var[3],4.0000000000000000e+00)+2.5000000000000000e-01*pow(var[2],4.0000000000000000e+00)+-5.0000000000000000e-01*pow(var[3],2.0000000000000000e+00)+2.5000000000000000e-01*pow(var[4],4.0000000000000000e+00)+7.5000000000000000e-01;
+            return  2.5000000000000000e-01*pow(var[4],4.0000000000000000e+00)+-5.0000000000000000e-01*pow(var[3],2.0000000000000000e+00)+2.5000000000000000e-01*pow(var[2],4.0000000000000000e+00)+-5.0000000000000000e-01*pow(var[2],2.0000000000000000e+00)+-5.0000000000000000e-01*pow(var[4],2.0000000000000000e+00)+2.5000000000000000e-01*pow(var[3],4.0000000000000000e+00)+7.5000000000000000e-01;
         };
-=======
-            return  -5.0000000000000000e-01*pow(var[3],2.0000000000000000e+00)+-5.0000000000000000e-01*pow(var[4],2.0000000000000000e+00)+2.5000000000000000e-01*pow(var[2],4.0000000000000000e+00)+-5.0000000000000000e-01*pow(var[2],2.0000000000000000e+00)+2.5000000000000000e-01*pow(var[4],4.0000000000000000e+00)+2.5000000000000000e-01*pow(var[3],4.0000000000000000e+00)+7.5000000000000000e-01;
-        }
->>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
         stvenkir_grad_1()
         {
             this->_name = "stvenkir_grad_1";
-        }
-
-        std::string csrc() const
-        {
-            return " -5.0000000000000000e-01*pow(var[3],2.0000000000000000e+00)+-5.0000000000000000e-01*pow(var[4],2.0000000000000000e+00)+2.5000000000000000e-01*pow(var[2],4.0000000000000000e+00)+-5.0000000000000000e-01*pow(var[2],2.0000000000000000e+00)+2.5000000000000000e-01*pow(var[4],4.0000000000000000e+00)+2.5000000000000000e-01*pow(var[3],4.0000000000000000e+00)+7.5000000000000000e-01";
-        }
-
-        std::string sym() const
-        {
-            return "0.75-(0.5)*lambda2^(2.0)+(0.25)*lambda1^(4.0)-(0.5)*lambda3^(2.0)+(0.25)*lambda3^(4.0)-(0.5)*lambda1^(2.0)+(0.25)*lambda2^(4.0)";
-        }
-
-        std::string latex() const
-        {
-            return "0.75+{(0.25)} lambda3^{{(4.0)}}-{(0.5)} lambda1^{{(2.0)}}-{(0.5)} lambda2^{{(2.0)}}+{(0.25)} lambda2^{{(4.0)}}+{(0.25)} lambda1^{{(4.0)}}-{(0.5)} lambda3^{{(2.0)}}";
-        }
+        };
 
         stvenkir_grad_1* clone() const
         {
             return new stvenkir_grad_1(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -146,40 +80,20 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-<<<<<<< HEAD
-            return  2.5000000000000000e-01*var[1]*( 4.0000000000000000e+00*pow(var[2],3.0000000000000000e+00)+-4.0000000000000000e+00*var[2])+5.0000000000000000e-01*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)*var[2]*var[0];
+            return  5.0000000000000000e-01*var[2]*var[0]*( pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00)+2.5000000000000000e-01*( -4.0000000000000000e+00*var[2]+4.0000000000000000e+00*pow(var[2],3.0000000000000000e+00))*var[1];
         };
-=======
-            return  5.0000000000000000e-01*var[0]*( pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00)*var[2]+2.5000000000000000e-01*var[1]*( 4.0000000000000000e+00*pow(var[2],3.0000000000000000e+00)+-4.0000000000000000e+00*var[2]);
-        }
->>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
         stvenkir_grad_2()
         {
             this->_name = "stvenkir_grad_2";
-        }
-
-        std::string csrc() const
-        {
-            return " 5.0000000000000000e-01*var[0]*( pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00)*var[2]+2.5000000000000000e-01*var[1]*( 4.0000000000000000e+00*pow(var[2],3.0000000000000000e+00)+-4.0000000000000000e+00*var[2])";
-        }
-
-        std::string sym() const
-        {
-            return "(0.25)*mu*(-(4.0)*lambda1+(4.0)*lambda1^(3.0))+(0.5)*lambda1*lambda*(-3.0+lambda2^(2.0)+lambda3^(2.0)+lambda1^(2.0))";
-        }
-
-        std::string latex() const
-        {
-            return "{(0.25)}  {({(4.0)} lambda1^{{(3.0)}}-{(4.0)} lambda1)} \\mu+{(0.5)}  {(-3.0+lambda1^{{(2.0)}}+lambda2^{{(2.0)}}+lambda3^{{(2.0)}})} \\lambda lambda1";
-        }
+        };
 
         stvenkir_grad_2* clone() const
         {
             return new stvenkir_grad_2(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -187,40 +101,20 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-<<<<<<< HEAD
-            return  5.0000000000000000e-01*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)*var[3]*var[0]+2.5000000000000000e-01*var[1]*( 4.0000000000000000e+00*pow(var[3],3.0000000000000000e+00)+-4.0000000000000000e+00*var[3]);
+            return  5.0000000000000000e-01*var[3]*var[0]*( pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00)+2.5000000000000000e-01*( 4.0000000000000000e+00*pow(var[3],3.0000000000000000e+00)+-4.0000000000000000e+00*var[3])*var[1];
         };
-=======
-            return  2.5000000000000000e-01*( 4.0000000000000000e+00*pow(var[3],3.0000000000000000e+00)+-4.0000000000000000e+00*var[3])*var[1]+5.0000000000000000e-01*var[3]*var[0]*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00);
-        }
->>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
         stvenkir_grad_3()
         {
             this->_name = "stvenkir_grad_3";
-        }
-
-        std::string csrc() const
-        {
-            return " 2.5000000000000000e-01*( 4.0000000000000000e+00*pow(var[3],3.0000000000000000e+00)+-4.0000000000000000e+00*var[3])*var[1]+5.0000000000000000e-01*var[3]*var[0]*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)";
-        }
-
-        std::string sym() const
-        {
-            return "(0.5)*lambda2*(-3.0+lambda3^(2.0)+lambda1^(2.0)+lambda2^(2.0))*lambda+(0.25)*mu*(-(4.0)*lambda2+(4.0)*lambda2^(3.0))";
-        }
-
-        std::string latex() const
-        {
-            return "{(0.25)}  \\mu {(-{(4.0)} lambda2+{(4.0)} lambda2^{{(3.0)}})}+{(0.5)}  {(-3.0+lambda1^{{(2.0)}}+lambda2^{{(2.0)}}+lambda3^{{(2.0)}})} lambda2 \\lambda";
-        }
+        };
 
         stvenkir_grad_3* clone() const
         {
             return new stvenkir_grad_3(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -228,40 +122,20 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-<<<<<<< HEAD
-            return  5.0000000000000000e-01*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)*var[4]*var[0]+2.5000000000000000e-01*var[1]*( 4.0000000000000000e+00*pow(var[4],3.0000000000000000e+00)+-4.0000000000000000e+00*var[4]);
+            return  2.5000000000000000e-01*( -4.0000000000000000e+00*var[4]+4.0000000000000000e+00*pow(var[4],3.0000000000000000e+00))*var[1]+5.0000000000000000e-01*var[0]*var[4]*( pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00);
         };
-=======
-            return  5.0000000000000000e-01*var[0]*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)*var[4]+2.5000000000000000e-01*( 4.0000000000000000e+00*pow(var[4],3.0000000000000000e+00)+-4.0000000000000000e+00*var[4])*var[1];
-        }
->>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
         stvenkir_grad_4()
         {
             this->_name = "stvenkir_grad_4";
-        }
-
-        std::string csrc() const
-        {
-            return " 5.0000000000000000e-01*var[0]*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)*var[4]+2.5000000000000000e-01*( 4.0000000000000000e+00*pow(var[4],3.0000000000000000e+00)+-4.0000000000000000e+00*var[4])*var[1]";
-        }
-
-        std::string sym() const
-        {
-            return "(0.5)*lambda*lambda3*(-3.0+lambda2^(2.0)+lambda3^(2.0)+lambda1^(2.0))+(0.25)*mu*((4.0)*lambda3^(3.0)-(4.0)*lambda3)";
-        }
-
-        std::string latex() const
-        {
-            return "{(0.25)}  {({(4.0)} lambda3^{{(3.0)}}-{(4.0)} lambda3)} \\mu+{(0.5)}  {(-3.0+lambda2^{{(2.0)}}+lambda3^{{(2.0)}}+lambda1^{{(2.0)}})} \\lambda lambda3";
-        }
+        };
 
         stvenkir_grad_4* clone() const
         {
             return new stvenkir_grad_4(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -270,34 +144,19 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return 5.0000000000000000e-01*pow(var[6],2.0000000000000000e+00);
-        }
+        };
 
     public:
 
         stvenkir_grad_5()
         {
             this->_name = "stvenkir_grad_5";
-        }
-
-        std::string csrc() const
-        {
-            return "5.0000000000000000e-01*pow(var[6],2.0000000000000000e+00)";
-        }
-
-        std::string sym() const
-        {
-            return "(0.5)*alpha^(2.0)";
-        }
-
-        std::string latex() const
-        {
-            return "{(0.5)}  \\alpha^{{(2.0)}}";
-        }
+        };
 
         stvenkir_grad_5* clone() const
         {
             return new stvenkir_grad_5(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -305,35 +164,20 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return var[6]*var[5];
-        }
+            return var[5]*var[6];
+        };
 
     public:
 
         stvenkir_grad_6()
         {
             this->_name = "stvenkir_grad_6";
-        }
-
-        std::string csrc() const
-        {
-            return "var[6]*var[5]";
-        }
-
-        std::string sym() const
-        {
-            return "K*alpha";
-        }
-
-        std::string latex() const
-        {
-            return " K \\alpha";
-        }
+        };
 
         stvenkir_grad_6* clone() const
         {
             return new stvenkir_grad_6(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -342,34 +186,19 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return 0.0;
-        }
+        };
 
     public:
 
         stvenkir_hess_0_0()
         {
             this->_name = "stvenkir_hess_0_0";
-        }
-
-        std::string csrc() const
-        {
-            return "0.0";
-        }
-
-        std::string sym() const
-        {
-            return "0";
-        }
-
-        std::string latex() const
-        {
-            return "0";
-        }
+        };
 
         stvenkir_hess_0_0* clone() const
         {
             return new stvenkir_hess_0_0(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -378,34 +207,19 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return 0.0;
-        }
+        };
 
     public:
 
         stvenkir_hess_0_1()
         {
             this->_name = "stvenkir_hess_0_1";
-        }
-
-        std::string csrc() const
-        {
-            return "0.0";
-        }
-
-        std::string sym() const
-        {
-            return "0";
-        }
-
-        std::string latex() const
-        {
-            return "0";
-        }
+        };
 
         stvenkir_hess_0_1* clone() const
         {
             return new stvenkir_hess_0_1(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -413,40 +227,20 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-<<<<<<< HEAD
-            return 5.0000000000000000e-01*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)*var[2];
+            return 5.0000000000000000e-01*var[2]*( pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00);
         };
-=======
-            return 5.0000000000000000e-01*var[2]*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00);
-        }
->>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
         stvenkir_hess_0_2()
         {
             this->_name = "stvenkir_hess_0_2";
-        }
-
-        std::string csrc() const
-        {
-            return "5.0000000000000000e-01*var[2]*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)";
-        }
-
-        std::string sym() const
-        {
-            return "(0.5)*(-3.0+lambda3^(2.0)+lambda1^(2.0)+lambda2^(2.0))*lambda1";
-        }
-
-        std::string latex() const
-        {
-            return "{(0.5)}  lambda1 {(-3.0+lambda3^{{(2.0)}}+lambda1^{{(2.0)}}+lambda2^{{(2.0)}})}";
-        }
+        };
 
         stvenkir_hess_0_2* clone() const
         {
             return new stvenkir_hess_0_2(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -454,40 +248,20 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-<<<<<<< HEAD
-            return 5.0000000000000000e-01*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)*var[3];
+            return 5.0000000000000000e-01*var[3]*( pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00);
         };
-=======
-            return 5.0000000000000000e-01*var[3]*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00);
-        }
->>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
         stvenkir_hess_0_3()
         {
             this->_name = "stvenkir_hess_0_3";
-        }
-
-        std::string csrc() const
-        {
-            return "5.0000000000000000e-01*var[3]*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)";
-        }
-
-        std::string sym() const
-        {
-            return "(0.5)*(-3.0+lambda1^(2.0)+lambda2^(2.0)+lambda3^(2.0))*lambda2";
-        }
-
-        std::string latex() const
-        {
-            return "{(0.5)}  lambda2 {(-3.0+lambda3^{{(2.0)}}+lambda1^{{(2.0)}}+lambda2^{{(2.0)}})}";
-        }
+        };
 
         stvenkir_hess_0_3* clone() const
         {
             return new stvenkir_hess_0_3(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -495,39 +269,20 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return 5.0000000000000000e-01*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)*var[4];
-<<<<<<< HEAD
+            return 5.0000000000000000e-01*var[4]*( pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00);
         };
-=======
-        }
->>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
         stvenkir_hess_0_4()
         {
             this->_name = "stvenkir_hess_0_4";
-        }
-
-        std::string csrc() const
-        {
-            return "5.0000000000000000e-01*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)*var[4]";
-        }
-
-        std::string sym() const
-        {
-            return "(0.5)*(-3.0+lambda3^(2.0)+lambda1^(2.0)+lambda2^(2.0))*lambda3";
-        }
-
-        std::string latex() const
-        {
-            return "{(0.5)}  {(-3.0+lambda3^{{(2.0)}}+lambda1^{{(2.0)}}+lambda2^{{(2.0)}})} lambda3";
-        }
+        };
 
         stvenkir_hess_0_4* clone() const
         {
             return new stvenkir_hess_0_4(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -536,34 +291,19 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return 0.0;
-        }
+        };
 
     public:
 
         stvenkir_hess_0_5()
         {
             this->_name = "stvenkir_hess_0_5";
-        }
-
-        std::string csrc() const
-        {
-            return "0.0";
-        }
-
-        std::string sym() const
-        {
-            return "0";
-        }
-
-        std::string latex() const
-        {
-            return "0";
-        }
+        };
 
         stvenkir_hess_0_5* clone() const
         {
             return new stvenkir_hess_0_5(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -572,34 +312,19 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return 0.0;
-        }
+        };
 
     public:
 
         stvenkir_hess_0_6()
         {
             this->_name = "stvenkir_hess_0_6";
-        }
-
-        std::string csrc() const
-        {
-            return "0.0";
-        }
-
-        std::string sym() const
-        {
-            return "0";
-        }
-
-        std::string latex() const
-        {
-            return "0";
-        }
+        };
 
         stvenkir_hess_0_6* clone() const
         {
             return new stvenkir_hess_0_6(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -608,34 +333,19 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return 0.0;
-        }
+        };
 
     public:
 
         stvenkir_hess_1_0()
         {
             this->_name = "stvenkir_hess_1_0";
-        }
-
-        std::string csrc() const
-        {
-            return "0.0";
-        }
-
-        std::string sym() const
-        {
-            return "0";
-        }
-
-        std::string latex() const
-        {
-            return "0";
-        }
+        };
 
         stvenkir_hess_1_0* clone() const
         {
             return new stvenkir_hess_1_0(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -644,34 +354,19 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return 0.0;
-        }
+        };
 
     public:
 
         stvenkir_hess_1_1()
         {
             this->_name = "stvenkir_hess_1_1";
-        }
-
-        std::string csrc() const
-        {
-            return "0.0";
-        }
-
-        std::string sym() const
-        {
-            return "0";
-        }
-
-        std::string latex() const
-        {
-            return "0";
-        }
+        };
 
         stvenkir_hess_1_1* clone() const
         {
             return new stvenkir_hess_1_1(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -679,40 +374,20 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-<<<<<<< HEAD
-            return  pow(var[2],3.0000000000000000e+00)-var[2];
-        };
-=======
             return -var[2]+pow(var[2],3.0000000000000000e+00);
-        }
->>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
+        };
 
     public:
 
         stvenkir_hess_1_2()
         {
             this->_name = "stvenkir_hess_1_2";
-        }
-
-        std::string csrc() const
-        {
-            return "-var[2]+pow(var[2],3.0000000000000000e+00)";
-        }
-
-        std::string sym() const
-        {
-            return "lambda1^(3.0)-lambda1";
-        }
-
-        std::string latex() const
-        {
-            return "-lambda1+lambda1^{{(3.0)}}";
-        }
+        };
 
         stvenkir_hess_1_2* clone() const
         {
             return new stvenkir_hess_1_2(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -720,35 +395,20 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return -var[3]+pow(var[3],3.0000000000000000e+00);
-        }
+            return  pow(var[3],3.0000000000000000e+00)-var[3];
+        };
 
     public:
 
         stvenkir_hess_1_3()
         {
             this->_name = "stvenkir_hess_1_3";
-        }
-
-        std::string csrc() const
-        {
-            return "-var[3]+pow(var[3],3.0000000000000000e+00)";
-        }
-
-        std::string sym() const
-        {
-            return "-lambda2+lambda2^(3.0)";
-        }
-
-        std::string latex() const
-        {
-            return "-lambda2+lambda2^{{(3.0)}}";
-        }
+        };
 
         stvenkir_hess_1_3* clone() const
         {
             return new stvenkir_hess_1_3(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -757,34 +417,19 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return -var[4]+pow(var[4],3.0000000000000000e+00);
-        }
+        };
 
     public:
 
         stvenkir_hess_1_4()
         {
             this->_name = "stvenkir_hess_1_4";
-        }
-
-        std::string csrc() const
-        {
-            return "-var[4]+pow(var[4],3.0000000000000000e+00)";
-        }
-
-        std::string sym() const
-        {
-            return "lambda3^(3.0)-lambda3";
-        }
-
-        std::string latex() const
-        {
-            return "-lambda3+lambda3^{{(3.0)}}";
-        }
+        };
 
         stvenkir_hess_1_4* clone() const
         {
             return new stvenkir_hess_1_4(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -793,34 +438,19 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return 0.0;
-        }
+        };
 
     public:
 
         stvenkir_hess_1_5()
         {
             this->_name = "stvenkir_hess_1_5";
-        }
-
-        std::string csrc() const
-        {
-            return "0.0";
-        }
-
-        std::string sym() const
-        {
-            return "0";
-        }
-
-        std::string latex() const
-        {
-            return "0";
-        }
+        };
 
         stvenkir_hess_1_5* clone() const
         {
             return new stvenkir_hess_1_5(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -829,34 +459,19 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return 0.0;
-        }
+        };
 
     public:
 
         stvenkir_hess_1_6()
         {
             this->_name = "stvenkir_hess_1_6";
-        }
-
-        std::string csrc() const
-        {
-            return "0.0";
-        }
-
-        std::string sym() const
-        {
-            return "0";
-        }
-
-        std::string latex() const
-        {
-            return "0";
-        }
+        };
 
         stvenkir_hess_1_6* clone() const
         {
             return new stvenkir_hess_1_6(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -864,40 +479,20 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-<<<<<<< HEAD
-            return 5.0000000000000000e-01*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)*var[2];
+            return 5.0000000000000000e-01*var[2]*( pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00);
         };
-=======
-            return 5.0000000000000000e-01*( pow(var[3],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)-3.0000000000000000e+00)*var[2];
-        }
->>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
         stvenkir_hess_2_0()
         {
             this->_name = "stvenkir_hess_2_0";
-        }
-
-        std::string csrc() const
-        {
-            return "5.0000000000000000e-01*( pow(var[3],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)-3.0000000000000000e+00)*var[2]";
-        }
-
-        std::string sym() const
-        {
-            return "(0.5)*(-3.0+lambda2^(2.0)+lambda3^(2.0)+lambda1^(2.0))*lambda1";
-        }
-
-        std::string latex() const
-        {
-            return "{(0.5)}  {(-3.0+lambda1^{{(2.0)}}+lambda2^{{(2.0)}}+lambda3^{{(2.0)}})} lambda1";
-        }
+        };
 
         stvenkir_hess_2_0* clone() const
         {
             return new stvenkir_hess_2_0(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -905,39 +500,20 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return  pow(var[2],3.0000000000000000e+00)-var[2];
-<<<<<<< HEAD
+            return -var[2]+pow(var[2],3.0000000000000000e+00);
         };
-=======
-        }
->>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
         stvenkir_hess_2_1()
         {
             this->_name = "stvenkir_hess_2_1";
-        }
-
-        std::string csrc() const
-        {
-            return " pow(var[2],3.0000000000000000e+00)-var[2]";
-        }
-
-        std::string sym() const
-        {
-            return "lambda1^(3.0)-lambda1";
-        }
-
-        std::string latex() const
-        {
-            return "lambda1^{{(3.0)}}-lambda1";
-        }
+        };
 
         stvenkir_hess_2_1* clone() const
         {
             return new stvenkir_hess_2_1(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -945,40 +521,20 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-<<<<<<< HEAD
-            return  (var[2]*var[2])*var[0]+2.5000000000000000e-01*var[1]*( 1.2000000000000000e+01*pow(var[2],2.0000000000000000e+00)-4.0000000000000000e+00)+5.0000000000000000e-01*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)*var[0];
+            return  (var[2]*var[2])*var[0]+5.0000000000000000e-01*var[0]*( pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00)+2.5000000000000000e-01*( 1.2000000000000000e+01*pow(var[2],2.0000000000000000e+00)-4.0000000000000000e+00)*var[1];
         };
-=======
-            return  5.0000000000000000e-01*var[0]*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)+(var[2]*var[2])*var[0]+2.5000000000000000e-01*( 1.2000000000000000e+01*pow(var[2],2.0000000000000000e+00)-4.0000000000000000e+00)*var[1];
-        }
->>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
         stvenkir_hess_2_2()
         {
             this->_name = "stvenkir_hess_2_2";
-        }
-
-        std::string csrc() const
-        {
-            return " 5.0000000000000000e-01*var[0]*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)+(var[2]*var[2])*var[0]+2.5000000000000000e-01*( 1.2000000000000000e+01*pow(var[2],2.0000000000000000e+00)-4.0000000000000000e+00)*var[1]";
-        }
-
-        std::string sym() const
-        {
-            return "lambda*lambda1^2+(0.5)*lambda*(-3.0+lambda3^(2.0)+lambda1^(2.0)+lambda2^(2.0))+(0.25)*mu*(-4.0+(12.0)*lambda1^(2.0))";
-        }
-
-        std::string latex() const
-        {
-            return " lambda1^{2} \\lambda+{(0.5)}  {(-3.0+lambda3^{{(2.0)}}+lambda1^{{(2.0)}}+lambda2^{{(2.0)}})} \\lambda+{(0.25)}  {(-4.0+{(12.0)} lambda1^{{(2.0)}})} \\mu";
-        }
+        };
 
         stvenkir_hess_2_2* clone() const
         {
             return new stvenkir_hess_2_2(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -986,35 +542,20 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return var[3]*var[0]*var[2];
-        }
+            return var[2]*var[3]*var[0];
+        };
 
     public:
 
         stvenkir_hess_2_3()
         {
             this->_name = "stvenkir_hess_2_3";
-        }
-
-        std::string csrc() const
-        {
-            return "var[3]*var[0]*var[2]";
-        }
-
-        std::string sym() const
-        {
-            return "lambda1*lambda2*lambda";
-        }
-
-        std::string latex() const
-        {
-            return " lambda1 lambda2 \\lambda";
-        }
+        };
 
         stvenkir_hess_2_3* clone() const
         {
             return new stvenkir_hess_2_3(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -1022,40 +563,20 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-<<<<<<< HEAD
-            return var[4]*var[2]*var[0];
-        };
-=======
             return var[2]*var[0]*var[4];
-        }
->>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
+        };
 
     public:
 
         stvenkir_hess_2_4()
         {
             this->_name = "stvenkir_hess_2_4";
-        }
-
-        std::string csrc() const
-        {
-            return "var[2]*var[0]*var[4]";
-        }
-
-        std::string sym() const
-        {
-            return "lambda*lambda3*lambda1";
-        }
-
-        std::string latex() const
-        {
-            return " lambda3 lambda1 \\lambda";
-        }
+        };
 
         stvenkir_hess_2_4* clone() const
         {
             return new stvenkir_hess_2_4(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -1064,34 +585,19 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return 0.0;
-        }
+        };
 
     public:
 
         stvenkir_hess_2_5()
         {
             this->_name = "stvenkir_hess_2_5";
-        }
-
-        std::string csrc() const
-        {
-            return "0.0";
-        }
-
-        std::string sym() const
-        {
-            return "0";
-        }
-
-        std::string latex() const
-        {
-            return "0";
-        }
+        };
 
         stvenkir_hess_2_5* clone() const
         {
             return new stvenkir_hess_2_5(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -1100,34 +606,19 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return 0.0;
-        }
+        };
 
     public:
 
         stvenkir_hess_2_6()
         {
             this->_name = "stvenkir_hess_2_6";
-        }
-
-        std::string csrc() const
-        {
-            return "0.0";
-        }
-
-        std::string sym() const
-        {
-            return "0";
-        }
-
-        std::string latex() const
-        {
-            return "0";
-        }
+        };
 
         stvenkir_hess_2_6* clone() const
         {
             return new stvenkir_hess_2_6(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -1135,40 +626,20 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-<<<<<<< HEAD
-            return 5.0000000000000000e-01*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)*var[3];
+            return 5.0000000000000000e-01*var[3]*( pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00);
         };
-=======
-            return 5.0000000000000000e-01*var[3]*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00);
-        }
->>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
         stvenkir_hess_3_0()
         {
             this->_name = "stvenkir_hess_3_0";
-        }
-
-        std::string csrc() const
-        {
-            return "5.0000000000000000e-01*var[3]*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)";
-        }
-
-        std::string sym() const
-        {
-            return "(0.5)*(-3.0+lambda2^(2.0)+lambda3^(2.0)+lambda1^(2.0))*lambda2";
-        }
-
-        std::string latex() const
-        {
-            return "{(0.5)}  {(-3.0+lambda2^{{(2.0)}}+lambda3^{{(2.0)}}+lambda1^{{(2.0)}})} lambda2";
-        }
+        };
 
         stvenkir_hess_3_0* clone() const
         {
             return new stvenkir_hess_3_0(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -1176,35 +647,20 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return -var[3]+pow(var[3],3.0000000000000000e+00);
-        }
+            return  pow(var[3],3.0000000000000000e+00)-var[3];
+        };
 
     public:
 
         stvenkir_hess_3_1()
         {
             this->_name = "stvenkir_hess_3_1";
-        }
-
-        std::string csrc() const
-        {
-            return "-var[3]+pow(var[3],3.0000000000000000e+00)";
-        }
-
-        std::string sym() const
-        {
-            return "-lambda2+lambda2^(3.0)";
-        }
-
-        std::string latex() const
-        {
-            return "lambda2^{{(3.0)}}-lambda2";
-        }
+        };
 
         stvenkir_hess_3_1* clone() const
         {
             return new stvenkir_hess_3_1(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -1213,34 +669,19 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return var[2]*var[3]*var[0];
-        }
+        };
 
     public:
 
         stvenkir_hess_3_2()
         {
             this->_name = "stvenkir_hess_3_2";
-        }
-
-        std::string csrc() const
-        {
-            return "var[2]*var[3]*var[0]";
-        }
-
-        std::string sym() const
-        {
-            return "lambda*lambda1*lambda2";
-        }
-
-        std::string latex() const
-        {
-            return " lambda1 lambda2 \\lambda";
-        }
+        };
 
         stvenkir_hess_3_2* clone() const
         {
             return new stvenkir_hess_3_2(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -1248,40 +689,20 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-<<<<<<< HEAD
-            return  (var[3]*var[3])*var[0]+5.0000000000000000e-01*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)*var[0]+2.5000000000000000e-01*var[1]*( 1.2000000000000000e+01*pow(var[3],2.0000000000000000e+00)-4.0000000000000000e+00);
+            return  (var[3]*var[3])*var[0]+2.5000000000000000e-01*( 1.2000000000000000e+01*pow(var[3],2.0000000000000000e+00)-4.0000000000000000e+00)*var[1]+5.0000000000000000e-01*var[0]*( pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00);
         };
-=======
-            return  (var[3]*var[3])*var[0]+5.0000000000000000e-01*var[0]*( pow(var[3],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)-3.0000000000000000e+00)+2.5000000000000000e-01*( 1.2000000000000000e+01*pow(var[3],2.0000000000000000e+00)-4.0000000000000000e+00)*var[1];
-        }
->>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
         stvenkir_hess_3_3()
         {
             this->_name = "stvenkir_hess_3_3";
-        }
-
-        std::string csrc() const
-        {
-            return " (var[3]*var[3])*var[0]+5.0000000000000000e-01*var[0]*( pow(var[3],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)-3.0000000000000000e+00)+2.5000000000000000e-01*( 1.2000000000000000e+01*pow(var[3],2.0000000000000000e+00)-4.0000000000000000e+00)*var[1]";
-        }
-
-        std::string sym() const
-        {
-            return "(0.5)*(-3.0+lambda2^(2.0)+lambda3^(2.0)+lambda1^(2.0))*lambda+(0.25)*mu*(-4.0+(12.0)*lambda2^(2.0))+lambda2^2*lambda";
-        }
-
-        std::string latex() const
-        {
-            return " lambda2^{2} \\lambda+{(0.25)}  {(-4.0+{(12.0)} lambda2^{{(2.0)}})} \\mu+{(0.5)}  \\lambda {(-3.0+lambda2^{{(2.0)}}+lambda3^{{(2.0)}}+lambda1^{{(2.0)}})}";
-        }
+        };
 
         stvenkir_hess_3_3* clone() const
         {
             return new stvenkir_hess_3_3(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -1289,40 +710,20 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-<<<<<<< HEAD
-            return var[4]*var[3]*var[0];
+            return var[3]*var[0]*var[4];
         };
-=======
-            return var[0]*var[4]*var[3];
-        }
->>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
         stvenkir_hess_3_4()
         {
             this->_name = "stvenkir_hess_3_4";
-        }
-
-        std::string csrc() const
-        {
-            return "var[0]*var[4]*var[3]";
-        }
-
-        std::string sym() const
-        {
-            return "lambda2*lambda*lambda3";
-        }
-
-        std::string latex() const
-        {
-            return " lambda3 lambda2 \\lambda";
-        }
+        };
 
         stvenkir_hess_3_4* clone() const
         {
             return new stvenkir_hess_3_4(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -1331,34 +732,19 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return 0.0;
-        }
+        };
 
     public:
 
         stvenkir_hess_3_5()
         {
             this->_name = "stvenkir_hess_3_5";
-        }
-
-        std::string csrc() const
-        {
-            return "0.0";
-        }
-
-        std::string sym() const
-        {
-            return "0";
-        }
-
-        std::string latex() const
-        {
-            return "0";
-        }
+        };
 
         stvenkir_hess_3_5* clone() const
         {
             return new stvenkir_hess_3_5(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -1367,34 +753,19 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return 0.0;
-        }
+        };
 
     public:
 
         stvenkir_hess_3_6()
         {
             this->_name = "stvenkir_hess_3_6";
-        }
-
-        std::string csrc() const
-        {
-            return "0.0";
-        }
-
-        std::string sym() const
-        {
-            return "0";
-        }
-
-        std::string latex() const
-        {
-            return "0";
-        }
+        };
 
         stvenkir_hess_3_6* clone() const
         {
             return new stvenkir_hess_3_6(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -1402,39 +773,20 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return 5.0000000000000000e-01*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)*var[4];
-<<<<<<< HEAD
+            return 5.0000000000000000e-01*var[4]*( pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00);
         };
-=======
-        }
->>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
         stvenkir_hess_4_0()
         {
             this->_name = "stvenkir_hess_4_0";
-        }
-
-        std::string csrc() const
-        {
-            return "5.0000000000000000e-01*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)*var[4]";
-        }
-
-        std::string sym() const
-        {
-            return "(0.5)*lambda3*(-3.0+lambda3^(2.0)+lambda1^(2.0)+lambda2^(2.0))";
-        }
-
-        std::string latex() const
-        {
-            return "{(0.5)}  {(-3.0+lambda3^{{(2.0)}}+lambda1^{{(2.0)}}+lambda2^{{(2.0)}})} lambda3";
-        }
+        };
 
         stvenkir_hess_4_0* clone() const
         {
             return new stvenkir_hess_4_0(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -1442,35 +794,20 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return  pow(var[4],3.0000000000000000e+00)-var[4];
-        }
+            return -var[4]+pow(var[4],3.0000000000000000e+00);
+        };
 
     public:
 
         stvenkir_hess_4_1()
         {
             this->_name = "stvenkir_hess_4_1";
-        }
-
-        std::string csrc() const
-        {
-            return " pow(var[4],3.0000000000000000e+00)-var[4]";
-        }
-
-        std::string sym() const
-        {
-            return "-lambda3+lambda3^(3.0)";
-        }
-
-        std::string latex() const
-        {
-            return "lambda3^{{(3.0)}}-lambda3";
-        }
+        };
 
         stvenkir_hess_4_1* clone() const
         {
             return new stvenkir_hess_4_1(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -1478,40 +815,20 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-<<<<<<< HEAD
-            return var[4]*var[2]*var[0];
+            return var[2]*var[0]*var[4];
         };
-=======
-            return var[0]*var[4]*var[2];
-        }
->>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
         stvenkir_hess_4_2()
         {
             this->_name = "stvenkir_hess_4_2";
-        }
-
-        std::string csrc() const
-        {
-            return "var[0]*var[4]*var[2]";
-        }
-
-        std::string sym() const
-        {
-            return "lambda1*lambda*lambda3";
-        }
-
-        std::string latex() const
-        {
-            return " lambda3 lambda1 \\lambda";
-        }
+        };
 
         stvenkir_hess_4_2* clone() const
         {
             return new stvenkir_hess_4_2(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -1519,40 +836,20 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-<<<<<<< HEAD
-            return var[4]*var[3]*var[0];
-        };
-=======
             return var[3]*var[0]*var[4];
-        }
+        };
 
     public:
 
         stvenkir_hess_4_3()
         {
             this->_name = "stvenkir_hess_4_3";
-        }
-
-        std::string csrc() const
-        {
-            return "var[3]*var[0]*var[4]";
-        }
->>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
-
-        std::string sym() const
-        {
-            return "lambda3*lambda2*lambda";
-        }
-
-        std::string latex() const
-        {
-            return " lambda2 \\lambda lambda3";
-        }
+        };
 
         stvenkir_hess_4_3* clone() const
         {
             return new stvenkir_hess_4_3(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -1560,40 +857,20 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-<<<<<<< HEAD
-            return  2.5000000000000000e-01*( 1.2000000000000000e+01*pow(var[4],2.0000000000000000e+00)-4.0000000000000000e+00)*var[1]+(var[4]*var[4])*var[0]+5.0000000000000000e-01*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)*var[0];
+            return  2.5000000000000000e-01*( 1.2000000000000000e+01*pow(var[4],2.0000000000000000e+00)-4.0000000000000000e+00)*var[1]+5.0000000000000000e-01*var[0]*( pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00)+var[0]*(var[4]*var[4]);
         };
-=======
-            return  5.0000000000000000e-01*var[0]*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)+2.5000000000000000e-01*var[1]*( 1.2000000000000000e+01*pow(var[4],2.0000000000000000e+00)-4.0000000000000000e+00)+var[0]*(var[4]*var[4]);
-        }
->>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
         stvenkir_hess_4_4()
         {
             this->_name = "stvenkir_hess_4_4";
-        }
-
-        std::string csrc() const
-        {
-            return " 5.0000000000000000e-01*var[0]*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)+2.5000000000000000e-01*var[1]*( 1.2000000000000000e+01*pow(var[4],2.0000000000000000e+00)-4.0000000000000000e+00)+var[0]*(var[4]*var[4])";
-        }
-
-        std::string sym() const
-        {
-            return "lambda*lambda3^2+(0.25)*(-4.0+(12.0)*lambda3^(2.0))*mu+(0.5)*lambda*(-3.0+lambda3^(2.0)+lambda1^(2.0)+lambda2^(2.0))";
-        }
-
-        std::string latex() const
-        {
-            return "{(0.25)}  \\mu {(-4.0+{(12.0)} lambda3^{{(2.0)}})}+ \\lambda lambda3^{2}+{(0.5)}  \\lambda {(-3.0+lambda3^{{(2.0)}}+lambda1^{{(2.0)}}+lambda2^{{(2.0)}})}";
-        }
+        };
 
         stvenkir_hess_4_4* clone() const
         {
             return new stvenkir_hess_4_4(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -1602,34 +879,19 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return 0.0;
-        }
+        };
 
     public:
 
         stvenkir_hess_4_5()
         {
             this->_name = "stvenkir_hess_4_5";
-        }
-
-        std::string csrc() const
-        {
-            return "0.0";
-        }
-
-        std::string sym() const
-        {
-            return "0";
-        }
-
-        std::string latex() const
-        {
-            return "0";
-        }
+        };
 
         stvenkir_hess_4_5* clone() const
         {
             return new stvenkir_hess_4_5(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -1638,34 +900,19 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return 0.0;
-        }
+        };
 
     public:
 
         stvenkir_hess_4_6()
         {
             this->_name = "stvenkir_hess_4_6";
-        }
-
-        std::string csrc() const
-        {
-            return "0.0";
-        }
-
-        std::string sym() const
-        {
-            return "0";
-        }
-
-        std::string latex() const
-        {
-            return "0";
-        }
+        };
 
         stvenkir_hess_4_6* clone() const
         {
             return new stvenkir_hess_4_6(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -1674,34 +921,19 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return 0.0;
-        }
+        };
 
     public:
 
         stvenkir_hess_5_0()
         {
             this->_name = "stvenkir_hess_5_0";
-        }
-
-        std::string csrc() const
-        {
-            return "0.0";
-        }
-
-        std::string sym() const
-        {
-            return "0";
-        }
-
-        std::string latex() const
-        {
-            return "0";
-        }
+        };
 
         stvenkir_hess_5_0* clone() const
         {
             return new stvenkir_hess_5_0(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -1710,34 +942,19 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return 0.0;
-        }
+        };
 
     public:
 
         stvenkir_hess_5_1()
         {
             this->_name = "stvenkir_hess_5_1";
-        }
-
-        std::string csrc() const
-        {
-            return "0.0";
-        }
-
-        std::string sym() const
-        {
-            return "0";
-        }
-
-        std::string latex() const
-        {
-            return "0";
-        }
+        };
 
         stvenkir_hess_5_1* clone() const
         {
             return new stvenkir_hess_5_1(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -1746,34 +963,19 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return 0.0;
-        }
+        };
 
     public:
 
         stvenkir_hess_5_2()
         {
             this->_name = "stvenkir_hess_5_2";
-        }
-
-        std::string csrc() const
-        {
-            return "0.0";
-        }
-
-        std::string sym() const
-        {
-            return "0";
-        }
-
-        std::string latex() const
-        {
-            return "0";
-        }
+        };
 
         stvenkir_hess_5_2* clone() const
         {
             return new stvenkir_hess_5_2(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -1782,34 +984,19 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return 0.0;
-        }
+        };
 
     public:
 
         stvenkir_hess_5_3()
         {
             this->_name = "stvenkir_hess_5_3";
-        }
-
-        std::string csrc() const
-        {
-            return "0.0";
-        }
-
-        std::string sym() const
-        {
-            return "0";
-        }
-
-        std::string latex() const
-        {
-            return "0";
-        }
+        };
 
         stvenkir_hess_5_3* clone() const
         {
             return new stvenkir_hess_5_3(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -1818,34 +1005,19 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return 0.0;
-        }
+        };
 
     public:
 
         stvenkir_hess_5_4()
         {
             this->_name = "stvenkir_hess_5_4";
-        }
-
-        std::string csrc() const
-        {
-            return "0.0";
-        }
-
-        std::string sym() const
-        {
-            return "0";
-        }
-
-        std::string latex() const
-        {
-            return "0";
-        }
+        };
 
         stvenkir_hess_5_4* clone() const
         {
             return new stvenkir_hess_5_4(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -1854,34 +1026,19 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return 0.0;
-        }
+        };
 
     public:
 
         stvenkir_hess_5_5()
         {
             this->_name = "stvenkir_hess_5_5";
-        }
-
-        std::string csrc() const
-        {
-            return "0.0";
-        }
-
-        std::string sym() const
-        {
-            return "0";
-        }
-
-        std::string latex() const
-        {
-            return "0";
-        }
+        };
 
         stvenkir_hess_5_5* clone() const
         {
             return new stvenkir_hess_5_5(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -1890,34 +1047,19 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return var[6];
-        }
+        };
 
     public:
 
         stvenkir_hess_5_6()
         {
             this->_name = "stvenkir_hess_5_6";
-        }
-
-        std::string csrc() const
-        {
-            return "var[6]";
-        }
-
-        std::string sym() const
-        {
-            return "alpha";
-        }
-
-        std::string latex() const
-        {
-            return "\\alpha";
-        }
+        };
 
         stvenkir_hess_5_6* clone() const
         {
             return new stvenkir_hess_5_6(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -1926,34 +1068,19 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return 0.0;
-        }
+        };
 
     public:
 
         stvenkir_hess_6_0()
         {
             this->_name = "stvenkir_hess_6_0";
-        }
-
-        std::string csrc() const
-        {
-            return "0.0";
-        }
-
-        std::string sym() const
-        {
-            return "0";
-        }
-
-        std::string latex() const
-        {
-            return "0";
-        }
+        };
 
         stvenkir_hess_6_0* clone() const
         {
             return new stvenkir_hess_6_0(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -1962,34 +1089,19 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return 0.0;
-        }
+        };
 
     public:
 
         stvenkir_hess_6_1()
         {
             this->_name = "stvenkir_hess_6_1";
-        }
-
-        std::string csrc() const
-        {
-            return "0.0";
-        }
-
-        std::string sym() const
-        {
-            return "0";
-        }
-
-        std::string latex() const
-        {
-            return "0";
-        }
+        };
 
         stvenkir_hess_6_1* clone() const
         {
             return new stvenkir_hess_6_1(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -1998,34 +1110,19 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return 0.0;
-        }
+        };
 
     public:
 
         stvenkir_hess_6_2()
         {
             this->_name = "stvenkir_hess_6_2";
-        }
-
-        std::string csrc() const
-        {
-            return "0.0";
-        }
-
-        std::string sym() const
-        {
-            return "0";
-        }
-
-        std::string latex() const
-        {
-            return "0";
-        }
+        };
 
         stvenkir_hess_6_2* clone() const
         {
             return new stvenkir_hess_6_2(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -2034,34 +1131,19 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return 0.0;
-        }
+        };
 
     public:
 
         stvenkir_hess_6_3()
         {
             this->_name = "stvenkir_hess_6_3";
-        }
-
-        std::string csrc() const
-        {
-            return "0.0";
-        }
-
-        std::string sym() const
-        {
-            return "0";
-        }
-
-        std::string latex() const
-        {
-            return "0";
-        }
+        };
 
         stvenkir_hess_6_3* clone() const
         {
             return new stvenkir_hess_6_3(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -2070,34 +1152,19 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return 0.0;
-        }
+        };
 
     public:
 
         stvenkir_hess_6_4()
         {
             this->_name = "stvenkir_hess_6_4";
-        }
-
-        std::string csrc() const
-        {
-            return "0.0";
-        }
-
-        std::string sym() const
-        {
-            return "0";
-        }
-
-        std::string latex() const
-        {
-            return "0";
-        }
+        };
 
         stvenkir_hess_6_4* clone() const
         {
             return new stvenkir_hess_6_4(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -2106,34 +1173,19 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return var[6];
-        }
+        };
 
     public:
 
         stvenkir_hess_6_5()
         {
             this->_name = "stvenkir_hess_6_5";
-        }
-
-        std::string csrc() const
-        {
-            return "var[6]";
-        }
-
-        std::string sym() const
-        {
-            return "alpha";
-        }
-
-        std::string latex() const
-        {
-            return "\\alpha";
-        }
+        };
 
         stvenkir_hess_6_5* clone() const
         {
             return new stvenkir_hess_6_5(*this);
-        }
+        };
     };
 
     template< class VarContainer>
@@ -2142,43 +1194,29 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return var[5];
-        }
+        };
 
     public:
 
         stvenkir_hess_6_6()
         {
             this->_name = "stvenkir_hess_6_6";
-        }
-
-        std::string csrc() const
-        {
-            return "var[5]";
-        }
-
-        std::string sym() const
-        {
-            return "K";
-        }
-
-        std::string latex() const
-        {
-            return "K";
-        }
+        };
 
         stvenkir_hess_6_6* clone() const
         {
             return new stvenkir_hess_6_6(*this);
-        }
+        };
     };
 
     template<class VarContainer>
     class stvenkir : public PFuncBase< VarContainer, double>
     {
     public:
+        using PFuncBase< VarContainer, double>::_name;
+        using PFuncBase< VarContainer, double>::_var_name;
+        using PFuncBase< VarContainer, double>::_var_description;
         
-        typedef typename PFuncBase< VarContainer, double>::size_type size_type;
-
         PSimpleBase< VarContainer, double> *_val;
         PSimpleBase< VarContainer, double> **_grad_val;
         PSimpleBase< VarContainer, double> ***_hess_val;
@@ -2190,131 +1228,69 @@ namespace PRISMS
 
         stvenkir(const stvenkir &RHS )
         {
-            construct(false);
-            
-            _val = RHS._val->clone();
-            _grad_val[0] = RHS._grad_val[0]->clone();
-            _grad_val[1] = RHS._grad_val[1]->clone();
-            _grad_val[2] = RHS._grad_val[2]->clone();
-            _grad_val[3] = RHS._grad_val[3]->clone();
-            _grad_val[4] = RHS._grad_val[4]->clone();
-            _grad_val[5] = RHS._grad_val[5]->clone();
-            _grad_val[6] = RHS._grad_val[6]->clone();
-            _hess_val[0][0] = RHS._hess_val[0][0]->clone();
-            _hess_val[0][1] = RHS._hess_val[0][1]->clone();
-            _hess_val[0][2] = RHS._hess_val[0][2]->clone();
-            _hess_val[0][3] = RHS._hess_val[0][3]->clone();
-            _hess_val[0][4] = RHS._hess_val[0][4]->clone();
-            _hess_val[0][5] = RHS._hess_val[0][5]->clone();
-            _hess_val[0][6] = RHS._hess_val[0][6]->clone();
-            _hess_val[1][0] = RHS._hess_val[1][0]->clone();
-            _hess_val[1][1] = RHS._hess_val[1][1]->clone();
-            _hess_val[1][2] = RHS._hess_val[1][2]->clone();
-            _hess_val[1][3] = RHS._hess_val[1][3]->clone();
-            _hess_val[1][4] = RHS._hess_val[1][4]->clone();
-            _hess_val[1][5] = RHS._hess_val[1][5]->clone();
-            _hess_val[1][6] = RHS._hess_val[1][6]->clone();
-            _hess_val[2][0] = RHS._hess_val[2][0]->clone();
-            _hess_val[2][1] = RHS._hess_val[2][1]->clone();
-            _hess_val[2][2] = RHS._hess_val[2][2]->clone();
-            _hess_val[2][3] = RHS._hess_val[2][3]->clone();
-            _hess_val[2][4] = RHS._hess_val[2][4]->clone();
-            _hess_val[2][5] = RHS._hess_val[2][5]->clone();
-            _hess_val[2][6] = RHS._hess_val[2][6]->clone();
-            _hess_val[3][0] = RHS._hess_val[3][0]->clone();
-            _hess_val[3][1] = RHS._hess_val[3][1]->clone();
-            _hess_val[3][2] = RHS._hess_val[3][2]->clone();
-            _hess_val[3][3] = RHS._hess_val[3][3]->clone();
-            _hess_val[3][4] = RHS._hess_val[3][4]->clone();
-            _hess_val[3][5] = RHS._hess_val[3][5]->clone();
-            _hess_val[3][6] = RHS._hess_val[3][6]->clone();
-            _hess_val[4][0] = RHS._hess_val[4][0]->clone();
-            _hess_val[4][1] = RHS._hess_val[4][1]->clone();
-            _hess_val[4][2] = RHS._hess_val[4][2]->clone();
-            _hess_val[4][3] = RHS._hess_val[4][3]->clone();
-            _hess_val[4][4] = RHS._hess_val[4][4]->clone();
-            _hess_val[4][5] = RHS._hess_val[4][5]->clone();
-            _hess_val[4][6] = RHS._hess_val[4][6]->clone();
-            _hess_val[5][0] = RHS._hess_val[5][0]->clone();
-            _hess_val[5][1] = RHS._hess_val[5][1]->clone();
-            _hess_val[5][2] = RHS._hess_val[5][2]->clone();
-            _hess_val[5][3] = RHS._hess_val[5][3]->clone();
-            _hess_val[5][4] = RHS._hess_val[5][4]->clone();
-            _hess_val[5][5] = RHS._hess_val[5][5]->clone();
-            _hess_val[5][6] = RHS._hess_val[5][6]->clone();
-            _hess_val[6][0] = RHS._hess_val[6][0]->clone();
-            _hess_val[6][1] = RHS._hess_val[6][1]->clone();
-            _hess_val[6][2] = RHS._hess_val[6][2]->clone();
-            _hess_val[6][3] = RHS._hess_val[6][3]->clone();
-            _hess_val[6][4] = RHS._hess_val[6][4]->clone();
-            _hess_val[6][5] = RHS._hess_val[6][5]->clone();
-            _hess_val[6][6] = RHS._hess_val[6][6]->clone();
-            
+            construct();
         }
 
-        stvenkir& operator=( stvenkir RHS )
+        stvenkir& operator=(const stvenkir &RHS )
         {
-            using std::swap;
+            _val = RHS._val;
             
-            swap(_val, RHS._val);
-            swap(_grad_val[0], RHS._grad_val[0]);
-            swap(_grad_val[1], RHS._grad_val[1]);
-            swap(_grad_val[2], RHS._grad_val[2]);
-            swap(_grad_val[3], RHS._grad_val[3]);
-            swap(_grad_val[4], RHS._grad_val[4]);
-            swap(_grad_val[5], RHS._grad_val[5]);
-            swap(_grad_val[6], RHS._grad_val[6]);
-            swap(_hess_val[0][0], RHS._hess_val[0][0]);
-            swap(_hess_val[0][1], RHS._hess_val[0][1]);
-            swap(_hess_val[0][2], RHS._hess_val[0][2]);
-            swap(_hess_val[0][3], RHS._hess_val[0][3]);
-            swap(_hess_val[0][4], RHS._hess_val[0][4]);
-            swap(_hess_val[0][5], RHS._hess_val[0][5]);
-            swap(_hess_val[0][6], RHS._hess_val[0][6]);
-            swap(_hess_val[1][0], RHS._hess_val[1][0]);
-            swap(_hess_val[1][1], RHS._hess_val[1][1]);
-            swap(_hess_val[1][2], RHS._hess_val[1][2]);
-            swap(_hess_val[1][3], RHS._hess_val[1][3]);
-            swap(_hess_val[1][4], RHS._hess_val[1][4]);
-            swap(_hess_val[1][5], RHS._hess_val[1][5]);
-            swap(_hess_val[1][6], RHS._hess_val[1][6]);
-            swap(_hess_val[2][0], RHS._hess_val[2][0]);
-            swap(_hess_val[2][1], RHS._hess_val[2][1]);
-            swap(_hess_val[2][2], RHS._hess_val[2][2]);
-            swap(_hess_val[2][3], RHS._hess_val[2][3]);
-            swap(_hess_val[2][4], RHS._hess_val[2][4]);
-            swap(_hess_val[2][5], RHS._hess_val[2][5]);
-            swap(_hess_val[2][6], RHS._hess_val[2][6]);
-            swap(_hess_val[3][0], RHS._hess_val[3][0]);
-            swap(_hess_val[3][1], RHS._hess_val[3][1]);
-            swap(_hess_val[3][2], RHS._hess_val[3][2]);
-            swap(_hess_val[3][3], RHS._hess_val[3][3]);
-            swap(_hess_val[3][4], RHS._hess_val[3][4]);
-            swap(_hess_val[3][5], RHS._hess_val[3][5]);
-            swap(_hess_val[3][6], RHS._hess_val[3][6]);
-            swap(_hess_val[4][0], RHS._hess_val[4][0]);
-            swap(_hess_val[4][1], RHS._hess_val[4][1]);
-            swap(_hess_val[4][2], RHS._hess_val[4][2]);
-            swap(_hess_val[4][3], RHS._hess_val[4][3]);
-            swap(_hess_val[4][4], RHS._hess_val[4][4]);
-            swap(_hess_val[4][5], RHS._hess_val[4][5]);
-            swap(_hess_val[4][6], RHS._hess_val[4][6]);
-            swap(_hess_val[5][0], RHS._hess_val[5][0]);
-            swap(_hess_val[5][1], RHS._hess_val[5][1]);
-            swap(_hess_val[5][2], RHS._hess_val[5][2]);
-            swap(_hess_val[5][3], RHS._hess_val[5][3]);
-            swap(_hess_val[5][4], RHS._hess_val[5][4]);
-            swap(_hess_val[5][5], RHS._hess_val[5][5]);
-            swap(_hess_val[5][6], RHS._hess_val[5][6]);
-            swap(_hess_val[6][0], RHS._hess_val[6][0]);
-            swap(_hess_val[6][1], RHS._hess_val[6][1]);
-            swap(_hess_val[6][2], RHS._hess_val[6][2]);
-            swap(_hess_val[6][3], RHS._hess_val[6][3]);
-            swap(_hess_val[6][4], RHS._hess_val[6][4]);
-            swap(_hess_val[6][5], RHS._hess_val[6][5]);
-            swap(_hess_val[6][6], RHS._hess_val[6][6]);
-            
-            return *this;
+            _grad_val[0] = RHS._grad_val[0];
+            _grad_val[1] = RHS._grad_val[1];
+            _grad_val[2] = RHS._grad_val[2];
+            _grad_val[3] = RHS._grad_val[3];
+            _grad_val[4] = RHS._grad_val[4];
+            _grad_val[5] = RHS._grad_val[5];
+            _grad_val[6] = RHS._grad_val[6];
+            _hess_val[0][0] = RHS._hess_val[0][0];
+            _hess_val[0][1] = RHS._hess_val[0][1];
+            _hess_val[0][2] = RHS._hess_val[0][2];
+            _hess_val[0][3] = RHS._hess_val[0][3];
+            _hess_val[0][4] = RHS._hess_val[0][4];
+            _hess_val[0][5] = RHS._hess_val[0][5];
+            _hess_val[0][6] = RHS._hess_val[0][6];
+            _hess_val[1][0] = RHS._hess_val[1][0];
+            _hess_val[1][1] = RHS._hess_val[1][1];
+            _hess_val[1][2] = RHS._hess_val[1][2];
+            _hess_val[1][3] = RHS._hess_val[1][3];
+            _hess_val[1][4] = RHS._hess_val[1][4];
+            _hess_val[1][5] = RHS._hess_val[1][5];
+            _hess_val[1][6] = RHS._hess_val[1][6];
+            _hess_val[2][0] = RHS._hess_val[2][0];
+            _hess_val[2][1] = RHS._hess_val[2][1];
+            _hess_val[2][2] = RHS._hess_val[2][2];
+            _hess_val[2][3] = RHS._hess_val[2][3];
+            _hess_val[2][4] = RHS._hess_val[2][4];
+            _hess_val[2][5] = RHS._hess_val[2][5];
+            _hess_val[2][6] = RHS._hess_val[2][6];
+            _hess_val[3][0] = RHS._hess_val[3][0];
+            _hess_val[3][1] = RHS._hess_val[3][1];
+            _hess_val[3][2] = RHS._hess_val[3][2];
+            _hess_val[3][3] = RHS._hess_val[3][3];
+            _hess_val[3][4] = RHS._hess_val[3][4];
+            _hess_val[3][5] = RHS._hess_val[3][5];
+            _hess_val[3][6] = RHS._hess_val[3][6];
+            _hess_val[4][0] = RHS._hess_val[4][0];
+            _hess_val[4][1] = RHS._hess_val[4][1];
+            _hess_val[4][2] = RHS._hess_val[4][2];
+            _hess_val[4][3] = RHS._hess_val[4][3];
+            _hess_val[4][4] = RHS._hess_val[4][4];
+            _hess_val[4][5] = RHS._hess_val[4][5];
+            _hess_val[4][6] = RHS._hess_val[4][6];
+            _hess_val[5][0] = RHS._hess_val[5][0];
+            _hess_val[5][1] = RHS._hess_val[5][1];
+            _hess_val[5][2] = RHS._hess_val[5][2];
+            _hess_val[5][3] = RHS._hess_val[5][3];
+            _hess_val[5][4] = RHS._hess_val[5][4];
+            _hess_val[5][5] = RHS._hess_val[5][5];
+            _hess_val[5][6] = RHS._hess_val[5][6];
+            _hess_val[6][0] = RHS._hess_val[6][0];
+            _hess_val[6][1] = RHS._hess_val[6][1];
+            _hess_val[6][2] = RHS._hess_val[6][2];
+            _hess_val[6][3] = RHS._hess_val[6][3];
+            _hess_val[6][4] = RHS._hess_val[6][4];
+            _hess_val[6][5] = RHS._hess_val[6][5];
+            _hess_val[6][6] = RHS._hess_val[6][6];
         }
 
         ~stvenkir()
@@ -2387,47 +1363,47 @@ namespace PRISMS
             delete [] _hess_val[5];
             delete [] _hess_val[6];
             delete [] _hess_val;
-        }
+        };
 
         stvenkir<VarContainer>* clone() const
         {
             return new stvenkir<VarContainer>(*this);
-        }
+        };
 
         PSimpleFunction< VarContainer, double> simplefunction() const
         {
             return PSimpleFunction< VarContainer, double>( *_val );
-        }
+        };
 
-        PSimpleFunction< VarContainer, double> grad_simplefunction(size_type di) const
+        PSimpleFunction< VarContainer, double> grad_simplefunction(int di) const
         {
             return PSimpleFunction< VarContainer, double>( *_grad_val[di] );
-        }
+        };
 
-        PSimpleFunction< VarContainer, double> hess_simplefunction(size_type di, size_type dj) const
+        PSimpleFunction< VarContainer, double> hess_simplefunction(int di, int dj) const
         {
             return PSimpleFunction< VarContainer, double>( *_hess_val[di][dj] );
-        }
+        };
 
         double operator()(const VarContainer &var)
         {
             return (*_val)(var);
-        }
+        };
 
-        double grad(const VarContainer &var, size_type di)
+        double grad(const VarContainer &var, int di)
         {
             return (*_grad_val[di])(var);
-        }
+        };
 
-        double hess(const VarContainer &var, size_type di, size_type dj)
+        double hess(const VarContainer &var, int di, int dj)
         {
             return (*_hess_val[di][dj])(var);
-        }
+        };
 
         void eval(const VarContainer &var)
         {
             (*_val)(var);
-        }
+        };
 
         void eval_grad(const VarContainer &var)
         {
@@ -2438,7 +1414,7 @@ namespace PRISMS
             (*_grad_val[4])(var);
             (*_grad_val[5])(var);
             (*_grad_val[6])(var);
-        }
+        };
 
         void eval_hess(const VarContainer &var)
         {
@@ -2491,45 +1467,54 @@ namespace PRISMS
             (*_hess_val[6][4])(var);
             (*_hess_val[6][5])(var);
             (*_hess_val[6][6])(var);
-        }
+        };
 
         double operator()() const
         {
             return (*_val)();
-        }
+        };
 
-        double grad(size_type di) const
+        double grad(int di) const
         {
             return (*_grad_val[di])();
-        }
+        };
 
-        double hess(size_type di, size_type dj) const
+        double hess(int di, int dj) const
         {
             return (*_hess_val[di][dj])();
-        }
+        };
 
     private:
-        void construct(bool allocate = true)
+        void construct()
         {
-            this->_name = "stvenkir";
-            this->_var_name.clear();
-            this->_var_name.push_back("lambda");
-            this->_var_name.push_back("mu");
-            this->_var_name.push_back("lambda1");
-            this->_var_name.push_back("lambda2");
-            this->_var_name.push_back("lambda3");
-            this->_var_name.push_back("K");
-            this->_var_name.push_back("alpha");
-            this->_var_description.clear();
-            this->_var_description.push_back("First Lame parameter");
-            this->_var_description.push_back("Second Lame parameter");
-            this->_var_description.push_back("First principle stretch");
-            this->_var_description.push_back("Second principle stretch");
-            this->_var_description.push_back("Third principle stretch");
-            this->_var_description.push_back("Strain hardening coefficient");
-            this->_var_description.push_back("Equivalent plastic strain");
+            _name = "stvenkir";
+            _var_name.clear();
+            _var_name.push_back("lambda");
+            _var_name.push_back("mu");
+            _var_name.push_back("lambda1");
+            _var_name.push_back("lambda2");
+            _var_name.push_back("lambda3");
+            _var_name.push_back("K");
+            _var_name.push_back("alpha");
+            _var_description.clear();
+            _var_description.push_back("First Lame parameter");
+            _var_description.push_back("Second Lame parameter");
+            _var_description.push_back("First principle stretch");
+            _var_description.push_back("Second principle stretch");
+            _var_description.push_back("Third principle stretch");
+            _var_description.push_back("Strain hardening coefficient");
+            _var_description.push_back("Equivalent plastic strain");
+            
+            _val = new stvenkir_f<VarContainer>();
             
             _grad_val = new PSimpleBase< VarContainer, double>*[7];
+            _grad_val[0] = new stvenkir_grad_0<VarContainer>();
+            _grad_val[1] = new stvenkir_grad_1<VarContainer>();
+            _grad_val[2] = new stvenkir_grad_2<VarContainer>();
+            _grad_val[3] = new stvenkir_grad_3<VarContainer>();
+            _grad_val[4] = new stvenkir_grad_4<VarContainer>();
+            _grad_val[5] = new stvenkir_grad_5<VarContainer>();
+            _grad_val[6] = new stvenkir_grad_6<VarContainer>();
             
             _hess_val = new PSimpleBase< VarContainer, double>**[7];
             _hess_val[0] = new PSimpleBase< VarContainer, double>*[7];
@@ -2539,19 +1524,6 @@ namespace PRISMS
             _hess_val[4] = new PSimpleBase< VarContainer, double>*[7];
             _hess_val[5] = new PSimpleBase< VarContainer, double>*[7];
             _hess_val[6] = new PSimpleBase< VarContainer, double>*[7];
-            
-            if(!allocate) return;
-            
-            _val = new stvenkir_f<VarContainer>();
-            
-            _grad_val[0] = new stvenkir_grad_0<VarContainer>();
-            _grad_val[1] = new stvenkir_grad_1<VarContainer>();
-            _grad_val[2] = new stvenkir_grad_2<VarContainer>();
-            _grad_val[3] = new stvenkir_grad_3<VarContainer>();
-            _grad_val[4] = new stvenkir_grad_4<VarContainer>();
-            _grad_val[5] = new stvenkir_grad_5<VarContainer>();
-            _grad_val[6] = new stvenkir_grad_6<VarContainer>();
-            
             _hess_val[0][0] = new stvenkir_hess_0_0<VarContainer>();
             _hess_val[0][1] = new stvenkir_hess_0_1<VarContainer>();
             _hess_val[0][2] = new stvenkir_hess_0_2<VarContainer>();
@@ -2601,10 +1573,8 @@ namespace PRISMS
             _hess_val[6][4] = new stvenkir_hess_6_4<VarContainer>();
             _hess_val[6][5] = new stvenkir_hess_6_5<VarContainer>();
             _hess_val[6][6] = new stvenkir_hess_6_6<VarContainer>();
-        }
+        };
 
     };
-
-
 }
 #endif

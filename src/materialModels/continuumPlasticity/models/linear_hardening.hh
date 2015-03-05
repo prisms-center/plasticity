@@ -1,4 +1,4 @@
-// created: 2015-3-5 16:09:07
+// created: 2015-3-5 16:54:09
 // version: 0.1.0
 // url: git@github.com:prisms-center/IntegrationTools.git
 // commit: 947b873eb0296ab1631408af59ecf7768231ff63
@@ -17,7 +17,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return -var[0]*var[1];
+            return -var[1]*var[0];
         };
 
     public:
