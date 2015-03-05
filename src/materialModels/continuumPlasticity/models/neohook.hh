@@ -1,7 +1,14 @@
+<<<<<<< HEAD
+// created: 2015-3-5 16:09:07
+// version: 0.1.0
+// url: git@github.com:prisms-center/IntegrationTools.git
+// commit: 947b873eb0296ab1631408af59ecf7768231ff63
+=======
 // created: 2014-12-20 0:31:57
 // version: develop
 // url: url
 // commit: id
+>>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
 #ifndef neohook_HH
 #define neohook_HH
@@ -17,8 +24,13 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
+<<<<<<< HEAD
+            return  5.0000000000000000e-01*var[1]*( pow(var[4],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)-3.0000000000000000e+00)+5.0000000000000000e-01*var[5]*pow(var[6],2.0000000000000000e+00)+2.5000000000000000e-01*( pow(var[4],2.0000000000000000e+00)*pow(var[2],2.0000000000000000e+00)*pow(var[3],2.0000000000000000e+00)-1.0000000000000000e+00)*var[0]-( var[1]+5.0000000000000000e-01*var[0])*log(var[4]*var[2]*var[3]);
+        };
+=======
             return  2.5000000000000000e-01*var[0]*( pow(var[2],2.0000000000000000e+00)*pow(var[3],2.0000000000000000e+00)*pow(var[4],2.0000000000000000e+00)-1.0000000000000000e+00)+5.0000000000000000e-01*var[5]*pow(var[6],2.0000000000000000e+00)+5.0000000000000000e-01*( pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)*var[1]-( 5.0000000000000000e-01*var[0]+var[1])*log(var[2]*var[3]*var[4]);
         }
+>>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
@@ -53,8 +65,13 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
+<<<<<<< HEAD
+            return  2.5000000000000000e-01*pow(var[4],2.0000000000000000e+00)*pow(var[2],2.0000000000000000e+00)*pow(var[3],2.0000000000000000e+00)+-5.0000000000000000e-01*log(var[4]*var[2]*var[3])-2.5000000000000000e-01;
+        };
+=======
             return  2.5000000000000000e-01*pow(var[2],2.0000000000000000e+00)*pow(var[3],2.0000000000000000e+00)*pow(var[4],2.0000000000000000e+00)+-5.0000000000000000e-01*log(var[2]*var[3]*var[4])-2.5000000000000000e-01;
         }
+>>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
@@ -89,8 +106,13 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
+<<<<<<< HEAD
+            return  5.0000000000000000e-01*pow(var[4],2.0000000000000000e+00)+5.0000000000000000e-01*pow(var[3],2.0000000000000000e+00)+5.0000000000000000e-01*pow(var[2],2.0000000000000000e+00)-log(var[4]*var[2]*var[3])-1.5000000000000000e+00;
+        };
+=======
             return  5.0000000000000000e-01*pow(var[2],2.0000000000000000e+00)+5.0000000000000000e-01*pow(var[4],2.0000000000000000e+00)+5.0000000000000000e-01*pow(var[3],2.0000000000000000e+00)-log(var[3]*var[4]*var[2])-1.5000000000000000e+00;
         }
+>>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
@@ -125,8 +147,13 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
+<<<<<<< HEAD
+            return -( var[1]+5.0000000000000000e-01*var[0])/var[2]+5.0000000000000000e-01*pow(var[4],2.0000000000000000e+00)*var[2]*pow(var[3],2.0000000000000000e+00)*var[0]+var[1]*var[2];
+        };
+=======
             return  var[1]*var[2]+5.0000000000000000e-01*pow(var[4],2.0000000000000000e+00)*var[2]*pow(var[3],2.0000000000000000e+00)*var[0]-1.0/var[2]*( var[1]+5.0000000000000000e-01*var[0]);
         }
+>>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
@@ -161,8 +188,13 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
+<<<<<<< HEAD
+            return -( var[1]+5.0000000000000000e-01*var[0])/var[3]+5.0000000000000000e-01*pow(var[4],2.0000000000000000e+00)*pow(var[2],2.0000000000000000e+00)*var[3]*var[0]+var[1]*var[3];
+        };
+=======
             return  var[3]*var[1]-1.0/var[3]*( 5.0000000000000000e-01*var[0]+var[1])+5.0000000000000000e-01*var[3]*var[0]*pow(var[4],2.0000000000000000e+00)*pow(var[2],2.0000000000000000e+00);
         }
+>>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
@@ -197,8 +229,13 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
+<<<<<<< HEAD
+            return  5.0000000000000000e-01*var[4]*pow(var[2],2.0000000000000000e+00)*pow(var[3],2.0000000000000000e+00)*var[0]-1.0/var[4]*( var[1]+5.0000000000000000e-01*var[0])+var[4]*var[1];
+        };
+=======
             return -1.0/var[4]*( var[1]+5.0000000000000000e-01*var[0])+var[4]*var[1]+5.0000000000000000e-01*var[4]*pow(var[2],2.0000000000000000e+00)*pow(var[3],2.0000000000000000e+00)*var[0];
         }
+>>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
@@ -377,8 +414,13 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
+<<<<<<< HEAD
+            return  -5.0000000000000000e-01*1.0/(var[2])+5.0000000000000000e-01*pow(var[4],2.0000000000000000e+00)*var[2]*pow(var[3],2.0000000000000000e+00);
+        };
+=======
             return  5.0000000000000000e-01*pow(var[4],2.0000000000000000e+00)*var[2]*pow(var[3],2.0000000000000000e+00)+-5.0000000000000000e-01*1.0/(var[2]);
         }
+>>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
@@ -414,7 +456,11 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return  -5.0000000000000000e-01*1.0/(var[3])+5.0000000000000000e-01*pow(var[4],2.0000000000000000e+00)*pow(var[2],2.0000000000000000e+00)*var[3];
+<<<<<<< HEAD
+        };
+=======
         }
+>>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
@@ -449,8 +495,13 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
+<<<<<<< HEAD
+            return  -5.0000000000000000e-01*1.0/(var[4])+5.0000000000000000e-01*var[4]*pow(var[2],2.0000000000000000e+00)*pow(var[3],2.0000000000000000e+00);
+        };
+=======
             return  5.0000000000000000e-01*pow(var[3],2.0000000000000000e+00)*var[4]*pow(var[2],2.0000000000000000e+00)+-5.0000000000000000e-01*1.0/(var[4]);
         }
+>>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
@@ -629,8 +680,13 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
+<<<<<<< HEAD
+            return  var[2]-1.0/(var[2]);
+        };
+=======
             return -1.0/(var[2])+var[2];
         }
+>>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
@@ -666,7 +722,11 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return -1.0/(var[3])+var[3];
+<<<<<<< HEAD
+        };
+=======
         }
+>>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
@@ -701,8 +761,13 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
+<<<<<<< HEAD
+            return  var[4]-1.0/(var[4]);
+        };
+=======
             return -1.0/(var[4])+var[4];
         }
+>>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
@@ -810,7 +875,11 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return  -5.0000000000000000e-01*1.0/(var[2])+5.0000000000000000e-01*pow(var[4],2.0000000000000000e+00)*var[2]*pow(var[3],2.0000000000000000e+00);
+<<<<<<< HEAD
+        };
+=======
         }
+>>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
@@ -846,7 +915,11 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return  var[2]-1.0/(var[2]);
+<<<<<<< HEAD
+        };
+=======
         }
+>>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
@@ -881,8 +954,13 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
+<<<<<<< HEAD
+            return  var[1]+5.0000000000000000e-01*pow(var[4],2.0000000000000000e+00)*pow(var[3],2.0000000000000000e+00)*var[0]+( var[1]+5.0000000000000000e-01*var[0])/(var[2]*var[2]);
+        };
+=======
             return  ( 5.0000000000000000e-01*var[0]+var[1])/(var[2]*var[2])+var[1]+5.0000000000000000e-01*pow(var[3],2.0000000000000000e+00)*var[0]*pow(var[4],2.0000000000000000e+00);
         }
+>>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
@@ -917,8 +995,13 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
+<<<<<<< HEAD
+            return pow(var[4],2.0000000000000000e+00)*var[2]*var[3]*var[0];
+        };
+=======
             return var[2]*var[3]*var[0]*pow(var[4],2.0000000000000000e+00);
         }
+>>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
@@ -953,8 +1036,13 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
+<<<<<<< HEAD
+            return var[4]*var[2]*pow(var[3],2.0000000000000000e+00)*var[0];
+        };
+=======
             return pow(var[3],2.0000000000000000e+00)*var[0]*var[4]*var[2];
         }
+>>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
@@ -1062,7 +1150,11 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return  -5.0000000000000000e-01*1.0/(var[3])+5.0000000000000000e-01*pow(var[4],2.0000000000000000e+00)*pow(var[2],2.0000000000000000e+00)*var[3];
+<<<<<<< HEAD
+        };
+=======
         }
+>>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
@@ -1098,7 +1190,11 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return -1.0/(var[3])+var[3];
+<<<<<<< HEAD
+        };
+=======
         }
+>>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
@@ -1133,8 +1229,13 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
+<<<<<<< HEAD
+            return pow(var[4],2.0000000000000000e+00)*var[2]*var[3]*var[0];
+        };
+=======
             return var[0]*pow(var[4],2.0000000000000000e+00)*var[2]*var[3];
         }
+>>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
@@ -1169,8 +1270,13 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
+<<<<<<< HEAD
+            return  var[1]+5.0000000000000000e-01*pow(var[4],2.0000000000000000e+00)*pow(var[2],2.0000000000000000e+00)*var[0]+( var[1]+5.0000000000000000e-01*var[0])/(var[3]*var[3]);
+        };
+=======
             return  1.0/(var[3]*var[3])*( 5.0000000000000000e-01*var[0]+var[1])+5.0000000000000000e-01*var[0]*pow(var[4],2.0000000000000000e+00)*pow(var[2],2.0000000000000000e+00)+var[1];
         }
+>>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
@@ -1205,8 +1311,13 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
+<<<<<<< HEAD
+            return var[4]*pow(var[2],2.0000000000000000e+00)*var[3]*var[0];
+        };
+=======
             return pow(var[2],2.0000000000000000e+00)*var[3]*var[0]*var[4];
         }
+>>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
@@ -1313,8 +1424,13 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
+<<<<<<< HEAD
+            return  -5.0000000000000000e-01*1.0/(var[4])+5.0000000000000000e-01*var[4]*pow(var[2],2.0000000000000000e+00)*pow(var[3],2.0000000000000000e+00);
+        };
+=======
             return  5.0000000000000000e-01*pow(var[3],2.0000000000000000e+00)*var[4]*pow(var[2],2.0000000000000000e+00)+-5.0000000000000000e-01*1.0/(var[4]);
         }
+>>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
@@ -1349,8 +1465,13 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
+<<<<<<< HEAD
+            return  var[4]-1.0/(var[4]);
+        };
+=======
             return -1.0/(var[4])+var[4];
         }
+>>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
@@ -1385,8 +1506,13 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
+<<<<<<< HEAD
+            return var[4]*var[2]*pow(var[3],2.0000000000000000e+00)*var[0];
+        };
+=======
             return var[2]*pow(var[3],2.0000000000000000e+00)*var[0]*var[4];
         }
+>>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 
@@ -1422,6 +1548,9 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return var[4]*pow(var[2],2.0000000000000000e+00)*var[3]*var[0];
+<<<<<<< HEAD
+        };
+=======
         }
 
     public:
@@ -1435,6 +1564,7 @@ namespace PRISMS
         {
             return "var[4]*pow(var[2],2.0000000000000000e+00)*var[3]*var[0]";
         }
+>>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
         std::string sym() const
         {
@@ -1458,7 +1588,11 @@ namespace PRISMS
         double eval( const VarContainer &var) const
         {
             return  var[1]+1.0/(var[4]*var[4])*( var[1]+5.0000000000000000e-01*var[0])+5.0000000000000000e-01*pow(var[2],2.0000000000000000e+00)*pow(var[3],2.0000000000000000e+00)*var[0];
+<<<<<<< HEAD
+        };
+=======
         }
+>>>>>>> 1853fc05524906a2a2d829468a5c2e263978073c
 
     public:
 

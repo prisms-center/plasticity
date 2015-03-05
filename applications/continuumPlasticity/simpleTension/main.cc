@@ -135,6 +135,7 @@ int main (int argc, char **argv)
 			problem.properties.lambda = material[0].value_.get_real();
 			problem.properties.mu = material[1].value_.get_real();
 			problem.properties.tau_y = material[2].value_.get_real();
+			problem.properties.K = material[3].value_.get_real();
 
 			//Read pfunction names for strain energy density and yield functions
 			strainEnergy = material[5].value_.get_obj();

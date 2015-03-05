@@ -10,7 +10,7 @@
 
 
 typedef struct {
-double lambda, mu, tau_y;
+double lambda, mu, tau_y, K;
 std::string yieldModel, strainEnergyModel;
 } materialProperties;
 
@@ -95,9 +95,16 @@ void continuumPlasticity<dim>::init(unsigned int num_quad_points)
 	varStrainEnergy[0] = properties.lambda;
 	varStrainEnergy[1] = properties.mu;
 
-  PRISMS::PLibrary::checkout("hardening", harden);
+	//For now, specify the hardening model here
+  PRISMS::PLibrary::checkout("linear_hardening", harden);
 
-	varIsoHardening.resize(1,0.);	
+	/*hardening function inputs:
+	alpha K
+	0: "Equivalent plastic strain"
+	1: "Hardening parameter"*/
+
+	varIsoHardening.resize(2,0.);
+	varIsoHardening[1] = properties.K;	
 		
 	/*yield function inputs:
 	beta1 beta2 beta3 tau_y q
