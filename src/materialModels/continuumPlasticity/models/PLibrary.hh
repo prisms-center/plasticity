@@ -3,8 +3,8 @@
 
 #include<cstring>
 #include<vector>
-#include "PFunction.hh"
-#include "PSeriesFunction.hh"
+#include "../../../../utils/IntegrationTools/PFunction.hh"
+#include "../../../../utils/IntegrationTools/pfunction/PSeriesFunction.hh"
 
 namespace PRISMS
 {
