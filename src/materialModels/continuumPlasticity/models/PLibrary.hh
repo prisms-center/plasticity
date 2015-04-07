@@ -1,10 +1,15 @@
+// created: 2015-4-7 15:16:58
+// version: master
+// url: https://github.com/prisms-center/IntegrationTools.git
+// commit: 010dc90537a86ed3458c4b12292b6af9545b3c1f
+
 #ifndef PLIBRARY_HH
 #define PLIBRARY_HH
 
 #include<cstring>
 #include<vector>
 #include "../../../../utils/IntegrationTools/PFunction.hh"
-#include "../../../../utils/IntegrationTools/pfunction/PSeriesFunction.hh"
+#include "../../../../utils/IntegrationTools/PPieceWise.hh"
 
 namespace PRISMS
 {
@@ -31,6 +36,8 @@ namespace PRISMS
 
         void checkout( std::string name, PFuncBase< std::vector<double>, double > *&func);
         void checkout( std::string name, PFuncBase< double*, double > *&func);
+
+
 
     }
 
