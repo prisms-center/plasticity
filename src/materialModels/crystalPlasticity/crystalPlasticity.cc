@@ -681,7 +681,7 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 	  if (cell->is_locally_owned()){
 	    //loop over quadrature points
 	    for (unsigned int q=0; q<num_quad_points; ++q){
-	      this->postprocessValues(cellID, q, 0, 0)=1.0;
+	      this->postprocessValues(cellID, q, 0, 0)=-1.9;
 	    }
 	    cellID++;
 	  }

@@ -63,9 +63,18 @@ void ellipticBVP<dim>::initProject(){
       
       //elementalMass=N*N
       for (unsigned int d1=0; d1<dofs_per_cell; ++d1) {
+	unsigned int i = fe_values.get_fe().system_to_component_index(d1).first;
 	for (unsigned int d2=0; d2<dofs_per_cell; ++d2) {
+	  unsigned int j = fe_values.get_fe().system_to_component_index(d2).first;
 	  for (unsigned int q=0; q<num_quad_points; ++q){
-	    elementalMass(d1,d2)+=fe_values.shape_value(d1, q)*fe_values.shape_value(d2, q)*fe_values.JxW(q);
+	    if (i==j){
+	      if (i==0){
+		elementalMass(d1,d2)+=fe_values.shape_value(d1, q)*fe_values.shape_value(d2, q)*fe_values.JxW(q);
+	      }
+	      else{
+		elementalMass(d1,d2)=1.0;
+	      }
+	    }
 	  }
 	}
       }
@@ -131,6 +140,7 @@ void ellipticBVP<dim>::project(){
     postResidual[field]->compress(VectorOperation::add);
     
     //L2 projection by solving for Mx=b problem
+    *postFields[field]=0.0;
     solveLinearSystem(constraintsMassMatrix, massMatrix, *postResidual[field], *postFields[field],  *postFieldsWithGhosts[field],  *postFieldsWithGhosts[field]);
   }
 }

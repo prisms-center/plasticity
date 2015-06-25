@@ -32,9 +32,6 @@ void ellipticBVP<dim>::solveLinearSystem(ConstraintMatrix& constraintmatrix, mat
 	  << " iterations as per set tolerances. consider increasing maxSolverIterations or decreasing relSolverTolerance.\n";     
   }
   constraintmatrix.distribute (completely_distributed_solutionInc);
-  //solutionIncWithGhosts=completely_distributed_solutionInc;
-  //solution+=completely_distributed_solutionInc; 
-  //solutionWithGhosts=solution;
   dxGhosts=completely_distributed_solutionInc;
   x+=completely_distributed_solutionInc; 
   xGhosts=x;
