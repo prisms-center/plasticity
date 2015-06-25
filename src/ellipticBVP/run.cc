@@ -13,6 +13,8 @@ void ellipticBVP<dim>::run(){
   mesh();
   //initialize FE objects and global data structures
   init();
+  initProject();
+
   computing_timer.exit_section("mesh and initialization");
 
   //solve();

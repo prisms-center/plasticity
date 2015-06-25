@@ -37,18 +37,20 @@ class ellipticBVP
   //FE data structres
   parallel::distributed::Triangulation<dim> triangulation;
   FESystem<dim>      FE;
-  ConstraintMatrix   constraints;
+  ConstraintMatrix   constraints, constraintsMassMatrix;
   DoFHandler<dim>    dofHandler;
     
   //methods
   virtual void mesh();
   void init();
   void assemble();
-  void solveLinearSystem();
+  void solveLinearSystem(ConstraintMatrix& constraintmatrix, matrixType& A, vectorType& b, vectorType& x, vectorType& xGhosts, vectorType& dxGhosts);
   void solveNonLinearSystem();
   void solve();
   void output();
- 
+  void initProject();
+  void project();
+
   //virtual methods to be implemented in derived class
   //method to calculate elemental Jacobian and Residual,
   //which should be implemented in the derived material model class
@@ -86,9 +88,18 @@ class ellipticBVP
   TimerOutput computing_timer;
 
   //output variables
-  //solution name array                                                                                                                                                
+  //solution name array                                                                                      
   std::vector<std::string> nodal_solution_names;
   std::vector<DataComponentInterpretation::DataComponentInterpretation> nodal_data_component_interpretation;
+
+  //post processing 
+  unsigned int numPostProcessedFields;
+  //postprocessed scalar variable name array (only scalar variables supported currently, will be extended later to vectors and tensors, if required.)
+  std::vector<std::string> postprocessed_solution_names;
+  //postprocessing data structures
+  std::vector<vectorType*> postFields, postFieldsWithGhosts, postResidual;
+  matrixType massMatrix;
+  Table<4,double> postprocessValues;
 };
 
 //other ellipticBVP headers 
@@ -108,5 +119,6 @@ class ellipticBVP
 #include "../src/ellipticBVP/iterationUpdates.cc"
 #include "../src/ellipticBVP/incrementUpdates.cc"
 #include "../src/ellipticBVP/output.cc"
+#include "../src/ellipticBVP/project.cc"
 
 #endif

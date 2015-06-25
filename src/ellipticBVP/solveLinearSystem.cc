@@ -7,19 +7,19 @@
 
 //solve linear system of equations AX=b using iterative solver
 template <int dim>
-void ellipticBVP<dim>::solveLinearSystem(){
+void ellipticBVP<dim>::solveLinearSystem(ConstraintMatrix& constraintmatrix, matrixType& A, vectorType& b, vectorType& x, vectorType& xGhosts, vectorType& dxGhosts){ 
   vectorType completely_distributed_solutionInc (locally_owned_dofs, mpi_communicator);
 #ifdef linearSolverType
-  SolverControl solver_control(maxLinearSolverIterations, relLinearSolverTolerance*residual.l2_norm());
+  SolverControl solver_control(maxLinearSolverIterations, relLinearSolverTolerance*b.l2_norm());
   linearSolverType solver(solver_control, mpi_communicator);
-  PETScWrappers::PreconditionJacobi preconditioner(jacobian);
+  PETScWrappers::PreconditionJacobi preconditioner(A);
 #else
   pcout << "\nError: solverType not defined. This is required for ELLIPTIC BVP.\n\n";
   exit (-1);
 #endif
   //solve Ax=b
   try{
-    solver.solve (jacobian, completely_distributed_solutionInc, residual, preconditioner);
+    solver.solve (A, completely_distributed_solutionInc, b, preconditioner);
     char buffer[200];
     sprintf(buffer, 
 	    "linear system solved in %3u iterations\n",
@@ -31,10 +31,13 @@ void ellipticBVP<dim>::solveLinearSystem(){
 	  << solver_control.last_step()
 	  << " iterations as per set tolerances. consider increasing maxSolverIterations or decreasing relSolverTolerance.\n";     
   }
-  constraints.distribute (completely_distributed_solutionInc);
-	solutionIncWithGhosts=completely_distributed_solutionInc;
-  solution+=completely_distributed_solutionInc; 
-  solutionWithGhosts=solution;
+  constraintmatrix.distribute (completely_distributed_solutionInc);
+  //solutionIncWithGhosts=completely_distributed_solutionInc;
+  //solution+=completely_distributed_solutionInc; 
+  //solutionWithGhosts=solution;
+  dxGhosts=completely_distributed_solutionInc;
+  x+=completely_distributed_solutionInc; 
+  xGhosts=x;
 }
 
 #endif
