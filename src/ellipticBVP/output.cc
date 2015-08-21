@@ -10,10 +10,17 @@ template <int dim>
 void ellipticBVP<dim>::output(){
   DataOut<dim> data_out;
   data_out.attach_dof_handler (dofHandler);
+  //add solution
   data_out.add_data_vector (solutionWithGhosts, 
 			    nodal_solution_names, 
 			    DataOut<dim>::type_dof_data, 
 			    nodal_data_component_interpretation);
+  //add postprocessing fields
+  for (unsigned int field=0; field<numPostProcessedFields; field++){
+    data_out.add_data_vector (*postFieldsWithGhosts[field], 
+			      postprocessed_solution_names[field].c_str());
+  }
+  //add subdomain id to output file
   Vector<float> subdomain (triangulation.n_active_cells());
   for (unsigned int i=0; i<subdomain.size(); ++i)
     subdomain(i) = triangulation.locally_owned_subdomain();

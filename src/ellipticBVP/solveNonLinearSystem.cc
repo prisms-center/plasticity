@@ -49,7 +49,7 @@ void ellipticBVP<dim>::solveNonLinearSystem(){
     
     //if not converged, solveLinearSystem Ax=b
     computing_timer.enter_section("solve");
-    solveLinearSystem();
+    solveLinearSystem(constraints, jacobian, residual, solution, solutionWithGhosts, solutionIncWithGhosts);
     computing_timer.exit_section("solve");
     currentIteration++;
 

@@ -28,11 +28,16 @@ void ellipticBVP<dim>::init(){
   constraints.reinit (locally_relevant_dofs);
   DoFTools::make_hanging_node_constraints (dofHandler, constraints);
   constraints.close ();
+  //constraints for mass matrix (i.e. no constraints, as mass matrix needs no dirichlet BCs)
+  constraintsMassMatrix.clear ();
+  constraintsMassMatrix.reinit (locally_relevant_dofs);
+  DoFTools::make_hanging_node_constraints (dofHandler, constraintsMassMatrix);
+  constraintsMassMatrix.close ();
 
   //initialize global data structures
   solution.reinit (locally_owned_dofs, mpi_communicator); solution=0;
-	solutionWithGhosts.reinit (locally_owned_dofs, locally_relevant_dofs, mpi_communicator);
-	solutionIncWithGhosts.reinit (locally_owned_dofs, locally_relevant_dofs, mpi_communicator);
+  solutionWithGhosts.reinit (locally_owned_dofs, locally_relevant_dofs, mpi_communicator);
+  solutionIncWithGhosts.reinit (locally_owned_dofs, locally_relevant_dofs, mpi_communicator);
   residual.reinit (locally_owned_dofs, mpi_communicator); residual=0;
   
   CompressedSimpleSparsityPattern csp (locally_relevant_dofs);

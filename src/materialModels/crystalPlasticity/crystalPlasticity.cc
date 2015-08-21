@@ -90,6 +90,10 @@ T(dim,dim),
 P(dim,dim)
 {
 	initCalled = false;
+
+	//post processing
+	ellipticBVP<dim>::numPostProcessedFields=1;
+	ellipticBVP<dim>::postprocessed_solution_names.push_back("post");
 }
 
 template <int dim>
@@ -669,6 +673,22 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 	Fe_conv=Fe_iter;
 	Fp_conv=Fp_iter;
 	s_alpha_conv=s_alpha_iter;
+
+	//fill in post processing field values
+	cellID=0;
+	cell = this->dofHandler.begin_active(), endc = this->dofHandler.end();
+	for (; cell!=endc; ++cell) {
+	  if (cell->is_locally_owned()){
+	    //loop over quadrature points
+	    for (unsigned int q=0; q<num_quad_points; ++q){
+	      this->postprocessValues(cellID, q, 0, 0)=-1.9;
+	    }
+	    cellID++;
+	  }
+	}
+
+	//call base class project() function to project post processed fields
+	ellipticBVP<dim>::project();
 }
 
 
