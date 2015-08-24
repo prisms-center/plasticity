@@ -434,12 +434,13 @@ void continuumPlasticity<dim>::updateAfterIncrement()
   histAlpha_conv = histAlpha_iter;
 
   //fill in post processing field values
-  cellID=0;
-  cell = this->dofHandler.begin_active(), endc = this->dofHandler.end();
+  unsigned int cellID=0;
+  typename DoFHandler<dim>::active_cell_iterator cell = this->dofHandler.begin_active(), 
+    endc = this->dofHandler.end();
   for (; cell!=endc; ++cell) {
     if (cell->is_locally_owned()){
       //loop over quadrature points
-      for (unsigned int q=0; q<num_quad_points; ++q){
+      for (unsigned int q=0; q<histAlpha_conv[cellID].size(); ++q){
 	this->postprocessValues(cellID, q, 0, 0)=histAlpha_conv[cellID][q];
       }
       cellID++;

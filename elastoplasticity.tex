@@ -1,0 +1,399 @@
+\documentclass[10pt]{article}
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{bbm}
+\usepackage{mathrsfs}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{subcaption}
+\usepackage{epsfig}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{wrapfig}
+\usepackage{graphicx}
+\usepackage{psfrag}
+\renewcommand{\baselinestretch}{1.2}
+\jot 5mm
+\graphicspath{{./figures/}}
+%text dimensions
+\textwidth 6.5 in
+\oddsidemargin .2 in
+\topmargin -0.2 in
+\textheight 8.5 in
+\headheight 0.2in
+\overfullrule = 0pt
+\pagestyle{plain}
+\def\newpar{\par\vskip 0.5cm}
+\begin{document}
+%
+%----------------------------------------------------------------------
+%        Define symbols
+%----------------------------------------------------------------------
+%
+\def\iso{\mathbbm{1}}
+\def\half{{\textstyle{1 \over 2}}}
+\def\third{{\textstyle{1 \over 3}}}
+\def\fourth{{\textstyle{{1 \over 4}}}}
+\def\twothird{{\textstyle {{2 \over 3}}}}
+\def\ndim{{n_{\rm dim}}}
+\def\nint{n_{\rm int}}
+\def\lint{l_{\rm int}}
+\def\nel{n_{\rm el}}
+\def\nf{n_{\rm f}}
+\def\DIV {\hbox{\af div}}
+\def\GRAD{\hbox{\af Grad}}
+\def\sym{\mathop{\rm sym}\nolimits}
+\def\tr{\mathop{\rm tr}\nolimits}
+\def\dev{\mathop{\rm dev}\nolimits}
+\def\Dev{\mathop{\rm Dev}\nolimits}
+\def\DEV{\mathop {\rm DEV}\nolimits}
+\def\bfb {{\bi b}}
+\def\Bnabla{\nabla}
+\def\bG{{\bi G}}
+\def\jmpdelu{{\lbrack\!\lbrack \Delta u\rbrack\!\rbrack}}
+\def\jmpudot{{\lbrack\!\lbrack\dot u\rbrack\!\rbrack}}
+\def\jmpu{{\lbrack\!\lbrack u\rbrack\!\rbrack}}
+\def\jmphi{{\lbrack\!\lbrack\varphi\rbrack\!\rbrack}}
+\def\ljmp{{\lbrack\!\lbrack}}
+\def\rjmp{{\rbrack\!\rbrack}}
+\def\sign{{\rm sign}}
+\def\nn{{n+1}}
+\def\na{{n+\vartheta}}
+\def\nna{{n+(1-\vartheta)}}
+\def\nt{{n+{1\over 2}}}
+\def\nb{{n+\beta}}
+\def\nbb{{n+(1-\beta)}}
+%---------------------------------------------------------
+%               Bold Face Math Characters:
+%               All In Format: \B***** .
+%---------------------------------------------------------
+\def\bOne{\mbox{\boldmath$1$}}
+\def\BGamma{\mbox{\boldmath$\Gamma$}}
+\def\BDelta{\mbox{\boldmath$\Delta$}}
+\def\BTheta{\mbox{\boldmath$\Theta$}}
+\def\BLambda{\mbox{\boldmath$\Lambda$}}
+\def\BXi{\mbox{\boldmath$\Xi$}}
+\def\BPi{\mbox{\boldmath$\Pi$}}
+\def\BSigma{\mbox{\boldmath$\Sigma$}}
+\def\BUpsilon{\mbox{\boldmath$\Upsilon$}}
+\def\BPhi{\mbox{\boldmath$\Phi$}}
+\def\BPsi{\mbox{\boldmath$\Psi$}}
+\def\BOmega{\mbox{\boldmath$\Omega$}}
+\def\Balpha{\mbox{\boldmath$\alpha$}}
+\def\Bbeta{\mbox{\boldmath$\beta$}}
+\def\Bgamma{\mbox{\boldmath$\gamma$}}
+\def\Bdelta{\mbox{\boldmath$\delta$}}
+\def\Bepsilon{\mbox{\boldmath$\epsilon$}}
+\def\Bzeta{\mbox{\boldmath$\zeta$}}
+\def\Beta{\mbox{\boldmath$\eta$}}
+\def\Btheta{\mbox{\boldmath$\theta$}}
+\def\Biota{\mbox{\boldmath$\iota$}}
+\def\Bkappa{\mbox{\boldmath$\kappa$}}
+\def\Blambda{\mbox{\boldmath$\lambda$}}
+\def\Bmu{\mbox{\boldmath$\mu$}}
+\def\Bnu{\mbox{\boldmath$\nu$}}
+\def\Bxi{\mbox{\boldmath$\xi$}}
+\def\Bpi{\mbox{\boldmath$\pi$}}
+\def\Brho{\mbox{\boldmath$\rho$}}
+\def\Bsigma{\mbox{\boldmath$\sigma$}}
+\def\Btau{\mbox{\boldmath$\tau$}}
+\def\Bupsilon{\mbox{\boldmath$\upsilon$}}
+\def\Bphi{\mbox{\boldmath$\phi$}}
+\def\Bchi{\mbox{\boldmath$\chi$}}
+\def\Bpsi{\mbox{\boldmath$\psi$}}
+\def\Bomega{\mbox{\boldmath$\omega$}}
+\def\Bvarepsilon{\mbox{\boldmath$\varepsilon$}}
+\def\Bvartheta{\mbox{\boldmath$\vartheta$}}
+\def\Bvarpi{\mbox{\boldmath$\varpi$}}
+\def\Bvarrho{\mbox{\boldmath$\varrho$}}
+\def\Bvarsigma{\mbox{\boldmath$\varsigma$}}
+\def\Bvarphi{\mbox{\boldmath$\varphi$}}
+\def\bone{\mathbf{1}}
+\def\bzero{\mathbf{0}}
+%---------------------------------------------------------
+%               Bold Face Math Italic:
+%               All In Format: \b* .
+%---------------------------------------------------------
+\def\bA{\mbox{\boldmath$ A$}}
+\def\bB{\mbox{\boldmath$ B$}}
+\def\bC{\mbox{\boldmath$ C$}}
+\def\bD{\mbox{\boldmath$ D$}}
+\def\bE{\mbox{\boldmath$ E$}}
+\def\bF{\mbox{\boldmath$ F$}}
+\def\bG{\mbox{\boldmath$ G$}}
+\def\bH{\mbox{\boldmath$ H$}}
+\def\bI{\mbox{\boldmath$ I$}}
+\def\bJ{\mbox{\boldmath$ J$}}
+\def\bK{\mbox{\boldmath$ K$}}
+\def\bL{\mbox{\boldmath$ L$}}
+\def\bM{\mbox{\boldmath$ M$}}
+\def\bN{\mbox{\boldmath$ N$}}
+\def\bO{\mbox{\boldmath$ O$}}
+\def\bP{\mbox{\boldmath$ P$}}
+\def\bQ{\mbox{\boldmath$ Q$}}
+\def\bR{\mbox{\boldmath$ R$}}
+\def\bS{\mbox{\boldmath$ S$}}
+\def\bT{\mbox{\boldmath$ T$}}
+\def\bU{\mbox{\boldmath$ U$}}
+\def\bV{\mbox{\boldmath$ V$}}
+\def\bW{\mbox{\boldmath$ W$}}
+\def\bX{\mbox{\boldmath$ X$}}
+\def\bY{\mbox{\boldmath$ Y$}}
+\def\bZ{\mbox{\boldmath$ Z$}}
+\def\ba{\mbox{\boldmath$ a$}}
+\def\bb{\mbox{\boldmath$ b$}}
+\def\bc{\mbox{\boldmath$ c$}}
+\def\bd{\mbox{\boldmath$ d$}}
+\def\be{\mbox{\boldmath$ e$}}
+\def\bff{\mbox{\boldmath$ f$}}
+\def\bg{\mbox{\boldmath$ g$}}
+\def\bh{\mbox{\boldmath$ h$}}
+\def\bi{\mbox{\boldmath$ i$}}
+\def\bj{\mbox{\boldmath$ j$}}
+\def\bk{\mbox{\boldmath$ k$}}
+\def\bl{\mbox{\boldmath$ l$}}
+\def\bm{\mbox{\boldmath$ m$}}
+\def\bn{\mbox{\boldmath$ n$}}
+\def\bo{\mbox{\boldmath$ o$}}
+\def\bp{\mbox{\boldmath$ p$}}
+\def\bq{\mbox{\boldmath$ q$}}
+\def\br{\mbox{\boldmath$ r$}}
+\def\bs{\mbox{\boldmath$ s$}}
+\def\bt{\mbox{\boldmath$ t$}}
+\def\bu{\mbox{\boldmath$ u$}}
+\def\bv{\mbox{\boldmath$ v$}}
+\def\bw{\mbox{\boldmath$ w$}}
+\def\bx{\mbox{\boldmath$ x$}}
+\def\by{\mbox{\boldmath$ y$}}
+\def\bz{\mbox{\boldmath$ z$}}
+%*********************************
+%Start main paper
+%*********************************
+\centerline{\Large{\bf Continuum Elastoplasticity - Finite Strain}}
+\bigskip
+In the following formulation, we consider continuum elastoplasticity with quasistatic finite strain deformation of an isotropic material, with isochoric plasticity and isotropic strain hardening.
+
+\section{Kinematics}
+
+We model continuum elastoplasticity with a multiplicative decomposition of the deformation gradient into elastic and plastic parts.
+\begin{align}
+\bF &= \bF^e \bF^p
+\end{align}
+We also specify the following (expected) relations:
+\begin{align}
+\bb^e &= \bF^e \bF^{e^T}\\
+\bC^p &= \bF^{p^T} \bF^p\\
+\implies \bb^e &= \bF\bC^{p^{-1}}\bF^T
+\end{align}
+
+The eigenvalues of $\bb^e$ are the squares of the principal elastic stretches ($\lambda^A_e$), and the associated spectral decomposition of $\bb^e$ is
+\begin{align}
+\bb^e &= \sum_{A=1}^3 \lambda_e^{A^2} \bn^A \otimes \bn^A
+\end{align}
+
+\section{Constitutive laws}
+
+For nonlinear hyperelastic models, we have
+\begin{align}
+\Btau:\bd &= \dot{w}
+\end{align}
+where $\Btau$ is the Kirchhoff stress, $\bd$ is the rate of deformation tensor, and $w$ is the strain energy density function. For isotropic hyperelasticity, the strain energy density can be written in terms of $\bb^e$ or in terms of the invariants or eigenvalues of $\bb^e$. It is also common to represent energy stored in the plastic deformation using a scalar $\alpha$ to represent equivalent plastic strain, so that $w = \hat{w}(\bb^e,\alpha) = \bar{w}(\lambda_e^{a^2},\alpha)$. Recognizing that the dissipation of energy must be non-negative, this equation can then be written as
+\begin{align}
+\Btau:\bd^p - \frac{\partial w}{\partial \alpha} \dot{\alpha} \geq 0
+\end{align}
+The eigenvalues of $\Btau$ are the principal stresses ($\beta^A$), and the eigenvectors of $\Btau$ are equal to those of $\bb^e$, resulting in a spectral decomposition of
+\begin{align}
+\Btau = \sum_{A=1}^3 \beta^A \bn^A \otimes \bn^A
+\end{align}
+The following relation holds in this case:
+\begin{align}
+\beta^A &= \frac{\partial \bar{w}}{\partial \lambda_e^{A}}\lambda_e^{A}
+\end{align}
+
+\subsection{Yield condition}
+
+We specify a yield function $f(\Btau)$ with the yield condition $f \leq 0$. Isochoric plasticity implies that $f$ is independent of $\text{tr}(\Btau)$, so we have
+\begin{align}
+f(\Btau) &= \bar{f}(\dev(\Btau))\\
+\text{where } \dev(\Btau) &= \Btau - \third \tr(\Btau) \iso
+\end{align}
+We define $q = -\frac{\partial w}{\partial \alpha}$ to be the conjugate equivalent stress associated with $\alpha$ and use a particular model $f(\Btau) = \tilde{f}(\Btau,q)$, where $q = \bar{q}(\alpha)$ is used to model the isotropic hardening. As an example, the isotropic von Mises yield function is
+\begin{align}
+\tilde{f}(\Btau,q) &= |\dev(\Btau)| - \sqrt{\frac{2}{3}}(\tau_y - q)
+\end{align}
+where $\tau_y$ is the yield stress. If we define the following
+\begin{align}
+\Bbeta &= [\beta^1,\beta^2,\beta^3]^T\\
+\bOne &= [1,1,1]^T\\
+\Dev(\Bbeta) &= \Bbeta - \third (\Bbeta \cdot \bOne) \bOne
+\end{align}
+then we can write the yield function $f = \bar{f}(\Bbeta,q)$ as
+\begin{align}
+\bar{f}(\Bbeta,q) &= |\Dev(\Bbeta)| - \sqrt{\frac{2}{3}}(\tau_y - q)
+\end{align}
+We could model linear isotropic hardening by defining $q = -K\alpha$.
+
+\subsection{Flow rules}
+
+Consider the associative flow rules
+\begin{align}
+\bd^p &= \gamma \frac{\partial f}{\partial \Btau}\\
+\dot{\alpha} &= \gamma \frac{\partial f}{\partial q}
+\end{align}
+where $\gamma \geq 0$ is the plastic multiplier.\\
+\\
+Then we have the following relation:
+\begin{align}
+\implies \gamma \frac{\partial f}{\partial \Btau}:\Btau
++ \gamma \frac{\partial f}{\partial q} q \geq 0\\
+\iff \gamma \frac{\partial f}{\partial \Bbeta}\cdot\Bbeta
++ \gamma \frac{\partial f}{\partial q} q \geq 0
+\end{align}
+The loading/unloading (Kuhn-Tucker) and consistency conditions give the following relations:
+\begin{align}
+\gamma f &= 0\\
+\gamma \dot{f} &= 0
+\end{align}
+
+\section{Algorithmic integration of the flow rules}
+We consider the case of displacment loading. The total applied displacement is discretized into pseudo-time steps. We solve for $\bF$ iteratively within each pseudo-time step, so we have an assumed value for $\bF_{n+1}$ when updating from $t_n$ to $t_{n+1}$. We define a trial state by assuming that all deformation between $t_n$ and $t_{n+1}$ is elastic, namely
+\begin{align}
+\alpha^{tr}_{n+1} &= \alpha_n\\
+\bb^{e^{tr}}_{n+1} &= \bF_{n+1}\bC^{p^{-1}}_n\bF_{n+1}^T
+\end{align}
+The yield function is evaluated using the trial state. If $f_{n+1}^{tr} < 0$, then the trial state holds and no plastic flow has ocurred. Otherwise, the body has undergone plastic deformation. The flow rules are algorithmically integrated and stress and strain values are updated using the return mapping algorithm, as follows:
+\begin{align}
+\alpha_{n+1} &= \alpha_{n+1}^{tr} + \gamma_{n+1}\Delta t
+\Big(\frac{\partial f}{\partial q}\Big)_{n+1}\\
+\lambda_{e_{n+1}}^{A^2} &= \exp\bigg(-2\gamma_{n+1}\Delta t
+\Big(\frac{\partial f}{\partial \beta^A}\Big)_{n+1}\bigg)
+\lambda_{e_{n+1}}^{A^{{tr}^2}}\\
+\bn^A_{n+1} &= \bn^{A^{tr}}_{n+1}
+\end{align}
+Recall that the spectral decompositions can be used to relate $\bb^e$ and $\Btau$ to the principal stretches and stresses, respectively.
+\begin{align}
+\bb^e &= \sum_{A=1}^3 \lambda_e^{A^2} \bn^A \otimes \bn^A\\
+\Btau &= \sum_{A=1}^3 \beta^A \bn^A \otimes \bn^A
+\end{align}
+Depending on the yield function $f$, hardening function $q$, and strain energy density function $w$, it may be necessary to iteratively solve for $\gamma_{n+1} \Delta_t$ (which is treated as a single variable), $q_{n+1}$, and $\Bbeta_{n+1}$ using the following equations:
+\begin{align}
+f_{n+1} &= 0\\
+q &= -\frac{\partial \bar{w}}{\partial \alpha}\\
+\beta^A &= \frac{\partial \bar{w}}{\partial \lambda_e^{A}}\lambda_e^{A}
+\end{align}
+
+\section{Residual and jacobian}
+The element residual and jacobian have the same form as finite strain elasticity, namely
+\begin{align}
+r_e &= \int_{\Omega_e} \Big(P^h_{iJ} \frac{\partial w^h_i}{\partial X_J} - w^h_i f_i \Big) \, dV
+- \sum_i \int_{\partial \Omega_{e_{T_i}}} w^h_i T_i \, dS\\
+j_e &=  \int_{\Omega_e} \Big( \frac{\partial w^h_i}{\partial x_j} c^{ep}_{ijkl} \frac{\partial \Delta u^h_k}{\partial x_l} 
++ \frac{\partial w^h_i}{\partial x_j} \tau^h_{jk} \frac{\partial \Delta u^h_i}{\partial x_k} \Big) \, dV
+\end{align}
+However, note that instead of the spatial elastic tangent, we are using the spatial algorithmic elastoplastic tangent $\bc^{ep}$. Assuming the yield function $f$ can be written as $f(\Bbeta,q) = g(\Bbeta) + h(q)$ for some functions $g$ and $h$, we can write $\bc^{ep}$ as the following [1]:
+\begin{align}
+\bc^{ep} &= \sum_{A=1}^3 \sum_{B=1}^3 a^{ep}_{AB} \bm^{A^{tr}}\otimes\bm^{B^{tr}}
++
+2\sum_{A=1}^3 \beta^A \bc^{A^{tr}}
+\end{align}
+where
+\begin{align}
+\ba^{ep} &= \bh - \frac{\Big(1 - \gamma \Delta t \frac{\partial q}{\partial \alpha} \frac{\partial^2 f}{\partial q^2}\Big)
+\Big(\bh \frac{\partial f}{\partial \Bbeta} \Big)\otimes\Big(\bh \frac{\partial f}{\partial \Bbeta} \Big)}
+{\Big(1 - \gamma \Delta t \frac{\partial q}{\partial \alpha} \frac{\partial^2 f}{\partial q^2}\Big)
+\frac{\partial f}{\partial \Bbeta}\cdot\bh \frac{\partial f}{\partial \Bbeta}
++ \frac{\partial q}{\partial \alpha}\Big(\frac{\partial f}{\partial q}\Big)^2}\\
+\bh &= \Big(\ba^{e^{-1}} + \gamma \Delta t \frac{\partial^2 f}{\partial \Bbeta^2}
+\Big)^{-1}\\
+a^e_{AB} &= \frac{\partial^2 w}{\partial \lambda^A_e \partial \lambda^B_e}
+\lambda^A_e \lambda^B_e
++
+\frac{\partial w}{\partial \lambda^A_e}
+\lambda^A_e \delta_{AB}\\
+\bm^{A^{tr}} &= \bn^{A^{tr}}\otimes\bn^{A^{tr}}\\
+\bc^{A^{tr}} &=
+\begin{aligned}[t]
+&\frac{1}{d_A} \bigg[
+\mathbb{I}_{b^{tr}_e} - \bb^{tr}_e \otimes \bb^{tr}_e - \frac{\det(\bb^{tr}_e)}{\lambda^{A^{2}}_e}
+\Big(
+\mathbb{I} - (\iso - \bm^{A^{tr}})\otimes(\iso - \bm^{A^{tr}})
+\Big)\\
+&+
+\lambda^{A^{2}}_e
+\Big(
+\bb^{tr}_e \otimes\bm^{A^{tr}} + \bm^{A^{tr}} \otimes\bb^{tr}_e
++
+(\tr(\bb^{tr}_e) - 4\lambda^{A^{2}}_e)\bm^{A^{tr}}\otimes\bm^{A^{tr}}
+\Big)
+\bigg]
+\end{aligned}\\
+\mathbb{I}^{b^{tr}_e}_{ijkl} &= \half(b^{tr}_{e_{ik}}b^{tr}_{e_{jl}} + b^{tr}_{e_{il}}b^{tr}_{e_{jk}})\\
+d_A &= \frac{\lambda^{A^{tr^2}}_e - \lambda^{B^{tr^2}}_e}{\lambda^{A^{tr^2}}_e - \lambda^{C^{tr^2}}_e}, 
+\text{ with $A,B,C$ even permutations of } \{1,2,3\}
+\end{align}
+
+The PRISMS continuum plasticity code also uses an enhanced strain field to prevent element locking, as described in [2].
+
+\pagebreak
+
+\section{Modifying the PRISMS continuum plasticity deal.II model}
+
+\subsection{Material parameters and constitutive laws}
+Most material parameters and constitutive laws can modified in the materialProperties.json file, including the Lam\'e paramters $\lambda$ and $\mu$, the yield stress $\tau_y$, the coefficient for linear isotropic strain hardening $K$, the strain energy density function $w$, and the yield function $f$. The two functions are specified by name in the .json file. Although there is a place to specify the path to the pfunction header file, it is not currently being read by the code. All pfunction files are assumed to be placed in the ``continuumPlasticity/models" folder. There are three strain energy density functions included in the models library: St. Venant-Kirchhoff (stvenkir), compressible neo-hookian (neohook), and quadratic-logarithmic (quadlog). There is only one yield function included in the models library: von Mises (von\textunderscore mises). Although the hardening function $q$ is not specified in the .json file, there are two hardening functions included in the models library. The default function is a linear hardening function (with coefficient $K$ (linear\textunderscore hardening), and the second is a nonlinear hardening function based on a crystal plasticity model for copper (Cu\textunderscore hardening). The hardening function is also specified by name, but it is set in the code (line 99 of continuumPlasticity.cc). Note that currently all hardening laws accept $K$ as an input for consistency, but only the linear hardening law uses that value.
+
+It is possible to create your own pfunctions using Integration Tools Writer, similiar to what is shown in the shell script ``continuumPlasticity/models/functions.sh." The following input variables/parameters are required:
+\begin{itemize}
+\itemsep-0.5em
+\item Strain energy density function:
+\vspace{-3mm}
+\begin{enumerate}
+\itemsep-0.5em 
+\item first Lam\'e parameter $\lambda$
+\item second Lam\'e parameter $\mu$
+\item first principle stretch $\lambda_1$
+\item second principle stretch $\lambda_2$
+\item third principle stretch $\lambda_3$
+\end{enumerate}
+%
+\item Yield function: 
+\begin{enumerate}
+\vspace{-3mm}
+\itemsep-0.5em
+\item first principle stress $\beta_1$
+item second principle stress $\beta_2$
+\item third principle stress $\beta_3$
+\item yield stress $\tau_y$
+\item conjugate stress-like quantity (equivalent plastic stress from hardening function) $q$
+\end{enumerate}
+%
+\item Hardening function: 
+\begin{enumerate}
+\vspace{-3mm}
+\itemsep-0.5em
+\item Equivalent plastic strain $\alpha$
+\item strain hardening parameter (coefficient to linear hardening) $K$
+\end{enumerate}
+\end{itemize}
+
+\subsection{Boundary conditions}
+Dirichlet boundary conditions are set in ``main.cc". The class ``BCFunction'' specifies the value of the non-zero Dirichlet conditions and on what nodal degrees-of-freedom they apply. The Dirichlet conditions are applied to specific surfaces in the function ``applyDirichletBCs".
+
+\subsection{Mesh refinement, basis function order, quadrature order, number of pseudo-time steps (increments), etc.}
+These values are specified at the top of ``main.cc" through macros. The domain and mesh refinement are defined in the function ``mesh" in ``main.cc".
+
+
+\pagebreak
+
+\centerline{\Large{References}}
+
+Unless otherwise noted, the information in this document was taken from the ME 605 class taught by Krishna Garikipati, University of Michigan. This material is also treated in the following text:
+
+Simo, J.C. and Hughes, T.J.R., \textit{Computational Inelasicity}, Springer, New York, 2000.
+
+[1] Simo, J.C., ``Algorithms for statis and dynamic multiplicative plasticity that preserve the classical return mapping schemes of the infinitesimal theory," \textit{Computer Methods in Applied Mechanics and Engineering}, 99 (1992), 61-112.
+
+[2]  Simo, J.C. and Armero, F., ``Improved versions of assumed enhanced strain tri-linear elements for 3D finite deformation problems,"  \textit{Computer Methods in Applied Mechanics and Engineering}, 110 (1993), 359-386.
+
+
+\end{document} 

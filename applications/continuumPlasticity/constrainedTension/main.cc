@@ -5,10 +5,10 @@
 
 #define feOrder   1
 #define quadOrder 2 
-#define meshRefineFactor 2
+#define meshRefineFactor 3
 #define writeOutput true
 #define linearSolverType PETScWrappers::SolverCG
-#define totalNumIncrements 100
+#define totalNumIncrements 200
 #define maxLinearSolverIterations 5000
 #define relLinearSolverTolerance  1.0e-12
 #define maxNonLinearIterations 30
@@ -67,7 +67,7 @@ void continuumPlasticity<dim>::markBoundaries(){
 	    cell->face(f)->set_boundary_indicator (1); //boundary at X=0.0 marked with flag '1'
 	  }
 	  else if (face_center[0]==5.0){
-	    cell->face(f)->set_boundary_indicator (2); //boundary at X=1.0 marked with flag '2'
+	    cell->face(f)->set_boundary_indicator (2); //boundary at X=5.0 marked with flag '2'
 	  }
 	}
       }
@@ -79,7 +79,7 @@ void continuumPlasticity<dim>::markBoundaries(){
 //Class to set Dirichlet BC values 
 template <int dim>
 class BCFunction : public Function<dim>{
-  public:
+public:
   BCFunction(): Function<dim> (dim){}
   void vector_value (const Point<dim>   &p, Vector<double>   &values) const{
     Assert (values.size() == dim, ExcDimensionMismatch (values.size(), dim));    
@@ -101,7 +101,7 @@ void continuumPlasticity<dim>::applyDirichletBCs(){
 					    ZeroFunction<dim>(dim),
 					    this->constraints,
 					    allComponenents);
-  //u=0.01 along X=1.00
+  //u=0.5 along X=5.00
   if (this->currentIteration==0){
     VectorTools::interpolate_boundary_values (this->dofHandler,
 					      2, 
@@ -128,24 +128,24 @@ int main (int argc, char **argv)
       deallog.depth_console(0);
       continuumPlasticity<3> problem;
 			
-			//load material properties
-			std::ifstream is("materialProperties.json");
-			json_spirit::Value value;
-			json_spirit::read_stream(is,value);
-			std::vector< json_spirit::Pair > material, strainEnergy, yield;
+      //load material properties
+      std::ifstream is("materialProperties.json");
+      json_spirit::Value value;
+      json_spirit::read_stream(is,value);
+      std::vector< json_spirit::Pair > material, strainEnergy, yield;
 
-			//Read material parameters
-			material = value.get_obj()[0].value_.get_obj();
-			problem.properties.lambda = material[0].value_.get_real();
-			problem.properties.mu = material[1].value_.get_real();
-			problem.properties.tau_y = material[2].value_.get_real();
-			problem.properties.K = material[3].value_.get_real();
+      //Read material parameters
+      material = value.get_obj()[0].value_.get_obj();
+      problem.properties.lambda = material[0].value_.get_real();
+      problem.properties.mu = material[1].value_.get_real();
+      problem.properties.tau_y = material[2].value_.get_real();
+      problem.properties.K = material[3].value_.get_real();
 
-			//Read pfunction names for strain energy density and yield functions
-			strainEnergy = material[5].value_.get_obj();
-			problem.properties.strainEnergyModel = strainEnergy[1].value_.get_str();
-			yield = material[6].value_.get_obj();
-			problem.properties.yieldModel = yield[1].value_.get_str();
+      //Read pfunction names for strain energy density and yield functions
+      strainEnergy = material[5].value_.get_obj();
+      problem.properties.strainEnergyModel = strainEnergy[1].value_.get_str();
+      yield = material[6].value_.get_obj();
+      problem.properties.yieldModel = yield[1].value_.get_str();
 
       problem.run ();
     }
