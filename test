@@ -1,0 +1,3334 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<tagfile>
+  <compound kind="file">
+    <name>main.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/applications/continuumPlasticity/bending/</path>
+    <filename>continuum_plasticity_2bending_2main_8cc</filename>
+    <includes id="continuum_plasticity_8cc" name="continuumPlasticity.cc" local="yes" imported="no">../../../src/materialModels/continuumPlasticity/continuumPlasticity.cc</includes>
+    <class kind="class">BCFunction</class>
+    <member kind="define">
+      <type>#define</type>
+      <name>feOrder</name>
+      <anchorfile>continuum_plasticity_2bending_2main_8cc.html</anchorfile>
+      <anchor>a6cf87ef172a04c03fb631619ee07cb7c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>quadOrder</name>
+      <anchorfile>continuum_plasticity_2bending_2main_8cc.html</anchorfile>
+      <anchor>ad7736de7c0865a63dfbf15f78f0b136c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>meshRefineFactor</name>
+      <anchorfile>continuum_plasticity_2bending_2main_8cc.html</anchorfile>
+      <anchor>ac5c8e45cf051136f193a6b2e0d8c6666</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>writeOutput</name>
+      <anchorfile>continuum_plasticity_2bending_2main_8cc.html</anchorfile>
+      <anchor>a0e0c9d336389e97f2526f080cf895055</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>linearSolverType</name>
+      <anchorfile>continuum_plasticity_2bending_2main_8cc.html</anchorfile>
+      <anchor>aa79df4667d32517702e329c8f0bab090</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>totalNumIncrements</name>
+      <anchorfile>continuum_plasticity_2bending_2main_8cc.html</anchorfile>
+      <anchor>a697ee3f069c71c4082d54e1de2e4f912</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>maxLinearSolverIterations</name>
+      <anchorfile>continuum_plasticity_2bending_2main_8cc.html</anchorfile>
+      <anchor>a9d09b044cf37218d45a1b1ef9779a623</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>relLinearSolverTolerance</name>
+      <anchorfile>continuum_plasticity_2bending_2main_8cc.html</anchorfile>
+      <anchor>a973c908767e87d3197d69791f5c52fdd</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>maxNonLinearIterations</name>
+      <anchorfile>continuum_plasticity_2bending_2main_8cc.html</anchorfile>
+      <anchor>abcde79fa0cb824fc933b7eb942490934</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>absNonLinearTolerance</name>
+      <anchorfile>continuum_plasticity_2bending_2main_8cc.html</anchorfile>
+      <anchor>a5a4cda807d13aabcc6aa0421bd567564</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>relNonLinearTolerance</name>
+      <anchorfile>continuum_plasticity_2bending_2main_8cc.html</anchorfile>
+      <anchor>a973312827a268d871d360032409ac4c5</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>stopOnConvergenceFailure</name>
+      <anchorfile>continuum_plasticity_2bending_2main_8cc.html</anchorfile>
+      <anchor>ad190e3187dd82737218cad01d7d92a69</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>int</type>
+      <name>main</name>
+      <anchorfile>continuum_plasticity_2bending_2main_8cc.html</anchorfile>
+      <anchor>a3c04138a5bfe5d72780bb7e82a18e627</anchor>
+      <arglist>(int argc, char **argv)</arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>main.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/applications/continuumPlasticity/constrainedTension/</path>
+    <filename>continuum_plasticity_2constrained_tension_2main_8cc</filename>
+    <includes id="continuum_plasticity_8cc" name="continuumPlasticity.cc" local="yes" imported="no">../../../src/materialModels/continuumPlasticity/continuumPlasticity.cc</includes>
+    <class kind="class">BCFunction</class>
+    <member kind="define">
+      <type>#define</type>
+      <name>feOrder</name>
+      <anchorfile>continuum_plasticity_2constrained_tension_2main_8cc.html</anchorfile>
+      <anchor>a6cf87ef172a04c03fb631619ee07cb7c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>quadOrder</name>
+      <anchorfile>continuum_plasticity_2constrained_tension_2main_8cc.html</anchorfile>
+      <anchor>ad7736de7c0865a63dfbf15f78f0b136c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>meshRefineFactor</name>
+      <anchorfile>continuum_plasticity_2constrained_tension_2main_8cc.html</anchorfile>
+      <anchor>ac5c8e45cf051136f193a6b2e0d8c6666</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>writeOutput</name>
+      <anchorfile>continuum_plasticity_2constrained_tension_2main_8cc.html</anchorfile>
+      <anchor>a0e0c9d336389e97f2526f080cf895055</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>linearSolverType</name>
+      <anchorfile>continuum_plasticity_2constrained_tension_2main_8cc.html</anchorfile>
+      <anchor>aa79df4667d32517702e329c8f0bab090</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>totalNumIncrements</name>
+      <anchorfile>continuum_plasticity_2constrained_tension_2main_8cc.html</anchorfile>
+      <anchor>a697ee3f069c71c4082d54e1de2e4f912</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>maxLinearSolverIterations</name>
+      <anchorfile>continuum_plasticity_2constrained_tension_2main_8cc.html</anchorfile>
+      <anchor>a9d09b044cf37218d45a1b1ef9779a623</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>relLinearSolverTolerance</name>
+      <anchorfile>continuum_plasticity_2constrained_tension_2main_8cc.html</anchorfile>
+      <anchor>a973c908767e87d3197d69791f5c52fdd</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>maxNonLinearIterations</name>
+      <anchorfile>continuum_plasticity_2constrained_tension_2main_8cc.html</anchorfile>
+      <anchor>abcde79fa0cb824fc933b7eb942490934</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>absNonLinearTolerance</name>
+      <anchorfile>continuum_plasticity_2constrained_tension_2main_8cc.html</anchorfile>
+      <anchor>a5a4cda807d13aabcc6aa0421bd567564</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>relNonLinearTolerance</name>
+      <anchorfile>continuum_plasticity_2constrained_tension_2main_8cc.html</anchorfile>
+      <anchor>a973312827a268d871d360032409ac4c5</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>stopOnConvergenceFailure</name>
+      <anchorfile>continuum_plasticity_2constrained_tension_2main_8cc.html</anchorfile>
+      <anchor>ad190e3187dd82737218cad01d7d92a69</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>int</type>
+      <name>main</name>
+      <anchorfile>continuum_plasticity_2constrained_tension_2main_8cc.html</anchorfile>
+      <anchor>a3c04138a5bfe5d72780bb7e82a18e627</anchor>
+      <arglist>(int argc, char **argv)</arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>main.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/applications/continuumPlasticity/shear/</path>
+    <filename>continuum_plasticity_2shear_2main_8cc</filename>
+    <includes id="continuum_plasticity_8cc" name="continuumPlasticity.cc" local="yes" imported="no">../../../src/materialModels/continuumPlasticity/continuumPlasticity.cc</includes>
+    <class kind="class">BCFunction</class>
+    <member kind="define">
+      <type>#define</type>
+      <name>feOrder</name>
+      <anchorfile>continuum_plasticity_2shear_2main_8cc.html</anchorfile>
+      <anchor>a6cf87ef172a04c03fb631619ee07cb7c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>quadOrder</name>
+      <anchorfile>continuum_plasticity_2shear_2main_8cc.html</anchorfile>
+      <anchor>ad7736de7c0865a63dfbf15f78f0b136c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>meshRefineFactor</name>
+      <anchorfile>continuum_plasticity_2shear_2main_8cc.html</anchorfile>
+      <anchor>ac5c8e45cf051136f193a6b2e0d8c6666</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>writeOutput</name>
+      <anchorfile>continuum_plasticity_2shear_2main_8cc.html</anchorfile>
+      <anchor>a0e0c9d336389e97f2526f080cf895055</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>linearSolverType</name>
+      <anchorfile>continuum_plasticity_2shear_2main_8cc.html</anchorfile>
+      <anchor>aa79df4667d32517702e329c8f0bab090</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>totalNumIncrements</name>
+      <anchorfile>continuum_plasticity_2shear_2main_8cc.html</anchorfile>
+      <anchor>a697ee3f069c71c4082d54e1de2e4f912</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>maxLinearSolverIterations</name>
+      <anchorfile>continuum_plasticity_2shear_2main_8cc.html</anchorfile>
+      <anchor>a9d09b044cf37218d45a1b1ef9779a623</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>relLinearSolverTolerance</name>
+      <anchorfile>continuum_plasticity_2shear_2main_8cc.html</anchorfile>
+      <anchor>a973c908767e87d3197d69791f5c52fdd</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>maxNonLinearIterations</name>
+      <anchorfile>continuum_plasticity_2shear_2main_8cc.html</anchorfile>
+      <anchor>abcde79fa0cb824fc933b7eb942490934</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>absNonLinearTolerance</name>
+      <anchorfile>continuum_plasticity_2shear_2main_8cc.html</anchorfile>
+      <anchor>a5a4cda807d13aabcc6aa0421bd567564</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>relNonLinearTolerance</name>
+      <anchorfile>continuum_plasticity_2shear_2main_8cc.html</anchorfile>
+      <anchor>a973312827a268d871d360032409ac4c5</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>stopOnConvergenceFailure</name>
+      <anchorfile>continuum_plasticity_2shear_2main_8cc.html</anchorfile>
+      <anchor>ad190e3187dd82737218cad01d7d92a69</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>int</type>
+      <name>main</name>
+      <anchorfile>continuum_plasticity_2shear_2main_8cc.html</anchorfile>
+      <anchor>a3c04138a5bfe5d72780bb7e82a18e627</anchor>
+      <arglist>(int argc, char **argv)</arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>main.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/applications/continuumPlasticity/simpleTension/</path>
+    <filename>continuum_plasticity_2simple_tension_2main_8cc</filename>
+    <includes id="continuum_plasticity_8cc" name="continuumPlasticity.cc" local="yes" imported="no">../../../src/materialModels/continuumPlasticity/continuumPlasticity.cc</includes>
+    <class kind="class">BCFunction</class>
+    <member kind="define">
+      <type>#define</type>
+      <name>feOrder</name>
+      <anchorfile>continuum_plasticity_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>a6cf87ef172a04c03fb631619ee07cb7c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>quadOrder</name>
+      <anchorfile>continuum_plasticity_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>ad7736de7c0865a63dfbf15f78f0b136c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>meshRefineFactor</name>
+      <anchorfile>continuum_plasticity_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>ac5c8e45cf051136f193a6b2e0d8c6666</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>writeOutput</name>
+      <anchorfile>continuum_plasticity_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>a0e0c9d336389e97f2526f080cf895055</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>linearSolverType</name>
+      <anchorfile>continuum_plasticity_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>aa79df4667d32517702e329c8f0bab090</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>totalNumIncrements</name>
+      <anchorfile>continuum_plasticity_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>a697ee3f069c71c4082d54e1de2e4f912</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>maxLinearSolverIterations</name>
+      <anchorfile>continuum_plasticity_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>a9d09b044cf37218d45a1b1ef9779a623</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>relLinearSolverTolerance</name>
+      <anchorfile>continuum_plasticity_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>a973c908767e87d3197d69791f5c52fdd</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>maxNonLinearIterations</name>
+      <anchorfile>continuum_plasticity_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>abcde79fa0cb824fc933b7eb942490934</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>absNonLinearTolerance</name>
+      <anchorfile>continuum_plasticity_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>a5a4cda807d13aabcc6aa0421bd567564</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>relNonLinearTolerance</name>
+      <anchorfile>continuum_plasticity_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>a973312827a268d871d360032409ac4c5</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>stopOnConvergenceFailure</name>
+      <anchorfile>continuum_plasticity_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>ad190e3187dd82737218cad01d7d92a69</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>int</type>
+      <name>main</name>
+      <anchorfile>continuum_plasticity_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>a3c04138a5bfe5d72780bb7e82a18e627</anchor>
+      <arglist>(int argc, char **argv)</arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>main.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/applications/crystalPlasticity/fcc/constrainedTension/</path>
+    <filename>crystal_plasticity_2fcc_2constrained_tension_2main_8cc</filename>
+    <includes id="crystal_plasticity_8cc" name="crystalPlasticity.cc" local="yes" imported="no">../../../../src/materialModels/crystalPlasticity/crystalPlasticity.cc</includes>
+    <class kind="class">BCFunction</class>
+    <member kind="define">
+      <type>#define</type>
+      <name>feOrder</name>
+      <anchorfile>crystal_plasticity_2fcc_2constrained_tension_2main_8cc.html</anchorfile>
+      <anchor>a6cf87ef172a04c03fb631619ee07cb7c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>quadOrder</name>
+      <anchorfile>crystal_plasticity_2fcc_2constrained_tension_2main_8cc.html</anchorfile>
+      <anchor>ad7736de7c0865a63dfbf15f78f0b136c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>meshRefineFactor</name>
+      <anchorfile>crystal_plasticity_2fcc_2constrained_tension_2main_8cc.html</anchorfile>
+      <anchor>ac5c8e45cf051136f193a6b2e0d8c6666</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>writeOutput</name>
+      <anchorfile>crystal_plasticity_2fcc_2constrained_tension_2main_8cc.html</anchorfile>
+      <anchor>a0e0c9d336389e97f2526f080cf895055</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>linearSolverType</name>
+      <anchorfile>crystal_plasticity_2fcc_2constrained_tension_2main_8cc.html</anchorfile>
+      <anchor>aa79df4667d32517702e329c8f0bab090</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>totalNumIncrements</name>
+      <anchorfile>crystal_plasticity_2fcc_2constrained_tension_2main_8cc.html</anchorfile>
+      <anchor>a697ee3f069c71c4082d54e1de2e4f912</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>maxLinearSolverIterations</name>
+      <anchorfile>crystal_plasticity_2fcc_2constrained_tension_2main_8cc.html</anchorfile>
+      <anchor>a9d09b044cf37218d45a1b1ef9779a623</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>relLinearSolverTolerance</name>
+      <anchorfile>crystal_plasticity_2fcc_2constrained_tension_2main_8cc.html</anchorfile>
+      <anchor>a973c908767e87d3197d69791f5c52fdd</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>maxNonLinearIterations</name>
+      <anchorfile>crystal_plasticity_2fcc_2constrained_tension_2main_8cc.html</anchorfile>
+      <anchor>abcde79fa0cb824fc933b7eb942490934</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>absNonLinearTolerance</name>
+      <anchorfile>crystal_plasticity_2fcc_2constrained_tension_2main_8cc.html</anchorfile>
+      <anchor>a5a4cda807d13aabcc6aa0421bd567564</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>relNonLinearTolerance</name>
+      <anchorfile>crystal_plasticity_2fcc_2constrained_tension_2main_8cc.html</anchorfile>
+      <anchor>a973312827a268d871d360032409ac4c5</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>stopOnConvergenceFailure</name>
+      <anchorfile>crystal_plasticity_2fcc_2constrained_tension_2main_8cc.html</anchorfile>
+      <anchor>ad190e3187dd82737218cad01d7d92a69</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>int</type>
+      <name>main</name>
+      <anchorfile>crystal_plasticity_2fcc_2constrained_tension_2main_8cc.html</anchorfile>
+      <anchor>a3c04138a5bfe5d72780bb7e82a18e627</anchor>
+      <arglist>(int argc, char **argv)</arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>main.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/applications/crystalPlasticity/fcc/shear/</path>
+    <filename>crystal_plasticity_2fcc_2shear_2main_8cc</filename>
+    <includes id="crystal_plasticity_8cc" name="crystalPlasticity.cc" local="yes" imported="no">../../../../src/materialModels/crystalPlasticity/crystalPlasticity.cc</includes>
+    <class kind="class">BCFunction</class>
+    <member kind="define">
+      <type>#define</type>
+      <name>feOrder</name>
+      <anchorfile>crystal_plasticity_2fcc_2shear_2main_8cc.html</anchorfile>
+      <anchor>a6cf87ef172a04c03fb631619ee07cb7c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>quadOrder</name>
+      <anchorfile>crystal_plasticity_2fcc_2shear_2main_8cc.html</anchorfile>
+      <anchor>ad7736de7c0865a63dfbf15f78f0b136c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>meshRefineFactor</name>
+      <anchorfile>crystal_plasticity_2fcc_2shear_2main_8cc.html</anchorfile>
+      <anchor>ac5c8e45cf051136f193a6b2e0d8c6666</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>writeOutput</name>
+      <anchorfile>crystal_plasticity_2fcc_2shear_2main_8cc.html</anchorfile>
+      <anchor>a0e0c9d336389e97f2526f080cf895055</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>linearSolverType</name>
+      <anchorfile>crystal_plasticity_2fcc_2shear_2main_8cc.html</anchorfile>
+      <anchor>aa79df4667d32517702e329c8f0bab090</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>totalNumIncrements</name>
+      <anchorfile>crystal_plasticity_2fcc_2shear_2main_8cc.html</anchorfile>
+      <anchor>a697ee3f069c71c4082d54e1de2e4f912</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>maxLinearSolverIterations</name>
+      <anchorfile>crystal_plasticity_2fcc_2shear_2main_8cc.html</anchorfile>
+      <anchor>a9d09b044cf37218d45a1b1ef9779a623</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>relLinearSolverTolerance</name>
+      <anchorfile>crystal_plasticity_2fcc_2shear_2main_8cc.html</anchorfile>
+      <anchor>a973c908767e87d3197d69791f5c52fdd</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>maxNonLinearIterations</name>
+      <anchorfile>crystal_plasticity_2fcc_2shear_2main_8cc.html</anchorfile>
+      <anchor>abcde79fa0cb824fc933b7eb942490934</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>absNonLinearTolerance</name>
+      <anchorfile>crystal_plasticity_2fcc_2shear_2main_8cc.html</anchorfile>
+      <anchor>a5a4cda807d13aabcc6aa0421bd567564</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>relNonLinearTolerance</name>
+      <anchorfile>crystal_plasticity_2fcc_2shear_2main_8cc.html</anchorfile>
+      <anchor>a973312827a268d871d360032409ac4c5</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>stopOnConvergenceFailure</name>
+      <anchorfile>crystal_plasticity_2fcc_2shear_2main_8cc.html</anchorfile>
+      <anchor>ad190e3187dd82737218cad01d7d92a69</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>int</type>
+      <name>main</name>
+      <anchorfile>crystal_plasticity_2fcc_2shear_2main_8cc.html</anchorfile>
+      <anchor>a3c04138a5bfe5d72780bb7e82a18e627</anchor>
+      <arglist>(int argc, char **argv)</arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>main.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/applications/crystalPlasticity/fcc/simpleTension/</path>
+    <filename>crystal_plasticity_2fcc_2simple_tension_2main_8cc</filename>
+    <includes id="crystal_plasticity_8cc" name="crystalPlasticity.cc" local="yes" imported="no">../../../../src/materialModels/crystalPlasticity/crystalPlasticity.cc</includes>
+    <class kind="class">BCFunction</class>
+    <member kind="define">
+      <type>#define</type>
+      <name>feOrder</name>
+      <anchorfile>crystal_plasticity_2fcc_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>a6cf87ef172a04c03fb631619ee07cb7c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>quadOrder</name>
+      <anchorfile>crystal_plasticity_2fcc_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>ad7736de7c0865a63dfbf15f78f0b136c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>meshRefineFactor</name>
+      <anchorfile>crystal_plasticity_2fcc_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>ac5c8e45cf051136f193a6b2e0d8c6666</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>writeOutput</name>
+      <anchorfile>crystal_plasticity_2fcc_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>a0e0c9d336389e97f2526f080cf895055</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>linearSolverType</name>
+      <anchorfile>crystal_plasticity_2fcc_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>aa79df4667d32517702e329c8f0bab090</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>totalNumIncrements</name>
+      <anchorfile>crystal_plasticity_2fcc_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>a697ee3f069c71c4082d54e1de2e4f912</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>maxLinearSolverIterations</name>
+      <anchorfile>crystal_plasticity_2fcc_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>a9d09b044cf37218d45a1b1ef9779a623</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>relLinearSolverTolerance</name>
+      <anchorfile>crystal_plasticity_2fcc_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>a973c908767e87d3197d69791f5c52fdd</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>maxNonLinearIterations</name>
+      <anchorfile>crystal_plasticity_2fcc_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>abcde79fa0cb824fc933b7eb942490934</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>absNonLinearTolerance</name>
+      <anchorfile>crystal_plasticity_2fcc_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>a5a4cda807d13aabcc6aa0421bd567564</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>relNonLinearTolerance</name>
+      <anchorfile>crystal_plasticity_2fcc_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>a973312827a268d871d360032409ac4c5</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>stopOnConvergenceFailure</name>
+      <anchorfile>crystal_plasticity_2fcc_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>ad190e3187dd82737218cad01d7d92a69</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>int</type>
+      <name>main</name>
+      <anchorfile>crystal_plasticity_2fcc_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>a3c04138a5bfe5d72780bb7e82a18e627</anchor>
+      <arglist>(int argc, char **argv)</arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>main.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/applications/crystalPlasticity/simpleTension/</path>
+    <filename>crystal_plasticity_2simple_tension_2main_8cc</filename>
+    <includes id="crystal_plasticity_8cc" name="crystalPlasticity.cc" local="yes" imported="no">../../../src/materialModels/crystalPlasticity/crystalPlasticity.cc</includes>
+    <class kind="class">BCFunction</class>
+    <member kind="define">
+      <type>#define</type>
+      <name>feOrder</name>
+      <anchorfile>crystal_plasticity_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>a6cf87ef172a04c03fb631619ee07cb7c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>quadOrder</name>
+      <anchorfile>crystal_plasticity_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>ad7736de7c0865a63dfbf15f78f0b136c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>meshRefineFactor</name>
+      <anchorfile>crystal_plasticity_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>ac5c8e45cf051136f193a6b2e0d8c6666</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>writeOutput</name>
+      <anchorfile>crystal_plasticity_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>a0e0c9d336389e97f2526f080cf895055</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>linearSolverType</name>
+      <anchorfile>crystal_plasticity_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>aa79df4667d32517702e329c8f0bab090</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>totalNumIncrements</name>
+      <anchorfile>crystal_plasticity_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>a697ee3f069c71c4082d54e1de2e4f912</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>maxLinearSolverIterations</name>
+      <anchorfile>crystal_plasticity_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>a9d09b044cf37218d45a1b1ef9779a623</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>relLinearSolverTolerance</name>
+      <anchorfile>crystal_plasticity_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>a973c908767e87d3197d69791f5c52fdd</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>maxNonLinearIterations</name>
+      <anchorfile>crystal_plasticity_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>abcde79fa0cb824fc933b7eb942490934</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>absNonLinearTolerance</name>
+      <anchorfile>crystal_plasticity_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>a5a4cda807d13aabcc6aa0421bd567564</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>relNonLinearTolerance</name>
+      <anchorfile>crystal_plasticity_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>a973312827a268d871d360032409ac4c5</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>stopOnConvergenceFailure</name>
+      <anchorfile>crystal_plasticity_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>ad190e3187dd82737218cad01d7d92a69</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>int</type>
+      <name>main</name>
+      <anchorfile>crystal_plasticity_2simple_tension_2main_8cc.html</anchorfile>
+      <anchor>a3c04138a5bfe5d72780bb7e82a18e627</anchor>
+      <arglist>(int argc, char **argv)</arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>dealIIheaders.h</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/include/</path>
+    <filename>deal_i_iheaders_8h</filename>
+  </compound>
+  <compound kind="file">
+    <name>ellipticBVP.h</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/include/</path>
+    <filename>elliptic_b_v_p_8h</filename>
+    <includes id="deal_i_iheaders_8h" name="dealIIheaders.h" local="yes" imported="no">dealIIheaders.h</includes>
+    <includes id="elliptic_b_v_p_8cc" name="ellipticBVP.cc" local="yes" imported="no">../src/ellipticBVP/ellipticBVP.cc</includes>
+    <includes id="run_8cc" name="run.cc" local="yes" imported="no">../src/ellipticBVP/run.cc</includes>
+    <includes id="mesh_8cc" name="mesh.cc" local="yes" imported="no">../src/ellipticBVP/mesh.cc</includes>
+    <includes id="init_8cc" name="init.cc" local="yes" imported="no">../src/ellipticBVP/init.cc</includes>
+    <includes id="mark_boundaries_8cc" name="markBoundaries.cc" local="yes" imported="no">../src/ellipticBVP/markBoundaries.cc</includes>
+    <includes id="initial_conditions_8cc" name="initialConditions.cc" local="yes" imported="no">../src/ellipticBVP/initialConditions.cc</includes>
+    <includes id="boundary_conditions_8cc" name="boundaryConditions.cc" local="yes" imported="no">../src/ellipticBVP/boundaryConditions.cc</includes>
+    <includes id="assemble_8cc" name="assemble.cc" local="yes" imported="no">../src/ellipticBVP/assemble.cc</includes>
+    <includes id="solve_8cc" name="solve.cc" local="yes" imported="no">../src/ellipticBVP/solve.cc</includes>
+    <includes id="solve_non_linear_system_8cc" name="solveNonLinearSystem.cc" local="yes" imported="no">../src/ellipticBVP/solveNonLinearSystem.cc</includes>
+    <includes id="solve_linear_system_8cc" name="solveLinearSystem.cc" local="yes" imported="no">../src/ellipticBVP/solveLinearSystem.cc</includes>
+    <includes id="iteration_updates_8cc" name="iterationUpdates.cc" local="yes" imported="no">../src/ellipticBVP/iterationUpdates.cc</includes>
+    <includes id="increment_updates_8cc" name="incrementUpdates.cc" local="yes" imported="no">../src/ellipticBVP/incrementUpdates.cc</includes>
+    <includes id="output_8cc" name="output.cc" local="yes" imported="no">../src/ellipticBVP/output.cc</includes>
+    <includes id="project_8cc" name="project.cc" local="yes" imported="no">../src/ellipticBVP/project.cc</includes>
+    <class kind="class">ellipticBVP</class>
+    <member kind="typedef">
+      <type>PETScWrappers::MPI::Vector</type>
+      <name>vectorType</name>
+      <anchorfile>elliptic_b_v_p_8h.html</anchorfile>
+      <anchor>a85b8fd9569351b08fe83fbf593fd7d9d</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>PETScWrappers::MPI::SparseMatrix</type>
+      <name>matrixType</name>
+      <anchorfile>elliptic_b_v_p_8h.html</anchorfile>
+      <anchor>ae07bd51fe79a82af032210afe94e0f7e</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>README.md</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/</path>
+    <filename>_r_e_a_d_m_e_8md</filename>
+  </compound>
+  <compound kind="file">
+    <name>relatedPages.dox</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/</path>
+    <filename>related_pages_8dox</filename>
+  </compound>
+  <compound kind="file">
+    <name>assemble.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/ellipticBVP/</path>
+    <filename>assemble_8cc</filename>
+    <member kind="define">
+      <type>#define</type>
+      <name>ASSEMBLE_H</name>
+      <anchorfile>assemble_8cc.html</anchorfile>
+      <anchor>a14b90663cbab17ee8599bc181ea7bfe2</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>boundaryConditions.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/ellipticBVP/</path>
+    <filename>boundary_conditions_8cc</filename>
+    <member kind="define">
+      <type>#define</type>
+      <name>BOUNDARYCONDITIONS_H</name>
+      <anchorfile>boundary_conditions_8cc.html</anchorfile>
+      <anchor>ab2ac09bb5024c4cd0a6bcc788d70c54b</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>ellipticBVP.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/ellipticBVP/</path>
+    <filename>elliptic_b_v_p_8cc</filename>
+    <member kind="define">
+      <type>#define</type>
+      <name>ELLIPTICBVP_SRC_H</name>
+      <anchorfile>elliptic_b_v_p_8cc.html</anchorfile>
+      <anchor>afc7dd442a10acc068952da5a3a6205f0</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>incrementUpdates.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/ellipticBVP/</path>
+    <filename>increment_updates_8cc</filename>
+    <member kind="define">
+      <type>#define</type>
+      <name>UPDATEINCREMENT_H</name>
+      <anchorfile>increment_updates_8cc.html</anchorfile>
+      <anchor>a41096d56e9aae00539d3c83cc201492a</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>init.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/ellipticBVP/</path>
+    <filename>init_8cc</filename>
+    <member kind="define">
+      <type>#define</type>
+      <name>INIT_ELLIPTICBVP_H</name>
+      <anchorfile>init_8cc.html</anchorfile>
+      <anchor>a819e02bd7ce9362063af6d2c93777ee0</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>initialConditions.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/ellipticBVP/</path>
+    <filename>initial_conditions_8cc</filename>
+    <member kind="define">
+      <type>#define</type>
+      <name>INITIALCONDITIONS_H</name>
+      <anchorfile>initial_conditions_8cc.html</anchorfile>
+      <anchor>a2c74acecd7882778a3e5559bd751d6ae</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>iterationUpdates.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/ellipticBVP/</path>
+    <filename>iteration_updates_8cc</filename>
+    <member kind="define">
+      <type>#define</type>
+      <name>UPDATEITERATION_H</name>
+      <anchorfile>iteration_updates_8cc.html</anchorfile>
+      <anchor>a0637dad9083a9ac018bf3c745a1c3402</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>markBoundaries.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/ellipticBVP/</path>
+    <filename>mark_boundaries_8cc</filename>
+    <member kind="define">
+      <type>#define</type>
+      <name>MARKBOUNDARIES_H</name>
+      <anchorfile>mark_boundaries_8cc.html</anchorfile>
+      <anchor>aff45649377ab10c1a4e012e8c387cd51</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>mesh.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/ellipticBVP/</path>
+    <filename>mesh_8cc</filename>
+    <member kind="define">
+      <type>#define</type>
+      <name>MESH_ELLIPTICBVP_H</name>
+      <anchorfile>mesh_8cc.html</anchorfile>
+      <anchor>a8b9b7b5d8fc8254b9ce602bcd8704781</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>output.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/ellipticBVP/</path>
+    <filename>output_8cc</filename>
+    <member kind="define">
+      <type>#define</type>
+      <name>OUTPUT_ELLIPTICBVP_H</name>
+      <anchorfile>output_8cc.html</anchorfile>
+      <anchor>ae2b4e87f0568920a1c9bc3ae3dcb3a3d</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>project.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/ellipticBVP/</path>
+    <filename>project_8cc</filename>
+    <member kind="define">
+      <type>#define</type>
+      <name>PROJECT_H</name>
+      <anchorfile>project_8cc.html</anchorfile>
+      <anchor>a60a64e99109ecafd1200533067660255</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>run.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/ellipticBVP/</path>
+    <filename>run_8cc</filename>
+    <member kind="define">
+      <type>#define</type>
+      <name>RUN_ELLIPTICBVP_H</name>
+      <anchorfile>run_8cc.html</anchorfile>
+      <anchor>acd2eab25c7b8f1311261c05f890ae1ef</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>solve.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/ellipticBVP/</path>
+    <filename>solve_8cc</filename>
+    <member kind="define">
+      <type>#define</type>
+      <name>SOLVE_ELLIPTICBVP_H</name>
+      <anchorfile>solve_8cc.html</anchorfile>
+      <anchor>a70c137d65942e1d25038334538767c7d</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>solveLinearSystem.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/ellipticBVP/</path>
+    <filename>solve_linear_system_8cc</filename>
+    <member kind="define">
+      <type>#define</type>
+      <name>SOLVELINEAR_ELLIPTICBVP_H</name>
+      <anchorfile>solve_linear_system_8cc.html</anchorfile>
+      <anchor>ad186dd9a291c501b45eb8d0ec8b2b9b9</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>solveNonLinearSystem.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/ellipticBVP/</path>
+    <filename>solve_non_linear_system_8cc</filename>
+    <member kind="define">
+      <type>#define</type>
+      <name>SOLVENONLINEAR_ELLIPTICBVP_H</name>
+      <anchorfile>solve_non_linear_system_8cc.html</anchorfile>
+      <anchor>aefc065effaf7fc058dda1fc0d6dee8d6</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>enhancedStrain.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/enrichmentModels/</path>
+    <filename>enhanced_strain_8cc</filename>
+    <includes id="deal_i_iheaders_8h" name="dealIIheaders.h" local="yes" imported="no">../../include/dealIIheaders.h</includes>
+    <includes id="static_condensation_8cc" name="staticCondensation.cc" local="yes" imported="no">../utilityObjects/staticCondensation.cc</includes>
+    <class kind="class">enhancedStrain</class>
+    <member kind="define">
+      <type>#define</type>
+      <name>ENHANCEDSTRAIN_H</name>
+      <anchorfile>enhanced_strain_8cc.html</anchorfile>
+      <anchor>aff0e4cc57c99ddc75ec77a995c99af9b</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>elasticity.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/materialModels/_elasticity/</path>
+    <filename>elasticity_8cc</filename>
+    <includes id="elliptic_b_v_p_8h" name="ellipticBVP.h" local="yes" imported="no">../../../include/ellipticBVP.h</includes>
+    <class kind="struct">materialProperties</class>
+    <class kind="class">elasticity</class>
+    <member kind="define">
+      <type>#define</type>
+      <name>ELASTIC_H</name>
+      <anchorfile>elasticity_8cc.html</anchorfile>
+      <anchor>ab73244a4675f5c21e7542cc82a184a94</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>continuumPlasticity.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/materialModels/continuumPlasticity/</path>
+    <filename>continuum_plasticity_8cc</filename>
+    <includes id="elliptic_b_v_p_8h" name="ellipticBVP.h" local="yes" imported="no">../../../include/ellipticBVP.h</includes>
+    <includes id="enhanced_strain_8cc" name="enhancedStrain.cc" local="yes" imported="no">../../../src/enrichmentModels/enhancedStrain.cc</includes>
+    <class kind="struct">materialProperties</class>
+    <class kind="class">continuumPlasticity</class>
+    <member kind="define">
+      <type>#define</type>
+      <name>CONTINUUMPLASTICITY_H</name>
+      <anchorfile>continuum_plasticity_8cc.html</anchorfile>
+      <anchor>a9ed0553d8838e4b8d5493c082d1a96bf</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>PExtern.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/materialModels/continuumPlasticity/models/</path>
+    <filename>_p_extern_8cc</filename>
+    <member kind="define">
+      <type>#define</type>
+      <name>PExtern_CC</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a9f45c10d5eab5bb2cf36c647310e0fec</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSimpleFunction_dsd_new</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a06c00c4e8cbf47364d147fdefee62ddb</anchor>
+      <arglist>(char *name, PRISMS::PSimpleBase&lt; double *, double &gt; *&amp;f)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSimpleFunction_dsd_delete</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a878daef20f6d6664a5f9144c71c69229</anchor>
+      <arglist>(PRISMS::PSimpleBase&lt; double *, double &gt; *&amp;f)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSimpleFunction_dsd_name</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a78ae0e7b544c37b6bcaef68f1df59792</anchor>
+      <arglist>(PRISMS::PSimpleBase&lt; double *, double &gt; *f, char *name)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSimpleFunction_dsd_calc</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a00a9d9deebcfdb7796798fde3fc7dcea</anchor>
+      <arglist>(PRISMS::PSimpleBase&lt; double *, double &gt; *f, double *var, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSimpleFunction_dsd_get</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>ad04a95eaede7780c20795a94fde520f0</anchor>
+      <arglist>(PRISMS::PSimpleBase&lt; double *, double &gt; *f, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSimpleFunction_dd_new</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a08bddf0212915170d347c6800a8ff764</anchor>
+      <arglist>(char *name, PRISMS::PSimpleBase&lt; double, double &gt; *&amp;f)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSimpleFunction_dd_delete</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a2e4e157c325abeac0461947150be17f9</anchor>
+      <arglist>(PRISMS::PSimpleBase&lt; double, double &gt; *&amp;f)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSimpleFunction_dd_name</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a05a852058c88c5255fb83d28ea63fa7a</anchor>
+      <arglist>(PRISMS::PSimpleBase&lt; double, double &gt; *f, char *name)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSimpleFunction_dd_calc</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>aa6a39a0720e193f4bc883f4eeec9123b</anchor>
+      <arglist>(PRISMS::PSimpleBase&lt; double, double &gt; *f, double var, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSimpleFunction_dd_get</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>ab65e26f22c49b5061e4c08807498d052</anchor>
+      <arglist>(PRISMS::PSimpleBase&lt; double, double &gt; *f, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PFunction_dsd_new</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a1c53c42da61874345621e67982a8b864</anchor>
+      <arglist>(char *name, PRISMS::PFuncBase&lt; double *, double &gt; *&amp;f)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PFunction_dsd_delete</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>ada80db2fd326f966308b5273da793ac5</anchor>
+      <arglist>(PRISMS::PFuncBase&lt; double *, double &gt; *&amp;f)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PFunction_dsd_name</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a3a5f092771e11d2a92e5045cec5c1371</anchor>
+      <arglist>(PRISMS::PFuncBase&lt; double *, double &gt; *f, char *name)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PFunction_dsd_size</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a2e252d944f3820dd6066160106196b82</anchor>
+      <arglist>(PRISMS::PFuncBase&lt; double *, double &gt; *f, int &amp;size)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PFunction_dsd_var_name</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a1151fa71516e98a516fd5641f3cce4a2</anchor>
+      <arglist>(PRISMS::PFuncBase&lt; double *, double &gt; *f, int i, char *var_name)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PFunction_dsd_var_description</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a8d09e2541a602979ae5e2b0a9345f190</anchor>
+      <arglist>(PRISMS::PFuncBase&lt; double *, double &gt; *f, int i, char *var_description)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PFunction_dsd_calc</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a71b5331ce46796520f9c7126fb263dcd</anchor>
+      <arglist>(PRISMS::PFuncBase&lt; double *, double &gt; *f, double *var, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PFunction_dsd_calc_grad</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a33c349325a0ce91007582cbd94030744</anchor>
+      <arglist>(PRISMS::PFuncBase&lt; double *, double &gt; *f, double *var, int di, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PFunction_dsd_calc_hess</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a079af5a6ec308641f4762cb62ab0de37</anchor>
+      <arglist>(PRISMS::PFuncBase&lt; double *, double &gt; *f, double *var, int di, int dj, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PFunction_dsd_eval</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>ab6255bbc3240f448e76f782379f3a392</anchor>
+      <arglist>(PRISMS::PFuncBase&lt; double *, double &gt; *f, double *var)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PFunction_dsd_eval_grad</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a01dc3e16415ebc7532e3430236ffdfb8</anchor>
+      <arglist>(PRISMS::PFuncBase&lt; double *, double &gt; *f, double *var, int di)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PFunction_dsd_eval_hess</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a68396a579a5bc59c9f5571cb841d31bf</anchor>
+      <arglist>(PRISMS::PFuncBase&lt; double *, double &gt; *f, double *var, int di, int dj)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PFunction_dsd_get</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>ad3131296e5168dde7afc339dc98e9801</anchor>
+      <arglist>(PRISMS::PFuncBase&lt; double *, double &gt; *f, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PFunction_dsd_get_grad</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a6bf6142beeea3656cfb2d851ba971934</anchor>
+      <arglist>(PRISMS::PFuncBase&lt; double *, double &gt; *f, int di, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PFunction_dsd_get_hess</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a98898216c578bea960e2ff516deb4a68</anchor>
+      <arglist>(PRISMS::PFuncBase&lt; double *, double &gt; *f, int di, int dj, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PBasisSet_dd_new</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>af1cf20824ed55d6292832dc92bc493db</anchor>
+      <arglist>(char *name, PRISMS::PBasisSetBase&lt; double, double &gt; *&amp;b, int N)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PBasisSet_dd_delete</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>af5d8c71e7cda099e3b402027d50cf527</anchor>
+      <arglist>(PRISMS::PBasisSetBase&lt; double, double &gt; *&amp;b)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PBasisSet_dd_name</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>ac8999213b939a19060e4379490e86c60</anchor>
+      <arglist>(PRISMS::PBasisSetBase&lt; double, double &gt; *b, char *name)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PBasisSet_dd_description</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a8a210acb032a71383908499696541c0f</anchor>
+      <arglist>(PRISMS::PBasisSetBase&lt; double, double &gt; *b, char *description)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PBasisSet_dd_size</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>aaf7ff8d14617404c39536be88e3e4ab2</anchor>
+      <arglist>(PRISMS::PBasisSetBase&lt; double, double &gt; *b, int &amp;size)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PBasisSet_dd_resize</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a48b036dcf19ffb73fe493f5684f81787</anchor>
+      <arglist>(PRISMS::PBasisSetBase&lt; double, double &gt; *b, int N)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PBasisSet_dd_max_size</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>aa87fd5c7bf93846cd4535f6e3d6b64de</anchor>
+      <arglist>(PRISMS::PBasisSetBase&lt; double, double &gt; *b, int &amp;max_size)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PBasisSet_dd_calc</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>af8f3702a8a4f848fb45e638263244764</anchor>
+      <arglist>(PRISMS::PBasisSetBase&lt; double, double &gt; *b, int term, double var, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PBasisSet_dd_calc_grad</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>ae0eea34a1df066fc715ccb51da56c08b</anchor>
+      <arglist>(PRISMS::PBasisSetBase&lt; double, double &gt; *b, int term, double var, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PBasisSet_dd_calc_hess</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a52bbcc547c7b3aa33342be6371163652</anchor>
+      <arglist>(PRISMS::PBasisSetBase&lt; double, double &gt; *b, int term, double var, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PBasisSet_dd_eval</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a71448921ffb6a3cf247701777daaf117</anchor>
+      <arglist>(PRISMS::PBasisSetBase&lt; double, double &gt; *b, double var)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PBasisSet_dd_eval_grad</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a91c2e4a989bcdd4eaf27d73e920c8643</anchor>
+      <arglist>(PRISMS::PBasisSetBase&lt; double, double &gt; *b, double var)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PBasisSet_dd_eval_hess</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a754c57ab986242baae5c5055db65e5d0</anchor>
+      <arglist>(PRISMS::PBasisSetBase&lt; double, double &gt; *b, double var)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PBasisSet_dd_get</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a214a7d917c9e420f89215e7ff30247c8</anchor>
+      <arglist>(PRISMS::PBasisSetBase&lt; double, double &gt; *b, int term, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PBasisSet_dd_get_grad</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a8307224679e341db39eeaf70596d0180</anchor>
+      <arglist>(PRISMS::PBasisSetBase&lt; double, double &gt; *b, int term, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PBasisSet_dd_get_hess</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a25ec76c6b4ad98e4913e41afa66188a6</anchor>
+      <arglist>(PRISMS::PBasisSetBase&lt; double, double &gt; *b, int term, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_new</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>aa7f3cbbcba29f0a30567d18e7871d34a</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *&amp;f)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_setnew</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a1ef170d3deab61d59ddb8f6c06b298ef</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *&amp;f, PRISMS::PBasisSetBase&lt; double, double &gt; **basis_set, int order)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_delete</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a5d5a5f2d0db4c68de4bf9c6bd7baea8a</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *&amp;f)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_clear</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a83fdc0286235ef56b618c80f8f515319</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_set</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>accc09622cb145052d58777673733b74f</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, PRISMS::PBasisSetBase&lt; double, double &gt; **basis_set, int order)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_order</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>aa85aae6dae05673155994ac89d8f92a0</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, int &amp;order)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_volume</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a62eaa10a451c670a7dc0e541620c73ad</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, int &amp;volume)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_dim</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>acd37e6a1979d8734dfcd787a5a2055cd</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, int i, int &amp;dim)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_get_linear_coeff</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a3fab8a48fd4355e465d2260b2a77d618</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, int i, double &amp;coeff)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_get_tensor_coeff</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a0f730f0905bfe980915b03204c5f145e</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, int *term, double &amp;coeff)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_set_linear_coeff</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a1d304d101c96e12764ccf0e78a52060f</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, int i, double coeff)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_set_tensor_coeff</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>aeecad802a532d526b415427a84a987a1</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, int *term, double coeff)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_linear_index</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>ae5d63b702374b49de8bf7b18c2bc7f52</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, int *term, int &amp;linear_index)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_tensor_indices</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a9f51086975f776da4019cf2e39574d9b</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, int linear_index, int *term)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_calc</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>abcbc0fc9b95163ed2087ada406cc8043</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, double *var, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_calc_grad</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a23b8ead8b33e5701cf46ff6134705950</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, double *var, int di, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_calc_hess</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>abc0be3f1becdaeb1d4196475bd2c9b9a</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, double *var, int di, int dj, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_eval</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a4457a27d40cc2042b1ad1fb5499ae7d7</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, double *var)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_eval_grad</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>ab657cab7a5060e8b339389a48d4e2bd6</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, double *var)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_eval_hess</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>af8cf52040717bf6fe6560d7c07e422c1</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, double *var)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_get</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>af24ea0a7240682c825599590ba1a772b</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_get_grad</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a5de5215078d5c2828c8279435d494959</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, int di, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_get_hess</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>ac4c4c61c779278dcc4f1331d85670d48</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, int di, int dj, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_calc_basis</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a0ae5e33577d487f547164b91e3e15cdf</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, int bindex, int term, double *var, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_calc_basis_grad</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a4c2b4f4050980a65b02fae420009e1b8</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, int bindex, int term, double *var, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_calc_basis_hess</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a47af68e9d22593aab2f04a5abe261ea8</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, int bindex, int term, double *var, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_calc_tensor_basis</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a8e68ea7e4813a53ec2f96c4598f79c61</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, int *term, double *var, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_calc_tensor_basis_grad</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a77fd45bb1a1540400103f3ea4ae7588a</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, int *term, double *var, int di, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_calc_tensor_basis_hess</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a55dda0cc1f64db6561deeb7935c65e65</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, int *term, double *var, int di, int dj, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_eval_basis_all</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a91ebc74f47686b7ca5ddc4afe3a86436</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, double *var)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_eval_basis</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a8665842026e475d51f10e8f66b6031ff</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, double *var, int i)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_eval_basis_grad_all</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>aadb805fe72ac9b248af62f7db04cd55c</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, double *var)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_eval_basis_grad</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>aaaa9b7f748ab5585ad25767a05db46eb</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, double *var, int i)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_eval_basis_hess_all</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a4ad11a5ae2a7019cec4dd082a9329826</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, double *var)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_eval_basis_hess</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>ab800b562106adcb9383ced05eac7e0d2</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, double *var, int i)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_get_basis</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>ad58ea76679cd6553961a96cea1d9c6ea</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, int bindex, int term, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_get_basis_grad</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>ad9ee0e192f08f7fc68f27ee8343d8580</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, int bindex, int term, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_get_basis_hess</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a64c895725dbd36a25af38292150c64a7</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, int bindex, int term, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_get_tensor_basis</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>acb956fad606c40706c7ac0ce865a5720</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, int *term, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_get_tensor_basis_grad</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>aea8ed3c0bdaf022ecbea582b8c7c35b7</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, int *term, int di, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>PSeriesFunction_dsis_get_tensor_basis_hess</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a401c9cda5fc33b7903a40ad36bc78b3a</anchor>
+      <arglist>(PRISMS::PSeriesFunction&lt; double, double, double *, int * &gt; *f, int *term, int di, int dj, double &amp;val)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>Body2D_new</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a24ab21dde8030709fbd94fc14407861a</anchor>
+      <arglist>(char *vtkfile, PRISMS::Body&lt; double *, 2 &gt; *&amp;b)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>Body2D_delete</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>ab30446fa8dce0f08e8fa65193f381114</anchor>
+      <arglist>(PRISMS::Body&lt; double *, 2 &gt; *&amp;b)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>ScalarField2D</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>ae14db95de4ca89527d06a2027c1d8a9a</anchor>
+      <arglist>(char *name, PRISMS::Body&lt; double *, 2 &gt; *b, PRISMS::PFuncBase&lt; double *, double &gt; *&amp;f)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>Body3D_new</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a68485055d28589293f00cfad0bcc0a01</anchor>
+      <arglist>(char *vtkfile, PRISMS::Body&lt; double *, 3 &gt; *&amp;b)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>Body3D_delete</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>a12f6fbdf92d8432551774451c444a327</anchor>
+      <arglist>(PRISMS::Body&lt; double *, 3 &gt; *&amp;b)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>ScalarField3D</name>
+      <anchorfile>_p_extern_8cc.html</anchorfile>
+      <anchor>aa78593dfafcb96c61be5e3713ebcc0cb</anchor>
+      <arglist>(char *name, PRISMS::Body&lt; double *, 3 &gt; *b, PRISMS::PFuncBase&lt; double *, double &gt; *&amp;f)</arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>PLibrary.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/materialModels/continuumPlasticity/models/</path>
+    <filename>_p_library_8cc</filename>
+    <namespace>PRISMS</namespace>
+    <member kind="define">
+      <type>#define</type>
+      <name>PLIBRARY_CC</name>
+      <anchorfile>_p_library_8cc.html</anchorfile>
+      <anchor>af3d7c7d1fd1ac16fde2ea2f8faf4d2c3</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>crystalPlasticity.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/materialModels/crystalPlasticity/</path>
+    <filename>crystal_plasticity_8cc</filename>
+    <includes id="elliptic_b_v_p_8h" name="ellipticBVP.h" local="yes" imported="no">../../../include/ellipticBVP.h</includes>
+    <includes id="crystal_orientations_i_o_8cc" name="crystalOrientationsIO.cc" local="yes" imported="no">../../../src/utilityObjects/crystalOrientationsIO.cc</includes>
+    <class kind="struct">materialProperties</class>
+    <class kind="class">crystalPlasticity</class>
+    <member kind="define">
+      <type>#define</type>
+      <name>CRYSTALPLASTICITY_H</name>
+      <anchorfile>crystal_plasticity_8cc.html</anchorfile>
+      <anchor>a8706e4d88548a332fbba10e10b3a7ae7</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="file">
+    <name>crystalOrientationsIO.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/utilityObjects/</path>
+    <filename>crystal_orientations_i_o_8cc</filename>
+    <class kind="class">crystalOrientationsIO</class>
+  </compound>
+  <compound kind="file">
+    <name>staticCondensation.cc</name>
+    <path>/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/utilityObjects/</path>
+    <filename>static_condensation_8cc</filename>
+    <class kind="class">staticCondensation</class>
+  </compound>
+  <compound kind="class">
+    <name>BCFunction</name>
+    <filename>class_b_c_function.html</filename>
+    <templarg>dim</templarg>
+    <base>Function&lt; dim &gt;</base>
+    <base>Function&lt; dim &gt;</base>
+    <base>Function&lt; dim &gt;</base>
+    <base>Function&lt; dim &gt;</base>
+    <base>Function&lt; dim &gt;</base>
+    <base>Function&lt; dim &gt;</base>
+    <base>Function&lt; dim &gt;</base>
+    <base>Function&lt; dim &gt;</base>
+    <member kind="function">
+      <type></type>
+      <name>BCFunction</name>
+      <anchorfile>class_b_c_function.html</anchorfile>
+      <anchor>aa4ca15a32ed184ac9e9953e45a3e2c1f</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>vector_value</name>
+      <anchorfile>class_b_c_function.html</anchorfile>
+      <anchor>add58f18a39ed42ce6d5a5223bef399e8</anchor>
+      <arglist>(const Point&lt; dim &gt; &amp;p, Vector&lt; double &gt; &amp;values) const </arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>BCFunction</name>
+      <anchorfile>class_b_c_function.html</anchorfile>
+      <anchor>aa4ca15a32ed184ac9e9953e45a3e2c1f</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>vector_value</name>
+      <anchorfile>class_b_c_function.html</anchorfile>
+      <anchor>add58f18a39ed42ce6d5a5223bef399e8</anchor>
+      <arglist>(const Point&lt; dim &gt; &amp;p, Vector&lt; double &gt; &amp;values) const </arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>BCFunction</name>
+      <anchorfile>class_b_c_function.html</anchorfile>
+      <anchor>aa4ca15a32ed184ac9e9953e45a3e2c1f</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>vector_value</name>
+      <anchorfile>class_b_c_function.html</anchorfile>
+      <anchor>add58f18a39ed42ce6d5a5223bef399e8</anchor>
+      <arglist>(const Point&lt; dim &gt; &amp;p, Vector&lt; double &gt; &amp;values) const </arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>BCFunction</name>
+      <anchorfile>class_b_c_function.html</anchorfile>
+      <anchor>aa4ca15a32ed184ac9e9953e45a3e2c1f</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>vector_value</name>
+      <anchorfile>class_b_c_function.html</anchorfile>
+      <anchor>add58f18a39ed42ce6d5a5223bef399e8</anchor>
+      <arglist>(const Point&lt; dim &gt; &amp;p, Vector&lt; double &gt; &amp;values) const </arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>BCFunction</name>
+      <anchorfile>class_b_c_function.html</anchorfile>
+      <anchor>aa4ca15a32ed184ac9e9953e45a3e2c1f</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>vector_value</name>
+      <anchorfile>class_b_c_function.html</anchorfile>
+      <anchor>add58f18a39ed42ce6d5a5223bef399e8</anchor>
+      <arglist>(const Point&lt; dim &gt; &amp;p, Vector&lt; double &gt; &amp;values) const </arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>BCFunction</name>
+      <anchorfile>class_b_c_function.html</anchorfile>
+      <anchor>aa4ca15a32ed184ac9e9953e45a3e2c1f</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>vector_value</name>
+      <anchorfile>class_b_c_function.html</anchorfile>
+      <anchor>add58f18a39ed42ce6d5a5223bef399e8</anchor>
+      <arglist>(const Point&lt; dim &gt; &amp;p, Vector&lt; double &gt; &amp;values) const </arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>BCFunction</name>
+      <anchorfile>class_b_c_function.html</anchorfile>
+      <anchor>aa4ca15a32ed184ac9e9953e45a3e2c1f</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>vector_value</name>
+      <anchorfile>class_b_c_function.html</anchorfile>
+      <anchor>add58f18a39ed42ce6d5a5223bef399e8</anchor>
+      <arglist>(const Point&lt; dim &gt; &amp;p, Vector&lt; double &gt; &amp;values) const </arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>BCFunction</name>
+      <anchorfile>class_b_c_function.html</anchorfile>
+      <anchor>aa4ca15a32ed184ac9e9953e45a3e2c1f</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>vector_value</name>
+      <anchorfile>class_b_c_function.html</anchorfile>
+      <anchor>add58f18a39ed42ce6d5a5223bef399e8</anchor>
+      <arglist>(const Point&lt; dim &gt; &amp;p, Vector&lt; double &gt; &amp;values) const </arglist>
+    </member>
+  </compound>
+  <compound kind="class">
+    <name>continuumPlasticity</name>
+    <filename>classcontinuum_plasticity.html</filename>
+    <templarg>dim</templarg>
+    <base>ellipticBVP</base>
+    <member kind="function">
+      <type></type>
+      <name>continuumPlasticity</name>
+      <anchorfile>classcontinuum_plasticity.html</anchorfile>
+      <anchor>aabf241fb6dfd6f4328a1cb857c356330</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="variable">
+      <type>materialProperties</type>
+      <name>properties</name>
+      <anchorfile>classcontinuum_plasticity.html</anchorfile>
+      <anchor>a187842ee49dfd5934bbea93168454bd1</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>void</type>
+      <name>init</name>
+      <anchorfile>classcontinuum_plasticity.html</anchorfile>
+      <anchor>a0954561ed483ee2f3ff3e8bf9f5a4680</anchor>
+      <arglist>(unsigned int num_quad_points)</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>void</type>
+      <name>mesh</name>
+      <anchorfile>classcontinuum_plasticity.html</anchorfile>
+      <anchor>af65d130d2d0ad4f1c51ee389721841e5</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>void</type>
+      <name>markBoundaries</name>
+      <anchorfile>classcontinuum_plasticity.html</anchorfile>
+      <anchor>a403b1bdcc68530e1fc0d235a0de744cf</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>void</type>
+      <name>applyDirichletBCs</name>
+      <anchorfile>classcontinuum_plasticity.html</anchorfile>
+      <anchor>a41b9bc91e70c79f7450b132f334d98b2</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>void</type>
+      <name>calculatePlasticity</name>
+      <anchorfile>classcontinuum_plasticity.html</anchorfile>
+      <anchor>af7f5406670328a9587bfbe45d39e651a</anchor>
+      <arglist>(unsigned int cellID, unsigned int quadPtID)</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>void</type>
+      <name>getElementalValues</name>
+      <anchorfile>classcontinuum_plasticity.html</anchorfile>
+      <anchor>a593d3194b39027b56fed88ddc3b32743</anchor>
+      <arglist>(FEValues&lt; dim &gt; &amp;fe_values, unsigned int dofs_per_cell, unsigned int num_quad_points, FullMatrix&lt; double &gt; &amp;elementalJacobian, Vector&lt; double &gt; &amp;elementalResidual)</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>void</type>
+      <name>updateAfterIteration</name>
+      <anchorfile>classcontinuum_plasticity.html</anchorfile>
+      <anchor>a27f504072c3f0dfc94601cacf98d1fb3</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>void</type>
+      <name>updateAfterIncrement</name>
+      <anchorfile>classcontinuum_plasticity.html</anchorfile>
+      <anchor>ac9fd8fe4219530825175c191e6eb2adb</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>FullMatrix&lt; double &gt;</type>
+      <name>F</name>
+      <anchorfile>classcontinuum_plasticity.html</anchorfile>
+      <anchor>ab861f6a9754ef0bd97877e8126c918e9</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>FullMatrix&lt; double &gt;</type>
+      <name>tau</name>
+      <anchorfile>classcontinuum_plasticity.html</anchorfile>
+      <anchor>ace4dd85e74e50f295d9dec10ab4389c2</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>Tensor&lt; 4, dim, double &gt;</type>
+      <name>c</name>
+      <anchorfile>classcontinuum_plasticity.html</anchorfile>
+      <anchor>a1bae1fe72ae4fa2af8a0f06c09869bd1</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>enhancedStrain&lt; dim &gt;</type>
+      <name>enhStrain</name>
+      <anchorfile>classcontinuum_plasticity.html</anchorfile>
+      <anchor>a156a8c8afdec0fdeee1cafdc90b7e28d</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>std::vector&lt; std::vector&lt; FullMatrix&lt; double &gt; &gt; &gt;</type>
+      <name>histInvCP_conv</name>
+      <anchorfile>classcontinuum_plasticity.html</anchorfile>
+      <anchor>a3290f16b0188ba8899ec46b4a77d765a</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>std::vector&lt; std::vector&lt; FullMatrix&lt; double &gt; &gt; &gt;</type>
+      <name>histInvCP_iter</name>
+      <anchorfile>classcontinuum_plasticity.html</anchorfile>
+      <anchor>a534f4bc6e9371b57fcedeb2deb0f8aba</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>std::vector&lt; std::vector&lt; double &gt; &gt;</type>
+      <name>histAlpha_conv</name>
+      <anchorfile>classcontinuum_plasticity.html</anchorfile>
+      <anchor>a5ff6fdbd39bb35a9db39f1f1895b647a</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>std::vector&lt; std::vector&lt; double &gt; &gt;</type>
+      <name>histAlpha_iter</name>
+      <anchorfile>classcontinuum_plasticity.html</anchorfile>
+      <anchor>a58cb5c451cc2b9ff792f2666e627f898</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>std::vector&lt; std::vector&lt; double &gt; &gt;</type>
+      <name>projectVonMisesStress</name>
+      <anchorfile>classcontinuum_plasticity.html</anchorfile>
+      <anchor>a70c0d856d69929da3e662054b7fef626</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>bool</type>
+      <name>plasticOnset</name>
+      <anchorfile>classcontinuum_plasticity.html</anchorfile>
+      <anchor>aa0d23b13b025124c85d2778b0be16fb5</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>bool</type>
+      <name>initCalled</name>
+      <anchorfile>classcontinuum_plasticity.html</anchorfile>
+      <anchor>ad65183307ed16715f51bae5059d9332f</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>std::vector&lt; double &gt;</type>
+      <name>varStrainEnergy</name>
+      <anchorfile>classcontinuum_plasticity.html</anchorfile>
+      <anchor>aa9d0229ee21be852723259bdf8591f3b</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>std::vector&lt; double &gt;</type>
+      <name>varYield</name>
+      <anchorfile>classcontinuum_plasticity.html</anchorfile>
+      <anchor>a5490f03bd5571518eb9acbe1dc42c78c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>std::vector&lt; double &gt;</type>
+      <name>varIsoHardening</name>
+      <anchorfile>classcontinuum_plasticity.html</anchorfile>
+      <anchor>a8823300525c8516dd06455e02082de54</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>PRISMS::PFunction&lt; std::vector&lt; double &gt;, double &gt;</type>
+      <name>strain_energy</name>
+      <anchorfile>classcontinuum_plasticity.html</anchorfile>
+      <anchor>ac5dd42dee008094bdf3a38fb68a7a1c3</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>PRISMS::PFunction&lt; std::vector&lt; double &gt;, double &gt;</type>
+      <name>yield</name>
+      <anchorfile>classcontinuum_plasticity.html</anchorfile>
+      <anchor>a7bc5766941a8071a542fece3f94ed825</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>PRISMS::PFunction&lt; std::vector&lt; double &gt;, double &gt;</type>
+      <name>harden</name>
+      <anchorfile>classcontinuum_plasticity.html</anchorfile>
+      <anchor>ab478f950b34c15f5f88988efef2727a0</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="class">
+    <name>crystalOrientationsIO</name>
+    <filename>classcrystal_orientations_i_o.html</filename>
+    <templarg>dim</templarg>
+    <member kind="function">
+      <type></type>
+      <name>crystalOrientationsIO</name>
+      <anchorfile>classcrystal_orientations_i_o.html</anchorfile>
+      <anchor>a7bdc324beffcb2238628f9ce9be9c69f</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>loadOrientations</name>
+      <anchorfile>classcrystal_orientations_i_o.html</anchorfile>
+      <anchor>a668f30fc448b1a6c9203e5d4edf8dc2c</anchor>
+      <arglist>(std::string _voxelFileName, unsigned int headerLines, std::string _orientationFileName, unsigned int _numPts[], double _stencil[])</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>loadOrientationVector</name>
+      <anchorfile>classcrystal_orientations_i_o.html</anchorfile>
+      <anchor>ab0ccbb0f876566ccbbd872371f1f619a</anchor>
+      <arglist>(std::string _eulerFileName)</arglist>
+    </member>
+    <member kind="function">
+      <type>unsigned int</type>
+      <name>getMaterialID</name>
+      <anchorfile>classcrystal_orientations_i_o.html</anchorfile>
+      <anchor>aa0594e1f16e4e7b3d5d0afd259073cb6</anchor>
+      <arglist>(double _coords[])</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>addToOutputOrientations</name>
+      <anchorfile>classcrystal_orientations_i_o.html</anchorfile>
+      <anchor>a7689e3b396ac07feca2d532ac56f976a</anchor>
+      <arglist>(std::vector&lt; double &gt; &amp;_orientationsInfo)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>writeOutputOrientations</name>
+      <anchorfile>classcrystal_orientations_i_o.html</anchorfile>
+      <anchor>a5b590781e7aeacfdf0e7518359751535</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="variable">
+      <type>std::map&lt; unsigned int, std::vector&lt; double &gt; &gt;</type>
+      <name>eulerAngles</name>
+      <anchorfile>classcrystal_orientations_i_o.html</anchorfile>
+      <anchor>ae604b3a37b16860f30f6a7fcd8e733e3</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::vector&lt; std::vector&lt; double &gt; &gt;</type>
+      <name>outputOrientations</name>
+      <anchorfile>classcrystal_orientations_i_o.html</anchorfile>
+      <anchor>aaf515af82acbe59de9850ea3bf0f686f</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>std::map&lt; double, std::map&lt; double, std::map&lt; double, unsigned int &gt; &gt; &gt;</type>
+      <name>inputVoxelData</name>
+      <anchorfile>classcrystal_orientations_i_o.html</anchorfile>
+      <anchor>a135cf0ce821e366ff114af197f1bf9aa</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>ConditionalOStream</type>
+      <name>pcout</name>
+      <anchorfile>classcrystal_orientations_i_o.html</anchorfile>
+      <anchor>af8ab44bc27a1ea9e54133e9e716bb2d4</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="class">
+    <name>crystalPlasticity</name>
+    <filename>classcrystal_plasticity.html</filename>
+    <templarg>dim</templarg>
+    <base>ellipticBVP</base>
+    <member kind="function">
+      <type></type>
+      <name>crystalPlasticity</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a2043fb7876fc33eee4b7210ac371ae93</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>mesh</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a98b4b46e41d88bd8ce7a65849bd7565c</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>reorient</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a5b44e4b72b4dd499faa8d9327435a9a0</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>tangent_modulus</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>add81b5393dd6522a92e27db3ff314ef0</anchor>
+      <arglist>(FullMatrix&lt; double &gt; &amp;F_trial, FullMatrix&lt; double &gt; &amp;Fpn_inv, FullMatrix&lt; double &gt; &amp;SCHMID_TENSOR1, FullMatrix&lt; double &gt; &amp;A, FullMatrix&lt; double &gt; &amp;A_PA, FullMatrix&lt; double &gt; &amp;B, FullMatrix&lt; double &gt; &amp;T_tau, FullMatrix&lt; double &gt; &amp;PK1_Stiff, Vector&lt; double &gt; &amp;active, Vector&lt; double &gt; &amp;resolved_shear_tau_trial, Vector&lt; double &gt; &amp;x_beta, Vector&lt; double &gt; &amp;PA, int &amp;n_PA, double &amp;det_F_tau, double &amp;det_FE_tau)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>inactive_slip_removal</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>ade6f8dbabddab30db4bdea429e45da3c</anchor>
+      <arglist>(Vector&lt; double &gt; &amp;inactive, Vector&lt; double &gt; &amp;active, Vector&lt; double &gt; &amp;x_beta, int &amp;n_PA, Vector&lt; double &gt; &amp;PA, Vector&lt; double &gt; b, FullMatrix&lt; double &gt; A, FullMatrix&lt; double &gt; A_PA)</arglist>
+    </member>
+    <member kind="variable">
+      <type>materialProperties</type>
+      <name>properties</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a09f4b95bc6f7ce3ffd617d9200a1844c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>crystalOrientationsIO&lt; dim &gt;</type>
+      <name>orientations</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a79b7c58fbb249f72dbaa115f1950b9e0</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>void</type>
+      <name>init</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a5ce02ad4a7b5d451d793b404404f5667</anchor>
+      <arglist>(unsigned int num_quad_points)</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>void</type>
+      <name>markBoundaries</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>ae76a03e308a95cf1c0b327ca6eeef25a</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>void</type>
+      <name>applyDirichletBCs</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a7ece85bacef266db722dc6d9c6192a1b</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>void</type>
+      <name>calculatePlasticity</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a20e6133a6d4ed6f4600c61bb217e6bb5</anchor>
+      <arglist>(unsigned int cellID, unsigned int quadPtID)</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>void</type>
+      <name>getElementalValues</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a430822c480b04a4d79c0d69f6b02c45c</anchor>
+      <arglist>(FEValues&lt; dim &gt; &amp;fe_values, unsigned int dofs_per_cell, unsigned int num_quad_points, FullMatrix&lt; double &gt; &amp;elementalJacobian, Vector&lt; double &gt; &amp;elementalResidual)</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>void</type>
+      <name>updateAfterIncrement</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a4ce787c66fa9998379641734146963c5</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>void</type>
+      <name>odfpoint</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a8df7b4fa7f807fc41b1aa827277f4f4e</anchor>
+      <arglist>(FullMatrix&lt; double &gt; &amp;OrientationMatrix, Vector&lt; double &gt; r)</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>Vector&lt; double &gt;</type>
+      <name>vecform</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>ac977bd49fda806fb9a6359e47185dcca</anchor>
+      <arglist>(FullMatrix&lt; double &gt; A)</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>void</type>
+      <name>matform</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a765887611cffb90123db63f9b8c590d4</anchor>
+      <arglist>(FullMatrix&lt; double &gt; &amp;A, Vector&lt; double &gt; Av)</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>void</type>
+      <name>right</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a0bd8ef01f9b4589afd236e36022cffd4</anchor>
+      <arglist>(FullMatrix&lt; double &gt; &amp;Aright, FullMatrix&lt; double &gt; elm)</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>void</type>
+      <name>symmf</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a2db326449455f3ff796dc8079ab20754</anchor>
+      <arglist>(FullMatrix&lt; double &gt; &amp;A, FullMatrix&lt; double &gt; elm)</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>void</type>
+      <name>left</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>aebec883957f19974e0e9c9fbac07307e</anchor>
+      <arglist>(FullMatrix&lt; double &gt; &amp;Aleft, FullMatrix&lt; double &gt; elm)</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>void</type>
+      <name>ElasticProd</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a67703becc4302f3cd9a1bec65f8ab184</anchor>
+      <arglist>(FullMatrix&lt; double &gt; &amp;stress, FullMatrix&lt; double &gt; elm, FullMatrix&lt; double &gt; ElasticityTensor)</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>void</type>
+      <name>tracev</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a5748912261faa7445557e4999fc8af44</anchor>
+      <arglist>(FullMatrix&lt; double &gt; &amp;Atrace, FullMatrix&lt; double &gt; elm, FullMatrix&lt; double &gt; B)</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>void</type>
+      <name>loadOrientations</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>afaf3fd29d3095ba87ffe5fb0055f3aed</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>FullMatrix&lt; double &gt;</type>
+      <name>F</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a1dc2d4d3de053e17db787b291b104c8f</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>FullMatrix&lt; double &gt;</type>
+      <name>F_tau</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a565d20ab74f26d5e2ab69dd9d6ca539c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>FullMatrix&lt; double &gt;</type>
+      <name>FP_tau</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a51d849103dcbbf01359a3854bb40ee56</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>FullMatrix&lt; double &gt;</type>
+      <name>FE_tau</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a6acbc513cb1d47daa5636b6270f9c281</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>FullMatrix&lt; double &gt;</type>
+      <name>T</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a4cffcbc3b6c045d99c02eb64e5229871</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>FullMatrix&lt; double &gt;</type>
+      <name>P</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a90aafb0567b31bfa8ceb2790ca478fb3</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>Tensor&lt; 4, dim, double &gt;</type>
+      <name>dP_dF</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a7d561add0d4c7703efc13f588cd3d066</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>double</type>
+      <name>No_Elem</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a51e9e5398b49cf77a60c274c41a495df</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>double</type>
+      <name>N_qpts</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a3cc9a7d4fee256d6fb26602b4a95e40c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>std::vector&lt; std::vector&lt; Vector&lt; double &gt; &gt; &gt;</type>
+      <name>rot</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a8a5d22542ea514687dad53084f38ed16</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>std::vector&lt; std::vector&lt; Vector&lt; double &gt; &gt; &gt;</type>
+      <name>rotnew</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a533c0c281d61bd8a0ebb58357bbe59a6</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>std::vector&lt; std::vector&lt; FullMatrix&lt; double &gt; &gt; &gt;</type>
+      <name>Fp_iter</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a83cfb76ba4e92d2ad12280375c504072</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>std::vector&lt; std::vector&lt; FullMatrix&lt; double &gt; &gt; &gt;</type>
+      <name>Fp_conv</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a6e288354f35c50e0db38f8680e23c9a6</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>std::vector&lt; std::vector&lt; FullMatrix&lt; double &gt; &gt; &gt;</type>
+      <name>Fe_iter</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>ac87b6f6417fb7b4d7dbd30c2e77571cb</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>std::vector&lt; std::vector&lt; FullMatrix&lt; double &gt; &gt; &gt;</type>
+      <name>Fe_conv</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>ae743b3d35b440b64108ff3633cf58e11</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>std::vector&lt; std::vector&lt; Vector&lt; double &gt; &gt; &gt;</type>
+      <name>s_alpha_iter</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>aab95ef8c8b156196cfe42f0e186bdc07</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>std::vector&lt; std::vector&lt; Vector&lt; double &gt; &gt; &gt;</type>
+      <name>s_alpha_conv</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a18f2856fe0357d2e5f2eb417c395e32c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>unsigned int</type>
+      <name>n_slip_systems</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a796f690dddef067dbf0c91ec480bab56</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>FullMatrix&lt; double &gt;</type>
+      <name>m_alpha</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a67d7e022ceb6b27f52609fe13d7189b4</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>FullMatrix&lt; double &gt;</type>
+      <name>n_alpha</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a332fef7224c8748f3616a4c4d7629aaf</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>FullMatrix&lt; double &gt;</type>
+      <name>q</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>ae856bc63daf5353242a25bf3cebb75b2</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>FullMatrix&lt; double &gt;</type>
+      <name>sres</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a79f4e7230cd1e914d626525e594851fa</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>FullMatrix&lt; double &gt;</type>
+      <name>Dmat</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>a2d83d949fae4db8671f230f4a7fe6423</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>Vector&lt; double &gt;</type>
+      <name>sres_tau</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>addd07eac3c6258187c479ff099a717f3</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>bool</type>
+      <name>initCalled</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>aaa82b22882b8085e9f565359aa80ff5e</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>std::vector&lt; std::vector&lt; unsigned int &gt; &gt;</type>
+      <name>quadratureOrientationsMap</name>
+      <anchorfile>classcrystal_plasticity.html</anchorfile>
+      <anchor>af8635861d39f9babb8b0c8eb313c7edb</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="class">
+    <name>elasticity</name>
+    <filename>classelasticity.html</filename>
+    <templarg>dim</templarg>
+    <base>ellipticBVP</base>
+    <member kind="function">
+      <type></type>
+      <name>elasticity</name>
+      <anchorfile>classelasticity.html</anchorfile>
+      <anchor>aa9c14d194c2890427696a8996546aecd</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="variable">
+      <type>materialProperties</type>
+      <name>properties</name>
+      <anchorfile>classelasticity.html</anchorfile>
+      <anchor>a013db9adceeba64b18f7bad7b282bb61</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>void</type>
+      <name>markBoundaries</name>
+      <anchorfile>classelasticity.html</anchorfile>
+      <anchor>a2ad70882ffa00585f125375fb10cd1e4</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>void</type>
+      <name>applyDirichletBCs</name>
+      <anchorfile>classelasticity.html</anchorfile>
+      <anchor>ad92e72437b36b907885384b802c5a251</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>void</type>
+      <name>getElementalValues</name>
+      <anchorfile>classelasticity.html</anchorfile>
+      <anchor>af7af549bf72ee51bc6db654f691a7277</anchor>
+      <arglist>(FEValues&lt; dim &gt; &amp;fe_values, unsigned int dofs_per_cell, unsigned int num_quad_points, FullMatrix&lt; double &gt; &amp;elementalJacobian, Vector&lt; double &gt; &amp;elementalResidual)</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
+    <name>ellipticBVP</name>
+    <filename>classelliptic_b_v_p.html</filename>
+    <templarg>dim</templarg>
+    <member kind="function">
+      <type></type>
+      <name>ellipticBVP</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>a4330bca51f20aa120865994a1d0a057a</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>~ellipticBVP</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>aac8ece39dc9a0e5e822d747c3c4b3366</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>run</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>a0a5be8a7252b99fcf0011f0f22c61229</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" protection="protected" virtualness="virtual">
+      <type>virtual void</type>
+      <name>mesh</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>a959613540ccc96519495a915de649b13</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type>void</type>
+      <name>init</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>a009d542a1dba3de14a1b8187482797f7</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type>void</type>
+      <name>assemble</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>a92fce0b84e33578acb077893a8364adb</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type>void</type>
+      <name>solveLinearSystem</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>af9a2dd7fe9d8d8186d840964a552069c</anchor>
+      <arglist>(ConstraintMatrix &amp;constraintmatrix, matrixType &amp;A, vectorType &amp;b, vectorType &amp;x, vectorType &amp;xGhosts, vectorType &amp;dxGhosts)</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type>void</type>
+      <name>solveNonLinearSystem</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>aa8264127a12042f40bfe256f3c806378</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type>void</type>
+      <name>solve</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>a9dd445b53597febaa943f6ec6af66bdc</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type>void</type>
+      <name>output</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>abfadbcf46e9d7443b1c87a97983976ea</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type>void</type>
+      <name>initProject</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>a28e67d7861b2908127ab229e01a3e17e</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" protection="protected">
+      <type>void</type>
+      <name>project</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>ad00200622467f43d2867885a3828df48</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" protection="protected" virtualness="pure">
+      <type>virtual void</type>
+      <name>getElementalValues</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>aa7e5c5ab87ad08cab44103734797cc54</anchor>
+      <arglist>(FEValues&lt; dim &gt; &amp;fe_values, unsigned int dofs_per_cell, unsigned int num_quad_points, FullMatrix&lt; double &gt; &amp;elementalJacobian, Vector&lt; double &gt; &amp;elementalResidual)=0</arglist>
+    </member>
+    <member kind="function" protection="protected" virtualness="virtual">
+      <type>virtual void</type>
+      <name>updateBeforeIteration</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>a2eb1fa753a895b06c9e634f806a235c9</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" protection="protected" virtualness="virtual">
+      <type>virtual void</type>
+      <name>updateAfterIteration</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>a7b08ecabce7dbccdcdb22cead3c0f64e</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" protection="protected" virtualness="virtual">
+      <type>virtual void</type>
+      <name>updateBeforeIncrement</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>a522835ac8250b78b59e2a824bcddfb9d</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" protection="protected" virtualness="virtual">
+      <type>virtual void</type>
+      <name>updateAfterIncrement</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>ac672a1ad0fa45af6e8b49a86e3fc7106</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" protection="protected" virtualness="virtual">
+      <type>virtual void</type>
+      <name>markBoundaries</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>a004d2d9b8b0379e111e2554120551856</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" protection="protected" virtualness="virtual">
+      <type>virtual void</type>
+      <name>applyDirichletBCs</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>a96007fd8c8ad50dad8db24e207600489</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" protection="protected" virtualness="virtual">
+      <type>virtual void</type>
+      <name>applyInitialConditions</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>acdf4205267d15ccf08ed5e9f347293ec</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>MPI_Comm</type>
+      <name>mpi_communicator</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>aef8b94676b04c49be3800d4879fb521e</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>IndexSet</type>
+      <name>locally_owned_dofs</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>a5da6e5aa812653c60598e572f14e8ffb</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>IndexSet</type>
+      <name>locally_relevant_dofs</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>ae6da878ae62a600057ea750ed6e5e82b</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>parallel::distributed::Triangulation&lt; dim &gt;</type>
+      <name>triangulation</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>a678578e211d345b35da928ebac8d30a2</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>FESystem&lt; dim &gt;</type>
+      <name>FE</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>aa96ba963567ff97d4a4ff837183eb125</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>ConstraintMatrix</type>
+      <name>constraints</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>a0c746c00fbbbb0114cc0feb886d7ecce</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>ConstraintMatrix</type>
+      <name>constraintsMassMatrix</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>ac20d5ecb68491e97c181fc36d069302a</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>DoFHandler&lt; dim &gt;</type>
+      <name>dofHandler</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>ab5832cb0dcd866f2d08cb5b38d6ea033</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>vectorType</type>
+      <name>solution</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>a24cd2b653ad441a6d0293bd59da41e1e</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>vectorType</type>
+      <name>residual</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>a5d9df6a768d385f4b01f8ac824a6e766</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>vectorType</type>
+      <name>solutionWithGhosts</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>a88aa038b551a7b9f21a207382eee774c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>vectorType</type>
+      <name>solutionIncWithGhosts</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>a592ad00ac4cc3a7ac34939cf50bbc10e</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>matrixType</type>
+      <name>jacobian</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>a8fd38ee417b9c97b1b29ee80d9731dbb</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>unsigned int</type>
+      <name>currentIteration</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>abb41f398d3edc073cc01531ee2dd5499</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>unsigned int</type>
+      <name>currentIncrement</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>ad601ffe7dc089ee449b792226d855bcb</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>unsigned int</type>
+      <name>totalIncrements</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>ad133e730aa31a69ed836329bcd5cb75c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>ConditionalOStream</type>
+      <name>pcout</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>a802e5f5a63abb2a2a72107df0ff45626</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>TimerOutput</type>
+      <name>computing_timer</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>a1e51652b1255b31f99b516031371ab36</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>std::vector&lt; std::string &gt;</type>
+      <name>nodal_solution_names</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>af4c80ef68c9adb17e6b5a5ec1eeef15a</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>std::vector&lt; DataComponentInterpretation::DataComponentInterpretation &gt;</type>
+      <name>nodal_data_component_interpretation</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>a38e24c53ceb7569f3b84fee8f4451be3</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>unsigned int</type>
+      <name>numPostProcessedFields</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>a98b275b5df0a5062035354335502156d</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>std::vector&lt; std::string &gt;</type>
+      <name>postprocessed_solution_names</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>a64553656cfeaa3d258515e87fc151a0b</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>std::vector&lt; vectorType * &gt;</type>
+      <name>postFields</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>ab0cff5fa505c54fc4498144226b59cc1</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>std::vector&lt; vectorType * &gt;</type>
+      <name>postFieldsWithGhosts</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>a2590b5d16a6e48b629661e1c3c942ca3</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>std::vector&lt; vectorType * &gt;</type>
+      <name>postResidual</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>aa2230d527caf784761fd1129be3fbbbd</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>matrixType</type>
+      <name>massMatrix</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>a3bda50e358f266a234b8423d0af1d0ad</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>Table&lt; 4, double &gt;</type>
+      <name>postprocessValues</name>
+      <anchorfile>classelliptic_b_v_p.html</anchorfile>
+      <anchor>ada4c1c9a6a9f8b1b7f328182315dbd2c</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="class">
+    <name>enhancedStrain</name>
+    <filename>classenhanced_strain.html</filename>
+    <templarg>dim</templarg>
+    <member kind="function">
+      <type></type>
+      <name>enhancedStrain</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>affe6d50286a6908a0bc4206719b5295d</anchor>
+      <arglist>(const FiniteElement&lt; dim, dim &gt; &amp;fe, ConditionalOStream pcout_temp)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>~enhancedStrain</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>ae9f4a20cea1ac24a1069e7de8a19d39d</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>void</type>
+      <name>init_enh_dofs</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>a4d5d23647ee639809a88f8e04e285a29</anchor>
+      <arglist>(unsigned int n_local_elems)</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>void</type>
+      <name>reinit</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>a20d0003e072ac93e05f26164f7c59c1e</anchor>
+      <arglist>(Vector&lt; double &gt; Ulocal_temp, typename DoFHandler&lt; dim &gt;::active_cell_iterator elem)</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>Tensor&lt; 1, dim, double &gt;</type>
+      <name>tilde_grad</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>a7e3b0dc19a1d3b1903e3404e981b4689</anchor>
+      <arglist>(unsigned int function_no, unsigned int point_no)</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>Tensor&lt; 1, dim, double &gt;</type>
+      <name>bar_grad</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>a962d3387456a097a4c74f1ed6fcf0b35</anchor>
+      <arglist>(unsigned int function_no, unsigned int point_no, Tensor&lt; 1, dim, double &gt; alpha_4)</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>Tensor&lt; 1, dim, double &gt;</type>
+      <name>center_grad</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>a607aed31c5299370f6a1bab600ff6062</anchor>
+      <arglist>(unsigned int function_no)</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>void</type>
+      <name>get_F_enh</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>ac6965efe15b2196dbcbbdb18266ad622</anchor>
+      <arglist>(unsigned int q, FullMatrix&lt; double &gt; &amp;F)</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>void</type>
+      <name>create_block_mat_vec</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>a718102136507870c9d17b79c6072c9f9</anchor>
+      <arglist>(FullMatrix&lt; double &gt; F, FullMatrix&lt; double &gt; tau, Tensor&lt; 4, dim, double &gt; c_ep, unsigned int q)</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>void</type>
+      <name>updateAlpha</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>a4d8222a803f7d3ad9a31e578a04d8505</anchor>
+      <arglist>(Vector&lt; double &gt; dUlocal, unsigned int cellID)</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>unsigned int</type>
+      <name>enhanced_system_to_component_index</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>a1337c9342b96b68be4f1b9812becf144</anchor>
+      <arglist>(unsigned int enhanced_elem_dof)</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>unsigned int</type>
+      <name>enhanced_dofs_per_cell</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>aa02e2139891c4eb0ed410371da5da8e0</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function" protection="private">
+      <type>unsigned int</type>
+      <name>primary_enhanced_dofs_per_cell</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>a7f76c1ef0f9fe6ea58f2ad9f6aade1a8</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>Vector&lt; double &gt;</type>
+      <name>Ulocal</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>adaed3243fd7fc76cea19a17eb484771d</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>DoFHandler&lt; dim &gt;::active_cell_iterator</type>
+      <name>currentElem</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>a49004ea847dfd87a84d542b88abc21b4</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>QGauss&lt; dim &gt;</type>
+      <name>center_quad</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>a88ae44a7b86de6b41c6d599be7f717a6</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>QGauss&lt; dim &gt;</type>
+      <name>quad_formula</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>a9e48473116d6833cd28e880d54d8902c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>FEValues&lt; dim &gt;</type>
+      <name>fe_values</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>ade9b186d514bb30715c56d2c06a72e9d</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>FEValues&lt; dim &gt;</type>
+      <name>center_values</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>a2ec4e28b408ab8a6ee6148ec5ea2f6e0</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>Vector&lt; double &gt;</type>
+      <name>Alpha</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>a3c2378891f0d197ba518e464c43e8f75</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>std::vector&lt; staticCondensation&lt; 8 *dim, 4 *dim &gt; &gt;</type>
+      <name>staticCondensationData</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>af9b1e8ab20497b67d0696ebc934b14ca</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>FullMatrix&lt; double &gt;</type>
+      <name>Klocal</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>a32a5f3770cc9c4d146aaed0fc1e02c2a</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>FullMatrix&lt; double &gt;</type>
+      <name>Glocal</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>a47763f918ba6137937b26a7572668ee0</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>FullMatrix&lt; double &gt;</type>
+      <name>Mlocal</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>aef4d6e22a09f101d50e71b20a040df6c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>Vector&lt; double &gt;</type>
+      <name>Flocal</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>aded64e628f4d02339e78f68cd5656d1f</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>Vector&lt; double &gt;</type>
+      <name>Hlocal</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>aa8fca3657fb9934a4e9d2cb9016c0cd1</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>Tensor&lt; 2, dim &gt;</type>
+      <name>J_0</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>aacf032c0b017c618cedfc75788923cb2</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>Tensor&lt; 2, dim &gt;</type>
+      <name>J_0inv</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>ad9f85390c5fb8b924dde54b71d1aae2a</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>double</type>
+      <name>j_0</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>ade8933537a9760748c63b7883012247c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>bool</type>
+      <name>enh_dofs_initialized</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>aaadf110827d9541fd83774b5fa3ad489</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="private">
+      <type>ConditionalOStream *</type>
+      <name>pcout</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>a8656904bdd2520fc6405f8788db7f740</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="friend" protection="private">
+      <type>friend class</type>
+      <name>continuumPlasticity</name>
+      <anchorfile>classenhanced_strain.html</anchorfile>
+      <anchor>a8a53da65d638d9a570bc9da7ffcc342e</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
+    <name>materialProperties</name>
+    <filename>structmaterial_properties.html</filename>
+    <member kind="variable">
+      <type>double</type>
+      <name>lambda</name>
+      <anchorfile>structmaterial_properties.html</anchorfile>
+      <anchor>a51583abc44ecd0201a2988bcbcfec194</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>double</type>
+      <name>mu</name>
+      <anchorfile>structmaterial_properties.html</anchorfile>
+      <anchor>a10d0cc1c93e2b5458511960e904ba3fc</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::string</type>
+      <name>strainEnergyModel</name>
+      <anchorfile>structmaterial_properties.html</anchorfile>
+      <anchor>a1a5a6b6de451a808f0e867b7a478c854</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>double</type>
+      <name>tau_y</name>
+      <anchorfile>structmaterial_properties.html</anchorfile>
+      <anchor>a544011f37aff887d11ca4d6791299dd6</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>double</type>
+      <name>K</name>
+      <anchorfile>structmaterial_properties.html</anchorfile>
+      <anchor>ae78bb89dac2a33164dcfba34ac1b7075</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::string</type>
+      <name>yieldModel</name>
+      <anchorfile>structmaterial_properties.html</anchorfile>
+      <anchor>adf671382a3708473b6478434d1c042d0</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>unsigned int</type>
+      <name>n_slip_systems</name>
+      <anchorfile>structmaterial_properties.html</anchorfile>
+      <anchor>a3f8cb0ea08307eda70c533ffbfa144ef</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>double</type>
+      <name>q1</name>
+      <anchorfile>structmaterial_properties.html</anchorfile>
+      <anchor>a5b349d03660c5aa87e55866db78fee6f</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>double</type>
+      <name>q2</name>
+      <anchorfile>structmaterial_properties.html</anchorfile>
+      <anchor>a0ef6d54fa460d0c353baee04a03ed837</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>double</type>
+      <name>a</name>
+      <anchorfile>structmaterial_properties.html</anchorfile>
+      <anchor>a320f494a30780560f1950ca9b09ac923</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>double</type>
+      <name>h0</name>
+      <anchorfile>structmaterial_properties.html</anchorfile>
+      <anchor>a8fcf6e728aed034d85476b7db1900942</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>double</type>
+      <name>s_s</name>
+      <anchorfile>structmaterial_properties.html</anchorfile>
+      <anchor>a210bc4730929d938f83126a226f3c4a2</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>double</type>
+      <name>s0</name>
+      <anchorfile>structmaterial_properties.html</anchorfile>
+      <anchor>ab5e15b81927e0f8c04c3d4b603460968</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>double</type>
+      <name>C11</name>
+      <anchorfile>structmaterial_properties.html</anchorfile>
+      <anchor>a1693869a56a2e960160a0ac7f797baf7</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>double</type>
+      <name>C12</name>
+      <anchorfile>structmaterial_properties.html</anchorfile>
+      <anchor>a3a676bfd8358fb49abec1844f36bed3c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>double</type>
+      <name>C44</name>
+      <anchorfile>structmaterial_properties.html</anchorfile>
+      <anchor>ac2b61260580e449b94984b16ba47f259</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>FullMatrix&lt; double &gt;</type>
+      <name>m_alpha</name>
+      <anchorfile>structmaterial_properties.html</anchorfile>
+      <anchor>a657ed3fc5c437c431ef0b0d0d2c30a3d</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>FullMatrix&lt; double &gt;</type>
+      <name>n_alpha</name>
+      <anchorfile>structmaterial_properties.html</anchorfile>
+      <anchor>a40d805d274cf1d367cd6ad78dd2621b1</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="class">
+    <name>staticCondensation</name>
+    <filename>classstatic_condensation.html</filename>
+    <templarg>_dof1</templarg>
+    <templarg>_dof2</templarg>
+    <member kind="function">
+      <type></type>
+      <name>staticCondensation</name>
+      <anchorfile>classstatic_condensation.html</anchorfile>
+      <anchor>a0e2b4911e8227ecc9e48d3d480f84595</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>staticCondense</name>
+      <anchorfile>classstatic_condensation.html</anchorfile>
+      <anchor>afba1a2345bc8f9ffea78b53c7ecfeec4</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>recover</name>
+      <anchorfile>classstatic_condensation.html</anchorfile>
+      <anchor>a1d124e757326992a2cdc9f66c3f38688</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>reset</name>
+      <anchorfile>classstatic_condensation.html</anchorfile>
+      <anchor>ad3d56d1ecbd90acc3e8878547b4bb2d9</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="variable">
+      <type>int</type>
+      <name>dof1</name>
+      <anchorfile>classstatic_condensation.html</anchorfile>
+      <anchor>a8e365c774a4ff8bacc0752dac973adcf</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>int</type>
+      <name>dof2</name>
+      <anchorfile>classstatic_condensation.html</anchorfile>
+      <anchor>a01f36eb7b4f070f9147eac0d69f0caea</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>FullMatrix&lt; double &gt;</type>
+      <name>K</name>
+      <anchorfile>classstatic_condensation.html</anchorfile>
+      <anchor>a022d6112720fab8b2b620e2e1d46ec9e</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>FullMatrix&lt; double &gt;</type>
+      <name>G</name>
+      <anchorfile>classstatic_condensation.html</anchorfile>
+      <anchor>ade9e59ca2c46947cfc291f2e186edf81</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>FullMatrix&lt; double &gt;</type>
+      <name>M</name>
+      <anchorfile>classstatic_condensation.html</anchorfile>
+      <anchor>a057b66918e6d44565440d53c86ce65b5</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>FullMatrix&lt; double &gt;</type>
+      <name>K2</name>
+      <anchorfile>classstatic_condensation.html</anchorfile>
+      <anchor>a97681f92eaca62da128df4632ef68c14</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>Vector&lt; double &gt;</type>
+      <name>F</name>
+      <anchorfile>classstatic_condensation.html</anchorfile>
+      <anchor>ae1584635f6f214e318c0d7cdb0a9b77f</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>Vector&lt; double &gt;</type>
+      <name>H</name>
+      <anchorfile>classstatic_condensation.html</anchorfile>
+      <anchor>a7d7e1a20b8eb5762136c2d4da2e9ceae</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>Vector&lt; double &gt;</type>
+      <name>d</name>
+      <anchorfile>classstatic_condensation.html</anchorfile>
+      <anchor>aebee480db6daedca0b613fb30b2b7d3f</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>Vector&lt; double &gt;</type>
+      <name>s</name>
+      <anchorfile>classstatic_condensation.html</anchorfile>
+      <anchor>aac1eb45e054645cba58dd6439b251d95</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>Vector&lt; double &gt;</type>
+      <name>F2</name>
+      <anchorfile>classstatic_condensation.html</anchorfile>
+      <anchor>ab9338861c9434a342f0ceeb1ab184901</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="namespace">
+    <name>PRISMS</name>
+    <filename>namespace_p_r_i_s_m_s.html</filename>
+  </compound>
+  <compound kind="page">
+    <name>page1</name>
+    <title>Formulations</title>
+    <filename>page1</filename>
+  </compound>
+  <compound kind="page">
+    <name>page2</name>
+    <title>Examples</title>
+    <filename>page2</filename>
+  </compound>
+  <compound kind="page">
+    <name>index</name>
+    <title></title>
+    <filename>index</filename>
+  </compound>
+</tagfile>

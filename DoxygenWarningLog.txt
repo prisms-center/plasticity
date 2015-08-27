@@ -1,0 +1,41 @@
+<unknown>:1: warning: Detected potential recursive class relation between class parallel::distributed::Triangulation and base class Triangulation!
+
+<unknown>:1: warning: Detected potential recursive class relation between class parallel::distributed::Triangulation and base class Triangulation!
+
+<unknown>:1: warning: Detected potential recursive class relation between class parallel::distributed::Triangulation and base class Triangulation!
+
+<unknown>:1: warning: Detected potential recursive class relation between class parallel::distributed::Triangulation and base class Triangulation!
+
+<unknown>:1: warning: no matching file member found for 
+void cell_action(ITERATOR cell, DoFInfoBox< dim, DOFINFO > &dof_info, INFOBOX &info, const std_cxx11::function< void(DOFINFO &, typename INFOBOX::CellInfo &)> &cell_worker, const std_cxx11::function< void(DOFINFO &, typename INFOBOX::CellInfo &)> &boundary_worker, const std_cxx11::function< void(DOFINFO &, DOFINFO &, typename INFOBOX::CellInfo &, typename INFOBOX::CellInfo &)> &face_worker, const LoopControl &loop_control)
+Possible candidates:
+ 'void cell_action(ITERATOR cell, DoFInfoBox< dim, DOFINFO > &dof_info, INFOBOX &info, const std_cxx11::function< void(DOFINFO &, typename INFOBOX::CellInfo &)> &cell_worker, const std_cxx11::function< void(DOFINFO &, typename INFOBOX::CellInfo &)> &boundary_worker, const std_cxx11::function< void(DOFINFO &, DOFINFO &, typename INFOBOX::CellInfo &, typename INFOBOX::CellInfo &)> &face_worker, const LoopControl &loop_control)' at line 1 of file
+
+<unknown>:1: warning: no matching file member found for 
+void loop(ITERATOR begin, typename identity< ITERATOR >::type end, DOFINFO &dinfo, INFOBOX &info, const std_cxx11::function< void(DOFINFO &, typename INFOBOX::CellInfo &)> &cell_worker, const std_cxx11::function< void(DOFINFO &, typename INFOBOX::CellInfo &)> &boundary_worker, const std_cxx11::function< void(DOFINFO &, DOFINFO &, typename INFOBOX::CellInfo &, typename INFOBOX::CellInfo &)> &face_worker, ASSEMBLER &assembler, const LoopControl &lctrl=LoopControl())
+Possible candidates:
+ 'void loop(ITERATOR begin, typename identity< ITERATOR >::type end, DOFINFO &dinfo, INFOBOX &info, const std_cxx11::function< void(DOFINFO &, typename INFOBOX::CellInfo &)> &cell_worker, const std_cxx11::function< void(DOFINFO &, typename INFOBOX::CellInfo &)> &boundary_worker, const std_cxx11::function< void(DOFINFO &, DOFINFO &, typename INFOBOX::CellInfo &, typename INFOBOX::CellInfo &)> &face_worker, ASSEMBLER &assembler, const LoopControl &lctrl=LoopControl())' at line 1 of file
+
+<unknown>:1: warning: no matching file member found for 
+void integration_loop(ITERATOR begin, typename identity< ITERATOR >::type end, DoFInfo< dim, spacedim > &dof_info, IntegrationInfoBox< dim, spacedim > &box, const std_cxx11::function< void(DoFInfo< dim > &, IntegrationInfo< dim, spacedim > &)> &cell_worker, const std_cxx11::function< void(DoFInfo< dim > &, IntegrationInfo< dim, spacedim > &)> &boundary_worker, const std_cxx11::function< void(DoFInfo< dim > &, DoFInfo< dim > &, IntegrationInfo< dim, spacedim > &, IntegrationInfo< dim, spacedim > &)> &face_worker, ASSEMBLER &assembler, bool cells_first)
+Possible candidates:
+ 'void integration_loop(ITERATOR begin, typename identity< ITERATOR >::type end, DoFInfo< dim, spacedim > &dof_info, IntegrationInfoBox< dim, spacedim > &box, const std_cxx11::function< void(DoFInfo< dim > &, IntegrationInfo< dim, spacedim > &)> &cell_worker, const std_cxx11::function< void(DoFInfo< dim > &, IntegrationInfo< dim, spacedim > &)> &boundary_worker, const std_cxx11::function< void(DoFInfo< dim > &, DoFInfo< dim > &, IntegrationInfo< dim, spacedim > &, IntegrationInfo< dim, spacedim > &)> &face_worker, ASSEMBLER &assembler, bool cells_first) DEAL_II_DEPRECATED' at line 1 of file
+ 'void integration_loop(ITERATOR begin, typename identity< ITERATOR >::type end, DoFInfo< dim, spacedim > &dof_info, IntegrationInfoBox< dim, spacedim > &box, const LocalIntegrator< dim, spacedim > &integrator, ASSEMBLER &assembler, bool cells_first) DEAL_II_DEPRECATED' at line 1 of file
+ 'void integration_loop(ITERATOR begin, typename identity< ITERATOR >::type end, DoFInfo< dim, spacedim > &dof_info, IntegrationInfoBox< dim, spacedim > &box, const LocalIntegrator< dim, spacedim > &integrator, ASSEMBLER &assembler, const LoopControl &lctrl=LoopControl())' at line 1 of file
+
+<unknown>:1: warning: no matching file member found for 
+void integration_loop(ITERATOR begin, typename identity< ITERATOR >::type end, DoFInfo< dim, spacedim > &dof_info, IntegrationInfoBox< dim, spacedim > &box, const LocalIntegrator< dim, spacedim > &integrator, ASSEMBLER &assembler, bool cells_first)
+Possible candidates:
+ 'void integration_loop(ITERATOR begin, typename identity< ITERATOR >::type end, DoFInfo< dim, spacedim > &dof_info, IntegrationInfoBox< dim, spacedim > &box, const std_cxx11::function< void(DoFInfo< dim > &, IntegrationInfo< dim, spacedim > &)> &cell_worker, const std_cxx11::function< void(DoFInfo< dim > &, IntegrationInfo< dim, spacedim > &)> &boundary_worker, const std_cxx11::function< void(DoFInfo< dim > &, DoFInfo< dim > &, IntegrationInfo< dim, spacedim > &, IntegrationInfo< dim, spacedim > &)> &face_worker, ASSEMBLER &assembler, bool cells_first) DEAL_II_DEPRECATED' at line 1 of file
+ 'void integration_loop(ITERATOR begin, typename identity< ITERATOR >::type end, DoFInfo< dim, spacedim > &dof_info, IntegrationInfoBox< dim, spacedim > &box, const LocalIntegrator< dim, spacedim > &integrator, ASSEMBLER &assembler, bool cells_first) DEAL_II_DEPRECATED' at line 1 of file
+ 'void integration_loop(ITERATOR begin, typename identity< ITERATOR >::type end, DoFInfo< dim, spacedim > &dof_info, IntegrationInfoBox< dim, spacedim > &box, const LocalIntegrator< dim, spacedim > &integrator, ASSEMBLER &assembler, const LoopControl &lctrl=LoopControl())' at line 1 of file
+
+/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/materialModels/continuumPlasticity/models/PLibrary.cc:23: warning: documented symbol `void PRISMS::PLibrary::checkout' was not declared or defined.
+/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/materialModels/continuumPlasticity/models/PLibrary.cc:244: warning: documented symbol `void PRISMS::PLibrary::checkout' was not declared or defined.
+/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/materialModels/continuumPlasticity/models/PLibrary.cc:466: warning: documented symbol `void PRISMS::PLibrary::checkout' was not declared or defined.
+/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/materialModels/continuumPlasticity/models/PLibrary.cc:477: warning: documented symbol `void PRISMS::PLibrary::checkout' was not declared or defined.
+/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/materialModels/continuumPlasticity/models/PLibrary.cc:492: warning: documented symbol `void PRISMS::PLibrary::checkout' was not declared or defined.
+/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/materialModels/continuumPlasticity/models/PLibrary.cc:712: warning: documented symbol `void PRISMS::PLibrary::checkout' was not declared or defined.
+/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/materialModels/continuumPlasticity/models/PLibrary.cc:933: warning: documented symbol `void PRISMS::PLibrary::checkout' was not declared or defined.
+/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/src/materialModels/continuumPlasticity/models/PLibrary.cc:943: warning: documented symbol `void PRISMS::PLibrary::checkout' was not declared or defined.
+/Users/rudraa/Google Drive/workspace/projects/materialScience/prismsReleases/plasticity/README.md:13: warning: explicit link request to 'DE' could not be resolved
