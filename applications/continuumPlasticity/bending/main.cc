@@ -5,7 +5,7 @@
 
 #define feOrder   1
 #define quadOrder 2 
-#define meshRefineFactor 4
+#define meshRefineFactor 3
 #define writeOutput true
 #define linearSolverType PETScWrappers::SolverCG
 #define totalNumIncrements 100

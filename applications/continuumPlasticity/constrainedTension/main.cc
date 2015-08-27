@@ -8,7 +8,7 @@
 #define meshRefineFactor 3
 #define writeOutput true
 #define linearSolverType PETScWrappers::SolverCG
-#define totalNumIncrements 200
+#define totalNumIncrements 400
 #define maxLinearSolverIterations 5000
 #define relLinearSolverTolerance  1.0e-12
 #define maxNonLinearIterations 30
@@ -33,11 +33,19 @@ void continuumPlasticity<dim>::mesh(){
   double x_max = 5., y_max = 1., z_max = 1.;
   Point<dim,double> min(0.,0.,0.), max(x_max,y_max,z_max);
 
-  //Define the mesh refinement
-  std::vector<unsigned int> numberOfElements(dim,std::pow(2,meshRefineFactor));
-  numberOfElements[0] *= 5;
+  //Define the mesh refinement - more refined near constrained end
+  unsigned int meshSize = std::pow(2.,meshRefineFactor);
+  double stepSize = 1./std::pow(2.,meshRefineFactor);
+  std::vector< std::vector<double> > stepSizes(dim,std::vector<double>(meshSize,stepSize));
+  stepSizes[0].resize(7*meshSize,stepSize);
+  for(unsigned int i=0; i<2*meshSize; i++){
+    stepSizes[0][i] = stepSize/4.;
+  }
+  for(unsigned int i=2*meshSize; i<3*meshSize; i++){
+    stepSizes[0][i] = stepSize/2.;
+  }
 
-  GridGenerator::subdivided_hyper_rectangle (this->triangulation, numberOfElements, min, max);
+  GridGenerator::subdivided_hyper_rectangle (this->triangulation, stepSizes, min, max,false);
 
   //Output image of the mesh in eps format                                                                                      
   if ((this->triangulation.n_global_active_cells()<1000) and (Utilities::MPI::n_mpi_processes(this->mpi_communicator)==1)){
@@ -83,7 +91,7 @@ public:
   BCFunction(): Function<dim> (dim){}
   void vector_value (const Point<dim>   &p, Vector<double>   &values) const{
     Assert (values.size() == dim, ExcDimensionMismatch (values.size(), dim));    
-    values[0]=0.5/totalNumIncrements; //total displacement along X-Direction divide by total increments
+    values[0]=0.1/totalNumIncrements; //total displacement along X-Direction divide by total increments
   }
 };
 

@@ -14,8 +14,8 @@
            "lambda1", 
            "lambda2", 
            "lambda3", 
-	   "K",
-	   "alpha"
+					 "K",
+					 "alpha"
        ]
     },
     "yield_function": {
