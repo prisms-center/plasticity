@@ -102,6 +102,7 @@ void continuumPlasticity<dim>::applyDirichletBCs(){
   std::vector<bool> mechanicsBoundary_Z1 (dim, true);
   std::vector<bool> mechanicsBoundary_Z2 (dim, true);
   std::vector<bool> mechanicsBoundary_Z3 (dim, true); mechanicsBoundary_Z3[0]=false;
+  //Apply additional displacement on each new increment
   if (this->currentIteration==0) {
     VectorTools:: interpolate_boundary_values (this->dofHandler, 
 					       2, 
@@ -109,6 +110,7 @@ void continuumPlasticity<dim>::applyDirichletBCs(){
 					       this->constraints, 
 					       mechanicsBoundary_Z2);
   }
+  //Don't apply additional displacement for simply a new solver iteration
   else {
     VectorTools:: interpolate_boundary_values (this->dofHandler, 
 					       2, 
@@ -116,11 +118,13 @@ void continuumPlasticity<dim>::applyDirichletBCs(){
 					       this->constraints, 
 					       mechanicsBoundary_Z2);
   }
+  //Fix the bottom surface
   VectorTools:: interpolate_boundary_values (this->dofHandler, 
 					     1, 
 					     ZeroFunction<dim>(dim), 
 					     this->constraints, 
 					     mechanicsBoundary_Z1);
+  //Prevent all displacement in the y or z directions on the sides.
   VectorTools:: interpolate_boundary_values (this->dofHandler, 
 					     3, 
 					     ZeroFunction<dim>(dim), 

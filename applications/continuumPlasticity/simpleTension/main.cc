@@ -103,7 +103,7 @@ void continuumPlasticity<dim>::applyDirichletBCs(){
   std::vector<bool> mechanicsBoundary_Z2 (dim, false); mechanicsBoundary_Z2[0]=true;
   std::vector<bool> mechanicsBoundary_Z3 (dim, false); mechanicsBoundary_Z3[1]=true;
   std::vector<bool> mechanicsBoundary_Z4 (dim, false); mechanicsBoundary_Z4[2]=true;
-  //u1 applied on X1=1
+  //u1 applied on X1=1, applied over each increment
   if (this->currentIteration==0) {
     VectorTools:: interpolate_boundary_values (this->dofHandler,
 					       2, 
@@ -111,6 +111,7 @@ void continuumPlasticity<dim>::applyDirichletBCs(){
 					       this->constraints,
 					       mechanicsBoundary_Z2);
   }
+  //Don't apply further displacement simply for a new sovler iteration
   else {
     VectorTools:: interpolate_boundary_values (this->dofHandler,
 					       2, 

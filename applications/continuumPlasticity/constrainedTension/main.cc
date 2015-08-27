@@ -117,6 +117,7 @@ void continuumPlasticity<dim>::applyDirichletBCs(){
 					      this->constraints,
 					      xComponenent);
   }
+  //Don't apply further displacement simply for a new solver iteration.
   else{
     VectorTools::interpolate_boundary_values (this->dofHandler,
 					      2, 
