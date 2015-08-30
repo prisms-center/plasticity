@@ -18,7 +18,7 @@ using namespace std;
 #define stopOnConvergenceFailure false
 
 //dealIIheaders
-#include "../../../../src/materialModels/crystalPlasticity/fcc/crystalPlasticityFCC.cc"
+#include "../../../../src/materialModels/crystalPlasticity/bcc/crystalPlasticityBCC.cc"
 
 //overload mesh() method to generate the required polycrystal geometry
 template <int dim>

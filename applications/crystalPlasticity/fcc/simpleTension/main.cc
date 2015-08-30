@@ -18,7 +18,7 @@ using namespace std;
 #define stopOnConvergenceFailure false
 
 //dealIIheaders
-#include "../../../../src/materialModels/crystalPlasticity/crystalPlasticity.cc"
+#include "../../../../src/materialModels/crystalPlasticity/fcc/crystalPlasticityFCC.cc"
 
 //overload mesh() method to generate the required polycrystal geometry
 template <int dim>
@@ -178,7 +178,7 @@ int main (int argc, char **argv)
 
 		problem.properties.n_slip_systems=n_slip_systems;
 		//Latent Hardening Ratio
-		problem.properties.q1=1.4;
+		problem.properties.q1=1.01;
 		problem.properties.q2=1.0;
 		//Slip Hardening Parameters
 		problem.properties.a=2.25;

@@ -37,27 +37,7 @@ Error! The deal.II library found at ${DEAL_II_PATH} was not configured with
 One or all of these are OFF in your installation but are required for this tutorial step."
     )
 ENDIF()
+
 DEAL_II_INITIALIZE_CACHED_VARIABLES()
-
-# Define the PFunction include path as an environment variable: PFUNCTION_INCLUDE_DIRS = path/to/IntegrationTools/include/PFunction
-
-#INCLUDE_DIRECTORIES(${DEAL_II_INCLUDE_DIRS} $ENV{PFUNCTION_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${DEAL_II_INCLUDE_DIRS} ${CMAKE_BINARY_DIR}/../../../utils)
-SET(CMAKE_BUILD_TYPE "Debug" CACHE STRING
-	"Choose the type of build, options are: Debug, Release"
-	)
-
 PROJECT(${TARGET})
-
-ADD_LIBRARY(PLibrary SHARED ${CMAKE_BINARY_DIR}/../../../src/materialModels/continuumPlasticity/models/PLibrary.cc)
-DEAL_II_SETUP_TARGET(PLibrary)
-
-ADD_EXECUTABLE(${TARGET} ${TARGET}.cc)
-DEAL_II_SETUP_TARGET(${TARGET})
-
-TARGET_LINK_LIBRARIES(${TARGET} ${DEAL_II_LIBRARIES} PLibrary)
-
-ADD_CUSTOM_TARGET(run
-  COMMAND ${TARGET} -pc_type jacobi
-  COMMENT "Run ${TARGET} with ${CMAKE_BUILD_TYPE} configuration"
-  )
+DEAL_II_INVOKE_AUTOPILOT()

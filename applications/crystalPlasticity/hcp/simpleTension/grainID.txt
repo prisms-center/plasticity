@@ -1,0 +1,28 @@
+**Total header lines = 12
+**
+**AC Lewis, AB Geltmacher, Naval Research Lab, 2004-2006
+**alexis.lewis@nrl.navy.mil
+**
+**Grain ID File for AL6XN Superaustenitic Stainless Steel
+**3D Volume has dimensions [119 x 112 x 79] voxels
+**Data arranged in a 2D array of 119 x 8,848 integer values
+**Rows 1-119 represent slice 1, 120-238 represent slice 2, etc.
+**Slice 1 is the bottom slice (z=0)
+**Calibration (microns per voxel) is [3.6, 3.6, 3.3]
+**
+1	9	33
+2	10	34
+3	11	35
+4	12	36
+5	13	37
+6	14	38	
+7	15	39
+8	16	40
+17	18	41
+19	20	42
+21 	22	43
+23	24	44
+25	26	45
+27	28	46
+29	30	47
+31	32	48
