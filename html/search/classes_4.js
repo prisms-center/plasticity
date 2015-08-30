@@ -4,7 +4,6 @@ var searchData=
   ['edgeorientation',['EdgeOrientation',['http://www.dealii.org/8.2.1/doxygen/deal.II/structinternal_1_1GridReordering3d_1_1EdgeOrientation.html',1,'internal::GridReordering3d']]],
   ['eigeninverse',['EigenInverse',['http://www.dealii.org/8.2.1/doxygen/deal.II/classEigenInverse.html',1,'']]],
   ['eigenpower',['EigenPower',['http://www.dealii.org/8.2.1/doxygen/deal.II/classEigenPower.html',1,'']]],
-  ['elasticity',['elasticity',['../classelasticity.html',1,'']]],
   ['ellipticbvp',['ellipticBVP',['../classelliptic_b_v_p.html',1,'']]],
   ['embeddedexplicitrungekutta',['EmbeddedExplicitRungeKutta',['http://www.dealii.org/8.2.1/doxygen/deal.II/classTimeStepping_1_1EmbeddedExplicitRungeKutta.html',1,'TimeStepping']]],
   ['enhancedstrain',['enhancedStrain',['../classenhanced_strain.html',1,'']]],

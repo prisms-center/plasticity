@@ -3,6 +3,8 @@ var searchData=
   ['c',['c',['http://www.dealii.org/8.2.1/doxygen/deal.II/classTimeStepping_1_1RungeKutta.html#a629adc49b0445e1a01296e7bac31d25b',1,'TimeStepping::EmbeddedExplicitRungeKutta::c()'],['../classcontinuum_plasticity.html#a1bae1fe72ae4fa2af8a0f06c09869bd1',1,'continuumPlasticity::c()'],['http://www.dealii.org/8.2.1/doxygen/deal.II/classSchurMatrix.html#aad4832ccc82b03c0b89947ece6e8df44',1,'SchurMatrix::C()']]],
   ['c11',['C11',['../structmaterial_properties.html#a1693869a56a2e960160a0ac7f797baf7',1,'materialProperties']]],
   ['c12',['C12',['../structmaterial_properties.html#a3a676bfd8358fb49abec1844f36bed3c',1,'materialProperties']]],
+  ['c13',['C13',['../structmaterial_properties.html#a1fe4e50d3d335fe5c009c7c851b560ca',1,'materialProperties']]],
+  ['c33',['C33',['../structmaterial_properties.html#a4581c659237ed7f5d1d00b80eb84e498',1,'materialProperties']]],
   ['c44',['C44',['../structmaterial_properties.html#ac2b61260580e449b94984b16ba47f259',1,'materialProperties']]],
   ['cache',['cache',['http://www.dealii.org/8.2.1/doxygen/deal.II/structCompressedSparsityPattern_1_1Line.html#a334975c599cae2104dec56c8ab45e0c1',1,'CompressedSparsityPattern::Line']]],
   ['cache_5fentries',['cache_entries',['http://www.dealii.org/8.2.1/doxygen/deal.II/structCompressedSparsityPattern_1_1Line.html#ae547d623b614c50806ad84764e38199e',1,'CompressedSparsityPattern::Line']]],

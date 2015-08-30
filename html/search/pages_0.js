@@ -30,5 +30,7 @@ var searchData=
   ['changes_20between_20version_208_2e0_20and_208_2e1',['Changes between Version 8.0 and 8.1',['http://www.dealii.org/8.2.1/doxygen/deal.II/changes_between_8_0_and_8_1.html',1,'']]],
   ['changes_20between_20version_208_2e1_20and_208_2e2',['Changes between Version 8.1 and 8.2',['http://www.dealii.org/8.2.1/doxygen/deal.II/changes_between_8_1_and_8_2.html',1,'']]],
   ['changes_20between_20version_208_2e2_2e0_20and_208_2e2_2e1',['Changes between Version 8.2.0 and 8.2.1',['http://www.dealii.org/8.2.1/doxygen/deal.II/changes_between_8_2_0_and_8_2_1.html',1,'']]],
-  ['coding_20conventions_20used_20throughout_20deal_2eii',['Coding conventions used throughout deal.II',['http://www.dealii.org/8.2.1/doxygen/deal.II/CodingConventions.html',1,'']]]
+  ['coding_20conventions_20used_20throughout_20deal_2eii',['Coding conventions used throughout deal.II',['http://www.dealii.org/8.2.1/doxygen/deal.II/CodingConventions.html',1,'']]],
+  ['crystal_20plasticity_20examples',['Crystal Plasticity Examples',['../page2.html',1,'']]],
+  ['continuum_20plasticity_20examples',['Continuum Plasticity Examples',['../page3.html',1,'']]]
 ];

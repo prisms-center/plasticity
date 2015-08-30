@@ -17,7 +17,7 @@ var searchData=
   ['order',['order',['http://www.dealii.org/8.2.1/doxygen/deal.II/classRelaxationBlock_1_1AdditionalData.html#a544a1a3cba46c03cfcf81f13669db8b8',1,'RelaxationBlock::AdditionalData']]],
   ['orientation',['orientation',['http://www.dealii.org/8.2.1/doxygen/deal.II/structGridTools_1_1PeriodicFacePair.html#a07a75154ec981d869a654e40df136714',1,'GridTools::PeriodicFacePair::orientation()'],['http://www.dealii.org/8.2.1/doxygen/deal.II/structinternal_1_1GridReordering3d_1_1EdgeOrientation.html#aa470f4bd7b9957926cef847709fe9ff3',1,'internal::GridReordering3d::EdgeOrientation::orientation()']]],
   ['orientation_5fflag',['orientation_flag',['http://www.dealii.org/8.2.1/doxygen/deal.II/structinternal_1_1GridReordering3d_1_1Edge.html#af479be541292af84ab61837f5e9a302d',1,'internal::GridReordering3d::Edge']]],
-  ['orientations',['orientations',['../classcrystal_plasticity.html#a79b7c58fbb249f72dbaa115f1950b9e0',1,'crystalPlasticity']]],
+  ['orientations',['orientations',['../classcrystal_plasticity.html#af9ea91ef74f3740ef8208e2f1ac32c05',1,'crystalPlasticity']]],
   ['original_5fcell_5fdata',['original_cell_data',['http://www.dealii.org/8.2.1/doxygen/deal.II/classinternal_1_1GridReordering2d_1_1MQuad.html#a1ae740aeab0cb8e114b306ce40b3558d',1,'internal::GridReordering2d::MQuad']]],
   ['os',['os',['http://www.dealii.org/8.2.1/doxygen/deal.II/classMeshWorker_1_1Assembler_1_1GnuplotPatch.html#a80f1c50cf4bdbd75ebc8cc0d6ead4af5',1,'MeshWorker::Assembler::GnuplotPatch']]],
   ['out',['out',['http://www.dealii.org/8.2.1/doxygen/deal.II/classDoFPrintSolverStep.html#a2e374d6bcccf36de25239e56e2c33bfc',1,'DoFPrintSolverStep']]],
