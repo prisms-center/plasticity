@@ -17,8 +17,8 @@ using namespace std;
 #define relNonLinearTolerance 1.0e-10
 #define stopOnConvergenceFailure false
 
-//dealIIheaders
-#include "../../../../src/materialModels/crystalPlasticity/fcc/crystalPlasticityFCC.cc"
+//FCC model header
+#include "../../../../src/materialModels/crystalPlasticity/fcc/model.h"
 
 //overload mesh() method to generate the required polycrystal geometry
 template <int dim>

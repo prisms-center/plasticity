@@ -40,7 +40,7 @@ template <int dim>
 void crystalOrientationsIO<dim>::writeOutputOrientations(){
   pcout << "writing orientations data to file\n";
   std::string fileName("orientationsOutputProc");
-  fileName += boost::to_string(Utilities::MPI::this_mpi_process(MPI_COMM_WORLD));
+  fileName += std::to_string(Utilities::MPI::this_mpi_process(MPI_COMM_WORLD));
   std::ofstream file(fileName.c_str());
   char buffer[200];
   if (file.is_open()){
@@ -66,7 +66,7 @@ void crystalOrientationsIO<dim>::writeOutputOrientations(){
       std::ofstream file2(fileName2.c_str());
       for (unsigned int proc=0; proc<Utilities::MPI::n_mpi_processes(MPI_COMM_WORLD); proc++){
 	std::string fileName3("orientationsOutputProc");
-	fileName3 += boost::to_string(proc);
+	fileName3 += std::to_string(proc);
 	std::ofstream file3(fileName3.c_str(), std::ofstream::in);
 	file2 << file3.rdbuf();
 	//delete file from processor proc
