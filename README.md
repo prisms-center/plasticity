@@ -1,9 +1,9 @@
-What is PRISMS-Plasticity?
+<B>What is %PRISMS Plasticity?</B>
 
   It is a Finite Element Method (FEM) code for solving boundary value 
   problems arising in Continuum Plasticity and Crystal Plasticity. 
   It is build on top of the deal.II open source finite element 
-  library (http://www.dealii.org)
+  library [http://www.dealii.org]
   
   This code is developed by the PRedictive Integrated Structural
   Materials Science (PRISMS) Center at University of Michigan which is
@@ -11,7 +11,7 @@ What is PRISMS-Plasticity?
   Sciences, Division of Materials Sciences and Engineering under Award
   #DE-SC0008637
 
-Installation and Use:
+<B>Installation and Use:</B>
 
   1) Configure, compile and install the deal.II library with the 
      following configuration flags. Dependencies are MPI, p4est,
@@ -69,7 +69,7 @@ Installation and Use:
   1. VisIt (https://wci.llnl.gov/simulation/computer-codes/visit/downloads)
   2. Paraview (http://www.paraview.org/download/)
 
-Getting started:
+<B>Getting started:</B>
 
   Examples of various boundary value problems are located under the 
   applications/ folder. Easiest way to get started on the code is to 
@@ -94,22 +94,22 @@ Getting started:
   utils/: IntegrationTools (developed by the PRISMS center and available at
   https://github.com/prisms-center/IntegrationTools) and json headers 
 
-Documentation:
+<B>Documentation:</B>
 
   Under development. 
   Details of material model formulation are available under src/materialmodels
   e.g. src/materialModels/crystalPlasticity/CPFEM.pdf   
  	
-License:
+<B>License:</B>
 
   GNU Lesser General Public License (LGPL). Please see the file
   LICENSE for details.
 
-Mailing List:
+<B>Mailing List:</B>
   
   PRISMS.plasticity@umich.edu
 
-Further information, questions, issues and bugs:
+<B>Further information, questions, issues and bugs:</B>
 
   Contact the plasticity mailing list at PRISMS.plasticity@umich.edu  
 

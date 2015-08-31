@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['g',['G',['../classstatic_condensation.html#ade9e59ca2c46947cfc291f2e186edf81',1,'staticCondensation']]],
+  ['g',['G',['../classstatic_condensation.html#a2a40b84572fe1ddcc4aea362eebd343c',1,'staticCondensation']]],
   ['generalized_5fface_5fsupport_5fpoints',['generalized_face_support_points',['http://www.dealii.org/8.2.1/doxygen/deal.II/singletonFiniteElement.html#a3b614baaf527c796af876c8807f5d7d7',1,'FE_ABF::generalized_face_support_points()'],['http://www.dealii.org/8.2.1/doxygen/deal.II/singletonFiniteElement.html#a3b614baaf527c796af876c8807f5d7d7',1,'FE_FaceP&lt; 1, spacedim &gt;::generalized_face_support_points()']]],
   ['generalized_5fsupport_5fpoints',['generalized_support_points',['http://www.dealii.org/8.2.1/doxygen/deal.II/singletonFiniteElement.html#ae2531d00b5c9e77e1e64981864c3b8cc',1,'FE_ABF::generalized_support_points()'],['http://www.dealii.org/8.2.1/doxygen/deal.II/singletonFiniteElement.html#ae2531d00b5c9e77e1e64981864c3b8cc',1,'FE_FaceP&lt; 1, spacedim &gt;::generalized_support_points()']]],
   ['ghost_5fcells',['ghost_cells',['http://www.dealii.org/8.2.1/doxygen/deal.II/classMeshWorker_1_1LoopControl.html#a9856680041f618409438f1a182959c50',1,'MeshWorker::LoopControl']]],
@@ -11,10 +11,10 @@ var searchData=
   ['global_5fdata',['global_data',['http://www.dealii.org/8.2.1/doxygen/deal.II/classMeshWorker_1_1IntegrationInfo.html#a96f4bcdfb14e776d437333015cee9b5c',1,'MeshWorker::IntegrationInfo']]],
   ['global_5findex',['global_index',['http://www.dealii.org/8.2.1/doxygen/deal.II/classinternal_1_1BlockVectorIterators_1_1Iterator.html#aa589e4a07ea65c460121e4fddd9ded6e',1,'internal::BlockVectorIterators::Iterator']]],
   ['global_5fsize',['global_size',['http://www.dealii.org/8.2.1/doxygen/deal.II/classUtilities_1_1MPI_1_1Partitioner.html#af97fae29c171f2ce09141305eec3fdfb',1,'Utilities::MPI::Partitioner']]],
-  ['global_5fstrain',['global_strain',['../classcrystal_plasticity.html#a4274ff9dcb0f945e36a0f0d2f0792d7f',1,'crystalPlasticity']]],
-  ['global_5fstress',['global_stress',['../classcrystal_plasticity.html#a3a5d68e84891570406415a2045227906',1,'crystalPlasticity']]],
+  ['global_5fstrain',['global_strain',['../classcrystal_plasticity.html#a26e36e726e31386fcdd0e38fd0f34883',1,'crystalPlasticity']]],
+  ['global_5fstress',['global_stress',['../classcrystal_plasticity.html#a3f96c417570db5150f2751b500574113',1,'crystalPlasticity']]],
   ['global_5fvertex_5findex',['global_vertex_index',['http://www.dealii.org/8.2.1/doxygen/deal.II/classTriaAccessor_3_010_00_011_00_01spacedim_01_4.html#a21c20f6143a24e5f578e9413f525b6b3',1,'DoFAccessor&lt; 0, DH&lt; 1, spacedim &gt;, level_dof_access &gt;']]],
-  ['glocal',['Glocal',['../classenhanced_strain.html#a47763f918ba6137937b26a7572668ee0',1,'enhancedStrain']]],
+  ['glocal',['Glocal',['../classenhanced_strain.html#af54a8d5baa958b2ccf49b5952bee755e',1,'enhancedStrain']]],
   ['gmres_5fdata',['gmres_data',['http://www.dealii.org/8.2.1/doxygen/deal.II/classSolverSelector.html#a648764fbad24f1197c7a356167cb2a80',1,'SolverSelector']]],
   ['gmres_5frestart_5fparameter',['gmres_restart_parameter',['http://www.dealii.org/8.2.1/doxygen/deal.II/structTrilinosWrappers_1_1SolverBase_1_1AdditionalData.html#a05567d5e6ac16d6cd84257415124301e',1,'TrilinosWrappers::SolverBase::AdditionalData']]],
   ['gmv_5fflags',['gmv_flags',['http://www.dealii.org/8.2.1/doxygen/deal.II/classDataOutInterface.html#a62aad8dd9acbe017b15757d419d356ae',1,'DataOutInterface']]],

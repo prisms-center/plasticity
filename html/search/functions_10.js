@@ -19,7 +19,7 @@ var searchData=
   ['quadrature_5fvalues',['quadrature_values',['http://www.dealii.org/8.2.1/doxygen/deal.II/classMeshWorker_1_1LocalResults.html#ab8b9a7cc72c96a5f331492b19d9c0c0a',1,'MeshWorker::DoFInfo']]],
   ['quadratureselector',['QuadratureSelector',['http://www.dealii.org/8.2.1/doxygen/deal.II/classQuadratureSelector.html#a90221859f16b00e0d9d831b0a76611c8',1,'QuadratureSelector']]],
   ['quarter_5fhyper_5fshell',['quarter_hyper_shell',['http://www.dealii.org/8.2.1/doxygen/deal.II/namespaceGridGenerator.html#acd7c51b0e8032db65db9a5ff73ccca50',1,'GridGenerator']]],
-  ['quat2rod',['quat2rod',['../classcrystal_plasticity.html#aa51102601c4172656016d53e1f4cc931',1,'crystalPlasticity']]],
-  ['quatproduct',['quatproduct',['../classcrystal_plasticity.html#a200b182459574b4cecc3ab8ac4c898e2',1,'crystalPlasticity']]],
+  ['quat2rod',['quat2rod',['../classcrystal_plasticity.html#a037699dd4d8a82e084de068ab35b5d66',1,'crystalPlasticity']]],
+  ['quatproduct',['quatproduct',['../classcrystal_plasticity.html#a6532fb79c5f442184a94e4f4758b13e4',1,'crystalPlasticity']]],
   ['queue_5ftask',['queue_task',['http://www.dealii.org/8.2.1/doxygen/deal.II/structThreads_1_1internal_1_1TaskDescriptor.html#aca0f80e7c74b3de34fcbb2b01356e7da',1,'Threads::internal::TaskDescriptor']]]
 ];
