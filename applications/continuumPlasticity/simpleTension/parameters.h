@@ -1,0 +1,19 @@
+#define feOrder   1
+#define quadOrder 2 
+#define meshRefineFactor 3
+#define writeOutput true
+#define linearSolverType PETScWrappers::SolverCG
+#define totalNumIncrements 50
+#define maxLinearSolverIterations 5000
+#define relLinearSolverTolerance  1.0e-12
+#define maxNonLinearIterations 30
+#define absNonLinearTolerance 1.0e-15
+#define relNonLinearTolerance 1.0e-10
+#define stopOnConvergenceFailure true
+
+#define lame_lambda 100.6582e9
+#define lame_mu 45.6473e9
+#define yield_stress 33.014025e6
+#define strain_hardening 2.0259e9
+#define strain_energy_function "quadlog"
+#define yield_function "von_mises"
