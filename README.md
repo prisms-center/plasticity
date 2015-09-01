@@ -13,31 +13,27 @@
 
 <B>Installation and Use:</B>
 
-  1) Configure, compile and install the deal.II library with the 
+  1) Install deal.II (version 8.2.1)<br>
+     Download Binaries (OSX and Linux) or  Virtual Machine (VMI) from https://www.dealii.org/download.html <br>
+     (OR) <br>
+     Configure, compile and install the deal.II library with the 
      following configuration flags. Dependencies are MPI, p4est,
      PETSc libraries.<br>
-     -DDEAL_II_WITH_MPI=ON<br>  
-     -DDEAL_II_WITH_LAPACK=ON
-     -DDEAL_II_WITH_P4EST=ON
-     -DDEAL_II_WITH_PETSC=ON
+     -DDEAL_II_WITH_MPI=ON, -DDEAL_II_WITH_LAPACK=ON, -DDEAL_II_WITH_P4EST=ON, -DDEAL_II_WITH_PETSC=ON
 
-     Download: http://www.dealii.org/download.html
-     Installation instructions: http://www.dealii.org/8.1.0/readme.html
-     Installation instructions for external packages (P4EST, PETSC, 
-     TRILINOS): https://www.dealii.org/developer/external-libs/
+     Download: http://www.dealii.org/download.html <br>
+     Installation instructions: http://www.dealii.org/8.2.1/readme.html <br>
+     Installation instructions for external packages (P4EST, PETSC): https://www.dealii.org/developer/external-libs/
 
   2) Fork the repo https://github.com/prisms-center/plasticity on
   GitHub (How to fork: https://help.github.com/articles/fork-a-repo/)
-  and clone the plasticity repository using your GitHub username:
-  $ git clone git@github.com:username/plasticity.git 
-  (OR)
-  $ git clone https://github.com/username/plasticity.git
-  and
-  $ cd plasticity  
-  $ git checkout master
-  [Note: plasticity is currently a private repository on GitHub and
-  hence you need to be authorised to access the repository. Contact
-  the developers/mailing-list to request access.]
+  and clone the plasticity repository using your GitHub username:<br>
+  $ git clone git@github.com:username/plasticity.git <br>
+  (OR) <br>
+  $ git clone https://github.com/username/plasticity.git <br>
+  and <br>
+  $ cd plasticity <br>
+  $ git checkout master <br>
    
   3) Running plasticity applications, for example simple tension
   boundary value problem with continuum plasticity material model: 
