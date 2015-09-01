@@ -1,4 +1,4 @@
-<B>What is %PRISMS Plasticity?</B>
+<B>What is PRISMS Plasticity?</B>
 
   It is a Finite Element Method (FEM) code for solving boundary value 
   problems arising in Continuum Plasticity and Crystal Plasticity. 
@@ -6,21 +6,20 @@
   library [http://www.dealii.org]
   
   This code is developed by the PRedictive Integrated Structural
-  Materials Science (PRISMS) Center at University of Michigan which is
-  supported by the U.S. Department of Energy, Office of Basic Energy
-  Sciences, Division of Materials Sciences and Engineering under Award
-  #DE-SC0008637
+  Materials Science (PRISMS) Center [http://www.prisms-center.org/]
+  at University of Michigan which is supported by the U.S. Department 
+  of Energy (DOE), Office of Basic Energy Sciences, Division of Materials Sciences 
+  and Engineering under Award #DE-SC0008637
 
 <B>Installation and Use:</B>
 
   1) Configure, compile and install the deal.II library with the 
      following configuration flags. Dependencies are MPI, p4est,
-     PETSc and Trilinos libraries.
-     -DDEAL_II_WITH_MPI=ON  
+     PETSc libraries.<br>
+     -DDEAL_II_WITH_MPI=ON<br>  
      -DDEAL_II_WITH_LAPACK=ON
      -DDEAL_II_WITH_P4EST=ON
      -DDEAL_II_WITH_PETSC=ON
-     -DDEAL_II_WITH_TRILINOS=ON
 
      Download: http://www.dealii.org/download.html
      Installation instructions: http://www.dealii.org/8.1.0/readme.html
