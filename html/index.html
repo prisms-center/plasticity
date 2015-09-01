@@ -80,45 +80,90 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">PRISMS Plasticity Documentation</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><b>What is PRISMS Plasticity?</b></p>
-<p>It is a Finite Element Method (FEM) code for solving boundary value problems arising in Continuum Plasticity and Crystal Plasticity. It is build on top of the deal.II open source finite element library [<a href="http://www.dealii.org">http://www.dealii.org</a>]</p>
+<div class="textblock"><p><b>Code repository:</b> <a href="https://github.com/prisms-center/plasticity">https://github.com/prisms-center/plasticity</a></p>
+<p><b>What is PRISMS Plasticity?</b></p>
+<p>It is a Finite Element Method (FEM) code for solving boundary value problems arising in <b>Continuum Plasticity</b> and <b>Crystal Plasticity</b>. It is build on top of the deal.II open source finite element library [<a href="http://www.dealii.org">http://www.dealii.org</a>]</p>
 <p>This code is developed by the PRedictive Integrated Structural Materials Science (PRISMS) Center [<a href="http://www.prisms-center.org/">http://www.prisms-center.org/</a>] at University of Michigan which is supported by the U.S. Department of Energy (DOE), Office of Basic Energy Sciences, Division of Materials Sciences and Engineering under Award DE-SC0008637</p>
-<p><b>Installation and Use:</b></p>
-<p>1) Install deal.II (version 8.2.1)<br />
- Download Binaries (OSX and Linux) or Virtual Machine (VMI) from <a href="https://www.dealii.org/download.html">https://www.dealii.org/download.html</a> <br />
+<p><b>Installation:</b></p>
+<p>1) Install deal.II (version 8.2.1 currently supported)<br />
+</p><ul>
+<li>Download Binaries (OSX and Linux) or Virtual Machine (VMI) from <a href="https://www.dealii.org/download.html">https://www.dealii.org/download.html</a> <br />
  (OR) <br />
- Configure, compile and install the deal.II library with the following configuration flags. Dependencies are MPI, p4est, PETSc libraries.<br />
- -DDEAL_II_WITH_MPI=ON, -DDEAL_II_WITH_LAPACK=ON, -DDEAL_II_WITH_P4EST=ON, -DDEAL_II_WITH_PETSC=ON</p>
+</li>
+<li>Configure, compile and install the deal.II library with the following configuration flags. Dependencies are MPI, p4est, PETSc libraries.<br />
+ -DDEAL_II_WITH_MPI=ON, -DDEAL_II_WITH_LAPACK=ON, -DDEAL_II_WITH_P4EST=ON, -DDEAL_II_WITH_PETSC=ON</li>
+</ul>
 <p>Download: <a href="http://www.dealii.org/download.html">http://www.dealii.org/download.html</a> <br />
  Installation instructions: <a href="http://www.dealii.org/8.2.1/readme.html">http://www.dealii.org/8.2.1/readme.html</a> <br />
  Installation instructions for external packages (P4EST, PETSC): <a href="https://www.dealii.org/developer/external-libs/">https://www.dealii.org/developer/external-libs/</a></p>
-<p>2) Fork the repo <a href="https://github.com/prisms-center/plasticity">https://github.com/prisms-center/plasticity</a> on GitHub (How to fork: <a href="https://help.github.com/articles/fork-a-repo/">https://help.github.com/articles/fork-a-repo/</a>) and clone the plasticity repository using your GitHub username:<br />
- $ git clone <a href="#" onclick="location.href='mai'+'lto:'+'git'+'@g'+'ith'+'ub'+'.co'+'m'; return false;">git@g<span style="display: none;">.nosp@m.</span>ithu<span style="display: none;">.nosp@m.</span>b.com</a>:username/plasticity.git <br />
+<p>2) Clone the PRISMS Plasticity GitHub repo <a href="https://github.com/prisms-center/plasticity">https://github.com/prisms-center/plasticity</a><br />
+</p><ul>
+<li>$ git clone <a href="#" onclick="location.href='mai'+'lto:'+'git'+'@g'+'ith'+'ub'+'.co'+'m'; return false;">git@g<span style="display: none;">.nosp@m.</span>ithu<span style="display: none;">.nosp@m.</span>b.com</a>:prisms-center/plasticity.git <br />
  (OR) <br />
- $ git clone <a href="https://github.com/username/plasticity.git">https://github.com/username/plasticity.git</a> <br />
+</li>
+<li>$ git clone <a href="https://github.com/prisms-center/plasticity.git">https://github.com/prisms-center/plasticity.git</a> <br />
  and <br />
- $ cd plasticity <br />
- $ git checkout master <br />
-</p>
-<p>3) Running plasticity applications, for example simple tension boundary value problem with continuum plasticity material model: $ cd applications/continuumPlasticity/simpleTension For debug mode [default mode]: $ cmake CMakeLists.txt -DCMAKE_BUILD_TYPE=Debug For optimized mode: $ cmake CMakeLists.txt -DCMAKE_BUILD_TYPE=Release and $ make Execution (serial runs): $ make run Execution (parallel runs): $ mpiexec -np nprocs ./main [here nprocs denotes the number of processors]</p>
-<p>4) Updates: Since plasticity code is still under active development, regular code and documentation updates are pushed to the upstream repo (<a href="https://github.com/prisms-center/plasticity">https://github.com/prisms-center/plasticity</a>) and we strongly recommend users to synchronize their respective forks at regular intervals or when requested by the developers through the announcements on the mailing list. (How to sync: <a href="https://help.github.com/articles/syncing-a-fork/">https://help.github.com/articles/syncing-a-fork/</a>)</p>
-<p>5) Visualization: Output of the primal fields is in standard vtk format (*.pvtu, *.vtu files) which can be visualized with the following open source applications:</p><ol type="1">
+</li>
+<li>$ cd plasticity <br />
+</li>
+<li>$ git checkout master <br />
+</li>
+</ul>
+<p><b>Usage:</b></p>
+<p>Running plasticity applications, for example simple tension boundary value problem with continuum plasticity material model:<br />
+</p><ul>
+<li>$ cd applications/continuumPlasticity/simpleTension <br />
+ For debug mode [default mode, very slow]: <br />
+</li>
+<li>$ cmake CMakeLists.txt -DCMAKE_BUILD_TYPE=Debug <br />
+ For optimized mode:<br />
+</li>
+<li>$ cmake CMakeLists.txt -DCMAKE_BUILD_TYPE=Release <br />
+ and <br />
+</li>
+<li>$ make <br />
+<br />
+ Execution (serial runs): <br />
+</li>
+<li>$ make run <br />
+ Execution (parallel runs): <br />
+</li>
+<li>$ mpirun -np nprocs ./main <br />
+ [here nprocs denotes the number of processors]</li>
+</ul>
+<p>Updates: Since plasticity code is still under active development, regular code and documentation updates are pushed to the upstream repo (<a href="https://github.com/prisms-center/plasticity">https://github.com/prisms-center/plasticity</a>) and we strongly recommend users to synchronize their respective clones/forks at regular intervals or when requested by the developers through the announcements on the mailing list.</p>
+<p><b>Visualization</b></p>
+<p>Output of the primal fields and postprocessed fields is in standard vtk format (parallel:*.pvtu, serial:*.vtu files) which can be visualized with the following open source applications:</p><ol type="1">
 <li>VisIt (<a href="https://wci.llnl.gov/simulation/computer-codes/visit/downloads">https://wci.llnl.gov/simulation/computer-codes/visit/downloads</a>)</li>
 <li>Paraview (<a href="http://www.paraview.org/download/">http://www.paraview.org/download/</a>)</li>
 </ol>
 <p><b>Getting started:</b></p>
 <p>Examples of various boundary value problems are located under the applications/ folder. Easiest way to get started on the code is to run the applications.</p>
 <p>Applications are intended to serve as (1) Demonstration of the capabilities of this library, (2) Provide a framework for further development of specialized/advanced applications by users.</p>
-<p>Application or code under development/testing is preceded by an underscore, such as: _hcp, _bcc</p>
-<p>List of folders: src/: material models (continuum plasticity and crystal plasticity), ellipticBVP (base class for parallel implementation of elliptic boundary value problems), enrichment models (enhanced strain), utility (static condensation class, crystal orientations and grain information IO) applications/: continuum plasticity and crystal plasticity utils/: IntegrationTools (developed by the PRISMS center and available at <a href="https://github.com/prisms-center/IntegrationTools">https://github.com/prisms-center/IntegrationTools</a>) and json headers</p>
+<p>Application or code under development/testing is preceded by an underscore.</p>
+<p>List of folders:</p><ul>
+<li>src/: material models (continuum plasticity and crystal plasticity), ellipticBVP (base class for parallel implementation of elliptic boundary value problems), enrichment models (enhanced strain), utility (static condensation class, crystal orientations and grain information IO)</li>
+<li>applications/: continuum plasticity and crystal plasticity</li>
+<li>utils/: IntegrationTools (developed by the PRISMS center and available at <a href="https://github.com/prisms-center/IntegrationTools">https://github.com/prisms-center/IntegrationTools</a>) and json headers</li>
+<li>docs/: Formulations, user manuals, etc in PDF format</li>
+<li>html/: HTML documentation generated by doxygen</li>
+</ul>
 <p><b>Documentation:</b></p>
-<p>Under development. Details of material model formulation are available under src/materialmodels e.g. src/materialModels/crystalPlasticity/CPFEM.pdf</p>
+<p>Detailed mathematical formulations, example simulations, code documentation, etc, provided:</p><ul>
+<li>Open html/index.html in any web browser <br />
+ (OR)<br />
+</li>
+<li><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/prisms-center/plasticity/master/html/index.html">https://htmlpreview.github.io/?https://raw.githubusercontent.com/prisms-center/plasticity/master/html/index.html</a></li>
+</ul>
 <p><b>License:</b></p>
 <p>GNU Lesser General Public License (LGPL). Please see the file LICENSE for details.</p>
 <p><b>Mailing List:</b></p>
-<p><a href="#" onclick="location.href='mai'+'lto:'+'PRI'+'SM'+'S.p'+'la'+'sti'+'ci'+'ty@'+'um'+'ich'+'.e'+'du'; return false;">PRISM<span style="display: none;">.nosp@m.</span>S.pl<span style="display: none;">.nosp@m.</span>astic<span style="display: none;">.nosp@m.</span>ity@<span style="display: none;">.nosp@m.</span>umich<span style="display: none;">.nosp@m.</span>.edu</a></p>
+<ul>
+<li><a href="#" onclick="location.href='mai'+'lto:'+'pri'+'sm'+'spl'+'as'+'tic'+'it'+'y.u'+'se'+'rs@'+'um'+'ich'+'.e'+'du'; return false;">prism<span style="display: none;">.nosp@m.</span>spla<span style="display: none;">.nosp@m.</span>stici<span style="display: none;">.nosp@m.</span>ty.u<span style="display: none;">.nosp@m.</span>sers@<span style="display: none;">.nosp@m.</span>umic<span style="display: none;">.nosp@m.</span>h.edu</a></li>
+<li><a href="#" onclick="location.href='mai'+'lto:'+'pri'+'sm'+'spl'+'as'+'tic'+'it'+'y.d'+'ev'+'@um'+'ic'+'h.e'+'du'; return false;">prism<span style="display: none;">.nosp@m.</span>spla<span style="display: none;">.nosp@m.</span>stici<span style="display: none;">.nosp@m.</span>ty.d<span style="display: none;">.nosp@m.</span>ev@um<span style="display: none;">.nosp@m.</span>ich.<span style="display: none;">.nosp@m.</span>edu</a></li>
+</ul>
 <p><b>Further information, questions, issues and bugs:</b></p>
-<p>Contact the plasticity mailing list at <a href="#" onclick="location.href='mai'+'lto:'+'PRI'+'SM'+'S.p'+'la'+'sti'+'ci'+'ty@'+'um'+'ich'+'.e'+'du'; return false;">PRISM<span style="display: none;">.nosp@m.</span>S.pl<span style="display: none;">.nosp@m.</span>astic<span style="display: none;">.nosp@m.</span>ity@<span style="display: none;">.nosp@m.</span>umich<span style="display: none;">.nosp@m.</span>.edu</a> </p>
+<p>Contact the developers at <a href="#" onclick="location.href='mai'+'lto:'+'pri'+'sm'+'spl'+'as'+'tic'+'it'+'y.d'+'ev'+'@um'+'ic'+'h.e'+'du'; return false;">prism<span style="display: none;">.nosp@m.</span>spla<span style="display: none;">.nosp@m.</span>stici<span style="display: none;">.nosp@m.</span>ty.d<span style="display: none;">.nosp@m.</span>ev@um<span style="display: none;">.nosp@m.</span>ich.<span style="display: none;">.nosp@m.</span>edu</a> </p>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
