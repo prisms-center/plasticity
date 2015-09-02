@@ -21,7 +21,7 @@
 #include "../../../utils/json/json_spirit_reader_template.h"
 
 //dealIIheaders
-#include "../../../src/materialModels/continuumPlasticity/continuumPlasticity.cc"
+#include "../../../src/materialModels/continuumPlasticity/continuumPlasticity.h"
 
 //generate or import mesh
 template <int dim>
