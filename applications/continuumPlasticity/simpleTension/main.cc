@@ -3,7 +3,7 @@
 #include <fstream>
 #include <sstream>
 
-//parameters
+//parameters file
 #include "parameters.h"
 
 //dealIIheaders

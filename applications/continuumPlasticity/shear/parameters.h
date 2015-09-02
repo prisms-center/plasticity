@@ -29,7 +29,7 @@
 /**
  *Relative tolerance for the linear solver
  */
-#define relLinearSolverTolerance  1.0e-12
+#define relLinearSolverTolerance  1.0e-13
 /**
  *Maximum iterations within the nonlinear solve (Newton-Raphson iterations)
  */

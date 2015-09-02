@@ -87,7 +87,7 @@ public:
   }
 };
 
-//Apply Dirchlet BCs for simple tension BVP
+//Apply Dirchlet BCs for simple bending BVP
 template <int dim>
 void continuumPlasticity<dim>::applyDirichletBCs(){
   this->constraints.clear ();

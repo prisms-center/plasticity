@@ -3,22 +3,8 @@
 #include <fstream>
 #include <sstream>
 
-#define feOrder   1
-#define quadOrder 2 
-#define meshRefineFactor 3
-#define writeOutput true
-#define linearSolverType PETScWrappers::SolverCG
-#define totalNumIncrements 50
-#define maxLinearSolverIterations 5000
-#define relLinearSolverTolerance  1.0e-13
-#define maxNonLinearIterations 30
-#define absNonLinearTolerance 1.0e-15
-#define relNonLinearTolerance 1.0e-10
-#define stopOnConvergenceFailure true
-
-//Read json input 
-#include "../../../utils/json/json_spirit.h"
-#include "../../../utils/json/json_spirit_reader_template.h"
+//parameters file
+#include "parameters.h"
 
 //dealIIheaders
 #include "../../../src/materialModels/continuumPlasticity/continuumPlasticity.cc"
@@ -141,25 +127,16 @@ int main (int argc, char **argv)
     {
       deallog.depth_console(0);
       continuumPlasticity<3> problem;
-			
-      //load material properties
-      std::ifstream is("materialProperties.json");
-      json_spirit::Value value;
-      json_spirit::read_stream(is,value);
-      std::vector< json_spirit::Pair > material, strainEnergy, yield;
 
       //Read material parameters
-      material = value.get_obj()[0].value_.get_obj();
-      problem.properties.lambda = material[0].value_.get_real();
-      problem.properties.mu = material[1].value_.get_real();
-      problem.properties.tau_y = material[2].value_.get_real();
-      problem.properties.K = material[3].value_.get_real();
+      problem.properties.lambda = lame_lambda;
+      problem.properties.mu = lame_mu;
+      problem.properties.tau_y = yield_stress;
+      problem.properties.K = strain_hardening;
 
       //Read pfunction names for strain energy density and yield functions
-      strainEnergy = material[5].value_.get_obj();
-      problem.properties.strainEnergyModel = strainEnergy[1].value_.get_str();
-      yield = material[6].value_.get_obj();
-      problem.properties.yieldModel = yield[1].value_.get_str();
+      problem.properties.strainEnergyModel = strain_energy_function;
+      problem.properties.yieldModel = yield_function;
 
       problem.run ();
     }
