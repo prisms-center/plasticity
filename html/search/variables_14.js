@@ -58,8 +58,8 @@ var searchData=
   ['triangulation_5fhas_5fcontent',['triangulation_has_content',['http://www.dealii.org/8.2.1/doxygen/deal.II/singletonparallel_1_1distributed_1_1Triangulation.html#a20283ec6daa76bcfafe7540fa5b4c3ab',1,'parallel::distributed::Triangulation']]],
   ['trilinos_5fmatrix',['trilinos_matrix',['http://www.dealii.org/8.2.1/doxygen/deal.II/classTrilinosWrappers_1_1PreconditionAMG.html#a0fa522bf37c7f06a1f7ca84949987025',1,'TrilinosWrappers::PreconditionAMG']]],
   ['turn_5fangle',['turn_angle',['http://www.dealii.org/8.2.1/doxygen/deal.II/structDataOutBase_1_1EpsFlags.html#a3afae76795cf33c76a3f65af902abf41',1,'DataOutBase::EpsFlags::turn_angle()'],['http://www.dealii.org/8.2.1/doxygen/deal.II/structGridOutFlags_1_1Eps_3_013_01_4.html#abd508c887a07c00467fc746d242a70ac',1,'GridOutFlags::Eps&lt; 3 &gt;::turn_angle()']]],
-  ['twin',['twin',['../classcrystal_plasticity.html#acbda238337e81701174dece9eacce3e7',1,'crystalPlasticity']]],
-  ['twinfraction_5fconv',['twinfraction_conv',['../classcrystal_plasticity.html#ac52176f706739bb9f71ed606a0306291',1,'crystalPlasticity']]],
-  ['twinfraction_5fiter',['twinfraction_iter',['../classcrystal_plasticity.html#af97cd20a767926824ff46031c3c9bc7e',1,'crystalPlasticity']]],
+  ['twin',['twin',['../classcrystal_plasticity.html#a49182385ecb0818fa39b478695881eab',1,'crystalPlasticity']]],
+  ['twinfraction_5fconv',['twinfraction_conv',['../classcrystal_plasticity.html#ac93229a762030f5b3a0fc4fbe5b4df27',1,'crystalPlasticity']]],
+  ['twinfraction_5fiter',['twinfraction_iter',['../classcrystal_plasticity.html#a71eb372d7e4a2ae5df6998d735075c85',1,'crystalPlasticity']]],
   ['type',['type',['http://www.dealii.org/8.2.1/doxygen/deal.II/classMultipleParameterLoop_1_1Entry.html#a8d48d3255c3f0c458e0eb79f429ca489',1,'MultipleParameterLoop::Entry']]]
 ];

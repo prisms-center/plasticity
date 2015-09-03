@@ -1,7 +1,7 @@
 var searchData=
 [
   ['j',['J',['http://www.dealii.org/8.2.1/doxygen/deal.II/classMeshWorker_1_1LocalResults.html#af107c8afe491ea5d9365f266b52e92de',1,'MeshWorker::LocalResults']]],
-  ['j_5f0',['J_0',['../classenhanced_strain.html#ab1b577c2b48e7db58f8534e0342582a9',1,'enhancedStrain::J_0()'],['../classenhanced_strain.html#ae6fa586d106a470989cbaa5f3a2af997',1,'enhancedStrain::j_0()']]],
+  ['j_5f0',['j_0',['../classenhanced_strain.html#ae6fa586d106a470989cbaa5f3a2af997',1,'enhancedStrain::j_0()'],['../classenhanced_strain.html#ab1b577c2b48e7db58f8534e0342582a9',1,'enhancedStrain::J_0()']]],
   ['j_5f0inv',['J_0inv',['../classenhanced_strain.html#aecb2690542a3cac22fe5e4a72a4fa0ac',1,'enhancedStrain']]],
   ['j_5fvalue',['J_value',['http://www.dealii.org/8.2.1/doxygen/deal.II/classFEEvaluationBase.html#abe43b499e02bfd4e50507c7a323d7e70',1,'FEEvaluation::J_value()'],['http://www.dealii.org/8.2.1/doxygen/deal.II/classFEEvaluationBase.html#abe43b499e02bfd4e50507c7a323d7e70',1,'FEEvaluationAccess&lt; 1, 1, Number &gt;::J_value()'],['http://www.dealii.org/8.2.1/doxygen/deal.II/classFEEvaluationBase.html#abe43b499e02bfd4e50507c7a323d7e70',1,'FEEvaluationAccess&lt; dim, 1, Number &gt;::J_value()'],['http://www.dealii.org/8.2.1/doxygen/deal.II/classFEEvaluationBase.html#abe43b499e02bfd4e50507c7a323d7e70',1,'FEEvaluationAccess&lt; dim, dim, Number &gt;::J_value()']]],
   ['jacobi_5fstep',['Jacobi_step',['http://www.dealii.org/8.2.1/doxygen/deal.II/singletonSparseMatrix.html#ab9abd0eaa7c5ac3e86c12f7feb58e6b3',1,'SparseILU']]],
