@@ -33,7 +33,7 @@
 *btr
 *orientationsOutput*
 *.nfs*
-
+*.DS_Store
 
 #CMAKE files
 *.cmake

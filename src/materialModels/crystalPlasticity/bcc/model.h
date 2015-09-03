@@ -1,6 +1,6 @@
-//implementation of the crystal plasticity material model for FCC crystal structure
-#ifndef MODEL_FCC_H
-#define MODEL_FCC_H
+//implementation of the crystal plasticity material model for BCC crystal structure
+#ifndef MODEL_BCC_H
+#define MODEL_BCC_H
 
 //dealii headers
 #include "../../../../include/ellipticBVP.h"

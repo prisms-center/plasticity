@@ -17,6 +17,7 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
     F.reinit(dim, dim);
     
     n_slip_systems=properties.n_slip_systems;
+    n_twin_systems=properties.n_twin_systems;
     m_alpha.reinit(properties.n_slip_systems,dim);
     n_alpha.reinit(properties.n_slip_systems,dim);
     

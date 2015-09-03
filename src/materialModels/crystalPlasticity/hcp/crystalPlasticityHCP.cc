@@ -9,7 +9,7 @@
 #include <fstream>
 
 typedef struct {
-    unsigned int n_slip_systems; //No. of slip systems
+    unsigned int n_slip_systems,n_twin_systems; //No. of slip systems
     double q1,q2,a1,a2,a3,a4,a5,h01,h02,h03,h04,h05,s_s1,s_s2,s_s3,s_s4,s_s5,s01,s02,s03,s04,s05,C11,C12,C13,C33,C44;
     FullMatrix<double> m_alpha,n_alpha;
 } materialProperties;
@@ -79,7 +79,7 @@ private:
     std::vector<std::vector<  vector<double> > >  twinfraction_iter, slipfraction_iter,twinfraction_conv, slipfraction_conv;
     std::vector<std::vector<double> >  twin;
     
-    unsigned int n_slip_systems; //No. of slip systems
+    unsigned int n_slip_systems,n_twin_systems; //No. of slip systems
     FullMatrix<double> m_alpha,n_alpha,q,sres,Dmat;
     Vector<double> sres_tau;
     bool initCalled;

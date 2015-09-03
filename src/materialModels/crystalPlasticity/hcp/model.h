@@ -1,6 +1,6 @@
 //implementation of the crystal plasticity material model for FCC crystal structure
-#ifndef MODEL_FCC_H
-#define MODEL_FCC_H
+#ifndef MODEL_HCP_H
+#define MODEL_HCP_H
 
 //dealii headers
 #include "../../../../include/ellipticBVP.h"
@@ -9,8 +9,8 @@
 #include <fstream>
 
 typedef struct {
-    unsigned int n_slip_systems; //No. of slip systems
-    double q1,q2,a,h0,s_s,s0,C11,C12,C44; // Elastic constants
+    unsigned int n_slip_systems,n_twin_systems; //No. of slip systems
+    double q1,q2,a1,a2,a3,a4,a5,h01,h02,h03,h04,h05,s_s1,s_s2,s_s3,s_s4,s_s5,s01,s02,s03,s04,s05,C11,C12,C13,C33,C44;
     FullMatrix<double> m_alpha,n_alpha;
 } materialProperties;
 
@@ -20,6 +20,7 @@ template <int dim>
 class crystalPlasticity : public ellipticBVP<dim>
 {
 public:
+
     /**
      *crystalPlasticity class constructor.
      */
@@ -126,7 +127,12 @@ private:
      */
     void tracev(FullMatrix<double> &Atrace, FullMatrix<double> elm, FullMatrix<double> B);
     
+    void Twin_image(double twin_pos,unsigned int cellID,unsigned int quadPtID);
+    void rod2quat(Vector<double> &quat,Vector<double> &rod);
+    void quatproduct(Vector<double> &quatp,Vector<double> &quat2,Vector<double> &quat1);
+    void quat2rod(Vector<double> &quat,Vector<double> &rod);
     
+
     /**
      * Global deformation gradient F
     */
@@ -191,6 +197,8 @@ private:
      */
     double microvol;
     
+    double local_F_e,local_F_r,F_e,F_r;
+    
     
     //Store crystal orientations
     /**
@@ -228,10 +236,14 @@ private:
      */
     std::vector<std::vector<  Vector<double> > >  s_alpha_conv;
     
+    std::vector<std::vector<  vector<double> > >  twinfraction_iter, slipfraction_iter,twinfraction_conv, slipfraction_conv;
+    std::vector<std::vector<double> >  twin;
+    
     /**
      * No. of slip systems
      */
     unsigned int n_slip_systems; //No. of slip systems
+    unsigned int n_twin_systems; //No. of twin systems
     /**
      * Slip directions
      */

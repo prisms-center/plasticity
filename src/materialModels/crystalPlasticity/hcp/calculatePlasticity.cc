@@ -1,4 +1,3 @@
-
 template <int dim>
 void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
                                                  unsigned int quadPtID)
@@ -30,7 +29,6 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     temp=0.0;
     rotmat.Tmmult(temp,F_tau);
     temp.mmult(F_tau,rotmat);
-    
     
     //FE_tau_trial=F_tau*inv(FP_t)
     FullMatrix<double> Fpn_inv(dim,dim),FE_tau_trial(dim,dim),F_trial(dim,dim),CE_tau_trial(dim,dim),Ee_tau_trial(dim,dim);
@@ -87,7 +85,6 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     Dmat.vmult(tempv1, vecform(Ee_tau_trial));
     matform(T_star_tau_trial,tempv1);
     
-    
     //% % % % % STEP 3 % % % % %
     // Calculate the trial resolved shear stress resolved_shear_tau_trial for each slip system
     int n_PA=0;	// Number of active slip systems
@@ -129,13 +126,46 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     
     //% % % % % STEP 5 % % % % %
     //Calculate the shear increments from the consistency condition
-    Vector<double> s_beta(n_slip_systems),h_beta(n_slip_systems);
+    Vector<double> s_beta(n_slip_systems),h_beta(n_slip_systems),h0(n_slip_systems),a_pow(n_slip_systems),s_s(n_slip_systems);
     FullMatrix<double> h_alpha_beta_t(n_slip_systems,n_slip_systems),A(n_slip_systems,n_slip_systems);
     s_beta=s_alpha_t;
     
+    
+    for (unsigned int i=0;i<n_slip_systems;i++){
+        if(i<3){
+            h0(i)=properties.h01;
+            a_pow(i)=properties.a1;
+            s_s(i)=properties.s_s1;
+        }
+        else if(i<6){
+            h0(i)=properties.h02;
+            a_pow(i)=properties.a2;
+            s_s(i)=properties.s_s2;
+        }
+        else if(i<12){
+            h0(i)=properties.h03;
+            a_pow(i)=properties.a3;
+            s_s(i)=properties.s_s3;
+        }
+        else if(i<18){
+            h0(i)=properties.h04;
+            a_pow(i)=properties.a4;
+            s_s(i)=properties.s_s4;
+        }
+        else if(i<24){
+            h0(i)=properties.h05;
+            a_pow(i)=properties.a5;
+            s_s(i)=properties.s_s5;
+        }
+        
+    }
+    
+    
     // Single slip hardening rate
     for(unsigned int i=0;i<n_slip_systems;i++){
-        h_beta=properties.h0*pow((1-s_beta(i)/properties.s_s),properties.a);
+        if(s_beta(i)>s_s(i))
+            s_beta(i)=0.98*s_s(i);
+        h_beta(i)=h0(i)*pow((1-s_beta(i)/s_s(i)),a_pow(i));
     }
     
     
@@ -186,10 +216,10 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     temp.reinit(dim,dim); FE_tau.mmult(temp,T_star_tau_trial);
     temp.equ(1.0/det_FE_tau,temp); temp.mTmult(T_tau,FE_tau);
     det_F_tau=F_tau.determinant();
+    temp=0.0;
     temp.invert(F_tau); T_tau.mTmult(P_tau,temp);
     P_tau.equ(det_F_tau,P_tau);
     s_alpha_tau=s_alpha_t;
-    
     
     double gamma = 0;
     int iter=0,iter1=0,iter2=0,iter3=0;
@@ -205,7 +235,6 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
         
         
         inactive_slip_removal(inactive,active,x_beta,n_PA, PA, b, A, A_PA);
-        
         
         // % % % % % STEP 6 % % % % %
         temp.reinit(dim,dim);
@@ -265,6 +294,16 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
             }
         }
         
+        for (unsigned int i=0;i<6;i++){
+            twinfraction_iter[cellID][quadPtID][i]=twinfraction_conv[cellID][quadPtID][i]+x_beta[i+18]/0.129;
+        }
+        
+        for (unsigned int i=0;i<18;i++){
+            slipfraction_iter[cellID][quadPtID][i]=slipfraction_conv[cellID][quadPtID][i]+x_beta[i]/0.129;
+        }
+        
+        
+        
         T_star_tau.add(1.0,T_star_tau_trial);
         
         // % % % % % STEP 9 % % % % %
@@ -275,6 +314,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
         temp.mTmult(T_tau,FE_tau);
         
         det_F_tau=F_tau.determinant();
+        temp=0.0;
         temp.invert(F_tau); T_tau.mTmult(P_tau,temp);
         P_tau.equ(det_F_tau,P_tau);
         
@@ -334,12 +374,16 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     tangent_modulus(F_trial, Fpn_inv, SCHMID_TENSOR1,A,A_PA,B,T_tau, PK1_Stiff, active, resolved_shear_tau_trial, x_beta, PA, n_PA,det_F_tau,det_FE_tau );
     
     
-    temp.reinit(dim,dim); T_tau.mTmult(temp,rotmat);
+    
+    temp.reinit(dim,dim);
+    temp=0.0;
+    T_tau.mTmult(temp,rotmat);
+    T_tau=0.0;
     rotmat.mmult(T_tau,temp);
-    
+    temp=0.0;
     temp.reinit(dim,dim); P_tau.mTmult(temp,rotmat);
+    P_tau=0.0;
     rotmat.mmult(P_tau,temp);
-    
     
     dP_dF=0.0;
     FullMatrix<double> L(dim,dim),mn(dim,dim);
@@ -374,7 +418,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     P=P_tau;
     T=T_tau;
     
-     
+    
     sres_tau.reinit(n_slip_systems);
     sres_tau = s_alpha_tau;
     
@@ -384,3 +428,4 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     s_alpha_iter[cellID][quadPtID]=sres_tau;
     
 }
+

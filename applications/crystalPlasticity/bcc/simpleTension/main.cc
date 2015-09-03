@@ -2,23 +2,17 @@
 //general headers
 #include <fstream>
 #include <sstream>
+#include <iostream>
+
 using namespace std;
 
-#define feOrder   1
-#define quadOrder 2 
-#define meshRefineFactor 3
-#define writeOutput true
-#define linearSolverType PETScWrappers::SolverCG
-#define totalNumIncrements 100
-#define maxLinearSolverIterations 5000
-#define relLinearSolverTolerance  1.0e-10
-#define maxNonLinearIterations 20
-#define absNonLinearTolerance 1.0e-18
-#define relNonLinearTolerance 1.0e-10
-#define stopOnConvergenceFailure false
 
-//dealIIheaders
-#include "../../../../src/materialModels/crystalPlasticity/bcc/crystalPlasticityBCC.cc"
+//parameters
+#include "parameters.h"
+
+//FCC model header
+#include "../../../../src/materialModels/crystalPlasticity/bcc/model.h"
+
 
 //overload mesh() method to generate the required polycrystal geometry
 template <int dim>
@@ -73,7 +67,7 @@ public:
 	BCFunction(): Function<dim> (dim){}
 	void vector_value (const Point<dim>   &p, Vector<double>   &values) const{
 		Assert (values.size() == dim, ExcDimensionMismatch (values.size(), dim));    
-		values[0]=-0.001; // displacement along X-Direction
+		values[0]=0.001; // displacement along X-Direction
 	}
 };
 
@@ -134,67 +128,72 @@ int main (int argc, char **argv)
 		crystalPlasticity<3> problem;
 
 		FullMatrix<double> m_alpha,n_alpha; // Slip directions and Slip Normals
-		const unsigned int n_slip_systems=12; //No. of slip systems 
+		const unsigned int n_slip_systems=numSlipSystems; //No. of slip systems
 
 		n_alpha.reinit(n_slip_systems,3);
 		m_alpha.reinit(n_slip_systems,3);
 		string line;
-		ifstream myfile;
 
-		// Reading slip Normals 
-		myfile.open("slipNormals.txt");
-		int i=0; int j=0;
-		if (myfile.is_open()){
-			for (unsigned int k=0; k<3*n_slip_systems; k++){	     
-				getline (myfile,line,'\t');
-				n_alpha[i][j] = atof(line.c_str()); 
-				j++;
-				if(j==3){
-					i=i+1; j=0;
-				}
-			}
-			myfile.close();
-		}
-		else cout << "Unable to open slipNormals file"; 
-		myfile.clear() ;
-
-		// Reading slip Normals 
-		myfile.open("slipDirections.txt");
-		i=0;
-		j=0;
-		if (myfile.is_open()){
-			for (unsigned int k=0; k<3*n_slip_systems; k++){	     
-				getline (myfile,line,'\t');
-				m_alpha[i][j] = atof(line.c_str()); 
-				j++;
-				if(j==3){
-					i=i+1; j=0;
-				}
-			}
-			myfile.close();
-		}
-		else cout << "Unable to open slipDirections file"; 
-		myfile.clear() ;
+        //open data file to read slip normals
+        ifstream slipNormalsDataFile("slipNormals.txt");
+        //read data
+        unsigned int id=0;
+        if (slipNormalsDataFile.is_open()){
+            cout << "reading slip Normals file\n";
+            //read data
+            while (getline (slipNormalsDataFile,line) && id<n_slip_systems){
+                stringstream ss(line);
+                ss >> n_alpha[id][0];
+                ss >> n_alpha[id][1];
+                ss >> n_alpha[id][2];
+                //cout<<id<<'\t'<<n_alpha[id][0]<<'\t'<<n_alpha[id][1]<<'\t'<<n_alpha[id][2]<<'\n';
+                id=id+1;
+            }
+        }
+        else{
+            cout << "Unable to open slipNormals.txt \n";
+            exit(1);
+        }
+        
+        //open data file to read slip directions
+        ifstream slipDirectionsDataFile("slipDirections.txt");
+        //read data
+        id=0;
+        if (slipDirectionsDataFile.is_open()){
+            cout << "reading slip Directions file\n";
+            //read data
+            while (getline (slipDirectionsDataFile,line)&& id<n_slip_systems){
+                stringstream ss(line);
+                ss >> m_alpha[id][0];
+                ss >> m_alpha[id][1];
+                ss >> m_alpha[id][2];
+                //cout<<id<<'\t'<<m_alpha[id][0]<<'\t'<<m_alpha[id][1]<<'\t'<<m_alpha[id][2]<<'\n';
+                id=id+1;
+            }
+        }
+        else{
+            cout << "Unable to open slipDirections.txt \n";
+            exit(1);
+        }
 
 		problem.properties.n_slip_systems=n_slip_systems;
 		//Latent Hardening Ratio
-		problem.properties.q1=1.01;
+		problem.properties.q1=latentHardeningRatio;
 		problem.properties.q2=1.0;
 		//Slip Hardening Parameters
-		problem.properties.a=2.25;
-		problem.properties.h0=180;
-		problem.properties.s_s=148;
+		problem.properties.a=powerLawExponent;
+		problem.properties.h0=initialHardeningModulus;
+		problem.properties.s_s=saturationStress;
 		//Initial slip deformation resistance
-		problem.properties.s0=16;
+		problem.properties.s0=initialSlipResistance;
 		//Elastic Parameters
-		problem.properties.C11=170e3;
-		problem.properties.C12=124e3;	
-		problem.properties.C44=75e3;
+		problem.properties.C11=c11;
+		problem.properties.C12=c12;
+		problem.properties.C44=c44;
 		problem.properties.m_alpha=m_alpha;
 		problem.properties.n_alpha=n_alpha;
 
 		//reading materials atlas files
-		unsigned int numPts[3]={10, 10, 6}; // No. of voxels in x,y and z directions
 		double stencil[3]={1.0/(numPts[0]-1), 1.0/(numPts[1]-1), 1.0/(numPts[2]-1)}; // Dimensions of voxel
 		problem.orientations.loadOrientations("grainID.txt",
 			5,

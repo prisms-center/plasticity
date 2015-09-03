@@ -2,7 +2,7 @@
 template <int dim>
 void crystalPlasticity<dim>::inactive_slip_removal(Vector<double> &inactive,Vector<double> &active, Vector<double> &x_beta, int &n_PA, Vector<double> &PA, Vector<double> b,FullMatrix<double> A,FullMatrix<double> A_PA){
     
-    FullMatrix<double> temp;
+    FullMatrix<double> temp,temp2;
     int iter=0,iter1=0,iter2=0,iter3=0;
     Vector<double> x_beta1(n_PA), x_beta2(n_PA),b_PA(n_PA);
     double flag1=0;
@@ -13,7 +13,8 @@ void crystalPlasticity<dim>::inactive_slip_removal(Vector<double> &inactive,Vect
             A_PA[i][j]=A[PA(i)][PA(j)];
         }
     }
-    temp.reinit(n_PA,n_PA); temp.invert(A_PA);
+    temp.reinit(n_PA,n_PA); temp2.reinit(n_PA,n_PA);
+    temp.invert(A_PA);
     Vector<double> tempv3;
     temp.vmult(x_beta1,b_PA);
     
