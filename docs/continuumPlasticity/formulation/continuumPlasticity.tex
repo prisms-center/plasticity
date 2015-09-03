@@ -13,6 +13,7 @@
 \usepackage{wrapfig}
 \usepackage{graphicx}
 \usepackage{psfrag}
+\usepackage{courier}
 \renewcommand{\baselinestretch}{1.2}
 \jot 5mm
 \graphicspath{{./figures/}}
@@ -341,7 +342,7 @@ The PRISMS continuum plasticity code also uses an enhanced strain field to preve
 \section{Modifying the PRISMS continuum plasticity deal.II model}
 
 \subsection{Material parameters and constitutive laws}
-Most material parameters and constitutive laws can modified in the materialProperties.json file, including the Lam\'e paramters $\lambda$ and $\mu$, the yield stress $\tau_y$, the coefficient for linear isotropic strain hardening $K$, the strain energy density function $w$, and the yield function $f$. The two functions are specified by name in the .json file. Although there is a place to specify the path to the pfunction header file, it is not currently being read by the code. All pfunction files are assumed to be placed in the ``continuumPlasticity/models" folder. There are three strain energy density functions included in the models library: St. Venant-Kirchhoff (stvenkir), compressible neo-hookian (neohook), and quadratic-logarithmic (quadlog). There is only one yield function included in the models library: von Mises (von\textunderscore mises). Although the hardening function $q$ is not specified in the .json file, there are two hardening functions included in the models library. The default function is a linear hardening function (with coefficient $K$ (linear\textunderscore hardening), and the second is a nonlinear hardening function based on a crystal plasticity model for copper (Cu\textunderscore hardening). The hardening function is also specified by name, but it is set in the code (line 194 of continuumPlasticity.h). Note that currently all hardening laws accept $K$ as an input for consistency, but only the linear hardening law uses that value.
+Most material parameters and constitutive laws can modified in the ``materialProperties.json" (or ``parameters.h") file, including the Lam\'e parameters $\lambda$ and $\mu$, the yield stress $\tau_y$, the coefficient for linear isotropic strain hardening $K$, the strain energy density function $w$, and the yield function $f$. The two functions are specified by name in the .json file. Although there is a place to specify the path to the pfunction header file, it is not currently being read by the code. All pfunction files are assumed to be placed in the ``continuumPlasticity/models" folder. There are three strain energy density functions included in the models library: St. Venant-Kirchhoff (stvenkir), compressible neo-hookian (neohook), and quadratic-logarithmic (quadlog). There is only one yield function included in the models library: von Mises (von\textunderscore mises). Although the hardening function $q$ is not specified in the .json file, there are two hardening functions included in the models library. The default function is a linear hardening function (with coefficient $K$ (linear\textunderscore hardening), and the second is a nonlinear hardening function based on a crystal plasticity model for copper (Cu\textunderscore hardening). The hardening function is also specified by name, but it is set in the code (line 194 of continuumPlasticity.h). Note that currently all hardening laws accept $K$ as an input for consistency, but only the linear hardening law uses that value.
 
 It is possible to create your own pfunctions using Integration Tools Writer, similiar to what is shown in the shell script ``continuumPlasticity/models/functions.sh." The following input variables/parameters are required:
 \begin{itemize}
@@ -381,7 +382,7 @@ It is possible to create your own pfunctions using Integration Tools Writer, sim
 Dirichlet boundary conditions are set in ``main.cc". The class ``BCFunction'' specifies the value of the non-zero Dirichlet conditions and on what nodal degrees-of-freedom they apply. The Dirichlet conditions are applied to specific surfaces in the function ``applyDirichletBCs".
 
 \subsection{Mesh refinement, basis function order, quadrature order, number of pseudo-time steps (increments), etc.}
-These values are specified at the top of ``main.cc" through macros. The domain and mesh refinement are defined in the function ``mesh" in ``main.cc".
+These values are specified at the top of ``main.cc" through macros (or in ``parameters.h"). The domain and mesh refinement are defined in the function ``mesh" in ``main.cc". Quadratic convergence can best be achieved using a direct solver, like mumps or superlu\_dist. These can be called from the command line, using a command such as:  \texttt{mpirun -np 16 ./main -pc\_type lu -pc\_factor\_mat\_solver\_package mumps}
 
 
 \pagebreak

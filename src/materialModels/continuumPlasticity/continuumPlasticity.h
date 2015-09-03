@@ -19,7 +19,7 @@ typedef struct {
 template <int dim>
 class continuumPlasticity : public ellipticBVP<dim>
 {
-public:
+ public:
   /**
    *continuumPlasticity class constructor.
    */
@@ -28,7 +28,7 @@ public:
    *Structure to hold the material parameters and model names.
    */
   materialProperties properties;
-private:
+ private:
   /**
    *Initialize and resize class data structures.
    */
@@ -135,8 +135,8 @@ private:
 //constructor
 template <int dim>
 continuumPlasticity<dim>::continuumPlasticity()
-  : 
-  ellipticBVP<dim>(),
+: 
+ellipticBVP<dim>(),
   enhStrain(this->FE,
 	    this->pcout)
 {
@@ -287,6 +287,15 @@ void continuumPlasticity<dim>::calculatePlasticity(unsigned int cellID,
   std::vector< Vector<double> > eigVec(dim);
   b_eTReig = b_eTR;
   Ident = Identity;
+  /* if(this->currentIncrement == 1){
+    for(int i=0;i<3;i++){
+      for(int j=0;j<3;j++){
+	this->pcout << invCp_TR[i][j] << " ";
+      }
+      this->pcout << std::endl;
+    }
+    this->pcout << std::endl;
+    }*/
 
   //Use LAPACK to solve for the eigenvalues/eigenvectors.
   b_eTReig.compute_generalized_eigenvalues_symmetric(Ident,eigVec);
@@ -313,7 +322,6 @@ void continuumPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     }
   }
 
-  //Vector<double> epsTRe(dim), eps_e(dim);
   //The principal elastic stretches
   Vector<double> lambda_e(dim);
   //The principal stresses and the derivative of the yield function w.r.t. the principal stresses
@@ -321,10 +329,9 @@ void continuumPlasticity<dim>::calculatePlasticity(unsigned int cellID,
   for(unsigned int i=0; i<dim; i++){
     //The principal elastic stretches, lambda_e(i)
     varStrainEnergy[2+i] = sqrt(eigTR(i));
-    //epsTRe(i) = 0.5*log(eigTR(i));
+    lambda_e[i] = sqrt(eigTR(i));
   }
   double gamma_Dt = 0.;
-  //eps_e = epsTRe;
   for(unsigned int i=0; i<dim; i++){
     //Calculate the principal stresses, beta, using equation (32)
     varYield[i] = strain_energy.grad(varStrainEnergy,2+i)*varStrainEnergy[2+i]; //Beta
@@ -338,6 +345,7 @@ void continuumPlasticity<dim>::calculatePlasticity(unsigned int cellID,
   varYield[4] = harden(varIsoHardening);
   //Get the value of the yield function, based on the trial values
   double yield_TR = yield(varYield);
+
   //If the yield function is greater than zero, plastic flow has occured.
   //We will need to update the plastic variables (see section 3 of the formulation) using Newton-Raphson.
   //The independent variables that we solve for are the 3 principal elastic stretches (lambda_e(i))
@@ -346,7 +354,7 @@ void continuumPlasticity<dim>::calculatePlasticity(unsigned int cellID,
   if(yield_TR > 0){
     //Report onset of plasticity
     if(plasticOnset == false){
-      this->pcout << "\ncontinummPlasticity: Onset of plasticity\n\n";
+      this->pcout << "\ncontinuumPlasticity: Onset of plasticity\n\n";
       plasticOnset = true;
     }
 
@@ -381,7 +389,6 @@ void continuumPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 			   yield.hess(varYield,4,4)*harden.grad(varIsoHardening,0))*yield.grad(varYield,B);
 	//This equation is half of the log of equation(26)
 	residual(B) = 0.5*log(eigTR(B)) - gamma_Dt*yield.grad(varYield,B) - log(varStrainEnergy[2+B]);
-	//residual(B) = epsTRe(B) - gamma_Dt*yield.grad(varYield,B) - log(varStrainEnergy[2+B]);
       }
       jacobian[3][3] = yield.grad(varYield,4)*harden.grad(varIsoHardening,0);
       //Equation (30)
@@ -439,12 +446,10 @@ void continuumPlasticity<dim>::calculatePlasticity(unsigned int cellID,
       //Update the principal elastic stretches, equation (26)
       lambda_e(i) = exp(-gamma_Dt*nu_bar(i))*sqrt(eigTR(i));
     }
-    //eps_e.equ(1.,epsTRe,-gamma_Dt,nu_bar);
 
   }
   //Find tau, equation (29)
   tau.equ(beta(0),eigDyad[0],beta(1),eigDyad[1],beta(2),eigDyad[2]);
-  //b_e.equ(exp(2.*eps_e(0)),eigDyad[0],exp(2.*eps_e(1)),eigDyad[1],exp(2.*eps_e(2)),eigDyad[2]);
   //Find b_e, equation (28)
   b_e.equ(std::pow(lambda_e(0),2),eigDyad[0],std::pow(lambda_e(1),2),eigDyad[1],std::pow(lambda_e(2),2),eigDyad[2]);
   //Find invCP, based on equation (4)
@@ -469,7 +474,7 @@ void continuumPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 	strain_energy.grad(varStrainEnergy,2+A)*varStrainEnergy[2+A]*(A==B);
     }
   }
-  if(yield_TR < 0){
+  if(yield_TR <= 0){
     //If elastic...
     a_ep = a_e;
   }

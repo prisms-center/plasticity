@@ -75,7 +75,7 @@ public:
   BCFunction(): Function<dim> (dim){}
   void vector_value (const Point<dim>   &p, Vector<double>   &values) const{
     Assert (values.size() == dim, ExcDimensionMismatch (values.size(), dim));    
-    values[0]=0.5/totalNumIncrements; //total displacement along X-Direction divided by total increments
+    values[0]=totalDisplacement/totalNumIncrements; //total displacement along X-Direction divided by total increments
   }
 };
 

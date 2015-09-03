@@ -11,6 +11,10 @@
  */
 #define meshRefineFactor 3
 /**
+ *Total applied displacement
+ */
+#define totalDisplacement 0.1
+/**
  *Flag to write output files
  */
 #define writeOutput true

@@ -5,7 +5,8 @@
 
 #define feOrder   1
 #define quadOrder 2 
-#define meshRefineFactor 3
+#define meshRefineFactor 2
+#define totalDisplacement 0.1
 #define writeOutput true
 #define linearSolverType PETScWrappers::SolverCG
 #define totalNumIncrements 400
@@ -91,7 +92,7 @@ public:
   BCFunction(): Function<dim> (dim){}
   void vector_value (const Point<dim>   &p, Vector<double>   &values) const{
     Assert (values.size() == dim, ExcDimensionMismatch (values.size(), dim));    
-    values[0]=0.1/totalNumIncrements; //total displacement along X-Direction divide by total increments
+    values[0]=totalDisplacement/totalNumIncrements; //total displacement along X-Direction divided by total increments
   }
 };
 

@@ -9,7 +9,11 @@
 /**
  *Exponential value used to define mesh refinement
  */
-#define meshRefineFactor 3
+#define meshRefineFactor 2
+/**
+ *Total applied displacement
+ */
+#define totalDisplacement 0.5
 /**
  *Flag to write output files
  */
@@ -21,7 +25,7 @@
 /**
  *Number of increments (i.e. loads steps, pseudo-time steps)
  */
-#define totalNumIncrements 50
+#define totalNumIncrements 10
 /**
  *Maximum iterations within the linear solve
  */

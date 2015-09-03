@@ -69,7 +69,7 @@ public:
   BCFunction(): Function<dim> (dim){}
   void vector_value (const Point<dim>   &p, Vector<double>   &values) const{
     Assert (values.size() == dim, ExcDimensionMismatch (values.size(), dim));    
-    values[2]=-0.1/totalNumIncrements; // total displacement along Z-Direction divide by total increments
+    values[2]=-totalDisplacement/totalNumIncrements; // total displacement along Z-Direction divide by total increments
   }
 };
 
@@ -88,7 +88,7 @@ void continuumPlasticity<dim>::applyDirichletBCs(){
 					       this->constraints,
 					       allComponents);
   }
-  //Don't apply further displacment simply for a new solver iteration.
+  //Don't apply further displacement simply for a new solver iteration.
   else {
     VectorTools:: interpolate_boundary_values (this->dofHandler,
 					       2, 
