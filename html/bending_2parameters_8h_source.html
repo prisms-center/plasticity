@@ -103,66 +103,70 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"> */</span></div>
 <div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#ac5c8e45cf051136f193a6b2e0d8c6666">   12</a></span>&#160;<span class="preprocessor">#define meshRefineFactor 3</span></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">/**</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"> *Flag to write output files</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"> *Total applied displacement</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#a0e0c9d336389e97f2526f080cf895055">   16</a></span>&#160;<span class="preprocessor">#define writeOutput true</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#a2014913e53b1ed403285ad0fca524826">   16</a></span>&#160;<span class="preprocessor">#define totalDisplacement 0.1</span></div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">/**</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment"> *Solve type for linear solves</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment"> *Flag to write output files</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#aa79df4667d32517702e329c8f0bab090">   20</a></span>&#160;<span class="preprocessor">#define linearSolverType PETScWrappers::SolverCG</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#a0e0c9d336389e97f2526f080cf895055">   20</a></span>&#160;<span class="preprocessor">#define writeOutput true</span></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">/**</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment"> *Number of increments (i.e. loads steps, pseudo-time steps)</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment"> *Solve type for linear solves</span></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#a697ee3f069c71c4082d54e1de2e4f912">   24</a></span>&#160;<span class="preprocessor">#define totalNumIncrements 100</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#aa79df4667d32517702e329c8f0bab090">   24</a></span>&#160;<span class="preprocessor">#define linearSolverType PETScWrappers::SolverCG</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment">/**</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment"> *Maximum iterations within the linear solve</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment"> *Number of increments (i.e. loads steps, pseudo-time steps)</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#a9d09b044cf37218d45a1b1ef9779a623">   28</a></span>&#160;<span class="preprocessor">#define maxLinearSolverIterations 5000</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#a697ee3f069c71c4082d54e1de2e4f912">   28</a></span>&#160;<span class="preprocessor">#define totalNumIncrements 100</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="comment">/**</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment"> *Relative tolerance for the linear solver</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment"> *Maximum iterations within the linear solve</span></div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#a973c908767e87d3197d69791f5c52fdd">   32</a></span>&#160;<span class="preprocessor">#define relLinearSolverTolerance  1.0e-12</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#a9d09b044cf37218d45a1b1ef9779a623">   32</a></span>&#160;<span class="preprocessor">#define maxLinearSolverIterations 5000</span></div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment">/**</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment"> *Maximum iterations within the nonlinear solve (Newton-Raphson iterations)</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment"> *Relative tolerance for the linear solver</span></div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#abcde79fa0cb824fc933b7eb942490934">   36</a></span>&#160;<span class="preprocessor">#define maxNonLinearIterations 30</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#a973c908767e87d3197d69791f5c52fdd">   36</a></span>&#160;<span class="preprocessor">#define relLinearSolverTolerance  1.0e-12</span></div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment">/**</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment"> *Absolute tolerance for nonlinear solver</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment"> *Maximum iterations within the nonlinear solve (Newton-Raphson iterations)</span></div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#a5a4cda807d13aabcc6aa0421bd567564">   40</a></span>&#160;<span class="preprocessor">#define absNonLinearTolerance 1.0e-15</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#abcde79fa0cb824fc933b7eb942490934">   40</a></span>&#160;<span class="preprocessor">#define maxNonLinearIterations 30</span></div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="comment">/**</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment"> *Relative tolerance for the nonlinear solver</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment"> *Absolute tolerance for nonlinear solver</span></div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#a973312827a268d871d360032409ac4c5">   44</a></span>&#160;<span class="preprocessor">#define relNonLinearTolerance 1.0e-10</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#a5a4cda807d13aabcc6aa0421bd567564">   44</a></span>&#160;<span class="preprocessor">#define absNonLinearTolerance 1.0e-15</span></div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment">/**</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment"> *Flag to stop the problem if convergence fails</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment"> *Relative tolerance for the nonlinear solver</span></div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#ad190e3187dd82737218cad01d7d92a69">   48</a></span>&#160;<span class="preprocessor">#define stopOnConvergenceFailure true</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="comment"></span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="comment">/**</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment"> *Lame&#39; material parameter, lambda</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#a01546c87904ac5fa7af1dfdcd34c661c">   53</a></span>&#160;<span class="preprocessor">#define lame_lambda 100.6582e9</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#a973312827a268d871d360032409ac4c5">   48</a></span>&#160;<span class="preprocessor">#define relNonLinearTolerance 1.0e-10</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="comment">/**</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="comment"> *Flag to stop the problem if convergence fails</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#ad190e3187dd82737218cad01d7d92a69">   52</a></span>&#160;<span class="preprocessor">#define stopOnConvergenceFailure true</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment"></span></div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment">/**</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="comment"> *Lame&#39; material parameter, mu</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="comment"> *Lame&#39; material parameter, lambda</span></div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#a6c3456f9b01bf856471aca59fdaa9714">   57</a></span>&#160;<span class="preprocessor">#define lame_mu 45.6473e9</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#a01546c87904ac5fa7af1dfdcd34c661c">   57</a></span>&#160;<span class="preprocessor">#define lame_lambda 100.6582e9</span></div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment">/**</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment"> *Value for yield stress (Kirchhoff)</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment"> *Lame&#39; material parameter, mu</span></div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#acaf0a1525ef25e655065cb2fdf137e7a">   61</a></span>&#160;<span class="preprocessor">#define yield_stress 33.014025e6</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#a6c3456f9b01bf856471aca59fdaa9714">   61</a></span>&#160;<span class="preprocessor">#define lame_mu 45.6473e9</span></div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment">/**</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment"> *Linear isotropic strain hardening coefficient</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment"> *Value for yield stress (Kirchhoff)</span></div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#a0985d50e1eac5243a1b09f71579da6ec">   65</a></span>&#160;<span class="preprocessor">#define strain_hardening 2.0259e9</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#acaf0a1525ef25e655065cb2fdf137e7a">   65</a></span>&#160;<span class="preprocessor">#define yield_stress 33.014025e6</span></div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="comment">/**</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="comment"> *Strain energy density function (&quot;quadlog&quot;, &quot;stvenkir&quot;, or &quot;neohook&quot;)</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="comment"> *Linear isotropic strain hardening coefficient</span></div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#af62407ee552bf9e356ce44ee830f09fc">   69</a></span>&#160;<span class="preprocessor">#define strain_energy_function &quot;quadlog&quot;</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#a0985d50e1eac5243a1b09f71579da6ec">   69</a></span>&#160;<span class="preprocessor">#define strain_hardening 2.0259e9</span></div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="comment">/**</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="comment"> *Yield function (currently only &quot;von_mises&quot;)</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="comment"> *Strain energy density function (&quot;quadlog&quot;, &quot;stvenkir&quot;, or &quot;neohook&quot;)</span></div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#adfefb89e36ce870c09c5e0fc673cca63">   73</a></span>&#160;<span class="preprocessor">#define yield_function &quot;von_mises&quot;</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#af62407ee552bf9e356ce44ee830f09fc">   73</a></span>&#160;<span class="preprocessor">#define strain_energy_function &quot;quadlog&quot;</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="comment">/**</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="comment"> *Yield function (currently only &quot;von_mises&quot;)</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="bending_2parameters_8h.html#adfefb89e36ce870c09c5e0fc673cca63">   77</a></span>&#160;<span class="preprocessor">#define yield_function &quot;von_mises&quot;</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
