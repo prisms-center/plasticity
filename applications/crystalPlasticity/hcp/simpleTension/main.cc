@@ -10,7 +10,7 @@ using namespace std;
 
 
 //dealIIheaders
-#include "../../../../src/materialModels/crystalPlasticity/hcp/model.h"
+#include "../../../../src/materialModels/crystalPlasticity/hcp/crystalPlasticityHCP.cc"
 
 //overload mesh() method to generate the required polycrystal geometry
 template <int dim>
