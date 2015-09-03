@@ -3,12 +3,7 @@
 * <a href="crystalPlasticity.pdf" target="_blank"><b>Crystal Plasticity</b></a> <br>
 */
 /** \page page2 Crystal Plasticity Examples
-* <a href="example_fcc_tension.pdf" target="_blank"><b>FCC: Simple Tension problem</b></a> <br>
-* <a href="example_fcc_shear.pdf" target="_blank"><b>FCC: Shear problem</b></a> <br>
-* <a href="example_bcc_tension.pdf" target="_blank"><b>BCC: Simple Tension problem</b></a> <br>
-* <a href="example_bcc_shear.pdf" target="_blank"><b>BCC: Shear problem</b></a> <br>
-* <a href="example_hcp_tension.pdf" target="_blank"><b>HCP: Simple Tension problem</b></a> <br>
-* <a href="example_hcp_shear.pdf" target="_blank"><b>HCP: Shear problem</b></a> <br>
+* <a href="example_fcc_tension.pdf" target="_blank"><b>BCC: Simple Tension problem</b></a> <br>
 */
 /** \page page3 Continuum Plasticity Examples
 * <a href="example_cp_simpleTension.pdf" target="_blank"><b>Continuum Plasticity: Simple Tension problem</b></a> <br>
