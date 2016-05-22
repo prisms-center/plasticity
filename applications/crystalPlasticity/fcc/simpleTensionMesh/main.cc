@@ -13,17 +13,22 @@ using namespace std;
 //FCC model header
 #include "../../../../src/materialModels/crystalPlasticity/fcc/model.h"
 
-
 //overload mesh() method to generate the required polycrystal geometry
 template <int dim>
 void crystalPlasticity<dim>::mesh(){
-	//creating mesh
-	this->pcout << "generating problem mesh\n";
-	double spanX=1.0; //Span along x-axis
-	double spanY=1.0; //Span along y-axis
-	double spanZ=1.0; //Span along z-axis
-	GridGenerator::hyper_rectangle (this->triangulation, Point<dim>(), Point<dim>(spanX,spanY,spanZ));
-	this->triangulation.refine_global (meshRefineFactor);
+  //reading external mesh
+  this->pcout << "reading problem mesh\n";
+  GridIn<dim> gridin;
+  gridin.attach_triangulation(this->triangulation);
+  //Read mesh in UCD format generated from Cubit
+  std::ifstream f("n1-id1_hex.msh");
+  gridin.read_msh(f);
+
+  //Output image to eps format for viewing (takes time, so comment out if not necessary)
+  std::ofstream out ("mesh.eps");
+  GridOut grid_out;
+  grid_out.write_eps (this->triangulation, out);
+  this->pcout << "writing mesh image to mesh.eps\n";
 } 
 
 //Mark boundaries for applying Dirichlet BC's
