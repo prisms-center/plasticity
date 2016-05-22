@@ -24,11 +24,11 @@ void crystalPlasticity<dim>::mesh(){
   std::ifstream f("n1-id1_hex.msh");
   gridin.read_msh(f);
 
-  //Output image to eps format for viewing (takes time, so comment out if not necessary)
-  std::ofstream out ("mesh.eps");
+  //Output image for viewing
+  std::ofstream out ("mesh.vtk");
   GridOut grid_out;
-  grid_out.write_eps (this->triangulation, out);
-  this->pcout << "writing mesh image to mesh.eps\n";
+  grid_out.write_vtk (this->triangulation, out);
+  this->pcout << "writing mesh image to mesh.vtk\n";
 } 
 
 //Mark boundaries for applying Dirichlet BC's
