@@ -58,7 +58,8 @@ public:
      PA-active slip systems
     */
      
-    void inactive_slip_removal(Vector<double> &inactive,Vector<double> &active, Vector<double> &x_beta, int &n_PA, Vector<double> &PA, Vector<double> b,FullMatrix<double> A,FullMatrix<double> A_PA);
+
+    void inactive_slip_removal(Vector<double> &active,Vector<double> &x_beta_old, Vector<double> &x_beta, int &n_PA, Vector<double> &PA, Vector<double> b,FullMatrix<double> A,FullMatrix<double> &A_PA);
     /**
      * Structure to hold material parameters
      */
@@ -125,6 +126,12 @@ private:
      *calculates the equivalent matrix Aleft for the second order tensorial operation trace(AX)=B => A_r*{x}={b}
      */
     void tracev(FullMatrix<double> &Atrace, FullMatrix<double> elm, FullMatrix<double> B);
+    
+    /**
+     *calculates the matrix exponential of matrix A
+     */
+    
+    FullMatrix<double> matrixExponential(FullMatrix<double> A);
     
     
     /**
