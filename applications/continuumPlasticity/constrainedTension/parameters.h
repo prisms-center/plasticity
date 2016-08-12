@@ -13,7 +13,7 @@
 /**
  *Total applied displacement
  */
-#define totalDisplacement 0.1
+#define totalDisplacement 0.05
 /**
  *Flag to write output files
  */
@@ -25,7 +25,7 @@
 /**
  *Number of increments (i.e. loads steps, pseudo-time steps)
  */
-#define totalNumIncrements 400
+#define totalNumIncrements 200
 /**
  *Maximum iterations within the linear solve
  */
@@ -33,7 +33,7 @@
 /**
  *Relative tolerance for the linear solver
  */
-#define relLinearSolverTolerance  1.0e-12
+#define relLinearSolverTolerance  1.0e-14
 /**
  *Maximum iterations within the nonlinear solve (Newton-Raphson iterations)
  */
@@ -66,7 +66,7 @@
 /**
  *Linear isotropic strain hardening coefficient
  */
-#define strain_hardening 100
+#define strain_hardening 1000
 /**
  *Kinematic strain hardening coefficient
  */
