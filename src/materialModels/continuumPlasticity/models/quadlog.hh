@@ -1,4 +1,4 @@
-// created: 2015-4-7 15:16:56
+// created: 2016-8-5 14:00:36
 // version: master
 // url: https://github.com/prisms-center/IntegrationToolsWriter.git
 // commit: 8a15adf67355fad30bd75ce9ba6b1f8d24b9a537
@@ -8,7 +8,7 @@
 
 #include <cmath>
 #include <cstdlib>
-#include "../../../../utils/IntegrationTools/PFunction.hh"
+#include "IntegrationTools/PFunction.hh"
 
 namespace PRISMS
 {
@@ -17,7 +17,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return  5.0000000000000000e-01*var[5]*pow(var[6],2.0000000000000000e+00)+5.0000000000000000e-01*var[0]*pow( log(var[4])+log(var[3])+log(var[2]),2.0000000000000000e+00)+var[1]*( pow(log(var[3]),2.0000000000000000e+00)+pow(log(var[4]),2.0000000000000000e+00)+pow(log(var[2]),2.0000000000000000e+00));
+            return  5.0000000000000000e-01*pow( log(var[4])+log(var[2])+log(var[3]),2.0000000000000000e+00)*var[0]+5.0000000000000000e-01*var[5]*pow(var[6],2.0000000000000000e+00)+( pow(log(var[3]),2.0000000000000000e+00)+pow(log(var[4]),2.0000000000000000e+00)+pow(log(var[2]),2.0000000000000000e+00))*var[1];
         }
 
     public:
@@ -29,17 +29,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return " 5.0000000000000000e-01*var[5]*pow(var[6],2.0000000000000000e+00)+5.0000000000000000e-01*var[0]*pow( log(var[4])+log(var[3])+log(var[2]),2.0000000000000000e+00)+var[1]*( pow(log(var[3]),2.0000000000000000e+00)+pow(log(var[4]),2.0000000000000000e+00)+pow(log(var[2]),2.0000000000000000e+00))";
+            return " 5.0000000000000000e-01*pow( log(var[4])+log(var[2])+log(var[3]),2.0000000000000000e+00)*var[0]+5.0000000000000000e-01*var[5]*pow(var[6],2.0000000000000000e+00)+( pow(log(var[3]),2.0000000000000000e+00)+pow(log(var[4]),2.0000000000000000e+00)+pow(log(var[2]),2.0000000000000000e+00))*var[1]";
         }
 
         std::string sym() const
         {
-            return "(0.5)*lambda*(log(lambda1)+log(lambda3)+log(lambda2))^(2.0)+(log(lambda3)^(2.0)+log(lambda1)^(2.0)+log(lambda2)^(2.0))*mu+(0.5)*K*alpha^(2.0)";
+            return "(0.5)*lambda*(log(lambda1)+log(lambda2)+log(lambda3))^(2.0)+(log(lambda2)^(2.0)+log(lambda3)^(2.0)+log(lambda1)^(2.0))*mu+(0.5)*K*alpha^(2.0)";
         }
 
         std::string latex() const
         {
-            return "{(0.5)}  K \\alpha^{{(2.0)}}+ {(\\ln(lambda2)^{{(2.0)}}+\\ln(lambda3)^{{(2.0)}}+\\ln(lambda1)^{{(2.0)}})} \\mu+{(0.5)}  \\lambda {(\\ln(lambda2)+\\ln(lambda1)+\\ln(lambda3))}^{{(2.0)}}";
+            return " \\mu {(\\ln(lambda2)^{{(2.0)}}+\\ln(lambda3)^{{(2.0)}}+\\ln(lambda1)^{{(2.0)}})}+{(0.5)}  \\alpha^{{(2.0)}} K+{(0.5)}  \\lambda {(\\ln(lambda1)+\\ln(lambda2)+\\ln(lambda3))}^{{(2.0)}}";
         }
 
         quadlog_f* clone() const
@@ -53,7 +53,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return 5.0000000000000000e-01*pow( log(var[4])+log(var[3])+log(var[2]),2.0000000000000000e+00);
+            return 5.0000000000000000e-01*pow( log(var[4])+log(var[2])+log(var[3]),2.0000000000000000e+00);
         }
 
     public:
@@ -65,17 +65,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return "5.0000000000000000e-01*pow( log(var[4])+log(var[3])+log(var[2]),2.0000000000000000e+00)";
+            return "5.0000000000000000e-01*pow( log(var[4])+log(var[2])+log(var[3]),2.0000000000000000e+00)";
         }
 
         std::string sym() const
         {
-            return "(0.5)*(log(lambda2)+log(lambda1)+log(lambda3))^(2.0)";
+            return "(0.5)*(log(lambda2)+log(lambda3)+log(lambda1))^(2.0)";
         }
 
         std::string latex() const
         {
-            return "{(0.5)}  {(\\ln(lambda3)+\\ln(lambda2)+\\ln(lambda1))}^{{(2.0)}}";
+            return "{(0.5)}  {(\\ln(lambda3)+\\ln(lambda1)+\\ln(lambda2))}^{{(2.0)}}";
         }
 
         quadlog_grad_0* clone() const
@@ -89,7 +89,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return  pow(log(var[3]),2.0000000000000000e+00)+pow(log(var[4]),2.0000000000000000e+00)+pow(log(var[2]),2.0000000000000000e+00);
+            return  pow(log(var[2]),2.0000000000000000e+00)+pow(log(var[3]),2.0000000000000000e+00)+pow(log(var[4]),2.0000000000000000e+00);
         }
 
     public:
@@ -101,17 +101,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return " pow(log(var[3]),2.0000000000000000e+00)+pow(log(var[4]),2.0000000000000000e+00)+pow(log(var[2]),2.0000000000000000e+00)";
+            return " pow(log(var[2]),2.0000000000000000e+00)+pow(log(var[3]),2.0000000000000000e+00)+pow(log(var[4]),2.0000000000000000e+00)";
         }
 
         std::string sym() const
         {
-            return "log(lambda2)^(2.0)+log(lambda3)^(2.0)+log(lambda1)^(2.0)";
+            return "log(lambda1)^(2.0)+log(lambda2)^(2.0)+log(lambda3)^(2.0)";
         }
 
         std::string latex() const
         {
-            return "\\ln(lambda1)^{{(2.0)}}+\\ln(lambda2)^{{(2.0)}}+\\ln(lambda3)^{{(2.0)}}";
+            return "\\ln(lambda3)^{{(2.0)}}+\\ln(lambda1)^{{(2.0)}}+\\ln(lambda2)^{{(2.0)}}";
         }
 
         quadlog_grad_1* clone() const
@@ -125,7 +125,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return  1.0/var[2]*( log(var[2])+log(var[4])+log(var[3]))*var[0]+2.0000000000000000e+00*log(var[2])*var[1]*1.0/(var[2]);
+            return  1.0/var[2]*( log(var[2])+log(var[3])+log(var[4]))*var[0]+2.0000000000000000e+00*var[1]*log(var[2])*1.0/(var[2]);
         }
 
     public:
@@ -137,17 +137,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return " 1.0/var[2]*( log(var[2])+log(var[4])+log(var[3]))*var[0]+2.0000000000000000e+00*log(var[2])*var[1]*1.0/(var[2])";
+            return " 1.0/var[2]*( log(var[2])+log(var[3])+log(var[4]))*var[0]+2.0000000000000000e+00*var[1]*log(var[2])*1.0/(var[2])";
         }
 
         std::string sym() const
         {
-            return "(2.0)*lambda1^(-1)*log(lambda1)*mu+lambda*(log(lambda2)+log(lambda1)+log(lambda3))*lambda1^(-1)";
+            return "lambda*lambda1^(-1)*(log(lambda2)+log(lambda3)+log(lambda1))+(2.0)*mu*lambda1^(-1)*log(lambda1)";
         }
 
         std::string latex() const
         {
-            return "{(2.0)}  \\ln(lambda1) \\mu \\frac{1}{lambda1}+\\frac{ {(\\ln(lambda1)+\\ln(lambda3)+\\ln(lambda2))} \\lambda}{lambda1}";
+            return "\\frac{ {(\\ln(lambda1)+\\ln(lambda2)+\\ln(lambda3))} \\lambda}{lambda1}+{(2.0)}  \\ln(lambda1) \\frac{1}{lambda1} \\mu";
         }
 
         quadlog_grad_2* clone() const
@@ -161,7 +161,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return  2.0000000000000000e+00*log(var[3])*var[1]*1.0/(var[3])+1.0/var[3]*var[0]*( log(var[4])+log(var[3])+log(var[2]));
+            return  1.0/var[3]*var[0]*( log(var[3])+log(var[4])+log(var[2]))+2.0000000000000000e+00*1.0/(var[3])*log(var[3])*var[1];
         }
 
     public:
@@ -173,17 +173,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return " 2.0000000000000000e+00*log(var[3])*var[1]*1.0/(var[3])+1.0/var[3]*var[0]*( log(var[4])+log(var[3])+log(var[2]))";
+            return " 1.0/var[3]*var[0]*( log(var[3])+log(var[4])+log(var[2]))+2.0000000000000000e+00*1.0/(var[3])*log(var[3])*var[1]";
         }
 
         std::string sym() const
         {
-            return "(log(lambda1)+log(lambda3)+log(lambda2))*lambda2^(-1)*lambda+(2.0)*mu*log(lambda2)*lambda2^(-1)";
+            return "lambda2^(-1)*lambda*(log(lambda1)+log(lambda2)+log(lambda3))+(2.0)*lambda2^(-1)*log(lambda2)*mu";
         }
 
         std::string latex() const
         {
-            return "{(2.0)}  \\ln(lambda2) \\mu \\frac{1}{lambda2}+\\frac{ \\lambda {(\\ln(lambda3)+\\ln(lambda2)+\\ln(lambda1))}}{lambda2}";
+            return "\\frac{ \\lambda {(\\ln(lambda2)+\\ln(lambda3)+\\ln(lambda1))}}{lambda2}+{(2.0)}  \\ln(lambda2) \\frac{1}{lambda2} \\mu";
         }
 
         quadlog_grad_3* clone() const
@@ -197,7 +197,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return  2.0000000000000000e+00*1.0/(var[4])*log(var[4])*var[1]+var[0]/var[4]*( log(var[2])+log(var[4])+log(var[3]));
+            return  2.0000000000000000e+00*1.0/(var[4])*var[1]*log(var[4])+var[0]/var[4]*( log(var[2])+log(var[3])+log(var[4]));
         }
 
     public:
@@ -209,17 +209,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return " 2.0000000000000000e+00*1.0/(var[4])*log(var[4])*var[1]+var[0]/var[4]*( log(var[2])+log(var[4])+log(var[3]))";
+            return " 2.0000000000000000e+00*1.0/(var[4])*var[1]*log(var[4])+var[0]/var[4]*( log(var[2])+log(var[3])+log(var[4]))";
         }
 
         std::string sym() const
         {
-            return "(2.0)*log(lambda3)*lambda3^(-1)*mu+lambda*lambda3^(-1)*(log(lambda3)+log(lambda2)+log(lambda1))";
+            return "lambda*lambda3^(-1)*(log(lambda3)+log(lambda1)+log(lambda2))+(2.0)*mu*log(lambda3)*lambda3^(-1)";
         }
 
         std::string latex() const
         {
-            return "{(2.0)}  \\frac{1}{lambda3} \\ln(lambda3) \\mu+\\frac{ \\lambda {(\\ln(lambda1)+\\ln(lambda3)+\\ln(lambda2))}}{lambda3}";
+            return "\\frac{ \\lambda {(\\ln(lambda1)+\\ln(lambda2)+\\ln(lambda3))}}{lambda3}+{(2.0)}  \\frac{1}{lambda3} \\ln(lambda3) \\mu";
         }
 
         quadlog_grad_4* clone() const
@@ -269,7 +269,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return var[5]*var[6];
+            return var[6]*var[5];
         }
 
     public:
@@ -281,7 +281,7 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return "var[5]*var[6]";
+            return "var[6]*var[5]";
         }
 
         std::string sym() const
@@ -377,7 +377,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return ( log(var[2])+log(var[4])+log(var[3]))/var[2];
+            return 1.0/var[2]*( log(var[2])+log(var[3])+log(var[4]));
         }
 
     public:
@@ -389,17 +389,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return "( log(var[2])+log(var[4])+log(var[3]))/var[2]";
+            return "1.0/var[2]*( log(var[2])+log(var[3])+log(var[4]))";
         }
 
         std::string sym() const
         {
-            return "(log(lambda3)+log(lambda2)+log(lambda1))*lambda1^(-1)";
+            return "(log(lambda2)+log(lambda3)+log(lambda1))*lambda1^(-1)";
         }
 
         std::string latex() const
         {
-            return "\\frac{\\ln(lambda1)+\\ln(lambda3)+\\ln(lambda2)}{lambda1}";
+            return "\\frac{\\ln(lambda1)+\\ln(lambda2)+\\ln(lambda3)}{lambda1}";
         }
 
         quadlog_hess_0_2* clone() const
@@ -413,7 +413,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return 1.0/var[3]*( log(var[4])+log(var[3])+log(var[2]));
+            return ( log(var[4])+log(var[2])+log(var[3]))/var[3];
         }
 
     public:
@@ -425,17 +425,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return "1.0/var[3]*( log(var[4])+log(var[3])+log(var[2]))";
+            return "( log(var[4])+log(var[2])+log(var[3]))/var[3]";
         }
 
         std::string sym() const
         {
-            return "lambda2^(-1)*(log(lambda1)+log(lambda3)+log(lambda2))";
+            return "lambda2^(-1)*(log(lambda1)+log(lambda2)+log(lambda3))";
         }
 
         std::string latex() const
         {
-            return "\\frac{\\ln(lambda3)+\\ln(lambda2)+\\ln(lambda1)}{lambda2}";
+            return "\\frac{\\ln(lambda3)+\\ln(lambda1)+\\ln(lambda2)}{lambda2}";
         }
 
         quadlog_hess_0_3* clone() const
@@ -449,7 +449,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return ( log(var[2])+log(var[4])+log(var[3]))/var[4];
+            return ( log(var[2])+log(var[3])+log(var[4]))/var[4];
         }
 
     public:
@@ -461,17 +461,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return "( log(var[2])+log(var[4])+log(var[3]))/var[4]";
+            return "( log(var[2])+log(var[3])+log(var[4]))/var[4]";
         }
 
         std::string sym() const
         {
-            return "lambda3^(-1)*(log(lambda3)+log(lambda2)+log(lambda1))";
+            return "lambda3^(-1)*(log(lambda3)+log(lambda1)+log(lambda2))";
         }
 
         std::string latex() const
         {
-            return "\\frac{\\ln(lambda2)+\\ln(lambda1)+\\ln(lambda3)}{lambda3}";
+            return "\\frac{\\ln(lambda1)+\\ln(lambda2)+\\ln(lambda3)}{lambda3}";
         }
 
         quadlog_hess_0_4* clone() const
@@ -629,7 +629,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return 2.0000000000000000e+00*1.0/(var[2])*log(var[2]);
+            return 2.0000000000000000e+00*log(var[2])*1.0/(var[2]);
         }
 
     public:
@@ -641,7 +641,7 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return "2.0000000000000000e+00*1.0/(var[2])*log(var[2])";
+            return "2.0000000000000000e+00*log(var[2])*1.0/(var[2])";
         }
 
         std::string sym() const
@@ -651,7 +651,7 @@ namespace PRISMS
 
         std::string latex() const
         {
-            return "{(2.0)}  \\ln(lambda1) \\frac{1}{lambda1}";
+            return "{(2.0)}  \\frac{1}{lambda1} \\ln(lambda1)";
         }
 
         quadlog_hess_1_2* clone() const
@@ -701,7 +701,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return 2.0000000000000000e+00*log(var[4])*1.0/(var[4]);
+            return 2.0000000000000000e+00*1.0/(var[4])*log(var[4]);
         }
 
     public:
@@ -713,17 +713,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return "2.0000000000000000e+00*log(var[4])*1.0/(var[4])";
+            return "2.0000000000000000e+00*1.0/(var[4])*log(var[4])";
         }
 
         std::string sym() const
         {
-            return "(2.0)*log(lambda3)*lambda3^(-1)";
+            return "(2.0)*lambda3^(-1)*log(lambda3)";
         }
 
         std::string latex() const
         {
-            return "{(2.0)}  \\ln(lambda3) \\frac{1}{lambda3}";
+            return "{(2.0)}  \\frac{1}{lambda3} \\ln(lambda3)";
         }
 
         quadlog_hess_1_4* clone() const
@@ -809,7 +809,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return ( log(var[2])+log(var[4])+log(var[3]))/var[2];
+            return 1.0/var[2]*( log(var[2])+log(var[3])+log(var[4]));
         }
 
     public:
@@ -821,17 +821,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return "( log(var[2])+log(var[4])+log(var[3]))/var[2]";
+            return "1.0/var[2]*( log(var[2])+log(var[3])+log(var[4]))";
         }
 
         std::string sym() const
         {
-            return "(log(lambda3)+log(lambda2)+log(lambda1))*lambda1^(-1)";
+            return "(log(lambda2)+log(lambda3)+log(lambda1))*lambda1^(-1)";
         }
 
         std::string latex() const
         {
-            return "\\frac{\\ln(lambda1)+\\ln(lambda3)+\\ln(lambda2)}{lambda1}";
+            return "\\frac{\\ln(lambda1)+\\ln(lambda2)+\\ln(lambda3)}{lambda1}";
         }
 
         quadlog_hess_2_0* clone() const
@@ -862,12 +862,12 @@ namespace PRISMS
 
         std::string sym() const
         {
-            return "(2.0)*lambda1^(-1)*log(lambda1)";
+            return "(2.0)*log(lambda1)*lambda1^(-1)";
         }
 
         std::string latex() const
         {
-            return "{(2.0)}  \\ln(lambda1) \\frac{1}{lambda1}";
+            return "{(2.0)}  \\frac{1}{lambda1} \\ln(lambda1)";
         }
 
         quadlog_hess_2_1* clone() const
@@ -881,7 +881,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return  2.0000000000000000e+00*1.0/var[2]*var[1]*1.0/(var[2])+-2.0000000000000000e+00*1.0/(var[2]*var[2])*log(var[2])*var[1]+1.0/(var[2]*var[2])*var[0]-1.0/(var[2]*var[2])*var[0]*( log(var[2])+log(var[4])+log(var[3]));
+            return -1.0/(var[2]*var[2])*var[0]*( log(var[2])+log(var[3])+log(var[4]))+1.0/(var[2]*var[2])*var[0]+2.0000000000000000e+00*1.0/var[2]*1.0/(var[2])*var[1]+-2.0000000000000000e+00*1.0/(var[2]*var[2])*log(var[2])*var[1];
         }
 
     public:
@@ -893,17 +893,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return " 2.0000000000000000e+00*1.0/var[2]*var[1]*1.0/(var[2])+-2.0000000000000000e+00*1.0/(var[2]*var[2])*log(var[2])*var[1]+1.0/(var[2]*var[2])*var[0]-1.0/(var[2]*var[2])*var[0]*( log(var[2])+log(var[4])+log(var[3]))";
+            return "-1.0/(var[2]*var[2])*var[0]*( log(var[2])+log(var[3])+log(var[4]))+1.0/(var[2]*var[2])*var[0]+2.0000000000000000e+00*1.0/var[2]*1.0/(var[2])*var[1]+-2.0000000000000000e+00*1.0/(var[2]*var[2])*log(var[2])*var[1]";
         }
 
         std::string sym() const
         {
-            return "-(2.0)*mu*lambda1^(-2)*log(lambda1)-lambda*lambda1^(-2)*(log(lambda3)+log(lambda2)+log(lambda1))+(2.0)*mu*lambda1^(-1)*lambda1^(-1)+lambda*lambda1^(-2)";
+            return "(2.0)*lambda1^(-1)*mu*lambda1^(-1)-(log(lambda3)+log(lambda1)+log(lambda2))*lambda1^(-2)*lambda+lambda1^(-2)*lambda-(2.0)*mu*lambda1^(-2)*log(lambda1)";
         }
 
         std::string latex() const
         {
-            return "\\frac{\\lambda}{lambda1^{2}}-\\frac{ \\lambda {(\\ln(lambda2)+\\ln(lambda1)+\\ln(lambda3))}}{lambda1^{2}}+{(2.0)} \\frac{\\frac{\\mu}{lambda1}}{lambda1}-{(2.0)} \\frac{ \\ln(lambda1) \\mu}{lambda1^{2}}";
+            return "{(2.0)} \\frac{\\frac{\\mu}{lambda1}}{lambda1}-{(2.0)} \\frac{ \\ln(lambda1) \\mu}{lambda1^{2}}-\\frac{ \\lambda {(\\ln(lambda1)+\\ln(lambda2)+\\ln(lambda3))}}{lambda1^{2}}+\\frac{\\lambda}{lambda1^{2}}";
         }
 
         quadlog_hess_2_2* clone() const
@@ -934,7 +934,7 @@ namespace PRISMS
 
         std::string sym() const
         {
-            return "lambda1^(-1)*lambda2^(-1)*lambda";
+            return "lambda2^(-1)*lambda*lambda1^(-1)";
         }
 
         std::string latex() const
@@ -953,7 +953,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return 1.0/var[2]*var[0]/var[4];
+            return var[0]/var[4]/var[2];
         }
 
     public:
@@ -965,7 +965,7 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return "1.0/var[2]*var[0]/var[4]";
+            return "var[0]/var[4]/var[2]";
         }
 
         std::string sym() const
@@ -1061,7 +1061,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return ( log(var[2])+log(var[4])+log(var[3]))/var[3];
+            return 1.0/var[3]*( log(var[2])+log(var[3])+log(var[4]));
         }
 
     public:
@@ -1073,17 +1073,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return "( log(var[2])+log(var[4])+log(var[3]))/var[3]";
+            return "1.0/var[3]*( log(var[2])+log(var[3])+log(var[4]))";
         }
 
         std::string sym() const
         {
-            return "lambda2^(-1)*(log(lambda3)+log(lambda2)+log(lambda1))";
+            return "(log(lambda3)+log(lambda1)+log(lambda2))*lambda2^(-1)";
         }
 
         std::string latex() const
         {
-            return "\\frac{\\ln(lambda1)+\\ln(lambda3)+\\ln(lambda2)}{lambda2}";
+            return "\\frac{\\ln(lambda1)+\\ln(lambda2)+\\ln(lambda3)}{lambda2}";
         }
 
         quadlog_hess_3_0* clone() const
@@ -1155,7 +1155,7 @@ namespace PRISMS
 
         std::string latex() const
         {
-            return "\\frac{\\lambda}{ lambda1 lambda2}";
+            return "\\frac{\\lambda}{ lambda2 lambda1}";
         }
 
         quadlog_hess_3_2* clone() const
@@ -1169,7 +1169,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return  1.0/(var[3]*var[3])*var[0]+2.0000000000000000e+00*1.0/(var[3])*var[1]/var[3]+-2.0000000000000000e+00*var[1]*log(var[3])/(var[3]*var[3])-( log(var[4])+log(var[3])+log(var[2]))/(var[3]*var[3])*var[0];
+            return  -2.0000000000000000e+00*var[1]*log(var[3])/(var[3]*var[3])+1.0/(var[3]*var[3])*var[0]+2.0000000000000000e+00*var[1]*1.0/(var[3])/var[3]-( log(var[4])+log(var[2])+log(var[3]))/(var[3]*var[3])*var[0];
         }
 
     public:
@@ -1181,17 +1181,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return " 1.0/(var[3]*var[3])*var[0]+2.0000000000000000e+00*1.0/(var[3])*var[1]/var[3]+-2.0000000000000000e+00*var[1]*log(var[3])/(var[3]*var[3])-( log(var[4])+log(var[3])+log(var[2]))/(var[3]*var[3])*var[0]";
+            return " -2.0000000000000000e+00*var[1]*log(var[3])/(var[3]*var[3])+1.0/(var[3]*var[3])*var[0]+2.0000000000000000e+00*var[1]*1.0/(var[3])/var[3]-( log(var[4])+log(var[2])+log(var[3]))/(var[3]*var[3])*var[0]";
         }
 
         std::string sym() const
         {
-            return "lambda2^(-2)*lambda+(2.0)*lambda2^(-1)*lambda2^(-1)*mu-(2.0)*log(lambda2)*lambda2^(-2)*mu-lambda2^(-2)*(log(lambda2)+log(lambda1)+log(lambda3))*lambda";
+            return "(2.0)*lambda2^(-1)*lambda2^(-1)*mu+lambda2^(-2)*lambda-(2.0)*log(lambda2)*lambda2^(-2)*mu-lambda2^(-2)*lambda*(log(lambda2)+log(lambda3)+log(lambda1))";
         }
 
         std::string latex() const
         {
-            return "\\frac{\\lambda}{lambda2^{2}}-\\frac{ {(\\ln(lambda1)+\\ln(lambda3)+\\ln(lambda2))} \\lambda}{lambda2^{2}}-{(2.0)} \\frac{ \\mu \\ln(lambda2)}{lambda2^{2}}+{(2.0)} \\frac{\\frac{\\mu}{lambda2}}{lambda2}";
+            return "-\\frac{ {(\\ln(lambda1)+\\ln(lambda2)+\\ln(lambda3))} \\lambda}{lambda2^{2}}+{(2.0)} \\frac{\\frac{\\mu}{lambda2}}{lambda2}+\\frac{\\lambda}{lambda2^{2}}-{(2.0)} \\frac{ \\mu \\ln(lambda2)}{lambda2^{2}}";
         }
 
         quadlog_hess_3_3* clone() const
@@ -1222,7 +1222,7 @@ namespace PRISMS
 
         std::string sym() const
         {
-            return "lambda3^(-1)*lambda2^(-1)*lambda";
+            return "lambda2^(-1)*lambda*lambda3^(-1)";
         }
 
         std::string latex() const
@@ -1313,7 +1313,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return 1.0/var[4]*( log(var[2])+log(var[4])+log(var[3]));
+            return ( log(var[2])+log(var[3])+log(var[4]))/var[4];
         }
 
     public:
@@ -1325,17 +1325,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return "1.0/var[4]*( log(var[2])+log(var[4])+log(var[3]))";
+            return "( log(var[2])+log(var[3])+log(var[4]))/var[4]";
         }
 
         std::string sym() const
         {
-            return "lambda3^(-1)*(log(lambda3)+log(lambda2)+log(lambda1))";
+            return "(log(lambda3)+log(lambda1)+log(lambda2))*lambda3^(-1)";
         }
 
         std::string latex() const
         {
-            return "\\frac{\\ln(lambda2)+\\ln(lambda1)+\\ln(lambda3)}{lambda3}";
+            return "\\frac{\\ln(lambda1)+\\ln(lambda2)+\\ln(lambda3)}{lambda3}";
         }
 
         quadlog_hess_4_0* clone() const
@@ -1349,7 +1349,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return 2.0000000000000000e+00*log(var[4])*1.0/(var[4]);
+            return 2.0000000000000000e+00*1.0/(var[4])*log(var[4]);
         }
 
     public:
@@ -1361,17 +1361,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return "2.0000000000000000e+00*log(var[4])*1.0/(var[4])";
+            return "2.0000000000000000e+00*1.0/(var[4])*log(var[4])";
         }
 
         std::string sym() const
         {
-            return "(2.0)*log(lambda3)*lambda3^(-1)";
+            return "(2.0)*lambda3^(-1)*log(lambda3)";
         }
 
         std::string latex() const
         {
-            return "{(2.0)}  \\ln(lambda3) \\frac{1}{lambda3}";
+            return "{(2.0)}  \\frac{1}{lambda3} \\ln(lambda3)";
         }
 
         quadlog_hess_4_1* clone() const
@@ -1385,7 +1385,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return 1.0/var[2]*var[0]/var[4];
+            return var[0]/var[4]/var[2];
         }
 
     public:
@@ -1397,7 +1397,7 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return "1.0/var[2]*var[0]/var[4]";
+            return "var[0]/var[4]/var[2]";
         }
 
         std::string sym() const
@@ -1421,7 +1421,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return 1.0/var[4]/var[3]*var[0];
+            return 1.0/var[3]*var[0]/var[4];
         }
 
     public:
@@ -1433,7 +1433,7 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return "1.0/var[4]/var[3]*var[0]";
+            return "1.0/var[3]*var[0]/var[4]";
         }
 
         std::string sym() const
@@ -1443,7 +1443,7 @@ namespace PRISMS
 
         std::string latex() const
         {
-            return "\\frac{\\lambda}{ lambda3 lambda2}";
+            return "\\frac{\\lambda}{ lambda2 lambda3}";
         }
 
         quadlog_hess_4_3* clone() const
@@ -1457,7 +1457,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return -var[0]/(var[4]*var[4])*( log(var[4])+log(var[3])+log(var[2]))+-2.0000000000000000e+00*log(var[4])/(var[4]*var[4])*var[1]+var[0]/(var[4]*var[4])+2.0000000000000000e+00*1.0/var[4]*1.0/(var[4])*var[1];
+            return -var[0]/(var[4]*var[4])*( log(var[3])+log(var[4])+log(var[2]))+var[0]/(var[4]*var[4])+2.0000000000000000e+00*1.0/var[4]*var[1]*1.0/(var[4])+-2.0000000000000000e+00*1.0/(var[4]*var[4])*var[1]*log(var[4]);
         }
 
     public:
@@ -1469,17 +1469,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return "-var[0]/(var[4]*var[4])*( log(var[4])+log(var[3])+log(var[2]))+-2.0000000000000000e+00*log(var[4])/(var[4]*var[4])*var[1]+var[0]/(var[4]*var[4])+2.0000000000000000e+00*1.0/var[4]*1.0/(var[4])*var[1]";
+            return "-var[0]/(var[4]*var[4])*( log(var[3])+log(var[4])+log(var[2]))+var[0]/(var[4]*var[4])+2.0000000000000000e+00*1.0/var[4]*var[1]*1.0/(var[4])+-2.0000000000000000e+00*1.0/(var[4]*var[4])*var[1]*log(var[4])";
         }
 
         std::string sym() const
         {
-            return "-(log(lambda1)+log(lambda3)+log(lambda2))*lambda*lambda3^(-2)-(2.0)*mu*log(lambda3)*lambda3^(-2)+(2.0)*mu*lambda3^(-1)*lambda3^(-1)+lambda*lambda3^(-2)";
+            return "-lambda*(log(lambda1)+log(lambda2)+log(lambda3))*lambda3^(-2)+(2.0)*lambda3^(-1)*lambda3^(-1)*mu+lambda*lambda3^(-2)-(2.0)*lambda3^(-2)*mu*log(lambda3)";
         }
 
         std::string latex() const
         {
-            return "-\\frac{ \\lambda {(\\ln(lambda3)+\\ln(lambda2)+\\ln(lambda1))}}{lambda3^{2}}+{(2.0)} \\frac{\\frac{\\mu}{lambda3}}{lambda3}-{(2.0)} \\frac{ \\ln(lambda3) \\mu}{lambda3^{2}}+\\frac{\\lambda}{lambda3^{2}}";
+            return "\\frac{\\lambda}{lambda3^{2}}+{(2.0)} \\frac{\\frac{\\mu}{lambda3}}{lambda3}-{(2.0)} \\frac{ \\mu \\ln(lambda3)}{lambda3^{2}}-\\frac{ \\lambda {(\\ln(lambda2)+\\ln(lambda3)+\\ln(lambda1))}}{lambda3^{2}}";
         }
 
         quadlog_hess_4_4* clone() const

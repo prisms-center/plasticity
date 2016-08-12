@@ -1,4 +1,4 @@
-// created: 2015-4-7 15:16:56
+// created: 2016-8-5 14:00:36
 // version: master
 // url: https://github.com/prisms-center/IntegrationToolsWriter.git
 // commit: 8a15adf67355fad30bd75ce9ba6b1f8d24b9a537
@@ -8,7 +8,7 @@
 
 #include <cmath>
 #include <cstdlib>
-#include "../../../../utils/IntegrationTools/PFunction.hh"
+#include "IntegrationTools/PFunction.hh"
 
 namespace PRISMS
 {
@@ -17,7 +17,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return  -1.1216965746072850e+09*pow(var[0],5.0000000000000000e-01)+3.2986102779887700e+08*pow(var[0],3.3333333333333331e-01)+3.2738656842295301e+08*var[0];
+            return  3.2986102779887700e+08*pow(var[0],3.3333333333333331e-01)+3.2738656842295301e+08*var[0]+-1.1216965746072850e+09*pow(var[0],5.0000000000000000e-01);
         }
 
     public:
@@ -29,12 +29,12 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return " -1.1216965746072850e+09*pow(var[0],5.0000000000000000e-01)+3.2986102779887700e+08*pow(var[0],3.3333333333333331e-01)+3.2738656842295301e+08*var[0]";
+            return " 3.2986102779887700e+08*pow(var[0],3.3333333333333331e-01)+3.2738656842295301e+08*var[0]+-1.1216965746072850e+09*pow(var[0],5.0000000000000000e-01)";
         }
 
         std::string sym() const
         {
-            return "-(1.121696574607285E9)*sqrt(alpha)+(3.29861027798877E8)*alpha^(0.33333333333333333334)+(3.2738656842295301E8)*alpha";
+            return "(3.2738656842295301E8)*alpha+(3.29861027798877E8)*alpha^(0.33333333333333333334)-(1.121696574607285E9)*sqrt(alpha)";
         }
 
         std::string latex() const
@@ -53,7 +53,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return  1.0995367593295901e+08*pow(var[0],-6.6666666666666663e-01)+-5.6084828730364251e+08*pow(var[0],-5.0000000000000000e-01)+3.2738656842295301e+08;
+            return  -5.6084828730364251e+08*pow(var[0],-5.0000000000000000e-01)+1.0995367593295901e+08*pow(var[0],-6.6666666666666663e-01)+3.2738656842295301e+08;
         }
 
     public:
@@ -65,12 +65,12 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return " 1.0995367593295901e+08*pow(var[0],-6.6666666666666663e-01)+-5.6084828730364251e+08*pow(var[0],-5.0000000000000000e-01)+3.2738656842295301e+08";
+            return " -5.6084828730364251e+08*pow(var[0],-5.0000000000000000e-01)+1.0995367593295901e+08*pow(var[0],-6.6666666666666663e-01)+3.2738656842295301e+08";
         }
 
         std::string sym() const
         {
-            return "3.2738656842295301E8-(5.608482873036425E8)*alpha^(-0.5)+(1.09953675932959E8)*alpha^(-0.66666666666666666663)";
+            return "3.2738656842295301E8+(1.09953675932959E8)*alpha^(-0.66666666666666666663)-(5.608482873036425E8)*alpha^(-0.5)";
         }
 
         std::string latex() const
@@ -125,7 +125,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return  -7.3302450621972665e+07*pow(var[0],-1.6666666666666667e+00)+2.8042414365182126e+08*pow(var[0],-1.5000000000000000e+00);
+            return  2.8042414365182126e+08*pow(var[0],-1.5000000000000000e+00)+-7.3302450621972665e+07*pow(var[0],-1.6666666666666667e+00);
         }
 
     public:
@@ -137,17 +137,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return " -7.3302450621972665e+07*pow(var[0],-1.6666666666666667e+00)+2.8042414365182126e+08*pow(var[0],-1.5000000000000000e+00)";
+            return " 2.8042414365182126e+08*pow(var[0],-1.5000000000000000e+00)+-7.3302450621972665e+07*pow(var[0],-1.6666666666666667e+00)";
         }
 
         std::string sym() const
         {
-            return "-(7.330245062197266666E7)*alpha^(-1.6666666666666666666)+(2.8042414365182125E8)*alpha^(-1.5)";
+            return "(2.8042414365182125E8)*alpha^(-1.5)-(7.330245062197266666E7)*alpha^(-1.6666666666666666666)";
         }
 
         std::string latex() const
         {
-            return "{(2.8042414365182125E8)} \\frac{1}{\\alpha^{{(1.5)}}}-{(7.330245062197266666E7)} \\frac{1}{\\alpha^{{(1.6666666666666666666)}}}";
+            return "-{(7.330245062197266666E7)} \\frac{1}{\\alpha^{{(1.6666666666666666666)}}}+{(2.8042414365182125E8)} \\frac{1}{\\alpha^{{(1.5)}}}";
         }
 
         Cu_hardening_hess_0_0* clone() const

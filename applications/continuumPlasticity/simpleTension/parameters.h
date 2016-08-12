@@ -29,11 +29,11 @@
 /**
  *Maximum iterations within the linear solve
  */
-#define maxLinearSolverIterations 5000
+#define maxLinearSolverIterations 8000
 /**
  *Relative tolerance for the linear solver
  */
-#define relLinearSolverTolerance  1.0e-12
+#define relLinearSolverTolerance  1.0e-14
 /**
  *Maximum iterations within the nonlinear solve (Newton-Raphson iterations)
  */
@@ -41,7 +41,7 @@
 /**
  *Absolute tolerance for nonlinear solver
  */
-#define absNonLinearTolerance 1.0e-15
+#define absNonLinearTolerance 1.0e-14
 /**
  *Relative tolerance for the nonlinear solver
  */
@@ -67,6 +67,10 @@
  *Linear isotropic strain hardening coefficient
  */
 #define strain_hardening 2.0259e9
+/**
+ *Kinematic strain hardening coefficient
+ */
+#define kinematic_hardening 1e6
 /**
  *Strain energy density function ("quadlog", "stvenkir", or "neohook")
  */
