@@ -12,14 +12,11 @@
 #define stopOnConvergenceFailure false // Flag to stop problem if convergence fails
 
 //Elastic Parameters
-
 #define c11  170e3 // C11 (MPa)
 #define c12 124e3 // C12 (MPa)
 #define c44 75e3  // C44 (MPa)
 
-
 //Crystal Plasticity parameters
-
 #define numSlipSystems 12 // generally 12 for FCC
 #define latentHardeningRatio 1.4  //q1
 #define powerLawExponent 2.25  //a

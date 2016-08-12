@@ -19,6 +19,8 @@ ellipticBVP<dim>::ellipticBVP ()
   currentIteration(0),
   currentIncrement(0),
   totalIncrements(totalNumIncrements),
+  loadFactorSetByModel(1.0),
+  resetIncrement(false),
   pcout (std::cout, Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0),
   computing_timer (pcout, TimerOutput::summary, TimerOutput::wall_times),
   numPostProcessedFields(0)

@@ -27,6 +27,7 @@
 *eps
 
 #Temporary files
+.#*
 *~
 *#
 *.#

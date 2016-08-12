@@ -17,4 +17,19 @@ void ellipticBVP<dim>::updateAfterIteration(){
   //default method does nothing
 }
 
+//method called after each iteration
+template <int dim>
+void ellipticBVP<dim>::testConvergenceAfterIteration(){
+  //default method resets solution to previously converged solution if resetIncrement flagis true
+  if (resetIncrement){
+    solution=oldSolution;
+    resetIncrement=false;
+    char buffer[100];
+    sprintf(buffer,
+	    "current increment reset by model. Restarting increment with loadFactorSetByModel: %12.6e\n",
+	    loadFactorSetByModel);
+    pcout << buffer;
+  }
+}
+
 #endif

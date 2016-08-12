@@ -31,18 +31,15 @@ void crystalPlasticity<dim>::inactive_slip_removal(Vector<double> &active, Vecto
     temp7.vmult(x_beta1,b_PA);
 
     if(x_beta1.l2_norm()>0.75){
-
-	printf ("Time-step is very large. Please consider reducing the time-step");
-	exit(0);
-
+      char buffer[100];
+      sprintf (buffer, "Time-step is very large. Please consider reducing the time-step. Current norm: %12.6e, Tolerance: %12.6e", x_beta1.l2_norm(), 0.75);
+      this->pcout <<buffer;
+      this->loadFactorSetByModel*=0.5;
+      this->resetIncrement=true;
+      throw 0;
     }
 
-		
-
-	
-
-    
-  //  this->pcout<<x_beta1[0]<<"\t"<<x_beta1[1]<<"\t"<<x_beta1[2]<<"\t"<<x_beta1[3]<<"\n";
+    //  this->pcout<<x_beta1[0]<<"\t"<<x_beta1[1]<<"\t"<<x_beta1[2]<<"\t"<<x_beta1[3]<<"\n";
     
     
   /*  // Determine the inactive slip sytems

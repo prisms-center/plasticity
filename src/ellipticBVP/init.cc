@@ -36,6 +36,7 @@ void ellipticBVP<dim>::init(){
 
   //initialize global data structures
   solution.reinit (locally_owned_dofs, mpi_communicator); solution=0;
+  oldSolution.reinit (locally_owned_dofs, mpi_communicator); oldSolution=0;
   solutionWithGhosts.reinit (locally_owned_dofs, locally_relevant_dofs, mpi_communicator);
   solutionIncWithGhosts.reinit (locally_owned_dofs, locally_relevant_dofs, mpi_communicator);
   residual.reinit (locally_owned_dofs, mpi_communicator); residual=0;
@@ -53,6 +54,7 @@ void ellipticBVP<dim>::init(){
   //apply initial conditions
   applyInitialConditions();
   solutionWithGhosts=solution;
+  oldSolution=solution;
 }
 
 #endif

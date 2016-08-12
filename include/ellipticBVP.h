@@ -63,24 +63,27 @@ class ellipticBVP
   //methods to allow for pre/post iteration updates
   virtual void updateBeforeIteration();
   virtual void updateAfterIteration();
+  virtual void testConvergenceAfterIteration();
   //methods to allow for pre/post increment updates
   virtual void updateBeforeIncrement();
   virtual void updateAfterIncrement();
-
+  
   //methods to apply dirichlet BC's and initial conditions
   virtual void markBoundaries();
   virtual void applyDirichletBCs();
   virtual void applyInitialConditions();
   
   //parallel data structures
-  vectorType solution, residual;
+  vectorType solution, oldSolution, residual;
   vectorType solutionWithGhosts, solutionIncWithGhosts;
   matrixType jacobian;
 
   //misc variables
   unsigned int currentIteration, currentIncrement;
   unsigned int totalIncrements;
-
+  bool resetIncrement;
+  double loadFactorSetByModel;
+  
   //parallel message stream
   ConditionalOStream  pcout;  
   
