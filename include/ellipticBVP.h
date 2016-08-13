@@ -45,7 +45,7 @@ class ellipticBVP
   void init();
   void assemble();
   void solveLinearSystem(ConstraintMatrix& constraintmatrix, matrixType& A, vectorType& b, vectorType& x, vectorType& xGhosts, vectorType& dxGhosts);
-  void solveNonLinearSystem();
+  bool solveNonLinearSystem();
   void solve();
   void output();
   void initProject();
@@ -63,7 +63,7 @@ class ellipticBVP
   //methods to allow for pre/post iteration updates
   virtual void updateBeforeIteration();
   virtual void updateAfterIteration();
-  virtual void testConvergenceAfterIteration();
+  virtual bool testConvergenceAfterIteration();
   //methods to allow for pre/post increment updates
   virtual void updateBeforeIncrement();
   virtual void updateAfterIncrement();

@@ -7,7 +7,7 @@
 
 //solve non-linear system of equations
 template <int dim>
-void ellipticBVP<dim>::solveNonLinearSystem(){
+bool ellipticBVP<dim>::solveNonLinearSystem(){
   //residuals
   double relNorm=1.0, initialNorm=1.0e-16, currentNorm=0.0;
 
@@ -18,12 +18,12 @@ void ellipticBVP<dim>::solveNonLinearSystem(){
     //call updateBeforeIteration, if any
     updateBeforeIteration();
 
-    try{
-      //Calling assemble
-      computing_timer.enter_section("assembly");
-      assemble();
-      computing_timer.exit_section("assembly");
-      
+    //Calling assemble
+    computing_timer.enter_section("assembly");
+    assemble();
+    computing_timer.exit_section("assembly");
+
+    if (!resetIncrement){
       //Calculate residual norms and check for convergence
       currentNorm=residual.l2_norm();
       initialNorm=std::max(initialNorm, currentNorm);
@@ -54,13 +54,10 @@ void ellipticBVP<dim>::solveNonLinearSystem(){
       computing_timer.exit_section("solve");
       currentIteration++;
     }
-    catch (int param){
-      pcout << "\nskipping nonlinear solve\n";
-      computing_timer.exit_section("assembly");
-    }
     
     //convergence test after iteration
-    testConvergenceAfterIteration();
+    bool convFlag=testConvergenceAfterIteration();
+    if (!convFlag) {return false;}
     
     //call updateAfterIteration, if any
     updateAfterIteration();
@@ -73,5 +70,8 @@ void ellipticBVP<dim>::solveNonLinearSystem(){
     else {pcout << "stopOnConvergenceFailure==false, so marching ahead\n";}
   }
 
+  //update old solution to new converged solution
+  oldSolution=solution;
+  return true;
 }
 #endif

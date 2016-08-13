@@ -12,22 +12,24 @@ void ellipticBVP<dim>::solve(){
 
   //increments
   for (;currentIncrement<totalIncrements; ++currentIncrement){
-    pcout << "increment: " 
+    pcout << "\nincrement: " 
 	  << currentIncrement 
 	  << std::endl;
     //call updateBeforeIncrement, if any
     updateBeforeIncrement();
 
     //solve time increment
-    solveNonLinearSystem();
-
+    bool success=solveNonLinearSystem();
+    
     //call updateAfterIncrement, if any
-    updateAfterIncrement();
+    if (success){
+      updateAfterIncrement();
 
-    //output results to file
-    computing_timer.enter_section("postprocess");
-    if (writeOutput) output();
-    computing_timer.exit_section("postprocess");
+      //output results to file
+      computing_timer.enter_section("postprocess");
+      if (writeOutput) output();
+      computing_timer.exit_section("postprocess");
+    }
   }
 }
 

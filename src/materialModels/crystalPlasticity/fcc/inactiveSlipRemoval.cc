@@ -30,10 +30,11 @@ void crystalPlasticity<dim>::inactive_slip_removal(Vector<double> &active, Vecto
     Vector<double> tempv3;
     temp7.vmult(x_beta1,b_PA);
 
+    //Check for model tolerance and activate adaptive time-stepping, if required
     if(x_beta1.l2_norm()>0.75){
-      char buffer[100];
-      sprintf (buffer, "Time-step is very large. Please consider reducing the time-step. Current norm: %12.6e, Tolerance: %12.6e", x_beta1.l2_norm(), 0.75);
-      this->pcout <<buffer;
+      char buffer[200];
+      sprintf (buffer, "processor %u: time-step is very large. Consider reducing the time-step. current model norm: %12.6e, tolerance: %12.6e\n", this->triangulation.locally_owned_subdomain(), x_beta1.l2_norm(), 0.75);
+      std::cout <<buffer;
       this->loadFactorSetByModel*=0.5;
       this->resetIncrement=true;
       throw 0;
