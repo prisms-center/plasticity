@@ -27,7 +27,11 @@ void ellipticBVP<dim>::solve(){
 
       //output results to file
       computing_timer.enter_section("postprocess");
+#ifdef writeOutput
       if (writeOutput) output();
+#else
+      output();
+#endif
       computing_timer.exit_section("postprocess");
     }
   }

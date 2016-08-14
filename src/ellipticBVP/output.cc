@@ -36,10 +36,18 @@ void ellipticBVP<dim>::output(){
   }
   
   //write to results file
+  //Set output directory, if provided
+#ifdef outputDirectory
+  std::string dir(outputDirectory);
+  dir+="/";
+#else
+  std::string dir("./");
+#endif
+  //
   unsigned int incrementDigits= (totalIncrements<10000 ? 4 : std::ceil(std::log10(totalIncrements))+1);
   unsigned int domainDigits   = (Utilities::MPI::n_mpi_processes(mpi_communicator)<10000 ? 4 : std::ceil(std::log10(Utilities::MPI::n_mpi_processes(mpi_communicator)))+1);
   
-  const std::string filename = ("solution-" +
+  const std::string filename = (dir+"solution-" +
 				Utilities::int_to_string (currentIncrement,incrementDigits) +
 				"." +
 				Utilities::int_to_string (triangulation.locally_owned_subdomain(), 
@@ -48,7 +56,7 @@ void ellipticBVP<dim>::output(){
   data_out.write_vtu (outputFile);
   //write projected fields, if any
   if (numPostProcessedFields>0){
-    const std::string filenameForProjectedFields = ("projectedFields-" +
+    const std::string filenameForProjectedFields = (dir+"projectedFields-" +
 						    Utilities::int_to_string (currentIncrement,incrementDigits) +
 						    "." +
 						    Utilities::int_to_string (triangulation.locally_owned_subdomain(), 
@@ -75,7 +83,7 @@ void ellipticBVP<dim>::output(){
 					       + ".vtu");
       }
     }
-    const std::string filenamepvtu = ("solution-" +
+    const std::string filenamepvtu = (dir+"solution-" +
 				      Utilities::int_to_string (currentIncrement,incrementDigits) +
 				      ".pvtu");
     std::ofstream master_output (filenamepvtu.c_str());
@@ -83,7 +91,7 @@ void ellipticBVP<dim>::output(){
     pcout << "output written to: " << filenamepvtu.c_str();
     //
     if (numPostProcessedFields>0){
-      const std::string filenamepvtuForProjectedFields = ("projectedFields-" +
+      const std::string filenamepvtuForProjectedFields = (dir+"projectedFields-" +
 							  Utilities::int_to_string (currentIncrement,incrementDigits) +
 							  ".pvtu");
       std::ofstream master_outputForProjectedFields (filenamepvtuForProjectedFields.c_str());

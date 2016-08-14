@@ -1,7 +1,12 @@
+//FE parameters
 #define feOrder   1 // Basis function interpolation order (1-linear)
 #define quadOrder 2 // Quadrature point order n^3 (2->8 quadrature points)
 #define meshRefineFactor 3 // 2^n*2^n*2^n elements(3->8*8*8 =512 elements)
-#define writeOutput true // flag to write output vtu and pvtu files)
+
+//Solution output parameters
+#define writeOutput true // flag to write output vtu and pvtu files
+#define outputDirectory "."
+ 
 #define linearSolverType PETScWrappers::SolverCG // Type of linear solver
 #define totalNumIncrements 100 // No. of increments
 #define maxLinearSolverIterations 50000 // Maximum iterations for linear solver
@@ -25,7 +30,6 @@
 #define initialHardeningModulus 180.0 //s_s(MPa) //h0(MPa)
 
 // Read Input Microstructure
-
 unsigned int numPts[3]={20, 20, 22}; // No. of voxels in x,y and z directions
 
 
