@@ -7,7 +7,10 @@
 #define writeOutput true // flag to write output vtu and pvtu files
 #define outputDirectory "."
 #define skipOutputSteps 0
- 
+#define output_Eqv_strain true
+#define output_Eqv_stress true
+#define output_Grain_ID   true
+
 #define linearSolverType PETScWrappers::SolverCG // Type of linear solver
 #define totalNumIncrements 100 // No. of increments
 #define maxLinearSolverIterations 50000 // Maximum iterations for linear solver

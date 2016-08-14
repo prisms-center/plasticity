@@ -19,9 +19,37 @@ void ellipticBVP<dim>::output(){
 			    nodal_data_component_interpretation);
 
   //add postprocessing fields
+  unsigned int numPostProcessedFieldsWritten=0;
   for (unsigned int field=0; field<numPostProcessedFields; field++){
+#ifdef output_Eqv_strain
+#if output_Eqv_strain==false
+    if (postprocessed_solution_names[field].compare(std::string("Eqv_strain"))==0) continue;
+#endif
+#endif
+#ifdef output_Eqv_stress
+#if output_Eqv_stress==false
+    if (postprocessed_solution_names[field].compare(std::string("Eqv_stress"))==0) continue;
+#endif
+#endif
+#ifdef output_Grain_ID
+#if output_Grain_ID==false
+    if (postprocessed_solution_names[field].compare(std::string("Grain_ID"))==0) continue;
+#endif
+#endif
+#ifdef output_alpha
+#if output_alpha==false
+    if (postprocessed_solution_names[field].compare(std::string("alpha"))==0) continue;
+#endif
+#endif
+#ifdef output_tau_vm
+#if output_tau_vm==false
+    if (postprocessed_solution_names[field].compare(std::string("tau_vm"))==0) continue;
+#endif
+#endif
+    //
     data_out_Scalar.add_data_vector (*postFieldsWithGhosts[field], 
 				     postprocessed_solution_names[field].c_str());
+    numPostProcessedFieldsWritten++;
   }
   
   //add subdomain id to output file
@@ -30,7 +58,7 @@ void ellipticBVP<dim>::output(){
     subdomain(i) = triangulation.locally_owned_subdomain();
   data_out.add_data_vector (subdomain, "subdomain");
   data_out.build_patches ();
-  if (numPostProcessedFields>0){
+  if (numPostProcessedFieldsWritten>0){
     data_out_Scalar.add_data_vector (subdomain, "subdomain");
     data_out_Scalar.build_patches ();
   }
@@ -55,7 +83,7 @@ void ellipticBVP<dim>::output(){
   std::ofstream outputFile ((filename + ".vtu").c_str());
   data_out.write_vtu (outputFile);
   //write projected fields, if any
-  if (numPostProcessedFields>0){
+  if (numPostProcessedFieldsWritten>0){
     const std::string filenameForProjectedFields = (dir+"projectedFields-" +
 						    Utilities::int_to_string (currentIncrement,incrementDigits) +
 						    "." +
@@ -75,7 +103,7 @@ void ellipticBVP<dim>::output(){
 			   "." +
 			   Utilities::int_to_string (i, domainDigits) +
 			   + ".vtu");
-      if (numPostProcessedFields>0){
+      if (numPostProcessedFieldsWritten>0){
 	filenamesForProjectedFields.push_back ("projectedFields-" +
 					       Utilities::int_to_string (currentIncrement, incrementDigits) + 
 					       "." +
@@ -90,7 +118,7 @@ void ellipticBVP<dim>::output(){
     data_out.write_pvtu_record (master_output, filenames);
     pcout << "output written to: " << filenamepvtu.c_str();
     //
-    if (numPostProcessedFields>0){
+    if (numPostProcessedFieldsWritten>0){
       const std::string filenamepvtuForProjectedFields = (dir+"projectedFields-" +
 							  Utilities::int_to_string (currentIncrement,incrementDigits) +
 							  ".pvtu");
