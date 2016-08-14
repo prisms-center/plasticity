@@ -6,6 +6,7 @@
 //Solution output parameters
 #define writeOutput true // flag to write output vtu and pvtu files
 #define outputDirectory "."
+#define skipOutputSteps 0
  
 #define linearSolverType PETScWrappers::SolverCG // Type of linear solver
 #define totalNumIncrements 100 // No. of increments

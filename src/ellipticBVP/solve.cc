@@ -27,11 +27,20 @@ void ellipticBVP<dim>::solve(){
 
       //output results to file
       computing_timer.enter_section("postprocess");
+#ifndef skipOutputSteps
+      unsigned int skipSteps=1;
+#elif skipOutputSteps<=0
+      unsigned int skipSteps=1;
+#else
+      unsigned int skipSteps=skipOutputSteps;
+#endif
+      if (currentIncrement%skipSteps==0){
 #ifdef writeOutput
       if (writeOutput) output();
 #else
       output();
 #endif
+      }
       computing_timer.exit_section("postprocess");
     }
   }
