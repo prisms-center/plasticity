@@ -15,7 +15,9 @@ ellipticBVP<dim>::ellipticBVP ()
 		 (Triangulation<dim>::smoothing_on_refinement |
 		  Triangulation<dim>::smoothing_on_coarsening)),
   FE (FE_Q<dim>(feOrder), dim),
+  FE_Scalar (FE_Q<dim>(feOrder), 1),
   dofHandler (triangulation),
+  dofHandler_Scalar (triangulation),
   currentIteration(0),
   currentIncrement(0),
   totalIncrements(totalNumIncrements),

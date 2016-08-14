@@ -15,17 +15,17 @@ void ellipticBVP<dim>::initProject(){
   for (unsigned int field=0; field<numPostProcessedFields; field++){
     //residuals
     vectorType* v=new vectorType;
-    v->reinit(locally_owned_dofs, mpi_communicator); (*v)=0;
+    v->reinit(locally_owned_dofs_Scalar, mpi_communicator); (*v)=0;
     postResidual.push_back(v);   
     
     //fields
     v=new vectorType;
-    v->reinit(locally_owned_dofs, mpi_communicator); (*v)=0;
+    v->reinit(locally_owned_dofs_Scalar, mpi_communicator); (*v)=0;
     postFields.push_back(v); 
 
     //fields with ghosts
     v=new vectorType;
-    v->reinit (locally_owned_dofs, locally_relevant_dofs, mpi_communicator); (*v)=0;
+    v->reinit (locally_owned_dofs_Scalar, locally_relevant_dofs_Scalar, mpi_communicator); (*v)=0;
     postFieldsWithGhosts.push_back(v); 
   }
 
@@ -36,22 +36,22 @@ void ellipticBVP<dim>::initProject(){
   postprocessValues.reinit(TableIndices<4>(num_local_cells, num_quad_points, numPostProcessedFields, dim));
 
   //create mass matrix
-  CompressedSimpleSparsityPattern csp (locally_relevant_dofs);
-  DoFTools::make_sparsity_pattern (dofHandler, csp, constraints, false);
+  CompressedSimpleSparsityPattern csp (locally_relevant_dofs_Scalar);
+  DoFTools::make_sparsity_pattern (dofHandler_Scalar, csp, constraintsMassMatrix, false);
   SparsityTools::distribute_sparsity_pattern (csp,
-					      dofHandler.n_locally_owned_dofs_per_processor(),
+					      dofHandler_Scalar.n_locally_owned_dofs_per_processor(),
 					      mpi_communicator,
-					      locally_relevant_dofs);
-  massMatrix.reinit (locally_owned_dofs, locally_owned_dofs, csp, mpi_communicator); massMatrix=0.0;
+					      locally_relevant_dofs_Scalar);
+  massMatrix.reinit (locally_owned_dofs_Scalar, locally_owned_dofs_Scalar, csp, mpi_communicator); massMatrix=0.0;
 
   //local variables
-  FEValues<dim> fe_values (FE, quadrature, update_values | update_JxW_values);
-  const unsigned int   dofs_per_cell   = FE.dofs_per_cell;
+  FEValues<dim> fe_values (FE_Scalar, quadrature, update_values | update_JxW_values);
+  const unsigned int   dofs_per_cell   = FE_Scalar.dofs_per_cell;
   FullMatrix<double>   elementalMass(dofs_per_cell, dofs_per_cell);
   std::vector<types::global_dof_index> local_dof_indices (dofs_per_cell);
   
   //parallel loop over all elements
-  typename DoFHandler<dim>::active_cell_iterator cell = dofHandler.begin_active(), endc = dofHandler.end();
+  typename DoFHandler<dim>::active_cell_iterator cell = dofHandler_Scalar.begin_active(), endc = dofHandler_Scalar.end();
   unsigned int cellID=0;
   for (; cell!=endc; ++cell) {
     if (cell->is_locally_owned()){
@@ -93,8 +93,8 @@ template <int dim>
 void ellipticBVP<dim>::project(){
   //return if no post processing fields
   if (numPostProcessedFields==0) return;
-  
-  pcout << "projecting post processing fields\n ";
+  pcout << "projecting post processing fields\n";
+
   //initialize global data structures to zero  
   for (unsigned int field=0; field<numPostProcessedFields; field++){
     (*postResidual[field])=0.0;    
@@ -102,14 +102,14 @@ void ellipticBVP<dim>::project(){
   
   //local variables
   QGauss<dim>  quadrature(quadOrder);
-  FEValues<dim> fe_values (FE, quadrature, update_values | update_JxW_values);
-  const unsigned int   dofs_per_cell   = FE.dofs_per_cell;
+  FEValues<dim> fe_values (FE_Scalar, quadrature, update_values | update_JxW_values);
+  const unsigned int   dofs_per_cell   = FE_Scalar.dofs_per_cell;
   const unsigned int   num_quad_points = quadrature.size();
   Vector<double>       elementalResidual (dofs_per_cell);
   std::vector<types::global_dof_index> local_dof_indices (dofs_per_cell);
     
   //parallel loop over all elements
-  typename DoFHandler<dim>::active_cell_iterator cell = dofHandler.begin_active(), endc = dofHandler.end();
+  typename DoFHandler<dim>::active_cell_iterator cell = dofHandler_Scalar.begin_active(), endc = dofHandler_Scalar.end();
   unsigned int cellID=0;
   for (; cell!=endc; ++cell) {
     if (cell->is_locally_owned()){
@@ -141,7 +141,7 @@ void ellipticBVP<dim>::project(){
     
     //L2 projection by solving for Mx=b problem
     *postFields[field]=0.0;
-    solveLinearSystem(constraintsMassMatrix, massMatrix, *postResidual[field], *postFields[field],  *postFieldsWithGhosts[field],  *postFieldsWithGhosts[field]);
+    solveLinearSystem2(constraintsMassMatrix, massMatrix, *postResidual[field], *postFields[field],  *postFieldsWithGhosts[field],  *postFieldsWithGhosts[field]);
   }
 }
 

@@ -32,19 +32,25 @@ class ellipticBVP
   //parallel objects
   MPI_Comm   mpi_communicator;
   IndexSet   locally_owned_dofs;
+  IndexSet   locally_owned_dofs_Scalar;
   IndexSet   locally_relevant_dofs;
+  IndexSet   locally_relevant_dofs_Scalar;
   
   //FE data structres
   parallel::distributed::Triangulation<dim> triangulation;
   FESystem<dim>      FE;
-  ConstraintMatrix   constraints, constraintsMassMatrix;
+  FESystem<dim>      FE_Scalar;
+  ConstraintMatrix   constraints;
+  ConstraintMatrix   constraintsMassMatrix;
   DoFHandler<dim>    dofHandler;
-    
+  DoFHandler<dim>    dofHandler_Scalar;
+  
   //methods
   virtual void mesh();
   void init();
   void assemble();
   void solveLinearSystem(ConstraintMatrix& constraintmatrix, matrixType& A, vectorType& b, vectorType& x, vectorType& xGhosts, vectorType& dxGhosts);
+  void solveLinearSystem2(ConstraintMatrix& constraintmatrix, matrixType& A, vectorType& b, vectorType& x, vectorType& xGhosts, vectorType& dxGhosts);
   bool solveNonLinearSystem();
   void solve();
   void output();

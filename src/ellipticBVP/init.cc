@@ -22,16 +22,23 @@ void ellipticBVP<dim>::init(){
 	<< "number of degrees of freedom: " 
 	<< dofHandler.n_dofs() 
 	<< std::endl;
+
+  //initialize FE objects for scalar field which will be used for post processing
+  dofHandler_Scalar.distribute_dofs (FE_Scalar);
+  locally_owned_dofs_Scalar = dofHandler_Scalar.locally_owned_dofs ();
+  DoFTools::extract_locally_relevant_dofs (dofHandler_Scalar, locally_relevant_dofs_Scalar);
   
   //constraints
   constraints.clear ();
   constraints.reinit (locally_relevant_dofs);
   DoFTools::make_hanging_node_constraints (dofHandler, constraints);
   constraints.close ();
-  //constraints for mass matrix (i.e. no constraints, as mass matrix needs no dirichlet BCs)
+
+  //constraints for mass matrix used in post-processing for projection
+  //(i.e. no constraints, as mass matrix needs no dirichlet BCs)
   constraintsMassMatrix.clear ();
-  constraintsMassMatrix.reinit (locally_relevant_dofs);
-  DoFTools::make_hanging_node_constraints (dofHandler, constraintsMassMatrix);
+  constraintsMassMatrix.reinit (locally_relevant_dofs_Scalar);
+  DoFTools::make_hanging_node_constraints (dofHandler_Scalar, constraintsMassMatrix);
   constraintsMassMatrix.close ();
 
   //initialize global data structures
