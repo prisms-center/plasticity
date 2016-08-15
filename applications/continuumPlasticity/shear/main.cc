@@ -122,7 +122,7 @@ void continuumPlasticity<dim>::applyDirichletBCs(){
 //main
 int main (int argc, char **argv)
 {
-  Utilities::System::MPI_InitFinalize mpi_initialization(argc, argv, 1);
+  Utilities::MPI::MPI_InitFinalize mpi_initialization(argc, argv, 1);
   try
     {
       deallog.depth_console(0);
@@ -133,6 +133,7 @@ int main (int argc, char **argv)
       problem.properties.mu = lame_mu;
       problem.properties.tau_y = yield_stress;
       problem.properties.K = strain_hardening;
+      problem.properties.H = kinematic_hardening;
 
       //Read pfunction names for strain energy density and yield functions
       problem.properties.strainEnergyModel = strain_energy_function;

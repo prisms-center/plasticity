@@ -10,7 +10,7 @@
 
 
 typedef struct {
-  double lambda, mu, tau_y, K;
+  double lambda, mu, tau_y, K, H;
   std::string yieldModel, strainEnergyModel;
 } materialProperties;
 
@@ -81,6 +81,18 @@ class continuumPlasticity : public ellipticBVP<dim>
    *transferred to "histInvCP_conv".
    */
   std::vector< std::vector< FullMatrix<double> > > histInvCP_iter;
+  /**
+   *Converged results of xi (deviatoric back stress)
+   *for the previous increment, indexed by element number and quadrature point number.
+   */
+  std::vector< std::vector< Vector<double> > > histXi_conv;
+  /**
+   *Stores values of xi (deviatoric back stress)
+   *for the most recent iteration, indexed by element number and quadrature point number.
+   *Once the solution to the current increment converges, this information will be 
+   *transferred to "histXi_conv".
+   */
+  std::vector< std::vector< Vector<double> > > histXi_iter;
   /**
    *Converged results of alpha (the equivalent plastic strain)
    *for the previous increment, indexed by element number and quadrature point number.
@@ -222,15 +234,18 @@ void continuumPlasticity<dim>::init(unsigned int num_quad_points)
     4: q, "Conjugate stress-like quantity"*/
 
   //Resize the vector of parameters/variables used in the yield function
-  varYield.resize(5,0.);
+  varYield.resize(8,0.);
   //Specify the material parameter used in the yield function
   varYield[3] = properties.tau_y;
 
   //Resize the vectors of history variables according to the number of elements and quadrature points
+	Vector<double> zero_vec(dim); zero_vec = 0.;
   histInvCP_conv.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,IdentityMatrix(dim)));
   histAlpha_conv.resize(num_local_cells,std::vector<double>(num_quad_points,0));
+  histXi_conv.resize(num_local_cells,std::vector<Vector<double> >(num_quad_points,zero_vec));
   histInvCP_iter.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,IdentityMatrix(dim)));
   histAlpha_iter.resize(num_local_cells,std::vector<double>(num_quad_points,0));
+  histXi_iter.resize(num_local_cells,std::vector<Vector<double> >(num_quad_points,zero_vec));
 
   //Resize the vector of vector used to store the von Mises stress
   projectVonMisesStress.resize(num_local_cells,std::vector<double>(num_quad_points,0));
@@ -247,6 +262,8 @@ void continuumPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 {
   //Actual and trial values of the equivalent plastic strain, respectively
   double alpha, alpha_TR;
+  //Actual and trial values of the back stress vector, respectively
+  Vector<double> xi(dim), xi_TR(dim);
   //Inverse deformation gradient and elastic left C-G tensor, repsectively
   FullMatrix<double> F_inv(dim,dim), b_e(dim,dim);
   //Trial and actual values of the inverse of plastic right C-G tensor, respectively
@@ -258,11 +275,12 @@ void continuumPlasticity<dim>::calculatePlasticity(unsigned int cellID,
   //Initialize isotropic tensor to correct values.
   Identity = IdentityMatrix(dim);
 
-  //Set the trial values of invCP and alpha for the current increment equal to the
+  //Set the trial values of invCP, alpha, and xi for the current increment equal to the
   //converged values of invCP and alpha from the previous increment
   //see equations (23) and (24) of the formulation
   invCp_TR = histInvCP_conv[cellID][quadPtID];
   alpha_TR = histAlpha_conv[cellID][quadPtID];
+  xi_TR = histXi_conv[cellID][quadPtID];
 
   //Initialize the "identity vector", i.e. the vector [1,1,1] in 3D
   Vector<double> Ident_vec(3); Ident_vec = 0.; Ident_vec.add(1.);
@@ -325,7 +343,7 @@ void continuumPlasticity<dim>::calculatePlasticity(unsigned int cellID,
   //The principal elastic stretches
   Vector<double> lambda_e(dim);
   //The principal stresses and the derivative of the yield function w.r.t. the principal stresses
-  Vector<double> beta(dim), nu_bar(dim);
+  Vector<double> beta(dim), nuBar(dim);
   for(unsigned int i=0; i<dim; i++){
     //The principal elastic stretches, lambda_e(i)
     varStrainEnergy[2+i] = sqrt(eigTR(i));
@@ -339,12 +357,23 @@ void continuumPlasticity<dim>::calculatePlasticity(unsigned int cellID,
   }
   //Initially take alpha as alpha_TR
   alpha = alpha_TR;
+  //Initially take xi as xi_TR
+  xi = xi_TR;
   //alpha is the first variable needed in the hardening function
   varIsoHardening[0] = alpha;
   //The variable, q, needed in the yield function gets its value from the hardening function
   varYield[4] = harden(varIsoHardening);
+	//The back stress is needed for the yield function
+  for(unsigned int i=0; i<dim; i++){
+    varYield[dim+2+i] = xi(i);
+  }
   //Get the value of the yield function, based on the trial values
   double yield_TR = yield(varYield);
+	//if(cellID == 0)
+	//	std::cout << "Trial yield: " << yield(varYield) << std::endl;
+
+	//Used as a fifth unknown in the nonlinear solve, zeta is to be equal to (df/dq)_{n+1}
+	double zeta = yield.grad(varYield,4);
 
   //If the yield function is greater than zero, plastic flow has occured.
   //We will need to update the plastic variables (see section 3 of the formulation) using Newton-Raphson.
@@ -366,8 +395,8 @@ void continuumPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     const double Tolerance = 1.e-12;
     //Declare the jacobian and residual to solve for the plastic variables.
     //(product = inv(jacobian)*residual)
-    Vector<double> residual(1+dim), product(1+dim);
-    FullMatrix<double> jacobian(1+dim,1+dim);
+    Vector<double> residual(2+dim), product(2+dim);
+    FullMatrix<double> jacobian(2+dim,2+dim);
     unsigned int iter=0;
     //Iterate until convergence is met
     while(true){
@@ -391,8 +420,12 @@ void continuumPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 	residual(B) = 0.5*log(eigTR(B)) - gamma_Dt*yield.grad(varYield,B) - log(varStrainEnergy[2+B]);
       }
       jacobian[3][3] = yield.grad(varYield,4)*harden.grad(varIsoHardening,0);
+			jacobian[4][3] = -yield.hess(varYield,4,4)*harden.grad(varIsoHardening,0);
+			jacobian[4][4] = 1;
+			
       //Equation (30)
       residual(3) = yield(varYield);
+			residual(4) = zeta - yield.grad(varYield,4);
 
       //Invert jacobian matrix
       jacobian.gauss_jordan();
@@ -406,6 +439,8 @@ void continuumPlasticity<dim>::calculatePlasticity(unsigned int cellID,
       }
       //Update alpha
       varIsoHardening[0] -= product(3); 
+			//Update zeta
+			zeta -= product(4);
 
       //Update other variables
       for(unsigned int i = 0; i < dim; i++){
@@ -414,8 +449,13 @@ void continuumPlasticity<dim>::calculatePlasticity(unsigned int cellID,
       }
       //Update q, directly from the hardening function
       varYield[4] = harden(varIsoHardening);
-      //Update gamma_Dt, based on equation (25)
-      gamma_Dt = (varIsoHardening[0] - alpha_TR)/yield.grad(varYield,4);
+      //Update gamma_Dt, based on equation (25). Pull in a little from the yield surface for stability.
+      gamma_Dt = (varIsoHardening[0] - alpha_TR)/zeta;
+			//Update xi
+	  	for(unsigned int i=0; i<dim; i++){
+				nuBar(i) = (log(varStrainEnergy[2+i]) - 0.5*log(eigTR(i)))/(-gamma_Dt);
+    		varYield[dim+2+i] = xi_TR(i) + 2./3.*gamma_Dt*properties.H*nuBar(i);
+  		}		
 
       //Check for convergence
       if(product.l2_norm() < Tolerance || residual.l2_norm() < Tolerance){
@@ -430,9 +470,13 @@ void continuumPlasticity<dim>::calculatePlasticity(unsigned int cellID,
       }
       iter++;
     }
+		//if(cellID == 0)
+		//	std::cout << "Before: " << yield(varYield) << " " << gamma_Dt << std::endl;
+//*
     //For stability, pull in a little from the yield surface. Recalculate the updated
     //variables with this adjusted value for gamma_Dt.
     gamma_Dt *= 1 - 1.e-8;
+
     //Update alpha, equation (25)
     alpha = alpha_TR + gamma_Dt*yield.grad(varYield,4);
     varIsoHardening[0] = alpha;
@@ -442,10 +486,17 @@ void continuumPlasticity<dim>::calculatePlasticity(unsigned int cellID,
       //Update the principal stresses
       beta(i) = varYield[i];
       //Update the derivative of the yield function, f w.r.t. beta
-      nu_bar(i) = yield.grad(varYield,i);
+      nuBar(i) = yield.grad(varYield,i);
       //Update the principal elastic stretches, equation (26)
-      lambda_e(i) = exp(-gamma_Dt*nu_bar(i))*sqrt(eigTR(i));
-    }
+      lambda_e(i) = exp(-gamma_Dt*nuBar(i))*sqrt(eigTR(i));
+			varStrainEnergy[2+i] = lambda_e(i);
+			//Update the back stress, xi
+    	xi(i) = xi_TR(i) + 2./3.*gamma_Dt*properties.H*nuBar(i);
+			varYield[dim+2+i] = xi(i);
+    }//*/
+
+		//if(cellID == 0)
+		//	std::cout << "After: " << yield(varYield) << " " << gamma_Dt << std::endl;
 
   }
   //Find tau, equation (29)
@@ -459,6 +510,7 @@ void continuumPlasticity<dim>::calculatePlasticity(unsigned int cellID,
   //Store history variables for this iteration
   histInvCP_iter[cellID][quadPtID] = invCp;
   histAlpha_iter[cellID][quadPtID] = alpha;
+  histXi_iter[cellID][quadPtID] = xi;
 
   //Store the von Mises stress to project to the nodes and include in output file
   projectVonMisesStress[cellID][quadPtID] = std::sqrt(0.5*(std::pow(beta(0) - beta(1),2.) +
@@ -491,19 +543,35 @@ void continuumPlasticity<dim>::calculatePlasticity(unsigned int cellID,
       }
     }
 
-    FullMatrix<double> h(dim,dim);
-    //Find the value within the parentheses of eqn (35)
-    h.equ(1.,a_eInv,gamma_Dt,f2_B);
-    //Invert the quantity to find the value of h, again, eqn (35)
-    h.gauss_jordan();
+    FullMatrix<double> h1(dim,dim), h2(dim,dim), h3(dim,dim), h3h2(dim,dim), h2h3h2(dim,dim), h2_etc(dim,dim);
+		double h4;
+		//Find h1
+		h1.equ(1,Identity,2./3.*properties.H*gamma_Dt,f2_B);
+		h1.gauss_jordan();
+		//Find h2
+		h1.mmult(h2,f2_B); //h1*f2_B
+		h2.equ(1,Identity,-2./3.*properties.H*gamma_Dt,h2);
+		//Find h3
+		f2_B.mmult(h3,h2); //f2_B*h2
+    h3.equ(1.,a_eInv,gamma_Dt,h3);
+    h3.gauss_jordan();
+		//Find h4
+		h4 = 1. - gamma_Dt*harden.grad(varIsoHardening,0)*yield.hess(varYield,4,4);
+		//Find h3*h2
+		h3.mmult(h3h2,h2);
+		//Find h2*h3*h2
+		h2.mmult(h2h3h2,h3h2);
+		//Find h2*h3*h2 + 2/3*H*h1
+		h2_etc.equ(1,h2h3h2,2./3.*properties.H,h1);
 
-    Vector<double> h_nu_bar(dim);
-    //A temporary variable, recall that nu_bar is the partial of f w.r.t. beta
-    h.vmult(h_nu_bar,nu_bar);
+    Vector<double> h3h2_nuBar(dim), h2etc_nuBar(dim);
+    //Temporary variables, recall that nuBar is the partial of f w.r.t. beta
+    h3h2.vmult(h3h2_nuBar,nuBar);
+		h2_etc.vmult(h2etc_nuBar,nuBar);
 	
     //The next two lines are equation (34)
-    a_ep.outer_product(h_nu_bar,h_nu_bar);
-    a_ep.equ(1.,h,-1./(nu_bar*h_nu_bar - pow(yield.grad(varYield,4),2.)/(1./harden.grad(varIsoHardening,0) - gamma_Dt*yield.hess(varYield,4,4))),a_ep);
+    a_ep.outer_product(h3h2_nuBar,h3h2_nuBar);
+    a_ep.equ(1.,h3,-h4/(h4*(nuBar*h2etc_nuBar) - pow(yield.grad(varYield,4),2.)*harden.grad(varIsoHardening,0)),a_ep);
 
   }
   for (unsigned int i=0; i<dim; ++i){
@@ -644,6 +712,7 @@ void continuumPlasticity<dim>::updateAfterIncrement()
   //Update the history variables when convergence is reached for the current increment
   histInvCP_conv = histInvCP_iter;
   histAlpha_conv = histAlpha_iter;
+  histXi_conv = histXi_iter;
 
   //fill in post processing field values
   unsigned int cellID=0;

@@ -39,14 +39,14 @@ One or all of these are OFF in your installation but are required for this tutor
 ENDIF()
 DEAL_II_INITIALIZE_CACHED_VARIABLES()
 
-INCLUDE_DIRECTORIES(${DEAL_II_INCLUDE_DIRS} ${CMAKE_BINARY_DIR}/../../../utils)
+INCLUDE_DIRECTORIES(${DEAL_II_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/../../../utils)
 SET(CMAKE_BUILD_TYPE "Debug" CACHE STRING
 	"Choose the type of build, options are: Debug, Release"
 	)
 
 PROJECT(${TARGET})
 
-ADD_LIBRARY(PLibrary SHARED ${CMAKE_BINARY_DIR}/../../../src/materialModels/continuumPlasticity/models/PLibrary.cc)
+ADD_LIBRARY(PLibrary SHARED ${CMAKE_CURRENT_SOURCE_DIR}/../../../src/materialModels/continuumPlasticity/models/PLibrary.cc)
 DEAL_II_SETUP_TARGET(PLibrary)
 
 ADD_EXECUTABLE(${TARGET} ${TARGET}.cc)
@@ -57,4 +57,17 @@ TARGET_LINK_LIBRARIES(${TARGET} ${DEAL_II_LIBRARIES} PLibrary)
 ADD_CUSTOM_TARGET(run
   COMMAND ${TARGET} -pc_type jacobi
   COMMENT "Run ${TARGET} with ${CMAKE_BUILD_TYPE} configuration"
+  )
+
+#Debug or release
+ADD_CUSTOM_TARGET(debug
+  COMMAND ${CMAKE_COMMAND} -DCMAKE_BUILD_TYPE=Debug ${CMAKE_SOURCE_DIR}
+  COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target all
+  COMMENT "Switch CMAKE_BUILD_TYPE to Debug"
+  )
+
+ADD_CUSTOM_TARGET(release
+  COMMAND ${CMAKE_COMMAND} -DCMAKE_BUILD_TYPE=Release ${CMAKE_SOURCE_DIR}
+  COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target all
+  COMMENT "Switch CMAKE_BUILD_TYPE to Release"
   )

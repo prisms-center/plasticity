@@ -79,6 +79,17 @@ public:
   }
 };
 
+//Class to set Dirichlet BC values 
+template <int dim>
+class BCFunction2 : public Function<dim>{
+public:
+  BCFunction2(): Function<dim> (dim){}
+  void vector_value (const Point<dim>   &p, Vector<double>   &values) const{
+    Assert (values.size() == dim, ExcDimensionMismatch (values.size(), dim));    
+    values[0]=-totalDisplacement/totalNumIncrements; //total displacement along X-Direction divided by total increments
+  }
+};
+
 //Apply Dirchlet BCs for simple tension BVP
 template <int dim>
 void continuumPlasticity<dim>::applyDirichletBCs(){
@@ -91,11 +102,11 @@ void continuumPlasticity<dim>::applyDirichletBCs(){
   std::vector<bool> mechanicsBoundary_Z4 (dim, false); mechanicsBoundary_Z4[2]=true;
   //u1 applied on X1=1, applied over each increment
   if (this->currentIteration==0) {
-    VectorTools:: interpolate_boundary_values (this->dofHandler,
-					       2, 
-					       BCFunction<dim>(), 
-					       this->constraints,
-					       mechanicsBoundary_Z2);
+	  VectorTools:: interpolate_boundary_values (this->dofHandler,
+						     2, 
+						     BCFunction<dim>(), 
+						     this->constraints,
+						     mechanicsBoundary_Z2);
   }
   //Don't apply further displacement simply for a new sovler iteration
   else {
@@ -130,7 +141,7 @@ void continuumPlasticity<dim>::applyDirichletBCs(){
 //main
 int main (int argc, char **argv)
 {
-  Utilities::System::MPI_InitFinalize mpi_initialization(argc, argv, 1);
+  Utilities::MPI::MPI_InitFinalize mpi_initialization(argc, argv, 1);
   try
     {
       deallog.depth_console(0);
@@ -141,6 +152,7 @@ int main (int argc, char **argv)
       problem.properties.mu = lame_mu;
       problem.properties.tau_y = yield_stress;
       problem.properties.K = strain_hardening;
+      problem.properties.H = kinematic_hardening;
 
       //Read pfunction names for strain energy density and yield functions
       problem.properties.strainEnergyModel = strain_energy_function;

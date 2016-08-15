@@ -1,15 +1,14 @@
-// created: 2015-4-7 15:16:58
-// version: master
-// url: https://github.com/prisms-center/IntegrationTools.git
+// created: 2016-8-5 14:00:38
+// version: HEAD
+// url: git@github.com:prisms-center/IntegrationTools.git
 // commit: 010dc90537a86ed3458c4b12292b6af9545b3c1f
 
 #ifndef PLIBRARY_HH
 #define PLIBRARY_HH
 
 #include<cstring>
-#include<vector>
-#include "../../../../utils/IntegrationTools/PFunction.hh"
-#include "../../../../utils/IntegrationTools/PPieceWise.hh"
+#include "IntegrationTools/PFunction.hh"
+#include "IntegrationTools/PPieceWise.hh"
 
 namespace PRISMS
 {

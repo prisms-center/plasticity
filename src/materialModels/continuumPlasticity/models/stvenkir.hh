@@ -1,4 +1,4 @@
-// created: 2015-4-7 15:16:56
+// created: 2016-8-5 14:00:36
 // version: master
 // url: https://github.com/prisms-center/IntegrationToolsWriter.git
 // commit: 8a15adf67355fad30bd75ce9ba6b1f8d24b9a537
@@ -8,7 +8,7 @@
 
 #include <cmath>
 #include <cstdlib>
-#include "../../../../utils/IntegrationTools/PFunction.hh"
+#include "IntegrationTools/PFunction.hh"
 
 namespace PRISMS
 {
@@ -17,7 +17,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return  1.2500000000000000e-01*pow( pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00,2.0000000000000000e+00)*var[0]+2.5000000000000000e-01*var[1]*( pow(var[4],4.0000000000000000e+00)+-2.0000000000000000e+00*pow(var[3],2.0000000000000000e+00)+pow(var[2],4.0000000000000000e+00)+-2.0000000000000000e+00*pow(var[2],2.0000000000000000e+00)+-2.0000000000000000e+00*pow(var[4],2.0000000000000000e+00)+pow(var[3],4.0000000000000000e+00)+3.0000000000000000e+00)+5.0000000000000000e-01*var[5]*pow(var[6],2.0000000000000000e+00);
+            return  2.5000000000000000e-01*( -2.0000000000000000e+00*pow(var[2],2.0000000000000000e+00)+pow(var[4],4.0000000000000000e+00)+-2.0000000000000000e+00*pow(var[3],2.0000000000000000e+00)+pow(var[3],4.0000000000000000e+00)+pow(var[2],4.0000000000000000e+00)+-2.0000000000000000e+00*pow(var[4],2.0000000000000000e+00)+3.0000000000000000e+00)*var[1]+1.2500000000000000e-01*var[0]*pow( pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00,2.0000000000000000e+00)+5.0000000000000000e-01*var[5]*pow(var[6],2.0000000000000000e+00);
         }
 
     public:
@@ -29,17 +29,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return " 1.2500000000000000e-01*pow( pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00,2.0000000000000000e+00)*var[0]+2.5000000000000000e-01*var[1]*( pow(var[4],4.0000000000000000e+00)+-2.0000000000000000e+00*pow(var[3],2.0000000000000000e+00)+pow(var[2],4.0000000000000000e+00)+-2.0000000000000000e+00*pow(var[2],2.0000000000000000e+00)+-2.0000000000000000e+00*pow(var[4],2.0000000000000000e+00)+pow(var[3],4.0000000000000000e+00)+3.0000000000000000e+00)+5.0000000000000000e-01*var[5]*pow(var[6],2.0000000000000000e+00)";
+            return " 2.5000000000000000e-01*( -2.0000000000000000e+00*pow(var[2],2.0000000000000000e+00)+pow(var[4],4.0000000000000000e+00)+-2.0000000000000000e+00*pow(var[3],2.0000000000000000e+00)+pow(var[3],4.0000000000000000e+00)+pow(var[2],4.0000000000000000e+00)+-2.0000000000000000e+00*pow(var[4],2.0000000000000000e+00)+3.0000000000000000e+00)*var[1]+1.2500000000000000e-01*var[0]*pow( pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00,2.0000000000000000e+00)+5.0000000000000000e-01*var[5]*pow(var[6],2.0000000000000000e+00)";
         }
 
         std::string sym() const
         {
-            return "(0.125)*lambda*(-3.0+lambda2^(2.0)+lambda1^(2.0)+lambda3^(2.0))^(2.0)+(0.5)*alpha^(2.0)*K+(0.25)*mu*(3.0+lambda3^(4.0)-(2.0)*lambda2^(2.0)+lambda1^(4.0)-(2.0)*lambda1^(2.0)-(2.0)*lambda3^(2.0)+lambda2^(4.0))";
+            return "(0.5)*K*alpha^(2.0)+(0.25)*(3.0-(2.0)*lambda1^(2.0)+lambda3^(4.0)-(2.0)*lambda2^(2.0)+lambda2^(4.0)+lambda1^(4.0)-(2.0)*lambda3^(2.0))*mu+(0.125)*lambda*(-3.0+lambda1^(2.0)+lambda2^(2.0)+lambda3^(2.0))^(2.0)";
         }
 
         std::string latex() const
         {
-            return "{(0.25)}  {(3.0-{(2.0)} lambda2^{{(2.0)}}-{(2.0)} lambda1^{{(2.0)}}+lambda3^{{(4.0)}}-{(2.0)} lambda3^{{(2.0)}}+lambda1^{{(4.0)}}+lambda2^{{(4.0)}})} \\mu+{(0.125)}  \\lambda {(-3.0+lambda2^{{(2.0)}}+lambda1^{{(2.0)}}+lambda3^{{(2.0)}})}^{{(2.0)}}+{(0.5)}  K \\alpha^{{(2.0)}}";
+            return "{(0.25)}  {(3.0-{(2.0)} lambda1^{{(2.0)}}+lambda3^{{(4.0)}}+lambda2^{{(4.0)}}-{(2.0)} lambda2^{{(2.0)}}-{(2.0)} lambda3^{{(2.0)}}+lambda1^{{(4.0)}})} \\mu+{(0.5)}  K \\alpha^{{(2.0)}}+{(0.125)}  {(-3.0+lambda1^{{(2.0)}}+lambda2^{{(2.0)}}+lambda3^{{(2.0)}})}^{{(2.0)}} \\lambda";
         }
 
         stvenkir_f* clone() const
@@ -53,7 +53,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return 1.2500000000000000e-01*pow( pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00,2.0000000000000000e+00);
+            return 1.2500000000000000e-01*pow( pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00,2.0000000000000000e+00);
         }
 
     public:
@@ -65,17 +65,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return "1.2500000000000000e-01*pow( pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00,2.0000000000000000e+00)";
+            return "1.2500000000000000e-01*pow( pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00,2.0000000000000000e+00)";
         }
 
         std::string sym() const
         {
-            return "(0.125)*(-3.0+lambda1^(2.0)+lambda3^(2.0)+lambda2^(2.0))^(2.0)";
+            return "(0.125)*(-3.0+lambda3^(2.0)+lambda1^(2.0)+lambda2^(2.0))^(2.0)";
         }
 
         std::string latex() const
         {
-            return "{(0.125)}  {(-3.0+lambda1^{{(2.0)}}+lambda3^{{(2.0)}}+lambda2^{{(2.0)}})}^{{(2.0)}}";
+            return "{(0.125)}  {(-3.0+lambda3^{{(2.0)}}+lambda1^{{(2.0)}}+lambda2^{{(2.0)}})}^{{(2.0)}}";
         }
 
         stvenkir_grad_0* clone() const
@@ -89,7 +89,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return  2.5000000000000000e-01*pow(var[3],4.0000000000000000e+00)+-5.0000000000000000e-01*pow(var[2],2.0000000000000000e+00)+-5.0000000000000000e-01*pow(var[4],2.0000000000000000e+00)+2.5000000000000000e-01*pow(var[4],4.0000000000000000e+00)+-5.0000000000000000e-01*pow(var[3],2.0000000000000000e+00)+2.5000000000000000e-01*pow(var[2],4.0000000000000000e+00)+7.5000000000000000e-01;
+            return  2.5000000000000000e-01*pow(var[3],4.0000000000000000e+00)+-5.0000000000000000e-01*pow(var[4],2.0000000000000000e+00)+-5.0000000000000000e-01*pow(var[2],2.0000000000000000e+00)+2.5000000000000000e-01*pow(var[2],4.0000000000000000e+00)+-5.0000000000000000e-01*pow(var[3],2.0000000000000000e+00)+2.5000000000000000e-01*pow(var[4],4.0000000000000000e+00)+7.5000000000000000e-01;
         }
 
     public:
@@ -101,17 +101,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return " 2.5000000000000000e-01*pow(var[3],4.0000000000000000e+00)+-5.0000000000000000e-01*pow(var[2],2.0000000000000000e+00)+-5.0000000000000000e-01*pow(var[4],2.0000000000000000e+00)+2.5000000000000000e-01*pow(var[4],4.0000000000000000e+00)+-5.0000000000000000e-01*pow(var[3],2.0000000000000000e+00)+2.5000000000000000e-01*pow(var[2],4.0000000000000000e+00)+7.5000000000000000e-01";
+            return " 2.5000000000000000e-01*pow(var[3],4.0000000000000000e+00)+-5.0000000000000000e-01*pow(var[4],2.0000000000000000e+00)+-5.0000000000000000e-01*pow(var[2],2.0000000000000000e+00)+2.5000000000000000e-01*pow(var[2],4.0000000000000000e+00)+-5.0000000000000000e-01*pow(var[3],2.0000000000000000e+00)+2.5000000000000000e-01*pow(var[4],4.0000000000000000e+00)+7.5000000000000000e-01";
         }
 
         std::string sym() const
         {
-            return "0.75+(0.25)*lambda2^(4.0)-(0.5)*lambda1^(2.0)-(0.5)*lambda3^(2.0)+(0.25)*lambda3^(4.0)-(0.5)*lambda2^(2.0)+(0.25)*lambda1^(4.0)";
+            return "0.75+(0.25)*lambda2^(4.0)-(0.5)*lambda3^(2.0)-(0.5)*lambda1^(2.0)+(0.25)*lambda1^(4.0)-(0.5)*lambda2^(2.0)+(0.25)*lambda3^(4.0)";
         }
 
         std::string latex() const
         {
-            return "0.75-{(0.5)} lambda1^{{(2.0)}}-{(0.5)} lambda3^{{(2.0)}}+{(0.25)} lambda2^{{(4.0)}}+{(0.25)} lambda3^{{(4.0)}}-{(0.5)} lambda2^{{(2.0)}}+{(0.25)} lambda1^{{(4.0)}}";
+            return "0.75+{(0.25)} lambda2^{{(4.0)}}-{(0.5)} lambda3^{{(2.0)}}+{(0.25)} lambda1^{{(4.0)}}-{(0.5)} lambda1^{{(2.0)}}+{(0.25)} lambda3^{{(4.0)}}-{(0.5)} lambda2^{{(2.0)}}";
         }
 
         stvenkir_grad_1* clone() const
@@ -125,7 +125,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return  5.0000000000000000e-01*var[2]*( pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)*var[0]+2.5000000000000000e-01*( -4.0000000000000000e+00*var[2]+4.0000000000000000e+00*pow(var[2],3.0000000000000000e+00))*var[1];
+            return  5.0000000000000000e-01*var[2]*var[0]*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)+2.5000000000000000e-01*var[1]*( -4.0000000000000000e+00*var[2]+4.0000000000000000e+00*pow(var[2],3.0000000000000000e+00));
         }
 
     public:
@@ -137,17 +137,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return " 5.0000000000000000e-01*var[2]*( pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)*var[0]+2.5000000000000000e-01*( -4.0000000000000000e+00*var[2]+4.0000000000000000e+00*pow(var[2],3.0000000000000000e+00))*var[1]";
+            return " 5.0000000000000000e-01*var[2]*var[0]*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)+2.5000000000000000e-01*var[1]*( -4.0000000000000000e+00*var[2]+4.0000000000000000e+00*pow(var[2],3.0000000000000000e+00))";
         }
 
         std::string sym() const
         {
-            return "(0.25)*mu*((4.0)*lambda1^(3.0)-(4.0)*lambda1)+(0.5)*lambda1*(-3.0+lambda1^(2.0)+lambda3^(2.0)+lambda2^(2.0))*lambda";
+            return "(0.5)*(-3.0+lambda3^(2.0)+lambda1^(2.0)+lambda2^(2.0))*lambda*lambda1+(0.25)*((4.0)*lambda1^(3.0)-(4.0)*lambda1)*mu";
         }
 
         std::string latex() const
         {
-            return "{(0.25)}  {({(4.0)} lambda1^{{(3.0)}}-{(4.0)} lambda1)} \\mu+{(0.5)}  \\lambda {(-3.0+lambda3^{{(2.0)}}+lambda2^{{(2.0)}}+lambda1^{{(2.0)}})} lambda1";
+            return "{(0.25)}  \\mu {(-{(4.0)} lambda1+{(4.0)} lambda1^{{(3.0)}})}+{(0.5)}  {(-3.0+lambda2^{{(2.0)}}+lambda3^{{(2.0)}}+lambda1^{{(2.0)}})} lambda1 \\lambda";
         }
 
         stvenkir_grad_2* clone() const
@@ -161,7 +161,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return  5.0000000000000000e-01*( pow(var[4],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)-3.0000000000000000e+00)*var[3]*var[0]+2.5000000000000000e-01*var[1]*( 4.0000000000000000e+00*pow(var[3],3.0000000000000000e+00)+-4.0000000000000000e+00*var[3]);
+            return  5.0000000000000000e-01*var[3]*var[0]*( pow(var[3],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)-3.0000000000000000e+00)+2.5000000000000000e-01*var[1]*( -4.0000000000000000e+00*var[3]+4.0000000000000000e+00*pow(var[3],3.0000000000000000e+00));
         }
 
     public:
@@ -173,17 +173,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return " 5.0000000000000000e-01*( pow(var[4],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)-3.0000000000000000e+00)*var[3]*var[0]+2.5000000000000000e-01*var[1]*( 4.0000000000000000e+00*pow(var[3],3.0000000000000000e+00)+-4.0000000000000000e+00*var[3])";
+            return " 5.0000000000000000e-01*var[3]*var[0]*( pow(var[3],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)-3.0000000000000000e+00)+2.5000000000000000e-01*var[1]*( -4.0000000000000000e+00*var[3]+4.0000000000000000e+00*pow(var[3],3.0000000000000000e+00))";
         }
 
         std::string sym() const
         {
-            return "(0.5)*(-3.0+lambda3^(2.0)+lambda2^(2.0)+lambda1^(2.0))*lambda2*lambda+(0.25)*(-(4.0)*lambda2+(4.0)*lambda2^(3.0))*mu";
+            return "(0.25)*mu*((4.0)*lambda2^(3.0)-(4.0)*lambda2)+(0.5)*(-3.0+lambda2^(2.0)+lambda3^(2.0)+lambda1^(2.0))*lambda2*lambda";
         }
 
         std::string latex() const
         {
-            return "{(0.5)}  lambda2 \\lambda {(-3.0+lambda3^{{(2.0)}}+lambda2^{{(2.0)}}+lambda1^{{(2.0)}})}+{(0.25)}  \\mu {({(4.0)} lambda2^{{(3.0)}}-{(4.0)} lambda2)}";
+            return "{(0.25)}  {({(4.0)} lambda2^{{(3.0)}}-{(4.0)} lambda2)} \\mu+{(0.5)}  lambda2 \\lambda {(-3.0+lambda2^{{(2.0)}}+lambda3^{{(2.0)}}+lambda1^{{(2.0)}})}";
         }
 
         stvenkir_grad_3* clone() const
@@ -197,7 +197,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return  5.0000000000000000e-01*( pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00)*var[0]*var[4]+2.5000000000000000e-01*( -4.0000000000000000e+00*var[4]+4.0000000000000000e+00*pow(var[4],3.0000000000000000e+00))*var[1];
+            return  5.0000000000000000e-01*var[0]*( pow(var[3],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)-3.0000000000000000e+00)*var[4]+2.5000000000000000e-01*( 4.0000000000000000e+00*pow(var[4],3.0000000000000000e+00)+-4.0000000000000000e+00*var[4])*var[1];
         }
 
     public:
@@ -209,17 +209,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return " 5.0000000000000000e-01*( pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00)*var[0]*var[4]+2.5000000000000000e-01*( -4.0000000000000000e+00*var[4]+4.0000000000000000e+00*pow(var[4],3.0000000000000000e+00))*var[1]";
+            return " 5.0000000000000000e-01*var[0]*( pow(var[3],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)-3.0000000000000000e+00)*var[4]+2.5000000000000000e-01*( 4.0000000000000000e+00*pow(var[4],3.0000000000000000e+00)+-4.0000000000000000e+00*var[4])*var[1]";
         }
 
         std::string sym() const
         {
-            return "(0.5)*lambda*(-3.0+lambda2^(2.0)+lambda1^(2.0)+lambda3^(2.0))*lambda3+(0.25)*mu*((4.0)*lambda3^(3.0)-(4.0)*lambda3)";
+            return "(0.25)*mu*(-(4.0)*lambda3+(4.0)*lambda3^(3.0))+(0.5)*lambda*(-3.0+lambda2^(2.0)+lambda3^(2.0)+lambda1^(2.0))*lambda3";
         }
 
         std::string latex() const
         {
-            return "{(0.5)}  {(-3.0+lambda2^{{(2.0)}}+lambda1^{{(2.0)}}+lambda3^{{(2.0)}})} \\lambda lambda3+{(0.25)}  \\mu {(-{(4.0)} lambda3+{(4.0)} lambda3^{{(3.0)}})}";
+            return "{(0.5)}  \\lambda {(-3.0+lambda1^{{(2.0)}}+lambda2^{{(2.0)}}+lambda3^{{(2.0)}})} lambda3+{(0.25)}  {(-{(4.0)} lambda3+{(4.0)} lambda3^{{(3.0)}})} \\mu";
         }
 
         stvenkir_grad_4* clone() const
@@ -377,7 +377,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return 5.0000000000000000e-01*( pow(var[4],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)-3.0000000000000000e+00)*var[2];
+            return 5.0000000000000000e-01*var[2]*( pow(var[3],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)-3.0000000000000000e+00);
         }
 
     public:
@@ -389,17 +389,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return "5.0000000000000000e-01*( pow(var[4],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)-3.0000000000000000e+00)*var[2]";
+            return "5.0000000000000000e-01*var[2]*( pow(var[3],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)-3.0000000000000000e+00)";
         }
 
         std::string sym() const
         {
-            return "(0.5)*(-3.0+lambda3^(2.0)+lambda2^(2.0)+lambda1^(2.0))*lambda1";
+            return "(0.5)*(-3.0+lambda2^(2.0)+lambda3^(2.0)+lambda1^(2.0))*lambda1";
         }
 
         std::string latex() const
         {
-            return "{(0.5)}  {(-3.0+lambda3^{{(2.0)}}+lambda2^{{(2.0)}}+lambda1^{{(2.0)}})} lambda1";
+            return "{(0.5)}  lambda1 {(-3.0+lambda2^{{(2.0)}}+lambda3^{{(2.0)}}+lambda1^{{(2.0)}})}";
         }
 
         stvenkir_hess_0_2* clone() const
@@ -413,7 +413,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return 5.0000000000000000e-01*( pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00)*var[3];
+            return 5.0000000000000000e-01*var[3]*( pow(var[3],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)-3.0000000000000000e+00);
         }
 
     public:
@@ -425,17 +425,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return "5.0000000000000000e-01*( pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00)*var[3]";
+            return "5.0000000000000000e-01*var[3]*( pow(var[3],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)-3.0000000000000000e+00)";
         }
 
         std::string sym() const
         {
-            return "(0.5)*lambda2*(-3.0+lambda2^(2.0)+lambda1^(2.0)+lambda3^(2.0))";
+            return "(0.5)*(-3.0+lambda2^(2.0)+lambda3^(2.0)+lambda1^(2.0))*lambda2";
         }
 
         std::string latex() const
         {
-            return "{(0.5)}  lambda2 {(-3.0+lambda2^{{(2.0)}}+lambda1^{{(2.0)}}+lambda3^{{(2.0)}})}";
+            return "{(0.5)}  lambda2 {(-3.0+lambda1^{{(2.0)}}+lambda2^{{(2.0)}}+lambda3^{{(2.0)}})}";
         }
 
         stvenkir_hess_0_3* clone() const
@@ -449,7 +449,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return 5.0000000000000000e-01*( pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00)*var[4];
+            return 5.0000000000000000e-01*( pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00)*var[4];
         }
 
     public:
@@ -461,17 +461,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return "5.0000000000000000e-01*( pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00)*var[4]";
+            return "5.0000000000000000e-01*( pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00)*var[4]";
         }
 
         std::string sym() const
         {
-            return "(0.5)*(-3.0+lambda2^(2.0)+lambda1^(2.0)+lambda3^(2.0))*lambda3";
+            return "(0.5)*lambda3*(-3.0+lambda1^(2.0)+lambda2^(2.0)+lambda3^(2.0))";
         }
 
         std::string latex() const
         {
-            return "{(0.5)}  lambda3 {(-3.0+lambda2^{{(2.0)}}+lambda1^{{(2.0)}}+lambda3^{{(2.0)}})}";
+            return "{(0.5)}  {(-3.0+lambda1^{{(2.0)}}+lambda2^{{(2.0)}}+lambda3^{{(2.0)}})} lambda3";
         }
 
         stvenkir_hess_0_4* clone() const
@@ -629,7 +629,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return  pow(var[2],3.0000000000000000e+00)-var[2];
+            return -var[2]+pow(var[2],3.0000000000000000e+00);
         }
 
     public:
@@ -641,7 +641,7 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return " pow(var[2],3.0000000000000000e+00)-var[2]";
+            return "-var[2]+pow(var[2],3.0000000000000000e+00)";
         }
 
         std::string sym() const
@@ -665,7 +665,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return  pow(var[3],3.0000000000000000e+00)-var[3];
+            return -var[3]+pow(var[3],3.0000000000000000e+00);
         }
 
     public:
@@ -677,7 +677,7 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return " pow(var[3],3.0000000000000000e+00)-var[3]";
+            return "-var[3]+pow(var[3],3.0000000000000000e+00)";
         }
 
         std::string sym() const
@@ -723,7 +723,7 @@ namespace PRISMS
 
         std::string latex() const
         {
-            return "-lambda3+lambda3^{{(3.0)}}";
+            return "lambda3^{{(3.0)}}-lambda3";
         }
 
         stvenkir_hess_1_4* clone() const
@@ -809,7 +809,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return 5.0000000000000000e-01*( pow(var[4],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)-3.0000000000000000e+00)*var[2];
+            return 5.0000000000000000e-01*( pow(var[3],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)-3.0000000000000000e+00)*var[2];
         }
 
     public:
@@ -821,17 +821,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return "5.0000000000000000e-01*( pow(var[4],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)-3.0000000000000000e+00)*var[2]";
+            return "5.0000000000000000e-01*( pow(var[3],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)-3.0000000000000000e+00)*var[2]";
         }
 
         std::string sym() const
         {
-            return "(0.5)*(-3.0+lambda3^(2.0)+lambda2^(2.0)+lambda1^(2.0))*lambda1";
+            return "(0.5)*(-3.0+lambda2^(2.0)+lambda3^(2.0)+lambda1^(2.0))*lambda1";
         }
 
         std::string latex() const
         {
-            return "{(0.5)}  lambda1 {(-3.0+lambda3^{{(2.0)}}+lambda2^{{(2.0)}}+lambda1^{{(2.0)}})}";
+            return "{(0.5)}  lambda1 {(-3.0+lambda2^{{(2.0)}}+lambda3^{{(2.0)}}+lambda1^{{(2.0)}})}";
         }
 
         stvenkir_hess_2_0* clone() const
@@ -845,7 +845,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return -var[2]+pow(var[2],3.0000000000000000e+00);
+            return  pow(var[2],3.0000000000000000e+00)-var[2];
         }
 
     public:
@@ -857,17 +857,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return "-var[2]+pow(var[2],3.0000000000000000e+00)";
+            return " pow(var[2],3.0000000000000000e+00)-var[2]";
         }
 
         std::string sym() const
         {
-            return "lambda1^(3.0)-lambda1";
+            return "-lambda1+lambda1^(3.0)";
         }
 
         std::string latex() const
         {
-            return "-lambda1+lambda1^{{(3.0)}}";
+            return "lambda1^{{(3.0)}}-lambda1";
         }
 
         stvenkir_hess_2_1* clone() const
@@ -881,7 +881,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return  var[0]*(var[2]*var[2])+5.0000000000000000e-01*( pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00)*var[0]+2.5000000000000000e-01*var[1]*( 1.2000000000000000e+01*pow(var[2],2.0000000000000000e+00)-4.0000000000000000e+00);
+            return  2.5000000000000000e-01*( 1.2000000000000000e+01*pow(var[2],2.0000000000000000e+00)-4.0000000000000000e+00)*var[1]+(var[2]*var[2])*var[0]+5.0000000000000000e-01*( pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00)*var[0];
         }
 
     public:
@@ -893,17 +893,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return " var[0]*(var[2]*var[2])+5.0000000000000000e-01*( pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00)*var[0]+2.5000000000000000e-01*var[1]*( 1.2000000000000000e+01*pow(var[2],2.0000000000000000e+00)-4.0000000000000000e+00)";
+            return " 2.5000000000000000e-01*( 1.2000000000000000e+01*pow(var[2],2.0000000000000000e+00)-4.0000000000000000e+00)*var[1]+(var[2]*var[2])*var[0]+5.0000000000000000e-01*( pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00)*var[0]";
         }
 
         std::string sym() const
         {
-            return "lambda1^2*lambda+(0.5)*(-3.0+lambda2^(2.0)+lambda1^(2.0)+lambda3^(2.0))*lambda+(0.25)*(-4.0+(12.0)*lambda1^(2.0))*mu";
+            return "(0.5)*lambda*(-3.0+lambda1^(2.0)+lambda2^(2.0)+lambda3^(2.0))+lambda*lambda1^2+(0.25)*mu*(-4.0+(12.0)*lambda1^(2.0))";
         }
 
         std::string latex() const
         {
-            return "{(0.5)}  \\lambda {(-3.0+lambda2^{{(2.0)}}+lambda1^{{(2.0)}}+lambda3^{{(2.0)}})}+{(0.25)}  \\mu {(-4.0+{(12.0)} lambda1^{{(2.0)}})}+ \\lambda lambda1^{2}";
+            return "{(0.5)}  {(-3.0+lambda1^{{(2.0)}}+lambda2^{{(2.0)}}+lambda3^{{(2.0)}})} \\lambda+{(0.25)}  \\mu {(-4.0+{(12.0)} lambda1^{{(2.0)}})}+ lambda1^{2} \\lambda";
         }
 
         stvenkir_hess_2_2* clone() const
@@ -917,7 +917,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return var[2]*var[3]*var[0];
+            return var[0]*var[2]*var[3];
         }
 
     public:
@@ -929,12 +929,12 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return "var[2]*var[3]*var[0]";
+            return "var[0]*var[2]*var[3]";
         }
 
         std::string sym() const
         {
-            return "lambda*lambda1*lambda2";
+            return "lambda1*lambda2*lambda";
         }
 
         std::string latex() const
@@ -953,7 +953,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return var[4]*var[2]*var[0];
+            return var[2]*var[0]*var[4];
         }
 
     public:
@@ -965,17 +965,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return "var[4]*var[2]*var[0]";
+            return "var[2]*var[0]*var[4]";
         }
 
         std::string sym() const
         {
-            return "lambda1*lambda*lambda3";
+            return "lambda3*lambda1*lambda";
         }
 
         std::string latex() const
         {
-            return " lambda3 lambda1 \\lambda";
+            return " \\lambda lambda3 lambda1";
         }
 
         stvenkir_hess_2_4* clone() const
@@ -1061,7 +1061,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return 5.0000000000000000e-01*( pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00)*var[3];
+            return 5.0000000000000000e-01*( pow(var[3],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)-3.0000000000000000e+00)*var[3];
         }
 
     public:
@@ -1073,17 +1073,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return "5.0000000000000000e-01*( pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00)*var[3]";
+            return "5.0000000000000000e-01*( pow(var[3],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)-3.0000000000000000e+00)*var[3]";
         }
 
         std::string sym() const
         {
-            return "(0.5)*lambda2*(-3.0+lambda2^(2.0)+lambda1^(2.0)+lambda3^(2.0))";
+            return "(0.5)*lambda2*(-3.0+lambda2^(2.0)+lambda3^(2.0)+lambda1^(2.0))";
         }
 
         std::string latex() const
         {
-            return "{(0.5)}  lambda2 {(-3.0+lambda2^{{(2.0)}}+lambda1^{{(2.0)}}+lambda3^{{(2.0)}})}";
+            return "{(0.5)}  lambda2 {(-3.0+lambda1^{{(2.0)}}+lambda2^{{(2.0)}}+lambda3^{{(2.0)}})}";
         }
 
         stvenkir_hess_3_0* clone() const
@@ -1097,7 +1097,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return  pow(var[3],3.0000000000000000e+00)-var[3];
+            return -var[3]+pow(var[3],3.0000000000000000e+00);
         }
 
     public:
@@ -1109,7 +1109,7 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return " pow(var[3],3.0000000000000000e+00)-var[3]";
+            return "-var[3]+pow(var[3],3.0000000000000000e+00)";
         }
 
         std::string sym() const
@@ -1133,7 +1133,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return var[3]*var[0]*var[2];
+            return var[2]*var[3]*var[0];
         }
 
     public:
@@ -1145,7 +1145,7 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return "var[3]*var[0]*var[2]";
+            return "var[2]*var[3]*var[0]";
         }
 
         std::string sym() const
@@ -1155,7 +1155,7 @@ namespace PRISMS
 
         std::string latex() const
         {
-            return " \\lambda lambda1 lambda2";
+            return " lambda1 lambda2 \\lambda";
         }
 
         stvenkir_hess_3_2* clone() const
@@ -1169,7 +1169,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return  2.5000000000000000e-01*( 1.2000000000000000e+01*pow(var[3],2.0000000000000000e+00)-4.0000000000000000e+00)*var[1]+(var[3]*var[3])*var[0]+5.0000000000000000e-01*( pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)*var[0];
+            return  2.5000000000000000e-01*( 1.2000000000000000e+01*pow(var[3],2.0000000000000000e+00)-4.0000000000000000e+00)*var[1]+5.0000000000000000e-01*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)*var[0]+(var[3]*var[3])*var[0];
         }
 
     public:
@@ -1181,17 +1181,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return " 2.5000000000000000e-01*( 1.2000000000000000e+01*pow(var[3],2.0000000000000000e+00)-4.0000000000000000e+00)*var[1]+(var[3]*var[3])*var[0]+5.0000000000000000e-01*( pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)*var[0]";
+            return " 2.5000000000000000e-01*( 1.2000000000000000e+01*pow(var[3],2.0000000000000000e+00)-4.0000000000000000e+00)*var[1]+5.0000000000000000e-01*( pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)-3.0000000000000000e+00)*var[0]+(var[3]*var[3])*var[0]";
         }
 
         std::string sym() const
         {
-            return "(0.25)*mu*(-4.0+(12.0)*lambda2^(2.0))+lambda2^2*lambda+(0.5)*(-3.0+lambda1^(2.0)+lambda3^(2.0)+lambda2^(2.0))*lambda";
+            return "(0.5)*(-3.0+lambda3^(2.0)+lambda1^(2.0)+lambda2^(2.0))*lambda+(0.25)*(-4.0+(12.0)*lambda2^(2.0))*mu+lambda2^2*lambda";
         }
 
         std::string latex() const
         {
-            return " lambda2^{2} \\lambda+{(0.25)}  {(-4.0+{(12.0)} lambda2^{{(2.0)}})} \\mu+{(0.5)}  {(-3.0+lambda1^{{(2.0)}}+lambda3^{{(2.0)}}+lambda2^{{(2.0)}})} \\lambda";
+            return "{(0.5)}  {(-3.0+lambda3^{{(2.0)}}+lambda1^{{(2.0)}}+lambda2^{{(2.0)}})} \\lambda+ lambda2^{2} \\lambda+{(0.25)}  \\mu {(-4.0+{(12.0)} lambda2^{{(2.0)}})}";
         }
 
         stvenkir_hess_3_3* clone() const
@@ -1205,7 +1205,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return var[4]*var[3]*var[0];
+            return var[3]*var[0]*var[4];
         }
 
     public:
@@ -1217,17 +1217,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return "var[4]*var[3]*var[0]";
+            return "var[3]*var[0]*var[4]";
         }
 
         std::string sym() const
         {
-            return "lambda2*lambda*lambda3";
+            return "lambda3*lambda2*lambda";
         }
 
         std::string latex() const
         {
-            return " lambda3 lambda2 \\lambda";
+            return " lambda2 \\lambda lambda3";
         }
 
         stvenkir_hess_3_4* clone() const
@@ -1313,7 +1313,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return 5.0000000000000000e-01*( pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00)*var[4];
+            return 5.0000000000000000e-01*( pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00)*var[4];
         }
 
     public:
@@ -1325,17 +1325,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return "5.0000000000000000e-01*( pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00)*var[4]";
+            return "5.0000000000000000e-01*( pow(var[2],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)-3.0000000000000000e+00)*var[4]";
         }
 
         std::string sym() const
         {
-            return "(0.5)*(-3.0+lambda2^(2.0)+lambda1^(2.0)+lambda3^(2.0))*lambda3";
+            return "(0.5)*lambda3*(-3.0+lambda1^(2.0)+lambda2^(2.0)+lambda3^(2.0))";
         }
 
         std::string latex() const
         {
-            return "{(0.5)}  {(-3.0+lambda2^{{(2.0)}}+lambda1^{{(2.0)}}+lambda3^{{(2.0)}})} lambda3";
+            return "{(0.5)}  {(-3.0+lambda1^{{(2.0)}}+lambda2^{{(2.0)}}+lambda3^{{(2.0)}})} lambda3";
         }
 
         stvenkir_hess_4_0* clone() const
@@ -1366,12 +1366,12 @@ namespace PRISMS
 
         std::string sym() const
         {
-            return "-lambda3+lambda3^(3.0)";
+            return "lambda3^(3.0)-lambda3";
         }
 
         std::string latex() const
         {
-            return "lambda3^{{(3.0)}}-lambda3";
+            return "-lambda3+lambda3^{{(3.0)}}";
         }
 
         stvenkir_hess_4_1* clone() const
@@ -1385,7 +1385,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return var[4]*var[2]*var[0];
+            return var[2]*var[0]*var[4];
         }
 
     public:
@@ -1397,17 +1397,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return "var[4]*var[2]*var[0]";
+            return "var[2]*var[0]*var[4]";
         }
 
         std::string sym() const
         {
-            return "lambda1*lambda*lambda3";
+            return "lambda3*lambda1*lambda";
         }
 
         std::string latex() const
         {
-            return " lambda3 lambda1 \\lambda";
+            return " \\lambda lambda3 lambda1";
         }
 
         stvenkir_hess_4_2* clone() const
@@ -1421,7 +1421,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return var[3]*var[0]*var[4];
+            return var[4]*var[3]*var[0];
         }
 
     public:
@@ -1433,17 +1433,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return "var[3]*var[0]*var[4]";
+            return "var[4]*var[3]*var[0]";
         }
 
         std::string sym() const
         {
-            return "lambda3*lambda2*lambda";
+            return "lambda2*lambda*lambda3";
         }
 
         std::string latex() const
         {
-            return " lambda2 \\lambda lambda3";
+            return " lambda3 lambda2 \\lambda";
         }
 
         stvenkir_hess_4_3* clone() const
@@ -1457,7 +1457,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return  5.0000000000000000e-01*var[0]*( pow(var[4],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)-3.0000000000000000e+00)+(var[4]*var[4])*var[0]+2.5000000000000000e-01*var[1]*( 1.2000000000000000e+01*pow(var[4],2.0000000000000000e+00)-4.0000000000000000e+00);
+            return  var[0]*(var[4]*var[4])+5.0000000000000000e-01*var[0]*( pow(var[3],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)-3.0000000000000000e+00)+2.5000000000000000e-01*var[1]*( 1.2000000000000000e+01*pow(var[4],2.0000000000000000e+00)-4.0000000000000000e+00);
         }
 
     public:
@@ -1469,17 +1469,17 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return " 5.0000000000000000e-01*var[0]*( pow(var[4],2.0000000000000000e+00)+pow(var[3],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)-3.0000000000000000e+00)+(var[4]*var[4])*var[0]+2.5000000000000000e-01*var[1]*( 1.2000000000000000e+01*pow(var[4],2.0000000000000000e+00)-4.0000000000000000e+00)";
+            return " var[0]*(var[4]*var[4])+5.0000000000000000e-01*var[0]*( pow(var[3],2.0000000000000000e+00)+pow(var[4],2.0000000000000000e+00)+pow(var[2],2.0000000000000000e+00)-3.0000000000000000e+00)+2.5000000000000000e-01*var[1]*( 1.2000000000000000e+01*pow(var[4],2.0000000000000000e+00)-4.0000000000000000e+00)";
         }
 
         std::string sym() const
         {
-            return "lambda*lambda3^2+(0.5)*(-3.0+lambda3^(2.0)+lambda2^(2.0)+lambda1^(2.0))*lambda+(0.25)*(-4.0+(12.0)*lambda3^(2.0))*mu";
+            return "(0.25)*mu*(-4.0+(12.0)*lambda3^(2.0))+(0.5)*(-3.0+lambda2^(2.0)+lambda3^(2.0)+lambda1^(2.0))*lambda+lambda*lambda3^2";
         }
 
         std::string latex() const
         {
-            return "{(0.25)}  \\mu {(-4.0+{(12.0)} lambda3^{{(2.0)}})}+{(0.5)}  \\lambda {(-3.0+lambda3^{{(2.0)}}+lambda2^{{(2.0)}}+lambda1^{{(2.0)}})}+ lambda3^{2} \\lambda";
+            return "{(0.5)}  \\lambda {(-3.0+lambda2^{{(2.0)}}+lambda3^{{(2.0)}}+lambda1^{{(2.0)}})}+{(0.25)}  \\mu {(-4.0+{(12.0)} lambda3^{{(2.0)}})}+ \\lambda lambda3^{2}";
         }
 
         stvenkir_hess_4_4* clone() const

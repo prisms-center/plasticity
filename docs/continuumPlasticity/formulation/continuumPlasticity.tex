@@ -13,7 +13,6 @@
 \usepackage{wrapfig}
 \usepackage{graphicx}
 \usepackage{psfrag}
-\usepackage{courier}
 \renewcommand{\baselinestretch}{1.2}
 \jot 5mm
 \graphicspath{{./figures/}}
@@ -212,6 +211,7 @@ The eigenvalues of $\Btau$ are the principal stresses ($\beta^A$), and the eigen
 The following relation holds in this case:
 \begin{align}
 \beta^A &= \frac{\partial \bar{w}}{\partial \lambda_e^{A}}\lambda_e^{A}
+\label{eqn:beta}
 \end{align}
 
 \subsection{Yield condition}
@@ -268,7 +268,9 @@ We consider the case of displacment loading. The total applied displacement is d
 The yield function is evaluated using the trial state. If $f_{n+1}^{tr} < 0$, then the trial state holds and no plastic flow has ocurred. Otherwise, the body has undergone plastic deformation. The flow rules are algorithmically integrated and stress and strain values are updated using the return mapping algorithm, as follows:
 \begin{align}
 \alpha_{n+1} &= \alpha_{n+1}^{tr} + \gamma_{n+1}\Delta t
-\Big(\frac{\partial f}{\partial q}\Big)_{n+1}\\
+\Big(\frac{\partial f}{\partial q}\Big)_{n+1}
+\label{eqn:alpha}
+\\
 \lambda_{e_{n+1}}^{A^2} &= \exp\bigg(-2\gamma_{n+1}\Delta t
 \Big(\frac{\partial f}{\partial \beta^A}\Big)_{n+1}\bigg)
 \label{eqn:lambda}
@@ -298,6 +300,7 @@ However, note that instead of the spatial elastic tangent, we are using the spat
 \bc^{ep} &= \sum_{A=1}^3 \sum_{B=1}^3 a^{ep}_{AB} \bm^{A^{tr}}\otimes\bm^{B^{tr}}
 +
 2\sum_{A=1}^3 \beta^A \bc^{A^{tr}}
+\label{eqn:cep}
 \end{align}
 where
 \begin{align}
@@ -305,7 +308,7 @@ where
 \Big(\bh \frac{\partial f}{\partial \Bbeta} \Big)\otimes\Big(\bh \frac{\partial f}{\partial \Bbeta} \Big)}
 {\Big(1 - \gamma \Delta t \frac{\partial q}{\partial \alpha} \frac{\partial^2 f}{\partial q^2}\Big)
 \frac{\partial f}{\partial \Bbeta}\cdot\bh \frac{\partial f}{\partial \Bbeta}
-+ \frac{\partial q}{\partial \alpha}\Big(\frac{\partial f}{\partial q}\Big)^2}\\
+- \frac{\partial q}{\partial \alpha}\Big(\frac{\partial f}{\partial q}\Big)^2}\\
 \bh &= \Big(\ba^{e^{-1}} + \gamma \Delta t \frac{\partial^2 f}{\partial \Bbeta^2}
 \Big)^{-1}\\
 a^e_{AB} &= \frac{\partial^2 w}{\partial \lambda^A_e \partial \lambda^B_e}
@@ -337,12 +340,349 @@ d_A &= \frac{\lambda^{A^{tr^2}}_e - \lambda^{B^{tr^2}}_e}{\lambda^{A^{tr^2}}_e -
 
 The PRISMS continuum plasticity code also uses an enhanced strain field to prevent element locking, as described in [2].
 
+\section{Kinematic hardening with von Mises yield function}
+We incorporate kinematic hardening in the von Mises yield function using ``the vector of principal values of the back-stress tensor in principal deviatoric (Kirchhoff) stress space'' denoted by $\Bxi$ [1]. The yield function then becomes
+\begin{align}
+\bar{f}(\Bbeta,\Bxi,q) &= |\Dev(\Bbeta)-\Bxi| - \sqrt{\frac{2}{3}}(\tau_y - q)
+\end{align}
+Note that since $\Bxi = \Dev(\Bxi)$, we have the relation $\partial f/\partial\Bbeta = -\partial f/\partial\Bxi$. The update for $\Bxi$ in the return mapping algorithm is
+\begin{align}
+\Bxi_{n+1} = \Bxi^{tr}_{n+1} + \frac{2}{3}\bar{H}\gamma_{n+1}\Delta t\left(\frac{\partial f}{\partial\Bbeta}\right)_{n+1}
+\label{eqn:xi}
+\end{align}
+where $\bar{H}$ is the kinematic hardening coefficient and $\Bxi^{tr}_{n+1} = \Bxi_{n}$. The algorithmic elastoplastic tangent has the form in equation (\ref{eqn:cep}), with an modified expression for $\ba^{ep}$. The derivation is similar, as outlined in [1], using the relations
+\begin{equation}
+\begin{aligned}
+\ba^{ep} &= \frac{\partial \Bbeta}{\partial \Bepsilon^{tr}}\\
+\ba^{e} &= \frac{\partial \Bbeta}{\partial \Bepsilon}
+\end{aligned}
+\end{equation}
+where $\epsilon^A = \log(\lambda^A_e)$. 
+%Then we can write equation (\ref{eqn:beta}) as
+%\begin{equation}
+%\begin{aligned}
+%\Bbeta &= \frac{\partial \hat{w}}{\partial \Bepsilon}\\
+%\implies \mathrm{d}\Bbeta &= \frac{\partial^2 \hat{w}}{\partial \Bepsilon^2}\mathrm{d}\Bepsilon
+%\label{eqn:dbeta}
+%\end{aligned}
+%\end{equation}
+Then we can write
+\begin{equation}
+\mathrm{d}\Bbeta = \ba^e\mathrm{d}\Bepsilon
+\label{eqn:dbeta}
+\end{equation}
+and we write equation (\ref{eqn:lambda}) at $t_{n+1}$ as 
+\begin{equation}
+\begin{aligned}
+\Bepsilon &= \Bepsilon^{tr}-\gamma\Delta t
+\frac{\partial f}{\partial \Bbeta}\\
+\implies \mathrm{d}\Bepsilon &= \mathrm{d}\Bepsilon^{tr}
+- \mathrm{d}(\gamma\Delta t)
+\frac{\partial f}{\partial \Bbeta}
+-\gamma\Delta t
+\left(\frac{\partial^2 f}{\partial \Bbeta^2}
+\mathrm{d}\Bbeta
++\frac{\partial^2 f}{\partial \Bxi \partial \Bbeta}
+\mathrm{d}\Bxi\right)\\
+&= \mathrm{d}\Bepsilon^{tr}
+- \mathrm{d}(\gamma\Delta t)
+\frac{\partial f}{\partial \Bbeta}
+-\gamma\Delta t
+\frac{\partial^2 f}{\partial \Bbeta^2}
+(\mathrm{d}\Bbeta
+- \mathrm{d}\Bxi)
+\label{eqn:depsilon}
+\end{aligned}
+\end{equation}
+The differential of equation (\ref{eqn:xi}) at $t_{n+1}$ is
+\begin{equation}
+\begin{aligned}
+\mathrm{d}\Bxi &= \mathrm{d}\Bxi^{tr} + 
+\frac{2}{3}\bar{H}\left[
+\mathrm{d}(\gamma\Delta t)\frac{\partial f}{\partial\Bbeta}
++ 
+\gamma\Delta t\left(
+\frac{\partial^2 f}{\partial\Bbeta^2}\mathrm{d}\Bbeta
++ \frac{\partial^2 f}{\partial\Bxi\partial\Bbeta}\mathrm{d}\Bxi\right)
+\right]\\
+&= \mathrm{d}\Bxi^{tr} + 
+\frac{2}{3}\bar{H}\left[
+\mathrm{d}(\gamma\Delta t)\frac{\partial f}{\partial\Bbeta}
++ 
+\gamma\Delta t\
+\frac{\partial^2 f}{\partial\Bbeta^2}
+(\mathrm{d}\Bbeta
+- \mathrm{d}\Bxi)
+\right]\\
+\implies
+\mathrm{d}\Bxi  &= 
+\left(\iso + \frac{2}{3}\bar{H}
+\gamma\Delta t\
+\frac{\partial^2 f}{\partial\Bbeta^2}
+\right)^{-1}
+\left[
+\mathrm{d}\Bxi^{tr} + 
+\frac{2}{3}\bar{H}\left(
+\mathrm{d}(\gamma\Delta t)\frac{\partial f}{\partial\Bbeta}
++ 
+\gamma\Delta t\
+\frac{\partial^2 f}{\partial\Bbeta^2}
+\mathrm{d}\Bbeta
+\right)\right]
+\label{eqn:dxi}
+\end{aligned}
+\end{equation}
+Substitute equations (\ref{eqn:dxi}) and (\ref{eqn:depsilon}) into equation (\ref{eqn:dbeta}) to find $\mathrm{d}\Bbeta$:
+\begin{equation}
+\begin{aligned}
+\mathrm{d}\Bbeta &= \ba^e
+\left[
+ \mathrm{d}\Bepsilon^{tr}
+- \mathrm{d}(\gamma\Delta t)
+\frac{\partial f}{\partial \Bbeta}
+-\gamma\Delta t
+\frac{\partial^2 f}{\partial \Bbeta^2}
+(\mathrm{d}\Bbeta
+- \mathrm{d}\Bxi)\right]\\
+&= \ba^e
+\left[
+ \mathrm{d}\Bepsilon^{tr}
+- \mathrm{d}(\gamma\Delta t)
+\frac{\partial f}{\partial \Bbeta}
+-\gamma\Delta t
+\frac{\partial^2 f}{\partial \Bbeta^2}
+\left(\mathrm{d}\Bbeta
+-
+\bh_1
+\left[
+\mathrm{d}\Bxi^{tr} + 
+\frac{2}{3}\bar{H}\left(
+\mathrm{d}(\gamma\Delta t)\frac{\partial f}{\partial\Bbeta}
++ 
+\gamma\Delta t\
+\frac{\partial^2 f}{\partial\Bbeta^2}
+\mathrm{d}\Bbeta
+\right)\right]
+\right)\right]\\
+\implies 
+\mathrm{d}\Bbeta
+&= 
+\bh_3
+\left[
+ \mathrm{d}\Bepsilon^{tr}
+- \mathrm{d}(\gamma\Delta t)
+\frac{\partial f}{\partial \Bbeta}
++\gamma\Delta t
+\frac{\partial^2 f}{\partial \Bbeta^2}
+\bh_1
+\left(
+\mathrm{d}\Bxi^{tr} + 
+\frac{2}{3}\bar{H}
+\mathrm{d}(\gamma\Delta t)\frac{\partial f}{\partial\Bbeta}
+\right)
+\right]\\
+&= 
+\bh_3
+\left[
+ \mathrm{d}\Bepsilon^{tr}
+ +\gamma\Delta t
+\frac{\partial^2 f}{\partial \Bbeta^2}
+\bh_1
+\mathrm{d}\Bxi^{tr} 
+- \bh_2
+\mathrm{d}(\gamma\Delta t)\frac{\partial f}{\partial\Bbeta}
+\right]
+\label{eqn:dbeta2}
+\end{aligned}
+\end{equation}
+where
+\begin{equation}
+\begin{aligned}
+\bh_1 &=\left(\iso + \frac{2}{3}\bar{H}\gamma\Delta t\frac{\partial^2 f}{\partial\Bbeta^2}\right)^{-1}\\
+\bh_2 &=\iso - \frac{2}{3}\bar{H}\gamma\Delta t\bh_1\frac{\partial^2 f}{\partial\Bbeta^2}\\
+\bh_3 &=\left(\ba^{e^{-1}} +\gamma\Delta t\frac{\partial^2 f}{\partial \Bbeta^2}\bh_2\right)^{-1}
+\end{aligned}
+\end{equation}
+We also take the differential of equation (\ref{eqn:alpha}) to find $\mathrm{d}q = (\partial q/\partial \alpha)\mathrm{d}\alpha$:
+\begin{equation}
+\begin{aligned}
+\mathrm{d}q &= \frac{\partial q}{\partial \alpha}\left(
+\mathrm{d}\alpha^{tr} + \mathrm{d}(\gamma\Delta t)
+\frac{\partial f}{\partial q}
++ \gamma\Delta t \frac{\partial^2 f}{\partial q^2}\mathrm{d}q
+\right)\\
+\implies \mathrm{d}q &=h_4^{-1}
+{\frac{\partial q}{\partial \alpha}\left(
+\mathrm{d}\alpha^{tr} + \mathrm{d}(\gamma\Delta t)
+\frac{\partial f}{\partial q}\right)}
+\end{aligned}
+\end{equation}
+where
+\begin{equation}
+h_4 = {1 - \gamma\Delta t \frac{\partial q}{\partial \alpha}\frac{\partial^2 f}{\partial q^2}}
+\end{equation}
+From the Kuhn-Tucker relations, we have $\mathrm{d}f = 0$, which we use to solve for $\mathrm{d}(\gamma \Delta t)$:
+\begin{equation}
+\begin{aligned}
+0 &=
+\frac{\partial f}{\partial \Bbeta}\cdot\mathrm{d}\Bbeta
++ \frac{\partial f}{\partial \Bxi}\cdot\mathrm{d}\Bxi
++ \frac{\partial f}{\partial q}\mathrm{d}q\\
+&=
+\frac{\partial f}{\partial \Bbeta}\cdot
+\left(\mathrm{d}\Bbeta
+- \mathrm{d}\Bxi\right)
++ \frac{\partial f}{\partial q}\mathrm{d}q\\
+&=
+\frac{\partial f}{\partial \Bbeta}\cdot
+\left(\mathrm{d}\Bbeta
+- \bh_1
+\left[
+\mathrm{d}\Bxi^{tr} + 
+\frac{2}{3}\bar{H}\left(
+\mathrm{d}(\gamma\Delta t)\frac{\partial f}{\partial\Bbeta}
++ 
+\gamma\Delta t\
+\frac{\partial^2 f}{\partial\Bbeta^2}
+\mathrm{d}\Bbeta
+\right)
+\right] \right)
++ \frac{\partial f}{\partial q}\mathrm{d}q\\
+&=
+\frac{\partial f}{\partial \Bbeta}\cdot
+\bh_2\mathrm{d}\Bbeta
+- \frac{\partial f}{\partial \Bbeta}\cdot\bh_1
+\left[
+\mathrm{d}\Bxi^{tr} + 
+\frac{2}{3}\bar{H}
+\mathrm{d}(\gamma\Delta t)\frac{\partial f}{\partial\Bbeta}
+\right]
++ \frac{\partial f}{\partial q}\mathrm{d}q\\
+\end{aligned}
+\end{equation}
+Now substitute the equations for $\mathrm{d}\Bbeta$ and $\mathrm{d}q$.
+\begin{equation}
+\begin{aligned}
+0 &=
+\frac{\partial f}{\partial \Bbeta}\cdot
+\bh_2
+\bh_3
+\left[
+ \mathrm{d}\Bepsilon^{tr}
+ +\gamma\Delta t
+\frac{\partial^2 f}{\partial \Bbeta^2}
+\bh_1
+\mathrm{d}\Bxi^{tr} 
+- \bh_2
+\mathrm{d}(\gamma\Delta t)\frac{\partial f}{\partial\Bbeta}
+\right]\\
+&\phantom{=} - \frac{\partial f}{\partial \Bbeta}\cdot\bh_1
+\left[
+\mathrm{d}\Bxi^{tr} + 
+\frac{2}{3}\bar{H}
+\mathrm{d}(\gamma\Delta t)\frac{\partial f}{\partial\Bbeta}
+\right]
+ + \frac{\partial f}{\partial q}h_4^{-1}
+{\frac{\partial q}{\partial \alpha}\left(
+\mathrm{d}\alpha^{tr} + \mathrm{d}(\gamma\Delta t)
+\frac{\partial f}{\partial q}\right)}\\
+&=
+\left[
+-\frac{\partial f}{\partial \Bbeta}\cdot
+\left(
+\bh_2\bh_3\bh_2
+ +
+\frac{2}{3}\bar{H}\bh_1
+\right)
+\frac{\partial f}{\partial\Bbeta}
+ + h_4^{-1}
+{\frac{\partial q}{\partial \alpha}
+\left(\frac{\partial f}{\partial q}\right)^2}
+\right]\mathrm{d}(\gamma\Delta t)\\
+&\phantom{=}+
+\frac{\partial f}{\partial \Bbeta}\cdot\left[
+\bh_2\bh_3
+ \mathrm{d}\Bepsilon^{tr}
++
+\left(\gamma\Delta t\bh_2\bh_3
+\frac{\partial^2 f}{\partial \Bbeta^2}\bh_1 -\bh_1
+\right)\mathrm{d}\Bxi^{tr} \right]
+ +h_4^{-1}\frac{\partial f}{\partial q}
+{\frac{\partial q}{\partial \alpha}
+\mathrm{d}\alpha^{tr}}\\
+\implies \mathrm{d}(\gamma\Delta t) &=
+\frac
+{\frac{\partial f}{\partial \Bbeta}\cdot\left[
+\bh_2\bh_3
+ \mathrm{d}\Bepsilon^{tr}
++
+\left(\gamma\Delta t\bh_2\bh_3
+\frac{\partial^2 f}{\partial \Bbeta^2}\bh_1 -\bh_1
+\right)\mathrm{d}\Bxi^{tr} \right]
+ +h_4^{-1}\frac{\partial f}{\partial q}
+{\frac{\partial q}{\partial \alpha}
+\mathrm{d}\alpha^{tr}}}
+{\frac{\partial f}{\partial \Bbeta}\cdot
+\left(
+\bh_2\bh_3\bh_2
+ +
+\frac{2}{3}\bar{H}\bh_1
+\right)
+\frac{\partial f}{\partial\Bbeta}
+ - h_4^{-1}
+{\frac{\partial q}{\partial \alpha}
+\left(\frac{\partial f}{\partial q}\right)^2}}
+\end{aligned}
+\end{equation}
+From this, we can write $\partial (\gamma\Delta t)/\partial \Bepsilon^{tr}$, noting that $\partial \Bepsilon^{tr}/\partial \Bepsilon^{tr} = \iso$, $\partial \Bxi^{tr}/\partial \Bepsilon^{tr} = \mathbf{0}$, and $\partial \alpha^{tr}/\partial \Bepsilon^{tr} = \mathbf{0}$:
+\begin{equation}
+\frac{\partial (\gamma\Delta t)}{\partial \Bepsilon^{tr}} =
+\frac
+{\frac{\partial f}{\partial \Bbeta}\cdot
+\bh_2\bh_3}
+{\frac{\partial f}{\partial \Bbeta}\cdot
+\left(
+\bh_2\bh_3\bh_2
+ +
+\frac{2}{3}\bar{H}\bh_1
+\right)
+\frac{\partial f}{\partial\Bbeta}
+ - h_4^{-1}
+{\frac{\partial q}{\partial \alpha}
+\left(\frac{\partial f}{\partial q}\right)^2}}
+\end{equation}
+Using this equation and equation (\ref{eqn:dbeta2}), we can find $\ba^{ep} = \partial \Bbeta/\partial \Bepsilon^{tr}$.
+\begin{equation}
+\begin{aligned}
+\ba^{ep}
+&= 
+\bh_3
+- 
+\frac{h_4
+\left(\bh_3\bh_2\frac{\partial f}{\partial\Bbeta}\right)\otimes
+\left(\bh_3\bh_2\frac{\partial f}{\partial \Bbeta}\right)}
+{h_4
+\frac{\partial f}{\partial \Bbeta}\cdot
+\left(
+\bh_2\bh_3\bh_2
+ +
+\frac{2}{3}\bar{H}\bh_1
+\right)
+\frac{\partial f}{\partial\Bbeta}
+ - 
+{\frac{\partial q}{\partial \alpha}
+\left(\frac{\partial f}{\partial q}\right)^2}}
+\end{aligned}
+\end{equation}
+Note that when $\bar{H} = 0$, then $\bh_1 = \bh_2 = \iso$ and $\bh_3 = \bh$, which reduces this to the form with no kinematic hardening in the previous section.
+
+
 \pagebreak
 
 \section{Modifying the PRISMS continuum plasticity deal.II model}
 
 \subsection{Material parameters and constitutive laws}
-Most material parameters and constitutive laws can modified in the ``materialProperties.json" (or ``parameters.h") file, including the Lam\'e parameters $\lambda$ and $\mu$, the yield stress $\tau_y$, the coefficient for linear isotropic strain hardening $K$, the strain energy density function $w$, and the yield function $f$. The two functions are specified by name in the .json file. Although there is a place to specify the path to the pfunction header file, it is not currently being read by the code. All pfunction files are assumed to be placed in the ``continuumPlasticity/models" folder. There are three strain energy density functions included in the models library: St. Venant-Kirchhoff (stvenkir), compressible neo-hookian (neohook), and quadratic-logarithmic (quadlog). There is only one yield function included in the models library: von Mises (von\textunderscore mises). Although the hardening function $q$ is not specified in the .json file, there are two hardening functions included in the models library. The default function is a linear hardening function (with coefficient $K$ (linear\textunderscore hardening), and the second is a nonlinear hardening function based on a crystal plasticity model for copper (Cu\textunderscore hardening). The hardening function is also specified by name, but it is set in the code (line 194 of continuumPlasticity.h). Note that currently all hardening laws accept $K$ as an input for consistency, but only the linear hardening law uses that value.
+Most material parameters and constitutive laws can modified in the materialProperties.json file, including the Lam\'e paramters $\lambda$ and $\mu$, the yield stress $\tau_y$, the coefficient for linear isotropic strain hardening $K$, the strain energy density function $w$, and the yield function $f$. The two functions are specified by name in the .json file. Although there is a place to specify the path to the pfunction header file, it is not currently being read by the code. All pfunction files are assumed to be placed in the ``continuumPlasticity/models" folder. There are three strain energy density functions included in the models library: St. Venant-Kirchhoff (stvenkir), compressible neo-hookian (neohook), and quadratic-logarithmic (quadlog). There is only one yield function included in the models library: von Mises (von\textunderscore mises). Although the hardening function $q$ is not specified in the .json file, there are two hardening functions included in the models library. The default function is a linear hardening function (with coefficient $K$ (linear\textunderscore hardening), and the second is a nonlinear hardening function based on a crystal plasticity model for copper (Cu\textunderscore hardening). The hardening function is also specified by name, but it is set in the code (line 194 of continuumPlasticity.cc). Note that currently all hardening laws accept $K$ as an input for consistency, but only the linear hardening law uses that value.
 
 It is possible to create your own pfunctions using Integration Tools Writer, similiar to what is shown in the shell script ``continuumPlasticity/models/functions.sh." The following input variables/parameters are required:
 \begin{itemize}
@@ -367,6 +707,9 @@ It is possible to create your own pfunctions using Integration Tools Writer, sim
 \item third principle stress $\beta_3$
 \item yield stress $\tau_y$
 \item conjugate stress-like quantity (equivalent plastic stress from hardening function) $q$
+\item first principle back stress $\xi_1$
+\item second principle back stress $\xi_2$
+\item third principle back stress $\xi_3$
 \end{enumerate}
 %
 \item Hardening function: 
@@ -382,7 +725,7 @@ It is possible to create your own pfunctions using Integration Tools Writer, sim
 Dirichlet boundary conditions are set in ``main.cc". The class ``BCFunction'' specifies the value of the non-zero Dirichlet conditions and on what nodal degrees-of-freedom they apply. The Dirichlet conditions are applied to specific surfaces in the function ``applyDirichletBCs".
 
 \subsection{Mesh refinement, basis function order, quadrature order, number of pseudo-time steps (increments), etc.}
-These values are specified at the top of ``main.cc" through macros (or in ``parameters.h"). The domain and mesh refinement are defined in the function ``mesh" in ``main.cc". Quadratic convergence can best be achieved using a direct solver, like mumps or superlu\_dist. These can be called from the command line, using a command such as:  \texttt{mpirun -np 16 ./main -pc\_type lu -pc\_factor\_mat\_solver\_package mumps}
+These values are specified at the top of ``main.cc" through macros. The domain and mesh refinement are defined in the function ``mesh" in ``main.cc".
 
 
 \pagebreak

@@ -1,4 +1,4 @@
-// created: 2015-4-7 15:16:56
+// created: 2016-8-5 14:00:36
 // version: master
 // url: https://github.com/prisms-center/IntegrationToolsWriter.git
 // commit: 8a15adf67355fad30bd75ce9ba6b1f8d24b9a537
@@ -8,7 +8,7 @@
 
 #include <cmath>
 #include <cstdlib>
-#include "../../../../utils/IntegrationTools/PFunction.hh"
+#include "IntegrationTools/PFunction.hh"
 
 namespace PRISMS
 {
@@ -17,7 +17,7 @@ namespace PRISMS
     {
         double eval( const VarContainer &var) const
         {
-            return -var[1]*var[0];
+            return -var[0]*var[1];
         }
 
     public:
@@ -29,12 +29,12 @@ namespace PRISMS
 
         std::string csrc() const
         {
-            return "-var[1]*var[0]";
+            return "-var[0]*var[1]";
         }
 
         std::string sym() const
         {
-            return "-K*alpha";
+            return "-alpha*K";
         }
 
         std::string latex() const

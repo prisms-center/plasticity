@@ -9,11 +9,11 @@
 /**
  *Exponential value used to define mesh refinement
  */
-#define meshRefineFactor 3
+#define meshRefineFactor 2
 /**
  *Total applied displacement
  */
-#define totalDisplacement 0.1
+#define totalDisplacement 0.05
 /**
  *Flag to write output files
  */
@@ -25,7 +25,7 @@
 /**
  *Number of increments (i.e. loads steps, pseudo-time steps)
  */
-#define totalNumIncrements 100
+#define totalNumIncrements 20
 /**
  *Maximum iterations within the linear solve
  */
@@ -33,7 +33,7 @@
 /**
  *Relative tolerance for the linear solver
  */
-#define relLinearSolverTolerance  1.0e-12
+#define relLinearSolverTolerance  1.0e-14
 /**
  *Maximum iterations within the nonlinear solve (Newton-Raphson iterations)
  */
@@ -68,9 +68,13 @@
  */
 #define strain_hardening 2.0259e9
 /**
+ *Kinematic strain hardening coefficient
+ */
+#define kinematic_hardening 1e7
+/**
  *Strain energy density function ("quadlog", "stvenkir", or "neohook")
  */
-#define strain_energy_function "quadlog"
+#define strain_energy_function "stvenkir"
 /**
  *Yield function (currently only "von_mises")
  */
