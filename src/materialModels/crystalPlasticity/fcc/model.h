@@ -275,7 +275,7 @@ private:
 #include "rotationOperations.cc"
 #include "init.cc"
 #include "matrixOperations.cc"
-#include "tangentModulus.cc"
+//#include "tangentModulus.cc"
 #include "inactiveSlipRemoval.cc"
 #include "reorient.cc"
 #include "loadOrientations.cc"
