@@ -93,6 +93,22 @@ template <int dim>
 void ellipticBVP<dim>::project(){
   //return if no post processing fields
   if (numPostProcessedFields==0) return;
+
+  //check whether to project in current increment
+#ifdef writeOutput
+    if (!writeOutput) return;
+#endif
+#ifndef skipOutputSteps
+  unsigned int skipSteps=1;
+#elif skipOutputSteps<=0
+  unsigned int skipSteps=1;
+#else
+  unsigned int skipSteps=skipOutputSteps;
+#endif
+  if (currentIncrement%skipSteps!=0){
+    return;
+  }
+  
   pcout << "projecting post processing fields\n";
 
   //initialize global data structures to zero  

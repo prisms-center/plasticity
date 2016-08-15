@@ -23,7 +23,6 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
     m_alpha.fill(properties.m_alpha);
     n_alpha.fill(properties.n_alpha);
     
-    
     //q is a parameter in the hardening model
     q.reinit(n_slip_systems,n_slip_systems);
     for(unsigned int i=0;i<n_slip_systems;i++){

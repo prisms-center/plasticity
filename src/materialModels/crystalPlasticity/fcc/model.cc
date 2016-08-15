@@ -239,18 +239,28 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 
      }
 
-
+     //check whether to write stress and strain data to file
+#ifdef writeOutput
+  if (!writeOutput) return;
+#endif
+     //write stress and strain data to file
+#ifdef outputDirectory
+     std::string dir(outputDirectory);
+     dir+="/";
+#else
+     std::string dir("./");
+#endif
      ofstream outputFile;
-
      if(this->currentIncrement==0){
-	 outputFile.open("stressstrain.txt");
-     outputFile << "Exx"<<'\t'<<"Eyy"<<'\t'<<"Ezz"<<'\t'<<"Eyz"<<'\t'<<"Exz"<<'\t'<<"Exy"<<'\t'<<"Txx"<<'\t'<<"Tyy"<<'\t'<<"Tzz"<<'\t'<<"Tyz"<<'\t'<<"Txz"<<'\t'<<"Txy"<<'\n';
-         
+       dir += std::string("stressstrain.txt");
+       outputFile.open(dir.c_str());
+       outputFile << "Exx"<<'\t'<<"Eyy"<<'\t'<<"Ezz"<<'\t'<<"Eyz"<<'\t'<<"Exz"<<'\t'<<"Exy"<<'\t'<<"Txx"<<'\t'<<"Tyy"<<'\t'<<"Tzz"<<'\t'<<"Tyz"<<'\t'<<"Txz"<<'\t'<<"Txy"<<'\n';
 	 outputFile.close();
      }
-     outputFile.open("stressstrain.txt",ios::app);
+     dir += std::string("stressstrain.txt");
+     outputFile.open(dir.c_str(),ios::app);
      if(Utilities::MPI::this_mpi_process(this->mpi_communicator)==0){
-	 outputFile << global_strain[0][0]<<'\t'<<global_strain[1][1]<<'\t'<<global_strain[2][2]<<'\t'<<global_strain[1][2]<<'\t'<<global_strain[0][2]<<'\t'<<global_strain[0][1]<<'\t'<<global_stress[0][0]<<'\t'<<global_stress[1][1]<<'\t'<<global_stress[2][2]<<'\t'<<global_stress[1][2]<<'\t'<<global_stress[0][2]<<'\t'<<global_stress[0][1]<<'\n';
+       outputFile << global_strain[0][0]<<'\t'<<global_strain[1][1]<<'\t'<<global_strain[2][2]<<'\t'<<global_strain[1][2]<<'\t'<<global_strain[0][2]<<'\t'<<global_strain[0][1]<<'\t'<<global_stress[0][0]<<'\t'<<global_stress[1][1]<<'\t'<<global_stress[2][2]<<'\t'<<global_stress[1][2]<<'\t'<<global_stress[0][2]<<'\t'<<global_stress[0][1]<<'\n';
      }
      outputFile.close();
      global_strain=0.0;
@@ -258,6 +268,4 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 
      //call base class project() function to project post processed fields
      ellipticBVP<dim>::project();
-
-
  }

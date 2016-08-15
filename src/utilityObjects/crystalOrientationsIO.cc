@@ -38,10 +38,23 @@ void crystalOrientationsIO<dim>::addToOutputOrientations(std::vector<double>& _o
 //writeOutputOreintations writes outputOrientations to file
 template <int dim>
 void crystalOrientationsIO<dim>::writeOutputOrientations(){
+  //check whether to write to file
+#ifdef writeOutput
+  if (!writeOutput) return;
+#endif
+  //  
   pcout << "writing orientations data to file\n";
+  //
+  //set output directory, if provided
+#ifdef outputDirectory
+  std::string dir(outputDirectory);
+  dir+="/";
+#else
+  std::string dir("./");
+#endif
   std::string fileName("orientationsOutputProc");
   fileName += std::to_string(Utilities::MPI::this_mpi_process(MPI_COMM_WORLD));
-  std::ofstream file(fileName.c_str());
+  std::ofstream file((dir+fileName).c_str());
   char buffer[200];
   if (file.is_open()){
     for (std::vector<std::vector<double> >::iterator it = outputOrientations.begin() ; it != outputOrientations.end(); ++it){
@@ -63,14 +76,14 @@ void crystalOrientationsIO<dim>::writeOutputOrientations(){
   MPI_Barrier(MPI_COMM_WORLD);
   if (Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0){
      std::string fileName2("orientationsOutput");
-      std::ofstream file2(fileName2.c_str());
+      std::ofstream file2((dir+fileName2).c_str());
       for (unsigned int proc=0; proc<Utilities::MPI::n_mpi_processes(MPI_COMM_WORLD); proc++){
 	std::string fileName3("orientationsOutputProc");
 	fileName3 += std::to_string(proc);
-	std::ofstream file3(fileName3.c_str(), std::ofstream::in);
+	std::ofstream file3((dir+fileName3).c_str(), std::ofstream::in);
 	file2 << file3.rdbuf();
 	//delete file from processor proc
-	remove(fileName3.c_str());
+	remove((dir+fileName3).c_str());
       }
       file2.close();
   }
