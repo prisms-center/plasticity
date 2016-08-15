@@ -1,7 +1,30 @@
+/*FE parameters*/
 #define feOrder   1 // Basis function interpolation order (1-linear)
 #define quadOrder 2 // Quadrature point order n^3 (2->8 quadrature points)
+
+/*Mesh parameters*/
+//Set the length of the domain in all three dimensions
+//Each axes spans from zero to the specified length
+#define spanX 1.0
+#define spanY 1.0
+#define spanZ 1.0
+// The number of elements in each direction is 2^(refineFactor) * subdivisions
+// For optimal performance, use meshRefineFactor primarily to determine the element size
+#define subdivisionsX 1
+#define subdivisionsY 1
+#define subdivisionsZ 1
 #define meshRefineFactor 3 // 2^n*2^n*2^n elements(3->8*8*8 =512 elements)
-#define writeOutput true // flag to write output vtu and pvtu files)
+#define writeMeshToEPS  true //Only written for serial runs and if number of elements < 10000
+
+/*Solution output parameters*/
+#define writeOutput true // flag to write output vtu and pvtu files
+#define outputDirectory "."
+#define skipOutputSteps 0
+#define output_Eqv_strain true
+#define output_Eqv_stress true
+#define output_Grain_ID   true
+
+/*Solver parameters*/
 #define linearSolverType PETScWrappers::SolverCG // Type of linear solver
 #define totalNumIncrements 100 // No. of increments
 #define maxLinearSolverIterations 50000 // Maximum iterations for linear solver
@@ -12,7 +35,6 @@
 #define stopOnConvergenceFailure false // Flag to stop problem if convergence fails
 
 //Elastic Parameters
-
 double elasticStiffness[6][6]={{59.3e3, 25.7e3, 21.4e3, 0, 0, 0},
 				   {25.7e3, 59.3e3, 21.4e3, 0, 0, 0},
 				   {21.4e3, 21.4e3, 61.5e3, 0, 0, 0},
@@ -22,10 +44,8 @@ double elasticStiffness[6][6]={{59.3e3, 25.7e3, 21.4e3, 0, 0, 0},
 
 
 //Crystal Plasticity 
-
 //slip parameters
-
-#define numSlipSystems 24 // Total No. of slip systems (slip)
+#define numSlipSystems 18 // Total No. of slip systems (slip)
 #define latentHardeningRatio 1.4  //q1
 
 double initialSlipResistance[numSlipSystems]= {25.0, 25.0, 25.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0};
