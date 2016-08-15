@@ -8,6 +8,10 @@
 
 #include<cstring>
 #include<stdexcept>
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wextra"
+
 #include "neohook.hh"
 #include "stvenkir.hh"
 #include "linear_hardening.hh"
@@ -15,6 +19,8 @@
 #include "von_mises.hh"
 #include "quadlog.hh"
 #include "PLibrary.hh"
+
+#pragma GCC diagnostic pop
 
 namespace PRISMS
 {

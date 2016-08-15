@@ -50,6 +50,7 @@ int main (int argc, char **argv)
       //Read pfunction names for strain energy density and yield functions
       problem.properties.strainEnergyModel = strain_energy_function;
       problem.properties.yieldModel = yield_function;
+      problem.properties.isoHardeningModel = iso_hardening_function;
 
       problem.run ();
     }

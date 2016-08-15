@@ -11,7 +11,7 @@
 
 typedef struct {
   double lambda, mu, tau_y, K, H;
-  std::string yieldModel, strainEnergyModel;
+  std::string yieldModel, strainEnergyModel, isoHardeningModel;
 } materialProperties;
 
 //material model class for continuum plasticity
@@ -183,8 +183,8 @@ void continuumPlasticity<dim>::init(unsigned int num_quad_points)
     PRISMS::PLibrary::checkout(properties.strainEnergyModel, strain_energy);	
   }
   else{
-    this->pcout << "Error: Constitutive law not recognized.\n";
-    exit(1);
+    this->pcout << "Using user defined strain energy density function.\n";
+    PRISMS::PLibrary::checkout(properties.strainEnergyModel, strain_energy);
   }
 
   /*strain energy function inputs:
@@ -204,7 +204,13 @@ void continuumPlasticity<dim>::init(unsigned int num_quad_points)
   //pfunction library (NOTE: this calculates the value for "q", the conjugate
   // stress-like quantity, used in the yield function).
   //See, for example, the end of section 2.1 of the formulation.
-  PRISMS::PLibrary::checkout("linear_hardening", harden);
+  if(properties.isoHardeningModel == "linear_hardening"){
+    PRISMS::PLibrary::checkout(properties.isoHardeningModel, harden);
+  }
+  else{
+    this->pcout << "Using user defined isotropic function.\n";
+    PRISMS::PLibrary::checkout(properties.isoHardeningModel, harden);
+  }
 
   /*hardening function inputs:
     0: alpha, "Equivalent plastic strain"
@@ -223,8 +229,8 @@ void continuumPlasticity<dim>::init(unsigned int num_quad_points)
     PRISMS::PLibrary::checkout(properties.yieldModel, yield);
   }
   else{
-    this->pcout << "Error: Yield function not recognized.\n";
-    exit(1);
+    this->pcout << "Using user defined yield function.\n";
+    PRISMS::PLibrary::checkout(properties.yieldModel, yield);
   }
 		
   /*yield function inputs:

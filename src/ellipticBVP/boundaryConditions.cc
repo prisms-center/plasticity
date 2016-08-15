@@ -6,7 +6,7 @@
 
 template <int dim>
 void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value){
-};
+}
 
 //methods to apply dirichlet BC's
 template <int dim>

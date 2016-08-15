@@ -1,8 +1,4 @@
 #!/bin/sh
-#fw='/nfs/mcfs_home/rudraa/Public/temp/IntegrationToolsWriter/src/fw/fw'
-#lw='/nfs/mcfs_home/rudraa/Public/temp/IntegrationTools/src/lw/lw'
-
-#fw --name "von_mises" -v "beta1" "beta2" "beta3" "tau_y" "q" -d "First principle stress" "Second principle stress" "Third principle stress" "Yield stress" "Conjugate stress-like quantity" --sym "sqrt(pow(2./3.*beta1 - 1./3.*beta2 - 1./3.*beta3,2.) + pow(-1./3.*beta1 + 2./3.*beta2 - 1./3.*beta3,2.) + pow(-1./3.*beta1 - 1./3.*beta2 + 2./3.*beta3,2.)) - sqrt(2./3.)*(tau_y - q)" --grad --hess
 
 fw --name "von_mises" -v "beta1" "beta2" "beta3" "tau_y" "q" "xi1" "xi2" "xi3" -d "First principle stress" "Second principle stress" "Third principle stress" "Yield stress" "Conjugate stress-like quantity" "First principle deviatoric back stress" "Second principle deviatoric back stress" "Third principle deviatoric back stress" --sym "sqrt(pow(2./3.*beta1 - 1./3.*beta2 - 1./3.*beta3 - xi1,2.) + pow(-1./3.*beta1 + 2./3.*beta2 - 1./3.*beta3 - xi2,2.) + pow(-1./3.*beta1 - 1./3.*beta2 + 2./3.*beta3 - xi3,2.)) - sqrt(2./3.)*(tau_y - q)" --grad --hess
 

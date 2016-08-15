@@ -44,6 +44,8 @@ SET(CMAKE_BUILD_TYPE "Debug" CACHE STRING
 	"Choose the type of build, options are: Debug, Release"
 	)
 
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-parameter -Wno-deprecated-declarations -Wno-reorder -Wno-unused-variable -Wno-extra")
+
 PROJECT(${TARGET})
 
 ADD_LIBRARY(PLibrary SHARED ${CMAKE_CURRENT_SOURCE_DIR}/../../../src/materialModels/continuumPlasticity/models/PLibrary.cc)

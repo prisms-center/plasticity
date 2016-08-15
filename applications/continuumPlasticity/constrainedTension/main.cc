@@ -9,110 +9,20 @@
 //dealIIheaders
 #include "../../../src/materialModels/continuumPlasticity/continuumPlasticity.h"
 
-//generate or import mesh
+//Specify Dirichlet boundary conditions 
 template <int dim>
-void continuumPlasticity<dim>::mesh(){
-  //creating mesh
-  this->pcout << "generating problem mesh\n";
-
-  //Define the limits of the domain (this example is in 3D)
-  double x_max = 5., y_max = 1., z_max = 1.;
-  Point<dim,double> min(0.,0.,0.), max(x_max,y_max,z_max);
-
-  //Define the mesh refinement - more refined near constrained end
-  unsigned int meshSize = std::pow(2.,meshRefineFactor);
-  double stepSize = 1./std::pow(2.,meshRefineFactor);
-  std::vector< std::vector<double> > stepSizes(dim,std::vector<double>(meshSize,stepSize));
-  stepSizes[0].resize(7*meshSize,stepSize);
-  for(unsigned int i=0; i<2*meshSize; i++){
-    stepSizes[0][i] = stepSize/4.;
+void continuumPlasticity<dim>::setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value){
+  //back boundary:   u=0
+  if (node[0] == 0.0){
+    {flag=true; value=0.0;} //Fix all dofs at x=0
   }
-  for(unsigned int i=2*meshSize; i<3*meshSize; i++){
-    stepSizes[0][i] = stepSize/2.;
-  }
-
-  GridGenerator::subdivided_hyper_rectangle (this->triangulation, stepSizes, min, max,false);
-
-  //Output image of the mesh in eps format                                                                                      
-  if ((this->triangulation.n_global_active_cells()<1000) and (Utilities::MPI::n_mpi_processes(this->mpi_communicator)==1)){
-    std::ofstream out ("mesh.eps");
-    GridOut grid_out;
-    grid_out.write_eps (this->triangulation, out);
-    this->pcout << "writing mesh image to mesh.eps" << std::endl;
+  //front boundary:  u_x=g
+  if (node[0] == 5.0){
+    //total displacement along X-Direction divided by total increments
+    if (dof==0) {flag=true; value=totalDisplacement/totalNumIncrements;}
   }
 }
 
-//Mark boundaries for applying Dirichlet BC's
-template <int dim>
-void continuumPlasticity<dim>::markBoundaries(){
-  typename DoFHandler<dim>::active_cell_iterator 
-    cell = this->dofHandler.begin_active(), 
-    endc = this->dofHandler.end();
-
-  //All boundaries are by marked with flag '0' by default. 
-  //To pick specific boundaries, one needs to mark them 
-  //with integer flags and use those flags in apply_dirichlet_conditons()
-  for (;cell!=endc; ++cell){
-    if (cell->is_locally_owned()){
-      for (unsigned int f=0; f<GeometryInfo<dim>::faces_per_cell; ++f){
-	if (cell->face(f)->at_boundary()){
-	  const Point<dim> face_center = cell->face(f)->center();
-	  if (face_center[0]==0.0){
-	    cell->face(f)->set_boundary_indicator (1); //boundary at X=0.0 marked with flag '1'
-	  }
-	  else if (face_center[0]==5.0){
-	    cell->face(f)->set_boundary_indicator (2); //boundary at X=5.0 marked with flag '2'
-	  }
-	}
-      }
-    }
-  }
-}
-
-
-//Class to set Dirichlet BC values 
-template <int dim>
-class BCFunction : public Function<dim>{
-public:
-  BCFunction(): Function<dim> (dim){}
-  void vector_value (const Point<dim>   &p, Vector<double>   &values) const{
-    Assert (values.size() == dim, ExcDimensionMismatch (values.size(), dim));    
-    values[0]=totalDisplacement/totalNumIncrements; //total displacement along X-Direction divided by total increments
-  }
-};
-
-//Apply Dirchlet BCs for constrained tension BVP
-template <int dim>
-void continuumPlasticity<dim>::applyDirichletBCs(){
-  this->constraints.clear ();
-  this->constraints.reinit (this->locally_relevant_dofs);
-  DoFTools::make_hanging_node_constraints (this->dofHandler, this->constraints);
-  std::vector<bool> allComponenents (dim, true); 
-  std::vector<bool> xComponenent    (dim, false); xComponenent[0]=true;
-  //u=0 along X=0
-  VectorTools::interpolate_boundary_values (this->dofHandler,
-					    1, 
-					    ZeroFunction<dim>(dim),
-					    this->constraints,
-					    allComponenents);
-  //u=0.5 along X=5.00
-  if (this->currentIteration==0){
-    VectorTools::interpolate_boundary_values (this->dofHandler,
-					      2, 
-					      BCFunction<dim>(),
-					      this->constraints,
-					      xComponenent);
-  }
-  //Don't apply further displacement simply for a new solver iteration.
-  else{
-    VectorTools::interpolate_boundary_values (this->dofHandler,
-					      2, 
-					      ZeroFunction<dim>(dim),
-					      this->constraints,
-					      xComponenent);
-  }
-  this->constraints.close ();
-}
 
 //main
 int main (int argc, char **argv)
@@ -133,6 +43,7 @@ int main (int argc, char **argv)
       //Read pfunction names for strain energy density and yield functions
       problem.properties.strainEnergyModel = strain_energy_function;
       problem.properties.yieldModel = yield_function;
+      problem.properties.isoHardeningModel = iso_hardening_function;
 
       problem.run ();
     }

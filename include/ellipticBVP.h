@@ -9,6 +9,10 @@
 //dealii headers
 #include "dealIIheaders.h"
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wextra"
+#pragma GCC diagnostic pop
+
 using namespace dealii;
 
 //define data types  
