@@ -12,6 +12,13 @@ void crystalPlasticity<dim>::loadOrientations(){
 
             
             fe_values.reinit(cell);
+            double pnt3[3];
+            const Point<dim> pnt2=cell->center();
+            for (unsigned int i=0; i<dim; ++i){
+                pnt3[i]=pnt2[i];
+            }
+            
+            
             //loop over quadrature points
             for (unsigned int q=0; q<num_quad_points; ++q){
                 double pnt[3];
@@ -19,7 +26,7 @@ void crystalPlasticity<dim>::loadOrientations(){
                 pnt[1]=fe_values.get_quadrature_points()[q][1];
                 pnt[2]=fe_values.get_quadrature_points()[q][2];
                 //get orientation ID and store it in quadratureOrientationsMap
-                unsigned int gID=orientations.getMaterialID(pnt);
+                unsigned int gID=orientations.getMaterialID(pnt3);
                 //gID=(gID%10)*10+gID/10;
                 //pcout << gid << " ";
                 quadratureOrientationsMap.back()[q]=gID;

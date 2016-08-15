@@ -10,7 +10,7 @@ using namespace std;
 
 
 //dealIIheaders
-#include "../../../../src/materialModels/crystalPlasticity/hcp/crystalPlasticityHCP.cc"
+#include "../../../../src/materialModels/crystalPlasticity/hcp/model.h"
 
 //overload mesh() method to generate the required polycrystal geometry
 template <int dim>
@@ -58,68 +58,71 @@ void crystalPlasticity<dim>::markBoundaries(){
 }
 
 
-//Class to set Dirichlet BC values
+
+//Class to set Dirichlet BC values 
 template <int dim>
 class BCFunction : public Function<dim>{
+  double loadFactor;
 public:
-    BCFunction(): Function<dim> (dim){}
-    void vector_value (const Point<dim>   &p, Vector<double>   &values) const{
-        Assert (values.size() == dim, ExcDimensionMismatch (values.size(), dim));
-        values[0]=0.001; // displacement along X-Direction
-    }
+  BCFunction(double _loadFactor): Function<dim> (dim){loadFactor=_loadFactor;}
+  void vector_value (const Point<dim>   &p, Vector<double>   &values) const{
+    Assert (values.size() == dim, ExcDimensionMismatch (values.size(), dim));    
+    values[0]=0.001*loadFactor; // displacement along X-Direction
+  }
 };
 
 //Apply Dirchlet BCs for simple tension BVP
 template <int dim>
 void crystalPlasticity<dim>::applyDirichletBCs(){
-    this->constraints.clear ();
-    this->constraints.reinit (this->locally_relevant_dofs);
-    DoFTools::make_hanging_node_constraints (this->dofHandler, this->constraints);
-    std::vector<bool> mechanicsBoundary_Z1 (dim, false); mechanicsBoundary_Z1[0]=true;
-    std::vector<bool> mechanicsBoundary_Z2 (dim, false); mechanicsBoundary_Z2[0]=true;
-    std::vector<bool> mechanicsBoundary_Z3 (dim, false); mechanicsBoundary_Z3[1]=true;
-    std::vector<bool> mechanicsBoundary_Z4 (dim, false); mechanicsBoundary_Z4[2]=true;
-    //u1 applied on X1=1
-    if (this->currentIteration==0) {
-        VectorTools:: interpolate_boundary_values (this->dofHandler,
-                                                   2,
-                                                   BCFunction<dim>(),
-                                                   this->constraints,
-                                                   mechanicsBoundary_Z2);
-    }
-    else {
-        VectorTools:: interpolate_boundary_values (this->dofHandler,
-                                                   2,
-                                                   ZeroFunction<dim>(dim),
-                                                   this->constraints,
-                                                   mechanicsBoundary_Z2);
-    }
-    //u1=0 on X1=0
+  this->constraints.clear ();
+  this->constraints.reinit (this->locally_relevant_dofs);
+  DoFTools::make_hanging_node_constraints (this->dofHandler, this->constraints);
+  std::vector<bool> mechanicsBoundary_Z1 (dim, false); mechanicsBoundary_Z1[0]=true;
+  std::vector<bool> mechanicsBoundary_Z2 (dim, false); mechanicsBoundary_Z2[0]=true;
+  std::vector<bool> mechanicsBoundary_Z3 (dim, false); mechanicsBoundary_Z3[1]=true;
+  std::vector<bool> mechanicsBoundary_Z4 (dim, false); mechanicsBoundary_Z4[2]=true;
+  //u1 applied on X1=1
+  if (this->currentIteration==0) {
     VectorTools:: interpolate_boundary_values (this->dofHandler,
-                                               1,
-                                               ZeroFunction<dim>(dim),
-                                               this->constraints,
-                                               mechanicsBoundary_Z1);
-    //u2=0 on X2=0
+					       2, 
+					       BCFunction<dim>(this->loadFactorSetByModel), 
+					       this->constraints,
+					       mechanicsBoundary_Z2);
+  }
+  else {
     VectorTools:: interpolate_boundary_values (this->dofHandler,
-                                               3,
-                                               ZeroFunction<dim>(dim),
-                                               this->constraints,
-                                               mechanicsBoundary_Z3);
-    //u3=0 on X3=0
-    VectorTools:: interpolate_boundary_values (this->dofHandler,
-                                               4,
-                                               ZeroFunction<dim>(dim),
-                                               this->constraints,
-                                               mechanicsBoundary_Z4);
-    
-    this->constraints.close ();
+					       2, 
+					       ZeroFunction<dim>(dim),
+					       this->constraints,
+					       mechanicsBoundary_Z2);
+  }
+  //u1=0 on X1=0
+  VectorTools:: interpolate_boundary_values (this->dofHandler, 
+					     1, 
+					     ZeroFunction<dim>(dim), 
+					     this->constraints, 
+					     mechanicsBoundary_Z1);
+  //u2=0 on X2=0
+  VectorTools:: interpolate_boundary_values (this->dofHandler, 
+					     3, 
+					     ZeroFunction<dim>(dim), 
+					     this->constraints, 
+					     mechanicsBoundary_Z3);
+  //u3=0 on X3=0
+  VectorTools:: interpolate_boundary_values (this->dofHandler, 
+					     4, 
+					     ZeroFunction<dim>(dim), 
+					     this->constraints, 
+					     mechanicsBoundary_Z4);
+  
+  this->constraints.close ();
 }
+
 
 //main
 int main (int argc, char **argv)
 {
-    Utilities::System::MPI_InitFinalize mpi_initialization(argc, argv, 1);
+    Utilities::MPI::MPI_InitFinalize mpi_initialization(argc, argv, 1);
     try
     {
         deallog.depth_console(0);
@@ -176,44 +179,6 @@ int main (int argc, char **argv)
             exit(1);
         }
         
-        problem.properties.n_slip_systems=n_slip_systems;
-        problem.properties.n_twin_systems=n_twin_systems;
-	
-		 //Latent Hardening Ratio
-        problem.properties.q1=latentHardeningRatio;
-        problem.properties.q2=1.0;
-        //Slip Hardening Parameters
-        problem.properties.a1=powerLawExponent1;
-        problem.properties.a2=powerLawExponent2;
-        problem.properties.a3=powerLawExponent3;
-        problem.properties.a4=powerLawExponent4;
-        problem.properties.a5=powerLawExponent5;
-        
-        problem.properties.h01=initialHardeningModulus1;
-        problem.properties.h02=initialHardeningModulus2;
-        problem.properties.h03=initialHardeningModulus3;
-        problem.properties.h04=initialHardeningModulus4;
-        problem.properties.h05=initialHardeningModulus5;
-        
-        problem.properties.s_s1=saturationStress1;
-        problem.properties.s_s2=saturationStress2;
-        problem.properties.s_s3=saturationStress3;
-        problem.properties.s_s4=saturationStress4;
-        problem.properties.s_s5=saturationStress5;
-        
-        //Initial slip deformation resistance
-        problem.properties.s01=initialSlipResistance1;
-        problem.properties.s02=initialSlipResistance2;
-        problem.properties.s03=initialSlipResistance3;
-        problem.properties.s04=initialSlipResistance4;
-        problem.properties.s05=initialSlipResistance5;
-        
-        //Elastic Parameters
-        problem.properties.C11=c11;
-        problem.properties.C12=c12;
-        problem.properties.C13=c13;
-        problem.properties.C33=c33;
-        problem.properties.C44=c44;
         problem.properties.m_alpha=m_alpha;
         problem.properties.n_alpha=n_alpha;
         

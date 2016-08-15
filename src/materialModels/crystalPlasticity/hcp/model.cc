@@ -1,4 +1,4 @@
- //constructor
+//constructor
 template <int dim>
 crystalPlasticity<dim>::crystalPlasticity() :
 ellipticBVP<dim>(),
@@ -12,11 +12,13 @@ P(dim,dim)
     initCalled = false;
     
     //post processing
-    ellipticBVP<dim>::numPostProcessedFields=3;
+    ellipticBVP<dim>::numPostProcessedFields=4;
     ellipticBVP<dim>::postprocessed_solution_names.push_back("Eqv_strain");
     ellipticBVP<dim>::postprocessed_solution_names.push_back("Eqv_stress");
     ellipticBVP<dim>::postprocessed_solution_names.push_back("Grain_ID");
     ellipticBVP<dim>::postprocessed_solution_names.push_back("twin");
+    
+    
 }
         
 //implementation of the getElementalValues method
@@ -139,7 +141,7 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
         
         std::cout.precision(3);
         
-        //evaluate elemental stiffness matrix, K_{ij} = N_{i,k}*C_{mknl}*F_{im}*F{jn}*N_{j,l} + N_{i,k}*F_{kl}*N_{j,l}*del{ij} dV
+        //evaluate elemental stiffness matrix, K_{ij} = N_{i,k}*C_{mknl}*F_{im}*F{jn}*N_{j,l} + N_{i,k}*F_{kl}*N_{j,l}*del{ij} dV 
         for (unsigned int d1=0; d1<dofs_per_cell; ++d1) {
             unsigned int i = fe_values.get_fe().system_to_component_index(d1).first;
             for (unsigned int d2=0; d2<dofs_per_cell; ++d2) {
@@ -162,30 +164,25 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 }
 
 
-template <int dim>
-void crystalPlasticity<dim>::updateBeforeIteration()
-{
-    local_strain=0.0;
-    local_stress=0.0;
-    local_microvol=0.0;
-    
-    //call base class project() function to project post processed fields
-    //ellipticBVP<dim>::project();
-}
 
-template <int dim>
-void crystalPlasticity<dim>::updateBeforeIncrement()
-{
-    local_F_e=0.0;
-    local_F_r=0.0;
-    F_e=0.0;
-    F_r=0.0;
-    microvol=0.0;
-    //call base class project() function to project post processed fields
-    //ellipticBVP<dim>::project();
-}
+ template <int dim>
+ void crystalPlasticity<dim>::updateBeforeIteration()
+ {
+     local_strain=0.0;
+     local_stress=0.0;
+     local_microvol=0.0;
 
+     //call base class project() function to project post processed fields
+     //ellipticBVP<dim>::project();
+ }
 
+ template <int dim>
+ void crystalPlasticity<dim>::updateBeforeIncrement()
+ {
+     microvol=0.0;
+     //call base class project() function to project post processed fields
+     //ellipticBVP<dim>::project();
+ }
 
 
 
@@ -221,6 +218,19 @@ void crystalPlasticity<dim>::updateAfterIncrement()
                 temp.push_back(rotnew[cellID][q][2]);
                 temp.push_back(fe_values.JxW(q));
                 temp.push_back(quadratureOrientationsMap[cellID][q]);
+                temp.push_back(slipfraction_conv[cellID][q][0]);
+                temp.push_back(slipfraction_conv[cellID][q][1]);
+                temp.push_back(slipfraction_conv[cellID][q][2]);
+                temp.push_back(slipfraction_conv[cellID][q][3]);
+                temp.push_back(slipfraction_conv[cellID][q][4]);
+                temp.push_back(slipfraction_conv[cellID][q][5]);
+                
+                temp.push_back(twinfraction_conv[cellID][q][0]);
+                temp.push_back(twinfraction_conv[cellID][q][1]);
+                temp.push_back(twinfraction_conv[cellID][q][2]);
+                temp.push_back(twinfraction_conv[cellID][q][3]);
+                temp.push_back(twinfraction_conv[cellID][q][4]);
+                temp.push_back(twinfraction_conv[cellID][q][5]);
                 temp.push_back(twin[cellID][q]);
                 orientations.addToOutputOrientations(temp);
                 local_F_e=local_F_e+twin[cellID][q]*fe_values.JxW(q);
@@ -274,8 +284,6 @@ void crystalPlasticity<dim>::updateAfterIncrement()
     
     
     cellID=0;
-    
-    //PTR Scheme
     cell = this->dofHandler.begin_active(), endc = this->dofHandler.end();
     for (; cell!=endc; ++cell) {
         if (cell->is_locally_owned()){
@@ -291,7 +299,7 @@ void crystalPlasticity<dim>::updateAfterIncrement()
                 twin_pos= std::distance(local_twin.begin(), result);
                 twin_max=local_twin[twin_pos];
                 
-                if(twin_max>=(0.25+0.25*F_e/F_r)){
+                if(twin_max>=(twinThresholdFraction+twinSaturationFactor*F_e/F_r)){
                     
                     FullMatrix<double> FE_t(dim,dim), FP_t(dim,dim),Twin_T(dim,dim),temp(dim,dim);
                     
@@ -300,17 +308,17 @@ void crystalPlasticity<dim>::updateAfterIncrement()
                     
                     
                     Twin_image(twin_pos,cellID,q);
-                    double s_alpha_twin=s_alpha_conv[cellID][q][18+twin_pos];
-                    for(unsigned int i=0;i<6;i++){
+                    double s_alpha_twin=s_alpha_conv[cellID][q][numSlipSystems+twin_pos];
+                    for(unsigned int i=0;i<numTwinSystems;i++){
                         twinfraction_conv[cellID][q][i]=0;
-                        s_alpha_conv[cellID][q][18+twin_pos]=s_alpha_twin;
+                        s_alpha_conv[cellID][q][numSlipSystems+twin_pos]=s_alpha_twin;
                         
                     }
                     
                     Vector<double> n(dim);
-                    n(0)=n_alpha[18+twin_pos][0];
-                    n(1)=n_alpha[18+twin_pos][1];
-                    n(2)=n_alpha[18+twin_pos][2];
+                    n(0)=n_alpha[numSlipSystems+twin_pos][0];
+                    n(1)=n_alpha[numSlipSystems+twin_pos][1];
+                    n(2)=n_alpha[numSlipSystems+twin_pos][2];
                     
                     for(unsigned int i=0;i<dim;i++){
                         for(unsigned int j=0;j<dim;j++){

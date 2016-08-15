@@ -9,8 +9,6 @@
 #include <fstream>
 
 typedef struct {
-    unsigned int n_slip_systems; //No. of slip systems
-    double q1,q2,a,h0,s_s,s0,C11,C12,C44; // Elastic constants
     FullMatrix<double> m_alpha,n_alpha;
 } materialProperties;
 

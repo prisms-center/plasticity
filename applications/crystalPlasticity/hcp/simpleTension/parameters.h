@@ -13,39 +13,49 @@
 
 //Elastic Parameters
 
-#define c11 59.3e3 // C11 (MPa)
-#define c12 25.7e3 // C12 (MPa)
-#define c13 21.4e3  // C44 (MPa)
-#define c33 61.5e3 // C33 (MPa)
-#define c44 16.4e3 // C44 (MPa)
+double elasticStiffness[6][6]={{59.3e3, 25.7e3, 21.4e3, 0, 0, 0},
+				   {25.7e3, 59.3e3, 21.4e3, 0, 0, 0},
+				   {21.4e3, 21.4e3, 61.5e3, 0, 0, 0},
+				   {0, 0, 0, 16.4e3, 0, 0},
+				   {0, 0, 0, 0, 16.4e3, 0}, 
+				   {0, 0, 0, 0, 0, 16.8e3}}; // 	Elastic Stiffness Matrix -Voigt Notation (MPa)
 
 
+//Crystal Plasticity 
 
-//Crystal Plasticity parameters
+//slip parameters
 
-#define numSlipSystems 24 // Total No. of slip systems (slip+twin)
-#define numTwinSystems 6 // No. of twin systems
+#define numSlipSystems 24 // Total No. of slip systems (slip)
 #define latentHardeningRatio 1.4  //q1
-#define powerLawExponent1 1.1  //a_basal
-#define powerLawExponent2 0.8  //a_prismatic
-#define powerLawExponent3 0.8  //a_pyramidal<a>
-#define powerLawExponent4 0.8  //a_pyramidal<c+a>
-#define powerLawExponent5 1.1  //a_twin<c+a>
-#define initialSlipResistance1 25.0 // CRSS s0_basal(MPa)
-#define initialSlipResistance2 68.0 // CRSS s0_prismatic(MPa)
-#define initialSlipResistance3 68.0 // CRSS s0_pyramidal<a>(MPa)
-#define initialSlipResistance4 68.0 // CRSS s0_pyramidal<c+a>(MPa)
-#define initialSlipResistance5 40.0 // CRSS s0_twin<c+a>(MPa)
-#define saturationStress1 70.0 //s_s_basal(MPa)
-#define saturationStress2 210.0 //s_s_prismatic(MPa)
-#define saturationStress3 210.0 //s_s_pyramidal<a>(MPa)
-#define saturationStress4 210.0 //s_s_pyramidal<c+a>(MPa)
-#define saturationStress5 50.0 //s_s_twin<c+a>(MPa)
-#define initialHardeningModulus1 100.0 //h0_basal(MPa)
-#define initialHardeningModulus2 130.0 //h0_prismatic(MPa)
-#define initialHardeningModulus3 130.0 //h0_pyramidal<a>(MPa)
-#define initialHardeningModulus4 130.0 //h0_pyramidal<c+a>(MPa)
-#define initialHardeningModulus5 50.0 //h0_twin<c+a>(MPa)
+
+double initialSlipResistance[numSlipSystems]= {25.0, 25.0, 25.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0};
+double initialHardeningModulus[numSlipSystems]= {100.0, 100.0, 100.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0};
+double powerLawExponent[numSlipSystems]= {1.1, 1.1, 1.1, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8};
+double saturationStress[numSlipSystems]= {70.0, 70.0, 70.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0};
+
+//Twin parameters
+
+#define numTwinSystems 6 // No. of twin systems
+
+double initialSlipResistanceTwin[numTwinSystems]= {40.0, 40.0, 40.0, 40.0, 40.0, 40.0};
+double initialHardeningModulusTwin[numTwinSystems]= {50.0, 50.0, 50.0, 50.0, 50.0, 50.0};
+double powerLawExponentTwin[numTwinSystems]= {1.1, 1.1, 1.1, 1.1, 1.1, 1.1};
+double saturationStressTwin[numTwinSystems]= {50.0, 50.0, 50.0, 50.0, 50.0, 50.0};
+
+#define twinThresholdFraction 0.25 //
+#define twinSaturationFactor 0.25 //
+#define twinShear 0.129 // characteristic twin shear
+
+
+// Crystal Plasticity Constitutive model parameters
+
+#define modelStressTolerance 1.0e-6 // Stress tolerance for the yield surface (MPa)
+#define modelMaxSlipSearchIterations 20 // Maximum no. of active slip search iterations
+#define modelMaxSolverIterations 10 // Maximum no. of iterations to achieve non-linear convergence
+#define modelMaxPlasticSlipL2Norm 0.8 // L2-Norm of plastic slip strain-used for load-step adaptivity
+#define adaptiveLoadStepFactor 0.5 // Load step factor
+
+
 
 // Read Input Microstructure
 

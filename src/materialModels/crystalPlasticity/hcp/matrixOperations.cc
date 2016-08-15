@@ -1,5 +1,3 @@
-
-
 template <int dim>
 void crystalPlasticity<dim>::tracev(FullMatrix<double> &Atrace, FullMatrix<double> elm, FullMatrix<double> B) {
     
@@ -161,3 +159,30 @@ void crystalPlasticity<dim>::matform(FullMatrix<double> &A, Vector<double> Av) {
     A[1][0]=Av(5) ;
     
 }
+
+
+template <int dim>
+FullMatrix<double> crystalPlasticity<dim>::matrixExponential(FullMatrix<double> A) {
+    
+    FullMatrix<double> matExp(dim,dim),temp(dim,dim),temp2(dim,dim);
+    matExp=IdentityMatrix(dim);
+    temp=IdentityMatrix(dim);
+    
+    double count=1;
+    
+    while(temp.frobenius_norm()>1e-15){
+        
+        temp.mmult(temp2,A);
+        temp2.equ(1/count,temp2);
+        temp.equ(1.0,temp2);
+        matExp.add(1.0,temp);
+        count=count+1.0;
+        
+        
+    }
+    
+    return matExp;
+    
+}
+
+

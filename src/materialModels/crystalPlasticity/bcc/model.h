@@ -1,6 +1,6 @@
 //implementation of the crystal plasticity material model for BCC crystal structure
-#ifndef MODEL_BCC_H
-#define MODEL_BCC_H
+#ifndef MODEL_FCC_H
+#define MODEL_FCC_H
 
 //dealii headers
 #include "../../../../include/ellipticBVP.h"
@@ -9,8 +9,6 @@
 #include <fstream>
 
 typedef struct {
-    unsigned int n_slip_systems; //No. of slip systems
-    double q1,q2,a,h0,s_s,s0,C11,C12,C44; // Elastic constants
     FullMatrix<double> m_alpha,n_alpha;
 } materialProperties;
 
@@ -58,7 +56,8 @@ public:
      PA-active slip systems
     */
      
-    void inactive_slip_removal(Vector<double> &inactive,Vector<double> &active, Vector<double> &x_beta, int &n_PA, Vector<double> &PA, Vector<double> b,FullMatrix<double> A,FullMatrix<double> A_PA);
+
+    void inactive_slip_removal(Vector<double> &active,Vector<double> &x_beta_old, Vector<double> &x_beta, int &n_PA, Vector<double> &PA, Vector<double> b,FullMatrix<double> A,FullMatrix<double> &A_PA);
     /**
      * Structure to hold material parameters
      */
@@ -125,6 +124,12 @@ private:
      *calculates the equivalent matrix Aleft for the second order tensorial operation trace(AX)=B => A_r*{x}={b}
      */
     void tracev(FullMatrix<double> &Atrace, FullMatrix<double> elm, FullMatrix<double> B);
+    
+    /**
+     *calculates the matrix exponential of matrix A
+     */
+    
+    FullMatrix<double> matrixExponential(FullMatrix<double> A);
     
     
     /**
