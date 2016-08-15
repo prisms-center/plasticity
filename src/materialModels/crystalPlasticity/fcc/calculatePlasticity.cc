@@ -13,7 +13,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     
     // Tolerance
     
-    double tol1=1e-6;
+    double tol1=modelStressTolerance;
     
     
     
@@ -24,36 +24,12 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     s_alpha_t=s_alpha_conv[cellID][quadPtID];
     rot1=rot[cellID][quadPtID];
     
-
-
+    
+    
     // Rotation matrix of the crystal orientation
     FullMatrix<double> rotmat(dim,dim);
     rotmat=0.0;
     odfpoint(rotmat,rot1);
-    
-   /*if(quadPtID==0){
-        
-        this->pcout<<F_tau[0][0]<<"\t"<<F_tau[0][1]<<"\t"<<F_tau[0][2]<<"\n";
-        this->pcout<<F_tau[1][0]<<"\t"<<F_tau[1][1]<<"\t"<<F_tau[1][2]<<"\n";
-        this->pcout<<F_tau[2][0]<<"\t"<<F_tau[2][1]<<"\t"<<F_tau[2][2]<<"\n\n\n";
-        
-        this->pcout<<FE_t[0][0]<<"\t"<<FE_t[0][1]<<"\t"<<FE_t[0][2]<<"\n";
-        this->pcout<<FE_t[1][0]<<"\t"<<FE_t[1][1]<<"\t"<<FE_t[1][2]<<"\n";
-        this->pcout<<FE_t[2][0]<<"\t"<<FE_t[2][1]<<"\t"<<FE_t[2][2]<<"\n\n\n";
-        
-        this->pcout<<FP_t[0][0]<<"\t"<<FP_t[0][1]<<"\t"<<FP_t[0][2]<<"\n";
-        this->pcout<<FP_t[1][0]<<"\t"<<FP_t[1][1]<<"\t"<<FP_t[1][2]<<"\n";
-        this->pcout<<FP_t[2][0]<<"\t"<<FP_t[2][1]<<"\t"<<FP_t[2][2]<<"\n\n\n";
-        
-        this->pcout<<rot1(0)<<"\t"<<rot1(1)<<"\t"<<rot1(2)<<"\n\n\n";
-        
-        this->pcout<<rotmat[0][0]<<"\t"<<rotmat[0][1]<<"\t"<<rotmat[0][2]<<"\n";
-        this->pcout<<rotmat[1][0]<<"\t"<<rotmat[1][1]<<"\t"<<rotmat[1][2]<<"\n";
-        this->pcout<<rotmat[2][0]<<"\t"<<rotmat[2][1]<<"\t"<<rotmat[2][2]<<"\n\n\n";
-
-        
-        
-    }*/
     
     
     FullMatrix<double> temp(dim,dim),temp1(dim,dim),temp2(dim,dim),temp3(dim,dim),temp4(dim,dim),temp5(dim,dim),temp6(dim,dim); // Temporary matrices
@@ -98,10 +74,18 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     
     FullMatrix<double> Dmat2(2*dim,2*dim),TM(dim*dim,dim*dim);
     Vector<double> vec1(2*dim),vec2(dim*dim);
-    Dmat2=Dmat;
-    Dmat2(3,3)=properties.C44; 	Dmat2(4,4)=properties.C44; 	Dmat2(5,5)=properties.C44;
+    Dmat2.reinit(6,6); Dmat2=0.0;
+    
+    for(unsigned int i=0;i<6;i++){
+        for(unsigned int j=0;j<6;j++){
+            Dmat2[i][j] = elasticStiffness[i][j];
+        }
+    }
+
     vec1(0)=0;vec1(1)=5;vec1(2)=4;vec1(3)=1;vec1(4)=3;vec1(5)=2;
     vec2(0)=0;vec2(1)=5;vec2(2)=4;vec2(3)=5;vec2(4)=1;vec2(5)=3;vec2(6)=4;vec2(7)=3;vec2(8)=2;
+    
+    
     
     for(unsigned int i=0;i<9;i++){
         for(unsigned int j=0;j<9;j++){
@@ -115,10 +99,6 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     Fpn_inv=0.0; Fpn_inv.invert(FP_t);
     F_tau.mmult(FE_tau,Fpn_inv);
     s_alpha_tau=s_alpha_t;
-    
-
-    
-    // this->pcout<<FE_tau[0][0]<<"\t"<<FE_tau[1][1]<<"\t"<<FE_tau[2][2]<<"\n";
     
     Vector<double> s_beta(n_slip_systems),h_beta(n_slip_systems),delh_beta_dels(n_slip_systems);
     FullMatrix<double> h_alpha_beta_t(n_slip_systems,n_slip_systems),A(n_slip_systems,n_slip_systems);
@@ -153,31 +133,17 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     
     while (iter1) {
         
-        if(iter1>50){
+        if(iter1>modelMaxSlipSearchIterations){
             flag2=1;
             break;
         }
         
-        // while(iter1){
-        
-        // this->pcout<<FE_tau[0][0]<<"\t"<<FE_tau[1][1]<<"\t"<<FE_tau[2][2]<<"\n";
-        
-        // }
-        
-        //FE_tau_trial=F_tau*inv(FP_t)
         FP_t2=FP_tau;
         Fpn_inv=0.0; Fpn_inv.invert(FP_t2);
         FE_tau_trial=0.0;
         F_trial=0.0;
         F_tau.mmult(FE_tau_trial,Fpn_inv);F_trial = FE_tau_trial;
         
-        
-        
-        
-        
-        //% % % % % STEP 1 % % % % %
-        //Calculate Trial Elastic Strain Ee_tau_trial
-        //Ee_tau_trial=0.5(FE_tau_trial'*FE_tau_trial-I)
         temp.reinit(dim,dim); temp=0.0;
         temp=FE_tau_trial;
         FE_tau_trial.Tmmult(CE_tau_trial,temp);
@@ -189,8 +155,8 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
             }
         }
         
-    
-    
+        
+        
         
         //% % % % % STEP 2 % % % % %
         // Calculate the trial stress T_star_tau_trial
@@ -207,11 +173,9 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
         temp2.reinit(dim,dim);
         temp.invert(F_tau); T_tau.mTmult(temp2,temp);
         
-        // this->pcout<<P_tau[0][0]<<"\t"<<P_tau[1][1]<<"\t"<<P_tau[2][2]<<"\n";
-        
         
         P_tau.equ(det_FE_tau,temp2);
-
+        
         
         //% % % % % STEP 3 % % % % %
         // Calculate the trial resolved shear stress resolved_shear_tau_trial for each slip system
@@ -221,38 +185,6 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
         CE_tau_trial.mmult(temp,T_star_tau_trial);
         
         n_PA=0;	// Number of active slip systems
-        
-        
-        
-      /*  if(quadPtID==0){
-            
-            this->pcout<<CE_tau_trial[0][0]<<"\t"<<CE_tau_trial[0][1]<<"\t"<<CE_tau_trial[0][2]<<"\n";
-            this->pcout<<CE_tau_trial[1][0]<<"\t"<<CE_tau_trial[1][1]<<"\t"<<CE_tau_trial[1][2]<<"\n";
-            this->pcout<<CE_tau_trial[2][0]<<"\t"<<CE_tau_trial[2][1]<<"\t"<<CE_tau_trial[2][2]<<"\n\n\n";
-            
-            this->pcout<<T_star_tau_trial[0][0]<<"\t"<<T_star_tau_trial[0][1]<<"\t"<<T_star_tau_trial[0][2]<<"\n";
-            this->pcout<<T_star_tau_trial[1][0]<<"\t"<<T_star_tau_trial[1][1]<<"\t"<<T_star_tau_trial[1][2]<<"\n";
-            this->pcout<<T_star_tau_trial[2][0]<<"\t"<<T_star_tau_trial[2][1]<<"\t"<<T_star_tau_trial[2][2]<<"\n\n\n";
-            
-            this->pcout<<temp[0][0]<<"\t"<<temp[0][1]<<"\t"<<temp[0][2]<<"\n";
-            this->pcout<<temp[1][0]<<"\t"<<temp[1][1]<<"\t"<<temp[1][2]<<"\n";
-            this->pcout<<temp[2][0]<<"\t"<<temp[2][1]<<"\t"<<temp[2][2]<<"\n\n\n";
-            
-            this->pcout<<SCHMID_TENSOR1[0][0]<<"\t"<<SCHMID_TENSOR1[0][1]<<"\t"<<SCHMID_TENSOR1[0][2]<<"\n";
-            this->pcout<<SCHMID_TENSOR1[1][0]<<"\t"<<SCHMID_TENSOR1[1][1]<<"\t"<<SCHMID_TENSOR1[1][2]<<"\n";
-            this->pcout<<SCHMID_TENSOR1[2][0]<<"\t"<<SCHMID_TENSOR1[2][1]<<"\t"<<SCHMID_TENSOR1[2][2]<<"\n\n\n";
-            
-            this->pcout<<m_alpha[0][0]<<"\t"<<m_alpha[0][1]<<"\t"<<m_alpha[0][2]<<"\n";
-            this->pcout<<m_alpha[1][0]<<"\t"<<m_alpha[1][1]<<"\t"<<m_alpha[1][2]<<"\n";
-            this->pcout<<m_alpha[2][0]<<"\t"<<m_alpha[2][1]<<"\t"<<m_alpha[2][2]<<"\n\n\n";
-
-            this->pcout<<n_alpha[0][0]<<"\t"<<n_alpha[0][1]<<"\t"<<n_alpha[0][2]<<"\n";
-            this->pcout<<n_alpha[1][0]<<"\t"<<n_alpha[1][1]<<"\t"<<n_alpha[1][2]<<"\n";
-            this->pcout<<n_alpha[2][0]<<"\t"<<n_alpha[2][1]<<"\t"<<n_alpha[2][2]<<"\n\n\n";
-            
-            
-            
-        }*/
         
         resolved_shear_tau_trial=0.0;
         
@@ -287,16 +219,6 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
         }
         
         
-        /*if(quadPtID==0){
-            
-            this->pcout<<resolved_shear_tau_trial(0)<<"\t"<<resolved_shear_tau_trial(1)<<"\t"<<resolved_shear_tau_trial(2)<<"\t"<<resolved_shear_tau_trial(3)<<"\t"<<resolved_shear_tau_trial(4)<<"\t"<<resolved_shear_tau_trial(5)<<"\t"<<resolved_shear_tau_trial(6)<<"\n\n";
-            this->pcout<<b(0)<<"\t"<<b(1)<<"\t"<<b(2)<<"\t"<<b(3)<<"\t"<<b(4)<<"\t"<<b(5)<<"\t"<<b(6)<<"\n\n";
-        }*/
-        
-        //this->pcout<<P_tau[0][0]<<"\t"<<P_tau[1][1]<<"\t"<<P_tau[2][2]<<"\n";
-        
-        
-        
         if(n_PA==0)
             break;
         
@@ -307,7 +229,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
         
         // Single slip hardening rate
         for(unsigned int i=0;i<n_slip_systems;i++){
-            h_beta(i)=properties.h0*pow((1-s_beta(i)/properties.s_s),properties.a);
+            h_beta(i)=initialSlipResistance[i]*pow((1-s_beta(i)/saturationStress[i]),powerLawExponent[i]);
         }
         
         
@@ -363,7 +285,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
             b_PA(i)=b(PA(i));
         }
         
-
+        
         
         
         //bool x1=1;
@@ -372,9 +294,8 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
             
             count1=count1+1;
             
-            //this->pcout<<P_tau[0][0]<<"\t"<<P_tau[1][1]<<"\t"<<P_tau[2][2]<<"\n";
             
-            if(count1>10)
+            if(count1>modelMaxSolverIterations)
                 break;
             
             x_beta=0.0;
@@ -384,16 +305,6 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
             //Modified slip system search for adding corrective term
             // [x_beta] = INACTIVE_SLIP_REMOVAL(A,b,PA,x_beta_old);
             inactive_slip_removal(active,x_beta_old,x_beta,n_PA,PA,b,A,A_PA);
-	    
-            // this->pcout<<n_PA<<"\n";
-            //this->pcout<<x_beta_old[0]<<"\t"<<x_beta_old[5]<<"\t"<<x_beta_old[8]<<"\t"<<x_beta_old[11]<<"\n";
-            //this->pcout<<PA[0]<<"\t"<<PA[1]<<"\t"<<PA[2]<<"\t"<<PA[3]<<"\n";
-            
-            
-            // % % % % % STEP 6 % % % % %
-            // % calculate Lp
-            // % % % % % STEP 6 % % % % %
-            
             temp.reinit(dim,dim);
             del_FP.reinit(dim,dim);
             del_FP=0.0;
@@ -416,12 +327,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
                 
             }
             
-           // if(quadPtID==0)
-           // this->pcout<<del_FP[0][0]<<"\t"<<del_FP[1][1]<<"\t"<<del_FP[2][2]<<"\n";
-            
             matrixExponential(del_FP).mmult(FP_tau,FP_t2);
-            
-            // this->pcout<<FP_tau[0][0]<<"\t"<<FP_tau[1][1]<<"\t"<<FP_tau[2][2]<<"\n";
             
             // % % % % % STEP 8 % % % % %
             temp.invert(FP_tau);
@@ -476,9 +382,9 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
                     h1=h1+h_alpha_beta_t(i,j)*x_beta(j);
                 }
                 s_alpha_tau(i)=s_alpha_tau(i)+h1;
-
-		if(s_alpha_tau(i)>properties.s_s)
-			s_alpha_tau=properties.s_s;
+                
+                if(s_alpha_tau(i)>saturationStress[i])
+                    s_alpha_tau=saturationStress[i];
             }
             
             
@@ -494,28 +400,12 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
             for(unsigned int i=0;i<n_PA;i++){
                 b_PA(i)=b(PA(i));
             }
-            
-            // this->pcout<<b_PA[0]<<"\t"<<b_PA[1]<<"\t"<<b_PA[2]<<"\t"<<b_PA[3]<<"\n";
-            
             bool x1=(b_PA.linfty_norm())>tol1;
-            
-            //  this->pcout<<b_PA.linfty_norm()<<"\n";
-            //this->pcout<<x1<<"\n";
-            //this->pcout<<count1<<"\n";
-            //this->pcout<<PK1_Stiff[0][0]<<"\t"<<PK1_Stiff[1][1]<<"\t"<<PK1_Stiff[2][2]<<"\n";
-            //this->pcout<<P_tau[0][0]<<"\t"<<P_tau[1][1]<<"\t"<<P_tau[2][2]<<"\n";
-            
-            
             
             
         }
         
-       /* if(quadPtID==0){
-            this->pcout<<P_tau[0][0]<<"\t"<<P_tau[1][1]<<"\t"<<P_tau[2][2]<<"\n";
-        }*/
         
-        //this->pcout<<P_tau[0][0]<<"\t"<<P_tau[1][1]<<"\t"<<P_tau[2][2]<<"\n";
-
         Fpn_inv=0.0; Fpn_inv.invert(FP_tau);
         delFp_delF_prev=delFp_delF;
         dels_delF_prev=dels_delF;
@@ -524,7 +414,6 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
         delFe_delF=0.0;
         temp1.reinit(dim,dim);
         F_tau.mmult(temp1,Fpn_inv);
-        //this->pcout<<temp1[0][0]<<"\t"<<temp1[1][1]<<"\t"<<temp1[2][2]<<"\n";
         
         for (unsigned int i=0;i<dim;i++){
             for (unsigned int j=0;j<dim;j++){
@@ -558,7 +447,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
             }
         }
         
-
+        
         
         deltau_delF=0.0;
         temp.reinit(dim,dim);
@@ -589,12 +478,6 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
             }
         }
         
-       /* if(quadPtID==0){
-            this->pcout<<delFe_delF[0][0]<<"\t"<<delFe_delF[1][1]<<"\t"<<delFe_delF[2][2]<<"\n\n";
-            this->pcout<<delEtrial_delF[0][0]<<"\t"<<delEtrial_delF[1][1]<<"\t"<<delEtrial_delF[2][2]<<"\n\n";
-            this->pcout<<deltau_delF[0][0]<<"\t"<<deltau_delF[1][1]<<"\t"<<deltau_delF[2][2]<<"\n\n";
-        }*/
-        
         
         dels_delF=0.0;
         
@@ -602,7 +485,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
         
         // Hardening modulus
         for(unsigned int i=0;i<n_slip_systems;i++){
-            delh_beta_dels(i)=properties.h0*pow((1-s_alpha_tau(i)/properties.s_s),(properties.a-1))*(-1.0/properties.s_s);
+            delh_beta_dels(i)=initialSlipResistance[i]*pow((1-s_alpha_tau(i)/saturationStress[i]),(powerLawExponent[i]-1))*(-1.0/saturationStress[i]);
         }
         
         FullMatrix<double> term_ds(n_slip_systems,n_slip_systems);
@@ -615,10 +498,6 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
             }
         }
         
-        /*if(quadPtID==0){
-            this->pcout<<term_ds[0][0]<<"\t"<<term_ds[1][1]<<"\t"<<term_ds[2][2]<<"\n\n";
-
-        }*/
         
         temp.reinit(n_slip_systems,n_slip_systems);
         temp=IdentityMatrix(n_slip_systems);
@@ -653,11 +532,6 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
             }
         }
         
-       /* if(quadPtID==0){
-            this->pcout<<delb_delF[0][0]<<"\t"<<delb_delF[1][1]<<"\t"<<delb_delF[2][2]<<"\n\n";
-
-        }*/
-
         
         double tol2=1.0;
         int count3=0;
@@ -729,12 +603,6 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
                 temp4.equ(pow(-1.0,k)/tgamma(k+2),temp4);
                 diff_FP.add(1.0,temp4);
             }
-
-           /* if(quadPtID==0){
-                
-                this->pcout<<diff_FP[0][0]<<"\t"<<diff_FP[1][1]<<"\t"<<diff_FP[2][2]<<"\n\n";
-                
-            }*/
             
             for(unsigned int i=0;i<n_PA;i++){
                 
@@ -752,12 +620,6 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
                 
                 temp.add(2.0,temp3);
                 
-               /* if(quadPtID==0){
-                    
-                    this->pcout<<temp2[0][0]<<"\t"<<temp2[1][1]<<"\t"<<temp2[2][2]<<"\n\n";
-                    this->pcout<<temp[0][0]<<"\t"<<temp[1][1]<<"\t"<<temp[2][2]<<"\n\n";
-                    
-                }*/
                 
                 for(unsigned int k=0;k<dim;k++){
                     for(unsigned int l=0;l<dim;l++){
@@ -771,22 +633,15 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
             }
         }
         
-        /*if(quadPtID==0){
-            
-             this->pcout<<count3<<"\n\n";
-            this->pcout<<A2[0][0]<<"\t"<<A2[1][1]<<"\t"<<A2[2][2]<<"\n\n";
-            
-        }*/
-        
         
         temp1.reinit(n_PA,n_PA);
         temp1.invert(A2);
         temp2.reinit(n_PA,dim*dim);
         
         for(unsigned int i=0;i<n_PA;i++){
-               for(unsigned int j=0;j<dim*dim;j++){
-                   temp2[i][j]=delb_delF[i][j]-dels_delF[PA(i)][j];
-               }
+            for(unsigned int j=0;j<dim*dim;j++){
+                temp2[i][j]=delb_delF[i][j]-dels_delF[PA(i)][j];
+            }
         }
         delgamma_delF.reinit(n_PA,dim*dim);
         temp1.mmult(delgamma_delF,temp2);
@@ -797,10 +652,10 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
                 delgamma_delF2[PA(i)][j]=delgamma_delF[i][j];
             }
         }
-
         
         
-
+        
+        
         S_PA.reinit(dim*dim,n_PA);
         
         for(unsigned int j=0;j<n_PA;j++){
@@ -851,7 +706,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
             temp1.reinit(dim,dim);
             diff_FP.mmult(temp1,FP_t2);
             //tempv1.reinit(dim*dim);
-
+            
             for(unsigned int k=0;k<dim;k++){
                 for(unsigned int l=0;l<dim;l++){
                     S_PA(3*k+l,j)=temp1(k,l);
@@ -864,14 +719,14 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
             
             
         }
-
+        
         
         S_PA.mmult(delFp_delF2,delgamma_delF);
         
         delFp_delF=0.0;
         temp1.reinit(dim,dim);
         temp1=matrixExponential(del_FP);
-            
+        
         for (unsigned int i=0;i<dim;i++){
             for (unsigned int j=0;j<dim;j++){
                 for (unsigned int k=0;k<dim;k++){
@@ -897,39 +752,15 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
         dels_delF_prev.add(1.0,temp1);
         
         iter1=iter1+1;
-       /* if(quadPtID==0){
-       this->pcout<<delFe_delF[0][0]<<"\t"<<delFe_delF[1][1]<<"\t"<<delFe_delF[2][2]<<"\n";
-         this->pcout<<delFp_delF[0][0]<<"\t"<<delFp_delF[1][1]<<"\t"<<delFp_delF[2][2]<<"\n";
-       // this->pcout<<delEtrial_delF[0][0]<<"\t"<<delEtrial_delF[1][1]<<"\t"<<delEtrial_delF[2][2]<<"\n";
-        }*/
-        
         
     }
-    
-    
-    
-    
-    // this->pcout<<F_trial[0][0]<<"\t"<<F_trial[1][1]<<"\t"<<F_trial[2][2]<<"\n";
-    /*this->pcout<<P_tau[0][0]<<"\t"<<P_tau[1][1]<<"\t"<<P_tau[2][2]<<"\n";
-     
-     
-     this->pcout<<P_tau[0][0]<<"\t"<<P_tau[1][1]<<"\t"<<P_tau[2][2]<<"\n";
-     this->pcout<<P_tau[0][0]<<"\t"<<P_tau[1][1]<<"\t"<<P_tau[2][2]<<"\n";*/
-    
-   /*if(quadPtID==0){
-     this->pcout<<P_tau[0][0]<<"\t"<<P_tau[1][1]<<"\t"<<P_tau[2][2]<<"\n";
-        this->pcout<<delFe_delF[0][0]<<"\t"<<delFe_delF[1][1]<<"\t"<<delFe_delF[2][2]<<"\n";
-        this->pcout<<delFp_delF[0][0]<<"\t"<<delFp_delF[1][1]<<"\t"<<delFp_delF[2][2]<<"\n";
-    }*/
-    
-  // tangent_modulus(F_trial, Fpn_inv, SCHMID_TENSOR1,A,A_PA,B,T_tau, PK1_Stiff, active, resolved_shear_tau_trial, x_beta_old, PA, n_PA,det_F_tau,det_FE_tau );
     
     
     
     delFe_delF=0.0;
     temp1.reinit(dim,dim);
     F_tau.mmult(temp1,Fpn_inv);
-
+    
     for (unsigned int i=0;i<dim;i++){
         for (unsigned int j=0;j<dim;j++){
             for (unsigned int k=0;k<dim;k++){
@@ -958,26 +789,21 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
                     for (unsigned int a=0;a<dim;a++){
                         for (unsigned int b=0;b<dim;b++){
                             for (unsigned int c=0;c<dim;c++){
-   
+                                
                                 
                                 delTstar_delF(3*(i)+j,3*(k)+l)=delTstar_delF(3*(i)+j,3*(k)+l)+ TM(3*(i)+j,3*(a)+b)*delFe_delF(3*(c)+a,3*(k)+l)*FE_tau(c,b);
                                 
+                            }
                         }
                     }
-                    }
-
+                    
                 }
             }
         }
     }
     
-   
-   /* if(quadPtID==0){
-       // this->pcout<<P_tau[0][0]<<"\t"<<P_tau[1][1]<<"\t"<<P_tau[2][2]<<"\n";
-        this->pcout<<delFe_delF[0][0]<<"\t"<<delFe_delF[1][1]<<"\t"<<delFe_delF[2][2]<<"\n";
-        this->pcout<<delTstar_delF[0][0]<<"\t"<<delTstar_delF[1][1]<<"\t"<<delTstar_delF[2][2]<<delTstar_delF[3][3]<<"\t"<<delTstar_delF[4][4]<<"\t"<<delTstar_delF[5][5]<<delTstar_delF[6][6]<<"\t"<<delTstar_delF[7][7]<<"\t"<<delTstar_delF[8][8]<<"\n";
-    }*/
-
+    
+    
     FullMatrix<double> PK_Stiff5(dim*dim,dim*dim);
     PK_Stiff5=0.0;
     temp4.reinit(dim,dim);
@@ -994,51 +820,22 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     temp3.mTmult(temp5,F_tau);
     temp6=IdentityMatrix(dim);
     
-    //mat1=(T_star_tau)*(FE_tau)'*(inv(F_tau))';
-    //mat2=(FE_tau)'*(inv(F_tau))';
-    //mat3=FE_tau*(T_star_tau);
-    //mat4=inv(F_tau);
-    //mat5=FE_tau*(T_star_tau)*(F_tau)';
-    
     for (unsigned int i=0;i<dim;i++){
         for (unsigned int j=0;j<dim;j++){
             for (unsigned int k=0;k<dim;k++){
                 for (unsigned int l=0;l<dim;l++){
                     for (unsigned int a=0;a<dim;a++){
                         for (unsigned int b=0;b<dim;b++){
-                                PK_Stiff5(3*(i)+j,3*(k)+l)=PK_Stiff5(3*(i)+j,3*(k)+l)+ temp6(i,a)*delFe_delF(3*(a)+b,3*(k)+l)*temp1(b,j)+FE_tau(i,a)*delTstar_delF(3*(a)+b,3*(k)+l)*temp2(j,b)-temp3(i,a)*delFe_delF(3*(a)+b,3*(k)+l)*temp4(j,b);
+                            PK_Stiff5(3*(i)+j,3*(k)+l)=PK_Stiff5(3*(i)+j,3*(k)+l)+ temp6(i,a)*delFe_delF(3*(a)+b,3*(k)+l)*temp1(b,j)+FE_tau(i,a)*delTstar_delF(3*(a)+b,3*(k)+l)*temp2(j,b)-temp3(i,a)*delFe_delF(3*(a)+b,3*(k)+l)*temp4(j,b);
                         }
-                                PK_Stiff5(3*(i)+j,3*(k)+l)=PK_Stiff5(3*(i)+j,3*(k)+l)-temp5(i,a)*temp4(j,k)*temp4(l,a);
+                        PK_Stiff5(3*(i)+j,3*(k)+l)=PK_Stiff5(3*(i)+j,3*(k)+l)-temp5(i,a)*temp4(j,k)*temp4(l,a);
                     }
-
+                    
                 }
             }
         }
     }
-
     
-    /*if(quadPtID==0){
-        this->pcout<<T_star_tau[0][0]<<"\t"<<T_star_tau[1][1]<<"\t"<<T_star_tau[2][2]<<"\n";
-        this->pcout<<temp1[0][0]<<"\t"<<temp1[1][1]<<"\t"<<temp1[2][2]<<"\n";
-        this->pcout<<temp2[0][0]<<"\t"<<temp2[1][1]<<"\t"<<temp2[2][2]<<"\n";
-        this->pcout<<temp3[0][0]<<"\t"<<temp3[1][1]<<"\t"<<temp3[2][2]<<"\n";
-        this->pcout<<temp4[0][0]<<"\t"<<temp4[1][1]<<"\t"<<temp4[2][2]<<"\n";
-        this->pcout<<temp5[0][0]<<"\t"<<temp5[1][1]<<"\t"<<temp5[2][2]<<"\n";
-        this->pcout<<temp6[0][0]<<"\t"<<temp6[1][1]<<"\t"<<temp6[2][2]<<"\n";
-        
-    }*/
-    
-    
-     /*if(quadPtID==0){
-    
-    this->pcout<<PK1_Stiff[0][0]<<"\t"<<PK1_Stiff[1][1]<<"\t"<<PK1_Stiff[2][2]<<"\n";
-    
-   this->pcout<<PK_Stiff5[0][0]<<"\t"<<PK_Stiff5[1][1]<<"\t"<<PK_Stiff5[2][2]<<"\n";
-
-    
-    this->pcout<<delFp_delF[0][0]<<"\t"<<delFp_delF[1][1]<<"\t"<<delFp_delF[2][2]<<"\n";
-    
-     }*/
     
     temp.reinit(dim,dim); T_tau.mTmult(temp,rotmat);
     rotmat.mmult(T_tau,temp);
@@ -1055,10 +852,6 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     
     // Transform the tangent modulus back to crystal frame
     
-    //this->pcout<<P_tau[0][0]<<"\t"<<P_tau[1][1]<<"\t"<<P_tau[2][2]<<"\n";
-    
-    
-   
     
     for(unsigned int m=0;m<dim;m++){
         for(unsigned int n=0;n<dim;n++){
@@ -1077,16 +870,6 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
             }
         }
     }
-    
-    
-   /*if(quadPtID==0){
-        this->pcout<<P_tau[0][0]<<"\t"<<P_tau[1][1]<<"\t"<<P_tau[2][2]<<"\n";
-        this->pcout<<PK1_Stiff[0][0]<<"\t"<<PK1_Stiff[1][1]<<"\t"<<PK1_Stiff[2][2]<<"\n";
-        this->pcout<<dP_dF[0][0][0][0]<<"\t"<<dP_dF[1][1][1][1]<<"\t"<<dP_dF[2][2][2][2]<<"\n";
-    }*/
-    
-    //this->pcout<<"\n"<<P_tau[0][0]<<"\t"<<P_tau[1][1]<<"\t"<<P_tau[2][2]<<"\n";
-    //this->pcout<<dP_dF[0][0][0][0]<<"\t"<<dP_dF[1][1][1][1]<<"\t"<<dP_dF[2][2][2][2]<<"\n";
     
     P.reinit(dim,dim);
     P=P_tau;

@@ -66,10 +66,13 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 	     F[i][i]+=1;
 	 }
 
+     //this->pcout<<F[0][0]<<"\t"<<F[1][1]<<"\t"<<F[2][2]<<"\n";
 
 	 //Update strain, stress, and tangent for current time step/quadrature point
 	 calculatePlasticity(cellID, q);
 
+     //this->pcout<<P[0][0]<<"\t"<<P[1][1]<<"\t"<<P[2][2]<<"\n";
+         
 	 //Fill local residual
 	 for (unsigned int d=0; d<dofs_per_cell; ++d) {
 	     unsigned int i = fe_values.get_fe().system_to_component_index(d).first;
@@ -159,6 +162,9 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
      }
      elementalJacobian = K_local;
      elementalResidual = Rlocal;
+     
+     //this->pcout<<K_local[0][0]<<"\t"<<K_local[0][1]<<"\t"<<K_local[0][2]<<"\t"<<K_local[1][0]<<"\t"<<K_local[1][1]<<"\t"<<K_local[1][2]<<"\t"<<K_local[2][0]<<"\t"<<K_local[2][1]<<"\t"<<K_local[2][2]<<"\n";
+    // this->pcout<<Rlocal[0]<<"\t"<<Rlocal[1]<<"\t"<<Rlocal[2]<<"\n";
  }
 
 

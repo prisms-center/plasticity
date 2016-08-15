@@ -35,17 +35,34 @@
 #define stopOnConvergenceFailure false // Flag to stop problem if convergence fails
 
 //Elastic Parameters
-#define c11  170e3 // C11 (MPa)
-#define c12 124e3 // C12 (MPa)
-#define c44 75e3  // C44 (MPa)
+
+double elasticStiffness[6][6]={{170.0e3, 124.0e3, 124.0e3, 0, 0, 0},
+				   {124.0e3, 170.0e3, 124.0e3, 0, 0, 0},
+				   {124.0e3, 124.0e3, 170.0e3, 0, 0, 0},
+				   {0, 0, 0, 75.0e3, 0, 0},
+				   {0, 0, 0, 0, 75.0e3, 0}, 
+				   {0, 0, 0, 0, 0, 75.0e3}}; // 	Elastic Stiffness Matrix -Voigt Notation (MPa)
+
+
 
 //Crystal Plasticity parameters
 #define numSlipSystems 12 // generally 12 for FCC
 #define latentHardeningRatio 1.4  //q1
-#define powerLawExponent 2.25  //a
-#define initialSlipResistance 16.0 // CRSS s0(MPa)
-#define saturationStress 148.0 //s_s(MPa)
-#define initialHardeningModulus 180.0 //s_s(MPa) //h0(MPa)
+
+double initialSlipResistance[numSlipSystems]= {16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0};
+double initialHardeningModulus[numSlipSystems]= {180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0};
+double powerLawExponent[numSlipSystems]= {2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25};
+double saturationStress[numSlipSystems]= {148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0};
+
+
+// Crystal Plasticity Constitutive model parameters
+
+#define modelStressTolerance 1.0e-6 // Stress tolerance for the yield surface (MPa)
+#define modelMaxSlipSearchIterations 20 // Maximum no. of active slip search iterations
+#define modelMaxSolverIterations 10 // Maximum no. of iterations to achieve non-linear convergence
+#define modelMaxPlasticSlipL2Norm 0.8 // L2-Norm of plastic slip strain-used for load-step adaptivity
+#define adaptiveLoadStepFactor 0.5 // Load step factor
+
 
 //Read Input Microstructure
 unsigned int numPts[3]={20, 20, 22}; // No. of voxels in x,y and z directions

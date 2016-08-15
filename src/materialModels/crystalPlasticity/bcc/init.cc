@@ -16,9 +16,10 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
     unsigned int num_local_cells = this->triangulation.n_locally_owned_active_cells();
     F.reinit(dim, dim);
     
-    n_slip_systems=properties.n_slip_systems;
-    m_alpha.reinit(properties.n_slip_systems,dim);
-    n_alpha.reinit(properties.n_slip_systems,dim);
+    // Read in the slip systems
+    n_slip_systems=numSlipSystems;
+    m_alpha.reinit(n_slip_systems,dim);
+    n_alpha.reinit(n_slip_systems,dim);
     
     m_alpha.fill(properties.m_alpha);
     n_alpha.fill(properties.n_alpha);
@@ -28,23 +29,34 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
     q.reinit(n_slip_systems,n_slip_systems);
     for(unsigned int i=0;i<n_slip_systems;i++){
         for(unsigned int j=0;j<n_slip_systems;j++){
-            q[i][j] = properties.q1;
+            q[i][j] = latentHardeningRatio;
         }
     }
     
     for(unsigned int i=0;i<n_slip_systems;i++){
-        q[i][i] = properties.q2;
+        q[i][i] = 1.0;
     }
     
     //Elastic Stiffness Matrix Dmat
     Dmat.reinit(6,6); Dmat=0.0;
-    Dmat[0][0]=properties.C11; Dmat[0][1]=properties.C12; Dmat[0][2]=properties.C12; Dmat[1][0]=properties.C12; Dmat[1][1]=properties.C11; Dmat[1][2]=properties.C12; Dmat[2][0]=properties.C12; Dmat[2][1]=properties.C12; Dmat[2][2]=properties.C11;
-    Dmat[3][3]=2*properties.C44; Dmat[4][4]=2*properties.C44; Dmat[5][5]=2*properties.C44;
+    
+    for(unsigned int i=0;i<6;i++){
+        for(unsigned int j=0;j<6;j++){
+            Dmat[i][j] = elasticStiffness[i][j];
+        }
+    }
+    
+    
+    for(unsigned int i=0;i<6;i++){
+        for(unsigned int j=3;j<6;j++){
+            Dmat[i][j] = 2*Dmat[i][j];
+        }
+    }
     
     Vector<double> s0_init (n_slip_systems),rot_init(dim),rotnew_init(dim);
     
     for (unsigned int i=0;i<n_slip_systems;i++){
-        s0_init(i)=properties.s0;
+        s0_init(i)=initialSlipResistance[i];
     }
     
     for (unsigned int i=0;i<dim;i++){

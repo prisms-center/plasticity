@@ -41,7 +41,7 @@ void crystalPlasticity<dim>::odfpoint(FullMatrix <double> &OrientationMatrix,Vec
     for(unsigned int i=0;i<dim;i++){
         
         for(unsigned int j=0;j<dim;j++){
-            OrientationMatrix[i][j] = OrientationMatrix[i][j]*1.0/term2;
+            OrientationMatrix[i][j] = OrientationMatrix[i][j]*1.0/term2;	
         }
     }
     

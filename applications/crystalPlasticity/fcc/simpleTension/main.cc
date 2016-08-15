@@ -90,20 +90,6 @@ int main (int argc, char **argv)
 	exit(1);
       }
       
-      problem.properties.n_slip_systems=n_slip_systems;
-      //Latent Hardening Ratio
-      problem.properties.q1=latentHardeningRatio;
-      problem.properties.q2=1.0;
-      //Slip Hardening Parameters
-      problem.properties.a=powerLawExponent;
-      problem.properties.h0=initialHardeningModulus;
-      problem.properties.s_s=saturationStress;
-      //Initial slip deformation resistance
-      problem.properties.s0=initialSlipResistance;
-      //Elastic Parameters
-      problem.properties.C11=c11;
-      problem.properties.C12=c12;
-      problem.properties.C44=c44;
       problem.properties.m_alpha=m_alpha;
       problem.properties.n_alpha=n_alpha;
       
