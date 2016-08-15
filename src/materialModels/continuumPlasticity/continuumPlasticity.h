@@ -33,9 +33,10 @@ class continuumPlasticity : public ellipticBVP<dim>
    *Initialize and resize class data structures.
    */
   void init(unsigned int num_quad_points);
-  void mesh();
-  void markBoundaries();
-  void applyDirichletBCs();
+  void setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value);
+  //void mesh();
+  //void markBoundaries();
+  //void applyDirichletBCs();
   /**
    *Update the plastic variables. For a given element and quadrature point, 
    *this takes the proposed deformation gradient for the current iteration

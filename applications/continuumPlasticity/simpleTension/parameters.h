@@ -9,17 +9,34 @@
 /**
  *Exponential value used to define mesh refinement
  */
-#define meshRefineFactor 2
-/**
+
+/*Mesh parameters*/
+//Set the length of the domain in all three dimensions
+//Each axes spans from zero to the specified length
+#define spanX 5.0
+#define spanY 1.0
+#define spanZ 1.0
+// The number of elements in each direction is 2^(refineFactor) * subdivisions
+// For optimal performance, use meshRefineFactor primarily to determine the element size
+#define subdivisionsX 5
+#define subdivisionsY 1
+#define subdivisionsZ 1
+#define meshRefineFactor 2 // 2^n*2^n*2^n elements(3->8*8*8 =512 elements)
+#define writeMeshToEPS  true //Only written for serial runs and if number of elements < 10000
+
+/*Solution output parameters*/
+#define writeOutput true // flag to write output vtu and pvtu files
+#define outputDirectory "."
+#define skipOutputSteps 0
+#define output_alpha true
+#define output_tau_vm true
+
+/*
  *Total applied displacement
  */
 #define totalDisplacement 0.5
-/**
- *Flag to write output files
- */
-#define writeOutput true
-/**
- *Solve type for linear solves
+/*
+*Solve type for linear solves
  */
 #define linearSolverType PETScWrappers::SolverCG
 /**
