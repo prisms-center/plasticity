@@ -22,11 +22,6 @@ template <int dim>
 bool ellipticBVP<dim>::testConvergenceAfterIteration(){
   //default method resets solution to previously converged solution if resetIncrement flagis true
   if (resetIncrement){
-    char buffer1[100];
-    sprintf(buffer1,
-	    "solution norm: %12.6e, old solution norm: %12.6e\n",
-	    solution.l2_norm(), oldSolution.l2_norm());
-    pcout << buffer1;
     solution=oldSolution;
     solutionWithGhosts=oldSolution;
     

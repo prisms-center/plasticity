@@ -24,7 +24,7 @@ public:
      *crystalPlasticity class constructor.
      */
     crystalPlasticity();
-    void mesh();
+    //void mesh();
     /**
      *calculates the texture of the deformed polycrystal
      */

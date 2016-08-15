@@ -9,17 +9,26 @@
 template <int dim>
 void ellipticBVP<dim>::mesh(){
   //creating mesh
-  pcout << "generating problem mesh1\n";
-  GridGenerator::hyper_cube (triangulation);
+  pcout << "generating problem mesh\n";
+  //
+  std::vector<unsigned int> subdivisions;
+  subdivisions.push_back(subdivisionsX);
+  subdivisions.push_back(subdivisionsY);
+  subdivisions.push_back(subdivisionsZ);
+  GridGenerator::subdivided_hyper_rectangle (triangulation, subdivisions, Point<dim>(), Point<dim>(spanX,spanY,spanZ));
   triangulation.refine_global (meshRefineFactor);
 
   //Output image of the mesh in eps format
-  if ((triangulation.n_global_active_cells()<1000) and (Utilities::MPI::n_mpi_processes(mpi_communicator)==1)){
+#ifdef  writeMeshToEPS
+#if writeMeshToEPS==true
+  if ((triangulation.n_global_active_cells()<10000) and (Utilities::MPI::n_mpi_processes(mpi_communicator)==1)){
     std::ofstream out ("mesh.eps");
     GridOut grid_out;
     grid_out.write_eps (triangulation, out);
     pcout << "writing mesh image to mesh.eps" << std::endl;
   }
+#endif
+#endif
 }
 
 #endif

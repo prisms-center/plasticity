@@ -6,25 +6,13 @@
 
 using namespace std;
 
-
 //parameters
 #include "parameters.h"
 
 //FCC model header
 #include "../../../../src/materialModels/crystalPlasticity/fcc/model.h"
- 
-//overload mesh() method to generate the required polycrystal geometry
-template <int dim>
-void crystalPlasticity<dim>::mesh(){
-  //creating mesh
-  this->pcout << "generating problem mesh\n";
-  double spanX=1.0; //Span along x-axis
-  double spanY=1.0; //Span along y-axis
-  double spanZ=1.0; //Span along z-axis
-  GridGenerator::hyper_rectangle (this->triangulation, Point<dim>(), Point<dim>(spanX,spanY,spanZ));
-  this->triangulation.refine_global (meshRefineFactor);
-} 
 
+//Specify Dirichlet boundary conditions 
 template <int dim>
 void crystalPlasticity<dim>::setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value){
   //back boundary:   u_x=0
