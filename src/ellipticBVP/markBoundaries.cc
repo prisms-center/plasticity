@@ -8,8 +8,7 @@
 //methods to mark boundaries
 template <int dim>
 void ellipticBVP<dim>::markBoundaries(){
-  //default method does nothing, as by default all boundary faces are
-  //marked with flag 0
 }
+
 
 #endif

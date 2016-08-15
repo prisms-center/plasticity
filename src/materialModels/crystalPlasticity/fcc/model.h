@@ -68,8 +68,7 @@ public:
     crystalOrientationsIO<dim> orientations;
 private:
     void init(unsigned int num_quad_points);
-    void markBoundaries();
-    void applyDirichletBCs();
+    void setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value);
     /**
      * Updates the stress and tangent modulus at a given quadrature point in a element for
      * the given constitutive model. Takes the deformation gradient at the current nonlinear

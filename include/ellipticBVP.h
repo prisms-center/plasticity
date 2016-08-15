@@ -75,9 +75,11 @@ class ellipticBVP
   virtual void updateAfterIncrement();
   
   //methods to apply dirichlet BC's and initial conditions
-  virtual void markBoundaries();
-  virtual void applyDirichletBCs();
-  virtual void applyInitialConditions();
+  void applyDirichletBCs();
+  void applyInitialConditions();
+  virtual void setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value);
+  std::map<types::global_dof_index,double> boundary_values;
+  std::map<types::global_dof_index, Point<dim> > supportPoints;
   
   //parallel data structures
   vectorType solution, oldSolution, residual;
@@ -118,7 +120,7 @@ class ellipticBVP
 #include "../src/ellipticBVP/run.cc"
 #include "../src/ellipticBVP/mesh.cc"
 #include "../src/ellipticBVP/init.cc"
-#include "../src/ellipticBVP/markBoundaries.cc"
+//#include "../src/ellipticBVP/markBoundaries.cc"
 #include "../src/ellipticBVP/initialConditions.cc"
 #include "../src/ellipticBVP/boundaryConditions.cc"
 #include "../src/ellipticBVP/assemble.cc"

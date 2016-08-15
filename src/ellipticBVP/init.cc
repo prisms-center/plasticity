@@ -41,6 +41,9 @@ void ellipticBVP<dim>::init(){
   DoFTools::make_hanging_node_constraints (dofHandler_Scalar, constraintsMassMatrix);
   constraintsMassMatrix.close ();
 
+  //get support points (nodes) for this problem
+  DoFTools::map_dofs_to_support_points(MappingQ1<dim, dim>(), dofHandler, supportPoints);
+  
   //initialize global data structures
   solution.reinit (locally_owned_dofs, mpi_communicator); solution=0;
   oldSolution.reinit (locally_owned_dofs, mpi_communicator); oldSolution=0;
@@ -56,8 +59,6 @@ void ellipticBVP<dim>::init(){
 					      locally_relevant_dofs);
   jacobian.reinit (locally_owned_dofs, locally_owned_dofs, csp, mpi_communicator);
 
-  //mark boundaries
-  markBoundaries();
   //apply initial conditions
   applyInitialConditions();
   solutionWithGhosts=solution;
