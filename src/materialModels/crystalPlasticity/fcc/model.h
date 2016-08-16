@@ -9,7 +9,7 @@
 #include <fstream>
 
 typedef struct {
-    FullMatrix<double> m_alpha,n_alpha;
+    
 } materialProperties;
 
 //material model class for crystal plasticity
@@ -22,11 +22,7 @@ public:
      *crystalPlasticity class constructor.
      */
     crystalPlasticity();
-#ifdef readExternalMeshes
-#if readExternalMeshes==true
-    void mesh();
-#endif
-#endif
+    //void mesh();
     /**
      *calculates the texture of the deformed polycrystal
      */

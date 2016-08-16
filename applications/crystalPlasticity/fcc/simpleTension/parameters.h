@@ -54,13 +54,17 @@ double elasticStiffness[6][6]={{170.0e3, 124.0e3, 124.0e3, 0, 0, 0},
 #define numSlipSystems 12 // generally 12 for FCC
 #define latentHardeningRatio 1.4  //q1
 
-double initialSlipResistance[numSlipSystems]= {16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0};
-double initialHardeningModulus[numSlipSystems]= {180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0};
-double powerLawExponent[numSlipSystems]= {2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25};
-double saturationStress[numSlipSystems]= {148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0};
+double initialSlipResistance[numSlipSystems]= {16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0}; //CRSS of the slip sytems
+double initialHardeningModulus[numSlipSystems]= {180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0}; //Hardening moduli of systems
+double powerLawExponent[numSlipSystems]= {2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25}; // Power law coefficient 
+double saturationStress[numSlipSystems]= {148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0}; // Saturation stress
+
+//Slip systems files
+#define slipDirectionsFile "slipDirections.txt" // Slip Directions File
+#define slipNormalsFile "slipNormals.txt" // Slip Normals File
 
 
-// Crystal Plasticity Constitutive model parameters
+// Crystal Plasticity Constitutive model tolerances (for advanced users) 
 #define modelStressTolerance 1.0e-6 // Stress tolerance for the yield surface (MPa)
 #define modelMaxSlipSearchIterations 20 // Maximum no. of active slip search iterations
 #define modelMaxSolverIterations 10 // Maximum no. of iterations to achieve non-linear convergence
@@ -69,6 +73,9 @@ double saturationStress[numSlipSystems]= {148.0, 148.0, 148.0, 148.0, 148.0, 148
 
 //Read Input Microstructure
 unsigned int numPts[3]={20, 20, 22}; // No. of voxels in x,y and z directions
+#define grainIDFile "grainID.txt" // Grain ID File
+#define headerLinesGrainIDFile 5 // No. of header Lines
+#define grainOrientationsFile "orientations.txt" // Slip Normals File
 
 
 
