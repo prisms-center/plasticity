@@ -62,7 +62,25 @@ void ellipticBVP<dim>::output(){
     data_out_Scalar.add_data_vector (subdomain, "subdomain");
     data_out_Scalar.build_patches ();
   }
-  
+
+#ifdef readExternalMeshes
+#if readExternalMeshes==true
+  //add material id to output file
+  Vector<float> material (triangulation.n_active_cells());
+  unsigned int matID=0;
+  typename parallel::distributed::Triangulation<dim>::active_cell_iterator cell = triangulation.begin_active(), endc = triangulation.end();
+  for (; cell!=endc; ++cell) {
+     material(matID) = cell->material_id(); matID++;
+  }
+  data_out.add_data_vector (material, "meshGrain_ID");
+  data_out.build_patches ();
+  if (numPostProcessedFieldsWritten>0){
+    data_out_Scalar.add_data_vector (material, "meshGrain_ID");
+    data_out_Scalar.build_patches ();
+  }
+#endif
+#endif  
+
   //write to results file
   //Set output directory, if provided
 #ifdef outputDirectory

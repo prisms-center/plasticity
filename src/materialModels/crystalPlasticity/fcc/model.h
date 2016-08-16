@@ -22,7 +22,11 @@ public:
      *crystalPlasticity class constructor.
      */
     crystalPlasticity();
-    //void mesh();
+#ifdef readExternalMeshes
+#if readExternalMeshes==true
+    void mesh();
+#endif
+#endif
     /**
      *calculates the texture of the deformed polycrystal
      */
