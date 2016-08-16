@@ -62,7 +62,7 @@ double initialHardeningModulusTwin[numTwinSystems]= {50.0, 50.0, 50.0, 50.0, 50.
 double powerLawExponentTwin[numTwinSystems]= {1.1, 1.1, 1.1, 1.1, 1.1, 1.1};
 double saturationStressTwin[numTwinSystems]= {50.0, 50.0, 50.0, 50.0, 50.0, 50.0};
 
-#define twinThresholdFraction 0.25 //
+#define twinThresholdFraction 20000.0 //
 #define twinSaturationFactor 0.25 //
 #define twinShear 0.129 // characteristic twin shear
 
@@ -72,7 +72,7 @@ double saturationStressTwin[numTwinSystems]= {50.0, 50.0, 50.0, 50.0, 50.0, 50.0
 #define modelStressTolerance 1.0e-6 // Stress tolerance for the yield surface (MPa)
 #define modelMaxSlipSearchIterations 20 // Maximum no. of active slip search iterations
 #define modelMaxSolverIterations 10 // Maximum no. of iterations to achieve non-linear convergence
-#define modelMaxPlasticSlipL2Norm 0.8 // L2-Norm of plastic slip strain-used for load-step adaptivity
+#define modelMaxPlasticSlipL2Norm 10.0 // L2-Norm of plastic slip strain-used for load-step adaptivity
 #define adaptiveLoadStepFactor 0.5 // Load step factor
 
 

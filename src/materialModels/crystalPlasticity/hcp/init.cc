@@ -2,7 +2,7 @@
 template <int dim>
 void crystalPlasticity<dim>::init(unsigned int num_quad_points)
 {
-    this->pcout << "test1\n";
+    
     //call loadOrientations to load material orientations
     loadOrientations();
     
@@ -27,7 +27,7 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
     m_alpha.fill(properties.m_alpha);
     n_alpha.fill(properties.n_alpha);
     
-    this->pcout << "test2\n";
+    
     
     //q is a parameter in the hardening model
     q.reinit(n_slip_systems,n_slip_systems);
@@ -88,7 +88,7 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
         rot_init(i)=0.0;
         rotnew_init(i)=0.0;
     }
-    this->pcout << "test3\n";
+    
 
     //Resize the vectors of history variables
     Fp_conv.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,IdentityMatrix(dim)));
@@ -117,6 +117,6 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
     }
     N_qpts=num_quad_points;
     initCalled=true;
-    this->pcout << "test4\n";
+    
 
 }
