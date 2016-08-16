@@ -29,7 +29,7 @@ PRISMS-Plasticity
      -DDEAL_II_WITH_MPI=ON, -DDEAL_II_WITH_LAPACK=ON, -DDEAL_II_WITH_P4EST=ON, -DDEAL_II_WITH_PETSC=ON
 
      Download: http://www.dealii.org/download.html <br>
-     Installation instructions: http://www.dealii.org/8.2.1/readme.html <br>
+     Installation instructions: http://www.dealii.org/8.4.1/readme.html <br>
      Installation instructions for external packages (P4EST, PETSC): https://www.dealii.org/developer/external-libs/ <br>
 
   + Additional software: CMake [http://www.cmake.org/download/]
