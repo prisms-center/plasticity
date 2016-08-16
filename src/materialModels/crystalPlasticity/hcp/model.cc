@@ -16,7 +16,7 @@ P(dim,dim)
     ellipticBVP<dim>::postprocessed_solution_names.push_back("Eqv_strain");
     ellipticBVP<dim>::postprocessed_solution_names.push_back("Eqv_stress");
     ellipticBVP<dim>::postprocessed_solution_names.push_back("Grain_ID");
-    ellipticBVP<dim>::postprocessed_solution_names.push_back("twin");
+    ellipticBVP<dim>::postprocessed_solution_names.push_back("Twin");
     
     
 }
@@ -218,7 +218,7 @@ void crystalPlasticity<dim>::updateAfterIncrement()
                 temp.push_back(rotnew[cellID][q][2]);
                 temp.push_back(fe_values.JxW(q));
                 temp.push_back(quadratureOrientationsMap[cellID][q]);
-                temp.push_back(slipfraction_conv[cellID][q][0]);
+                /*temp.push_back(slipfraction_conv[cellID][q][0]);
                 temp.push_back(slipfraction_conv[cellID][q][1]);
                 temp.push_back(slipfraction_conv[cellID][q][2]);
                 temp.push_back(slipfraction_conv[cellID][q][3]);
@@ -231,7 +231,7 @@ void crystalPlasticity<dim>::updateAfterIncrement()
                 temp.push_back(twinfraction_conv[cellID][q][3]);
                 temp.push_back(twinfraction_conv[cellID][q][4]);
                 temp.push_back(twinfraction_conv[cellID][q][5]);
-                temp.push_back(twin[cellID][q]);
+                temp.push_back(twin[cellID][q]);*/
                 orientations.addToOutputOrientations(temp);
                 local_F_e=local_F_e+twin[cellID][q]*fe_values.JxW(q);
                 for(unsigned int i=0;i<6;i++){
@@ -268,17 +268,34 @@ void crystalPlasticity<dim>::updateAfterIncrement()
     
     
     
-    ofstream outputFile;
-    
-    if(this->currentIncrement==0){
-        outputFile.open("stressstrain.txt");
-        outputFile.close();
-    }
-    outputFile.open("stressstrain.txt",ios::app);
-    if(Utilities::MPI::this_mpi_process(this->mpi_communicator)==0){
-        outputFile << global_strain[0][0]<<'\t'<<global_strain[1][1]<<'\t'<<global_strain[2][2]<<'\t'<<global_strain[1][2]<<'\t'<<global_strain[0][2]<<'\t'<<global_strain[0][1]<<'\t'<<global_stress[0][0]<<'\t'<<global_stress[1][1]<<'\t'<<global_stress[2][2]<<'\t'<<global_stress[1][2]<<'\t'<<global_stress[0][2]<<'\t'<<global_stress[0][1]<<'\n';
-    }
-    outputFile.close();
+
+     //check whether to write stress and strain data to file
+#ifdef writeOutput
+  if (!writeOutput) return;
+#endif
+     //write stress and strain data to file
+#ifdef output
+ectory
+     std::string dir(outputDirectory);
+     dir+="/";
+#else
+     std::string dir("./");
+#endif
+     ofstream outputFile;
+     if(this->currentIncrement==0){
+       dir += std::string("stressstrain.txt");
+       outputFile.open(dir.c_str());
+       outputFile << "Exx"<<'\t'<<"Eyy"<<'\t'<<"Ezz"<<'\t'<<"Eyz"<<'\t'<<"Exz"<<'\t'<<"Exy"<<'\t'<<"Txx"<<'\t'<<"Tyy"<<'\t'<<"Tzz"<<'\t'<<"Tyz"<<'\t'<<"Txz"<<'\t'<<"Txy"<<'\n';
+	 outputFile.close();
+     }
+     else{
+     dir += std::string("stressstrain.txt");
+     }
+     outputFile.open(dir.c_str(),ios::app);
+     if(Utilities::MPI::this_mpi_process(this->mpi_communicator)==0){
+       outputFile << global_strain[0][0]<<'\t'<<global_strain[1][1]<<'\t'<<global_strain[2][2]<<'\t'<<global_strain[1][2]<<'\t'<<global_strain[0][2]<<'\t'<<global_strain[0][1]<<'\t'<<global_stress[0][0]<<'\t'<<global_stress[1][1]<<'\t'<<global_stress[2][2]<<'\t'<<global_stress[1][2]<<'\t'<<global_stress[0][2]<<'\t'<<global_stress[0][1]<<'\n';
+     }
+     outputFile.close();
     global_strain=0.0;
     global_stress=0.0;
     

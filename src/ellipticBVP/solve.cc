@@ -47,6 +47,8 @@ void ellipticBVP<dim>::solve(){
 
       //increase loadFactorSetByModel, if succesiveIncForIncreasingTimeStep satisfied.
       successiveIncs++;
+#ifdef enableAdaptiveTimeStepping
+#if enableAdaptiveTimeStepping==true
 #ifdef succesiveIncForIncreasingTimeStep 
       if (successiveIncs>=succesiveIncForIncreasingTimeStep){
 #ifdef adaptiveLoadIncreaseFactor
@@ -59,7 +61,8 @@ void ellipticBVP<dim>::solve(){
 	pcout << buffer1;
       }
 #endif
-      
+#endif
+#endif 
       //output results to file
       computing_timer.enter_section("postprocess");
 #ifndef skipOutputSteps

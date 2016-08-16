@@ -28,12 +28,16 @@ void crystalPlasticity<dim>::inactive_slip_removal(Vector<double> &active, Vecto
     
     //Check for model tolerance and activate adaptive time-stepping, if required
     if(x_beta1.l2_norm()> modelMaxPlasticSlipL2Norm){
+#ifdef enableAdaptiveTimeStepping
+#if enableAdaptiveTimeStepping==true
         char buffer[200];
         sprintf (buffer, "processor %u: time-step is very large. Consider reducing the time-step. current model norm: %12.6e, tolerance: %12.6e\n", this->triangulation.locally_owned_subdomain(), x_beta1.l2_norm(), modelMaxPlasticSlipL2Norm);
         std::cout <<buffer;
         this->loadFactorSetByModel*=adaptiveLoadStepFactor;
         this->resetIncrement=true;
         throw 0;
+#endif
+#endif
     }
     
     x_beta2=x_beta1; x_beta1.reinit(n_slip_systems);

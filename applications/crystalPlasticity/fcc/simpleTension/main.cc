@@ -20,7 +20,7 @@ void crystalPlasticity<dim>::setBoundaryValues(const Point<dim>& node, const uns
   }
   //front boundary:  u_x=0.001
   if (node[0] == spanX){
-    if (dof==0) {flag=true; value=0.001;}
+    if (dof==0) {flag=true; value=0.0001;}
   }
   //left boundary:   u_y=0
   if (node[1] == 0.0){

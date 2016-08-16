@@ -1,6 +1,6 @@
 //implementation of the crystal plasticity material model for BCC crystal structure
-#ifndef MODEL_FCC_H
-#define MODEL_FCC_H
+#ifndef MODEL_BCC_H
+#define MODEL_BCC_H
 
 //dealii headers
 #include "../../../../include/ellipticBVP.h"
@@ -9,7 +9,7 @@
 #include <fstream>
 
 typedef struct {
-    FullMatrix<double> m_alpha,n_alpha;
+    
 } materialProperties;
 
 //material model class for crystal plasticity
@@ -22,7 +22,7 @@ public:
      *crystalPlasticity class constructor.
      */
     crystalPlasticity();
-    void mesh();
+    //void mesh();
     /**
      *calculates the texture of the deformed polycrystal
      */
@@ -66,8 +66,7 @@ public:
     crystalOrientationsIO<dim> orientations;
 private:
     void init(unsigned int num_quad_points);
-    void markBoundaries();
-    void applyDirichletBCs();
+    void setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value);
     /**
      * Updates the stress and tangent modulus at a given quadrature point in a element for
      * the given constitutive model. Takes the deformation gradient at the current nonlinear

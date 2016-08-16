@@ -26,7 +26,15 @@ void crystalPlasticity<dim>::loadOrientations(){
                 pnt[1]=fe_values.get_quadrature_points()[q][1];
                 pnt[2]=fe_values.get_quadrature_points()[q][2];
                 //get orientation ID and store it in quadratureOrientationsMap
+#ifdef readExternalMeshes
+#if readExternalMeshes==true
+                unsigned int gID=cell->material_id();
+#else
                 unsigned int gID=orientations.getMaterialID(pnt3);
+#endif
+#else
+                unsigned int gID=orientations.getMaterialID(pnt3);
+#endif
                 //gID=(gID%10)*10+gID/10;
                 //pcout << gid << " ";
                 quadratureOrientationsMap.back()[q]=gID;

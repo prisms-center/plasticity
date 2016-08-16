@@ -25,7 +25,7 @@ void crystalPlasticity<dim>::inactive_slip_removal(Vector<double> &active, Vecto
     temp7.compute_inverse_svd(0.0);
     Vector<double> tempv3;
     temp7.vmult(x_beta1,b_PA);
-
+    
     //Check for model tolerance and activate adaptive time-stepping, if required
     if(x_beta1.l2_norm()> modelMaxPlasticSlipL2Norm){
 #ifdef enableAdaptiveTimeStepping

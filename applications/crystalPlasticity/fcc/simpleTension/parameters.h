@@ -26,18 +26,18 @@
 
 /*Solver parameters*/
 #define linearSolverType PETScWrappers::SolverCG // Type of linear solver
-#define totalNumIncrements 1 // No. of increments
+#define totalNumIncrements 100 // No. of increments
 #define maxLinearSolverIterations 50000 // Maximum iterations for linear solver
 #define relLinearSolverTolerance  1.0e-10 // Relative linear solver tolerance
-#define maxNonLinearIterations 5 // Maximum no. of non-linear iterations
+#define maxNonLinearIterations 4 // Maximum no. of non-linear iterations
 #define absNonLinearTolerance 1.0e-18 // Non-linear solver tolerance
-#define relNonLinearTolerance 1.0e-6 // Relative non-linear solver tolerance
+#define relNonLinearTolerance 1.0e-3 // Relative non-linear solver tolerance
 #define stopOnConvergenceFailure false // Flag to stop problem if convergence fails
 
 /*Adaptive time-stepping parameters*/
-#define enableAdaptiveTimeStepping true
-#define adaptiveLoadStepFactor 0.5
-#define adaptiveLoadIncreaseFactor 1.25
+#define enableAdaptiveTimeStepping false //Flag to enable adaptive time steps
+#define adaptiveLoadStepFactor 0.5 // Load step factor
+#define adaptiveLoadIncreaseFactor 1.25 
 #define succesiveIncForIncreasingTimeStep 10
 
 //Elastic Parameters
@@ -55,7 +55,7 @@ double elasticStiffness[6][6]={{170.0e3, 124.0e3, 124.0e3, 0, 0, 0},
 #define latentHardeningRatio 1.4  //q1
 
 double initialSlipResistance[numSlipSystems]= {16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0}; //CRSS of the slip sytems
-double initialHardeningModulus[numSlipSystems]= {180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0}; //Hardening moduli of systems
+double initialHardeningModulus[numSlipSystems]= {180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0}; //Hardening moduli of slip systems
 double powerLawExponent[numSlipSystems]= {2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25}; // Power law coefficient 
 double saturationStress[numSlipSystems]= {148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0}; // Saturation stress
 

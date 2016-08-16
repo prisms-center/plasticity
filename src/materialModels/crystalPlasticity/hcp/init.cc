@@ -21,13 +21,97 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
     n_slip_systems=numSlipSystems;
     n_slip_systems+=numTwinSystems;
     n_twin_systems=numTwinSystems;
-    m_alpha.reinit(n_slip_systems,dim);
-    n_alpha.reinit(n_slip_systems,dim);
-    
-    m_alpha.fill(properties.m_alpha);
-    n_alpha.fill(properties.n_alpha);
-    
-    
+   
+    n_alpha.reinit(n_slip_systems,3);
+      m_alpha.reinit(n_slip_systems,3);
+      string line;
+      
+      //open data file to read slip normals
+      ifstream slipNormalsDataFile(slipDirectionsFile);
+      //read data
+      unsigned int id=0;
+      if (slipNormalsDataFile.is_open()){
+	//cout << "reading slip Normals file\n";
+	//read data
+	while (getline (slipNormalsDataFile,line) && id<numSlipSystems){
+	  stringstream ss(line);
+	  ss >> n_alpha[id][0];
+	  ss >> n_alpha[id][1];
+	  ss >> n_alpha[id][2];
+	  //cout<<id<<'\t'<<n_alpha[id][0]<<'\t'<<n_alpha[id][1]<<'\t'<<n_alpha[id][2]<<'\n';
+	  id=id+1;
+	}
+      }
+      else{
+	cout << "Unable to open slipNormals.txt \n";
+	exit(1);
+      }
+      
+      //open data file to read slip directions
+      ifstream slipDirectionsDataFile(slipNormalsFile);
+      //read data
+      id=0;
+      if (slipDirectionsDataFile.is_open()){
+	//cout << "reading slip Directions file\n";
+	//read data
+	while (getline (slipDirectionsDataFile,line)&& id<numSlipSystems){
+	  stringstream ss(line);
+	  ss >> m_alpha[id][0];
+	  ss >> m_alpha[id][1];
+	  ss >> m_alpha[id][2];
+	  //cout<<id<<'\t'<<m_alpha[id][0]<<'\t'<<m_alpha[id][1]<<'\t'<<m_alpha[id][2]<<'\n';
+	  id=id+1;
+	}
+      }
+      else{
+	cout << "Unable to open slipDirections.txt \n";
+	exit(1);
+      }
+
+
+	//open data file to read twin normals
+      ifstream twinNormalsDataFile(twinDirectionsFile);
+      //read data
+      id=numSlipSystems;
+      if (twinNormalsDataFile.is_open()){
+	cout << "reading slip Normals file\n";
+	//read data
+	while (getline (twinNormalsDataFile,line) && id<n_slip_systems){
+	  stringstream ss(line);
+	  ss >> n_alpha[id][0];
+	  ss >> n_alpha[id][1];
+	  ss >> n_alpha[id][2];
+	  //cout<<id<<'\t'<<n_alpha[id][0]<<'\t'<<n_alpha[id][1]<<'\t'<<n_alpha[id][2]<<'\n';
+	  id=id+1;
+	}
+      }
+      else{
+	cout << "Unable to open slipNormals.txt \n";
+	exit(1);
+      }
+      
+      //open data file to read twin directions
+      ifstream twinDirectionsDataFile(twinNormalsFile);
+      //read data
+      id=numSlipSystems;
+      if (twinDirectionsDataFile.is_open()){
+	cout << "reading slip Directions file\n";
+	//read data
+	while (getline (twinDirectionsDataFile,line)&& id<n_slip_systems){
+	  stringstream ss(line);
+	  ss >> m_alpha[id][0];
+	  ss >> m_alpha[id][1];
+	  ss >> m_alpha[id][2];
+	  //cout<<id<<'\t'<<m_alpha[id][0]<<'\t'<<m_alpha[id][1]<<'\t'<<m_alpha[id][2]<<'\n';
+	  id=id+1;
+	}
+      }
+      else{
+	cout << "Unable to open slipDirections.txt \n";
+	exit(1);
+      }
+      
+        
     
     //q is a parameter in the hardening model
     q.reinit(n_slip_systems,n_slip_systems);
