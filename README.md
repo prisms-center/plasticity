@@ -6,9 +6,9 @@ PRISMS-Plasticity
 
 <B>Code repository:</B> https://github.com/prisms-center/plasticity
 
-<B>What is PRISMS Plasticity?</B>
+<B>What is PRISMS-Plasticity?</B>
 
-  PRISMS Plasticity is a Finite Element Method (FEM) code for solving boundary value 
+  PRISMS-Plasticity is a Finite Element Method (FEM) code for solving boundary value 
   problems arising in <B>Continuum Plasticity</B> and <B>Crystal Plasticity</B>. 
   It is build on top of the deal.II open source finite element 
   library [http://www.dealii.org]
