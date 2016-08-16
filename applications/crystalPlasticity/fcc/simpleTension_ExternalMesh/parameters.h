@@ -15,6 +15,7 @@
 #define subdivisionsZ 1
 #define meshRefineFactor 3 // 2^n*2^n*2^n elements(3->8*8*8 =512 elements)
 #define writeMeshToEPS  true //Only written for serial runs and if number of elements < 10000
+#define readExternalMeshes true 
 
 /*Solution output parameters*/
 #define writeOutput true // flag to write output vtu and pvtu files

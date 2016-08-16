@@ -1,0 +1,121 @@
+{\bfseries Code repository\-:} \href{https://github.com/prisms-center/plasticity}{\tt https\-://github.\-com/prisms-\/center/plasticity} \par
+ {\bfseries Code documentation\-:} \href{https://goo.gl/B6lVpZ}{\tt https\-://goo.\-gl/\-B6l\-Vp\-Z} \par
+ {\bfseries User registration link\-:} \href{https://goo.gl/forms/dkAdtoHzd1qsKJ673}{\tt https\-://goo.\-gl/forms/dk\-Adto\-Hzd1qs\-K\-J673} \par
+
+
+{\bfseries What is P\-R\-I\-S\-M\-S-\/\-Plasticity?}
+
+P\-R\-I\-S\-M\-S-\/\-Plasticity is a Finite Element Method (F\-E\-M) code for solving boundary value problems arising in {\bfseries Continuum Plasticity} and {\bfseries Crystal Plasticity}. It is build on top of the deal.\-I\-I open source finite element library \mbox{[}\href{http://www.dealii.org}{\tt http\-://www.\-dealii.\-org}\mbox{]}
+
+This code is developed by the P\-Redictive Integrated Structural Materials Science (P\-R\-I\-S\-M\-S) Center \mbox{[}\href{http://www.prisms-center.org/}{\tt http\-://www.\-prisms-\/center.\-org/}\mbox{]} at University of Michigan which is supported by the U.\-S. Department of Energy (D\-O\-E), Office of Basic Energy Sciences, Division of Materials Sciences and Engineering under Award \#\-D\-E-\/\-S\-C0008637
+
+{\bfseries Installation\-:}
+
+1) Install deal.\-I\-I (version 8.\-4.\-1 recommended)\par
+
+\begin{DoxyItemize}
+\item Download Binaries (O\-S\-X and Linux) or Virtual Machine (V\-M\-I) from \href{https://www.dealii.org/download.html}{\tt https\-://www.\-dealii.\-org/download.\-html} \par
+ (O\-R) \par
+
+\item Configure, compile and install the deal.\-I\-I library with the following configuration flags. Dependencies are M\-P\-I, p4est, P\-E\-T\-Sc libraries.\par
+ -\/\-D\-D\-E\-A\-L\-\_\-\-I\-I\-\_\-\-W\-I\-T\-H\-\_\-\-M\-P\-I=O\-N, -\/\-D\-D\-E\-A\-L\-\_\-\-I\-I\-\_\-\-W\-I\-T\-H\-\_\-\-L\-A\-P\-A\-C\-K=O\-N, -\/\-D\-D\-E\-A\-L\-\_\-\-I\-I\-\_\-\-W\-I\-T\-H\-\_\-\-P4\-E\-S\-T=O\-N, -\/\-D\-D\-E\-A\-L\-\_\-\-I\-I\-\_\-\-W\-I\-T\-H\-\_\-\-P\-E\-T\-S\-C=O\-N
+
+Download\-: \href{http://www.dealii.org/download.html}{\tt http\-://www.\-dealii.\-org/download.\-html} \par
+ Installation instructions\-: \href{http://www.dealii.org/8.4.1/readme.html}{\tt http\-://www.\-dealii.\-org/8.\-4.\-1/readme.\-html} \par
+ Installation instructions for external packages (P4\-E\-S\-T, P\-E\-T\-S\-C)\-: \href{https://www.dealii.org/developer/external-libs/}{\tt https\-://www.\-dealii.\-org/developer/external-\/libs/} \par
+
+\item Additional software\-: C\-Make \mbox{[}\href{http://www.cmake.org/download/}{\tt http\-://www.\-cmake.\-org/download/}\mbox{]}
+\end{DoxyItemize}
+
+2) Clone the P\-R\-I\-S\-M\-S Plasticity Git\-Hub repo \href{https://github.com/prisms-center/plasticity}{\tt https\-://github.\-com/prisms-\/center/plasticity}\par
+
+\begin{DoxyItemize}
+\item \$ git clone \href{mailto:git@github.com}{\tt git@github.\-com}\-:prisms-\/center/plasticity.\-git \par
+ (O\-R) \par
+
+\item \$ git clone \href{https://github.com/prisms-center/plasticity.git}{\tt https\-://github.\-com/prisms-\/center/plasticity.\-git} \par
+ and \par
+
+\item \$ cd plasticity \par
+
+\item \$ git checkout master \par
+
+\end{DoxyItemize}
+
+{\bfseries Usage\-:}
+
+Running plasticity applications, for example simple tension boundary value problem with continuum plasticity material model\-:\par
+
+\begin{DoxyItemize}
+\item \$ cd applications/continuum\-Plasticity/simple\-Tension \par
+ For debug mode \mbox{[}default mode, very slow\mbox{]}\-: \par
+
+\item \$ cmake C\-Make\-Lists.\-txt -\/\-D\-C\-M\-A\-K\-E\-\_\-\-B\-U\-I\-L\-D\-\_\-\-T\-Y\-P\-E=Debug \par
+ For optimized mode\-:\par
+
+\item \$ cmake C\-Make\-Lists.\-txt -\/\-D\-C\-M\-A\-K\-E\-\_\-\-B\-U\-I\-L\-D\-\_\-\-T\-Y\-P\-E=Release \par
+ and \par
+
+\item \$ make \par
+\par
+ Execution (serial runs)\-: \par
+
+\item \$ make run \par
+ Execution (parallel runs)\-: \par
+
+\item \$ mpirun -\/np nprocs ./main \par
+ \mbox{[}here nprocs denotes the number of processors\mbox{]}
+\end{DoxyItemize}
+
+Updates\-: Since plasticity code is still under active development, regular code and documentation updates are pushed to the upstream repo (\href{https://github.com/prisms-center/plasticity}{\tt https\-://github.\-com/prisms-\/center/plasticity}) and we strongly recommend users to synchronize their respective clones/forks at regular intervals or when requested by the developers through the announcements on the mailing list.
+
+{\bfseries Visualization}
+
+Output of the primal fields and postprocessed fields is in standard vtk format (parallel\-:$\ast$.pvtu, serial\-:$\ast$.vtu files) which can be visualized with the following open source applications\-:
+\begin{DoxyEnumerate}
+\item Vis\-It (\href{https://wci.llnl.gov/simulation/computer-codes/visit/downloads}{\tt https\-://wci.\-llnl.\-gov/simulation/computer-\/codes/visit/downloads})
+\item Paraview (\href{http://www.paraview.org/download/}{\tt http\-://www.\-paraview.\-org/download/})
+\end{DoxyEnumerate}
+
+{\bfseries Getting started\-:}
+
+Examples of various boundary value problems are located under the applications/ folder. Easiest way to get started on the code is to run the applications.
+
+Applications are intended to serve as (1) Demonstration of the capabilities of this library, (2) Provide a framework for further development of specialized/advanced applications by users.
+
+Application or code under development/testing is preceded by an underscore.
+
+List of folders\-:
+\begin{DoxyItemize}
+\item src/\-: material models (continuum plasticity and crystal plasticity), elliptic\-B\-V\-P (base class for parallel implementation of elliptic boundary value problems), enrichment models (enhanced strain), utility (static condensation class, crystal orientations and grain information I\-O)
+\item applications/\-: continuum plasticity and crystal plasticity
+\item utils/\-: Integration\-Tools (developed by the P\-R\-I\-S\-M\-S center and available at \href{https://github.com/prisms-center/IntegrationTools}{\tt https\-://github.\-com/prisms-\/center/\-Integration\-Tools}) and json headers
+\item docs/\-: Formulations, example documents, etc in P\-D\-F format
+\item html/\-: H\-T\-M\-L documentation generated by doxygen
+\end{DoxyItemize}
+
+{\bfseries Documentation\-:}
+
+Detailed mathematical formulations, example simulations, code documentation, etc, provided\-:
+\begin{DoxyItemize}
+\item Open html/index.\-html in any web browser \par
+ (O\-R)\par
+
+\item \href{https://htmlpreview.github.io/?https://raw.githubusercontent.com/prisms-center/plasticity/master/html/index.html}{\tt https\-://htmlpreview.\-github.\-io/?https\-://raw.\-githubusercontent.\-com/prisms-\/center/plasticity/master/html/index.\-html}
+\end{DoxyItemize}
+
+{\bfseries License\-:}
+
+G\-N\-U Lesser General Public License (L\-G\-P\-L). Please see the file L\-I\-C\-E\-N\-S\-E for details.
+
+{\bfseries Mailing List\-:}
+
+
+\begin{DoxyItemize}
+\item \href{mailto:prismsplasticity.users@umich.edu}{\tt prismsplasticity.\-users@umich.\-edu}
+\item \href{mailto:prismsplasticity.dev@umich.edu}{\tt prismsplasticity.\-dev@umich.\-edu}
+\end{DoxyItemize}
+
+{\bfseries Further information, questions, issues and bugs\-:}
+
+Contact the developers at \href{mailto:prismsplasticity.dev@umich.edu}{\tt prismsplasticity.\-dev@umich.\-edu} 
