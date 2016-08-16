@@ -1,8 +1,12 @@
-<B>Code repository:</B> https://github.com/prisms-center/plasticity
+PRISMS-Plasticity
+=================
+<B>Code repository:</B> https://github.com/prisms-center/plasticity <br>
+<B>Code documentation:</B> https://goo.gl/B6lVpZ <br>
+<B>User registration link:</B> https://goo.gl/forms/dkAdtoHzd1qsKJ673 <br>
 
-<B>What is PRISMS Plasticity?</B>
+<B>What is PRISMS-Plasticity?</B>
 
-  It is a Finite Element Method (FEM) code for solving boundary value 
+  PRISMS-Plasticity is a Finite Element Method (FEM) code for solving boundary value 
   problems arising in <B>Continuum Plasticity</B> and <B>Crystal Plasticity</B>. 
   It is build on top of the deal.II open source finite element 
   library [http://www.dealii.org]
@@ -15,7 +19,7 @@
 
 <B>Installation:</B>
 
-  1) Install deal.II (version 8.2.1 currently supported)<br>
+  1) Install deal.II (version 8.4.1 recommended)<br>
   + Download Binaries (OSX and Linux) or  Virtual Machine (VMI) from https://www.dealii.org/download.html <br>
   (OR) <br>
   + Configure, compile and install the deal.II library with the
@@ -23,7 +27,7 @@
      -DDEAL_II_WITH_MPI=ON, -DDEAL_II_WITH_LAPACK=ON, -DDEAL_II_WITH_P4EST=ON, -DDEAL_II_WITH_PETSC=ON
 
      Download: http://www.dealii.org/download.html <br>
-     Installation instructions: http://www.dealii.org/8.2.1/readme.html <br>
+     Installation instructions: http://www.dealii.org/8.4.1/readme.html <br>
      Installation instructions for external packages (P4EST, PETSC): https://www.dealii.org/developer/external-libs/ <br>
 
   + Additional software: CMake [http://www.cmake.org/download/]
