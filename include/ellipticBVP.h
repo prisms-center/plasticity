@@ -9,6 +9,7 @@
 //dealii headers
 #include "dealIIheaders.h"
 
+//compiler directives to handle warnings
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wextra"
 #pragma GCC diagnostic pop
@@ -95,6 +96,7 @@ class ellipticBVP
   unsigned int totalIncrements;
   bool resetIncrement;
   double loadFactorSetByModel;
+  double totalLoadFactor;
   
   //parallel message stream
   ConditionalOStream  pcout;  

@@ -26,7 +26,7 @@
 
 /*Solver parameters*/
 #define linearSolverType PETScWrappers::SolverCG // Type of linear solver
-#define totalNumIncrements 100 // No. of increments
+#define totalNumIncrements 1 // No. of increments
 #define maxLinearSolverIterations 50000 // Maximum iterations for linear solver
 #define relLinearSolverTolerance  1.0e-10 // Relative linear solver tolerance
 #define maxNonLinearIterations 5 // Maximum no. of non-linear iterations
@@ -34,8 +34,13 @@
 #define relNonLinearTolerance 1.0e-6 // Relative non-linear solver tolerance
 #define stopOnConvergenceFailure false // Flag to stop problem if convergence fails
 
-//Elastic Parameters
+/*Adaptive time-stepping parameters*/
+#define enableAdaptiveTimeStepping true
+#define adaptiveLoadStepFactor 0.5
+#define adaptiveLoadIncreaseFactor 1.25
+#define succesiveIncForIncreasingTimeStep 10
 
+//Elastic Parameters
 double elasticStiffness[6][6]={{170.0e3, 124.0e3, 124.0e3, 0, 0, 0},
 				   {124.0e3, 170.0e3, 124.0e3, 0, 0, 0},
 				   {124.0e3, 124.0e3, 170.0e3, 0, 0, 0},
@@ -56,12 +61,10 @@ double saturationStress[numSlipSystems]= {148.0, 148.0, 148.0, 148.0, 148.0, 148
 
 
 // Crystal Plasticity Constitutive model parameters
-
 #define modelStressTolerance 1.0e-6 // Stress tolerance for the yield surface (MPa)
 #define modelMaxSlipSearchIterations 20 // Maximum no. of active slip search iterations
 #define modelMaxSolverIterations 10 // Maximum no. of iterations to achieve non-linear convergence
 #define modelMaxPlasticSlipL2Norm 0.8 // L2-Norm of plastic slip strain-used for load-step adaptivity
-#define adaptiveLoadStepFactor 0.5 // Load step factor
 
 
 //Read Input Microstructure

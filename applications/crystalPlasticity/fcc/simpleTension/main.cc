@@ -4,7 +4,7 @@
 #include <sstream>
 #include <iostream>
 using namespace std;
-
+ 
 //parameters
 #include "parameters.h"
 

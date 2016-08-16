@@ -35,6 +35,7 @@
 *orientationsOutput*
 *.nfs*
 *.DS_Store
+stressstrain.txt
 
 #CMAKE files
 *.cmake
