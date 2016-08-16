@@ -4,7 +4,7 @@
 */
 /** \page page2 Crystal Plasticity Examples
 * <a href="example_fcc_simpleTension.pdf" target="_blank"><b>FCC: Simple Tension problem</b></a> <br>
-* <a href="example_fcc_simpleTension_externalmesh.pdf" target="_blank"><b>FCC: Simple Tension problem with externral mesh</b></a> <br>
+* <a href="example_fcc_simpleTension_externalmesh.pdf" target="_blank"><b>FCC: Simple Tension problem with external mesh</b></a> <br>
 * <a href="example_bcc_simpleTension.pdf" target="_blank"><b>BCC: Simple Tension problem</b></a> <br>
 * <a href="example_hcp_simpleTension.pdf" target="_blank"><b>HCP: Simple Tension problem</b></a> <br>
 */ 
