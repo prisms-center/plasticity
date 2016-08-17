@@ -65,12 +65,23 @@ class ellipticBVP
   //virtual methods to be implemented in derived class
   //method to calculate elemental Jacobian and Residual,
   //which should be implemented in the derived material model class
+#ifdef enableUserModel
+  virtual void getQuadratureValues(unsigned int elementID,
+				   unsigned int numElemDofs,
+				   unsigned int* componentIndices,
+				   double* shapeValues,
+				   double* shapeGrads,
+				   double* F,
+				   double* residual,
+				   double* jacobian,
+				   double* history) = 0; 
+#else
   virtual void getElementalValues(FEValues<dim>& fe_values,
 				  unsigned int dofs_per_cell,
 				  unsigned int num_quad_points,
 				  FullMatrix<double>& elementalJacobian,
 				  Vector<double>&     elementalResidual) = 0;
-  
+#endif  
   //methods to allow for pre/post iteration updates
   virtual void updateBeforeIteration();
   virtual void updateAfterIteration();
@@ -117,6 +128,13 @@ class ellipticBVP
   std::vector<vectorType*> postFields, postFieldsWithGhosts, postResidual;
   matrixType massMatrix;
   Table<4,double> postprocessValues;
+
+  //user model related variables and methods
+#ifdef enableUserModel
+  unsigned int numQuadHistoryVariables;
+  Table<3, double> quadHistory; 
+  virtual void initQuadHistory();
+#endif
 };
 
 //other ellipticBVP headers 
@@ -137,5 +155,6 @@ class ellipticBVP
 #include "../src/ellipticBVP/incrementUpdates.cc"
 #include "../src/ellipticBVP/output.cc"
 #include "../src/ellipticBVP/project.cc"
+#include "../src/ellipticBVP/userModelMethods.cc"
 
 #endif

@@ -14,6 +14,10 @@ void ellipticBVP<dim>::run(){
   //initialize FE objects and global data structures
   init();
   initProject();
+  //user model related variables and methods
+#ifdef enableUserModel
+  initQuadHistory();
+#endif
 
   computing_timer.exit_section("mesh and initialization");
 
