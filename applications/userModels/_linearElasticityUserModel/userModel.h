@@ -4,7 +4,7 @@
 
 //headers
 #include <deal.II/base/table.h>
-#include "../../include/ellipticBVP.h"
+#include "../../../include/ellipticBVP.h"
 
 //Saint Venant–Kirchhoff elastic material model as a user model
 //Derives from ellipticBVP base abstract class
