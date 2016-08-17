@@ -6,5 +6,5 @@ var searchData=
   ['microvol',['microvol',['../classcrystal_plasticity.html#a458b9fe34af9355b3b7b9ca205b17f38',1,'crystalPlasticity']]],
   ['mlocal',['Mlocal',['../classenhanced_strain.html#ab4562a8b9e94a911572663cac2bf5371',1,'enhancedStrain']]],
   ['mpi_5fcommunicator',['mpi_communicator',['../classelliptic_b_v_p.html#a03728ed636ca889ae407c84d181bc611',1,'ellipticBVP']]],
-  ['mu',['mu',['../structmaterial_properties.html#a74577585cf12d1712ab9c57616d49205',1,'materialProperties']]]
+  ['mu',['mu',['../structmaterial_properties.html#a74577585cf12d1712ab9c57616d49205',1,'materialProperties::mu()'],['../classuser_model.html#a74577585cf12d1712ab9c57616d49205',1,'userModel::mu()']]]
 ];
