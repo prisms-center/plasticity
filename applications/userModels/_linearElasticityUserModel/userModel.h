@@ -36,8 +36,8 @@ class userModel : public ellipticBVP<dim>
 //constructor
 template <int dim>
 userModel<dim>::userModel(): ellipticBVP<dim>(),  C(dim,dim,dim,dim){
-  //set the number of quadrature history variables required
-  this->numQuadHistoryVariables=9; 
+  //set the number of quadrature point history variables required
+  this->numQuadHistoryVariables=3; 
 
   //Elasticity tensor C_{ijkl}
   lambda=lame_lambda; mu=lame_mu;
@@ -81,6 +81,10 @@ void userModel<dim>::getQuadratureValues(unsigned int elementID,
       }
     }
   }
+
+  //To store the quadrature point history variables, 
+  //use the history[] array whose size is set by 
+  //numQuadHistoryVariables in the constructor above.
 }
 
 #endif
