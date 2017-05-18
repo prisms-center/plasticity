@@ -326,13 +326,13 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
                     }
                 }
                 
-                temp.mmult(temp2,FP_t);
+                
                 for (unsigned int j=0;j<dim;j++){
                     for (unsigned int k=0;k<dim;k++){
                         if(resolved_shear_tau_trial(i)>0)
-                            del_FP[j][k]=del_FP[j][k]+x_beta_old(i)*temp2[j][k];
+                            del_FP[j][k]=del_FP[j][k]+x_beta_old(i)*temp[j][k];
                         else
-                            del_FP[j][k]=del_FP[j][k]-x_beta_old(i)*temp2[j][k];
+                            del_FP[j][k]=del_FP[j][k]-x_beta_old(i)*temp[j][k];
                     }
                 }
                 
@@ -399,14 +399,14 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
             for (unsigned int i=0;i<numSlipSystems;i++){
             
                     if(s_alpha_tau(i)>saturationStress[i])
-                        s_alpha_tau(i)=saturationStress[i];
+                        s_alpha_tau(i)=0.90*saturationStress[i];
             
             }
             
             for (unsigned int i=0;i<numTwinSystems;i++){
                 
                 if(s_alpha_tau(numSlipSystems+i)>saturationStressTwin[i])
-                    s_alpha_tau(numSlipSystems+i)=saturationStressTwin[i];
+                    s_alpha_tau(numSlipSystems+i)=0.90*saturationStressTwin[i];
                 
             }
             

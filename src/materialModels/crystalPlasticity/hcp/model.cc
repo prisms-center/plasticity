@@ -218,23 +218,10 @@ void crystalPlasticity<dim>::updateAfterIncrement()
                 temp.push_back(rotnew[cellID][q][2]);
                 temp.push_back(fe_values.JxW(q));
                 temp.push_back(quadratureOrientationsMap[cellID][q]);
-                /*temp.push_back(slipfraction_conv[cellID][q][0]);
-                temp.push_back(slipfraction_conv[cellID][q][1]);
-                temp.push_back(slipfraction_conv[cellID][q][2]);
-                temp.push_back(slipfraction_conv[cellID][q][3]);
-                temp.push_back(slipfraction_conv[cellID][q][4]);
-                temp.push_back(slipfraction_conv[cellID][q][5]);
-                
-                temp.push_back(twinfraction_conv[cellID][q][0]);
-                temp.push_back(twinfraction_conv[cellID][q][1]);
-                temp.push_back(twinfraction_conv[cellID][q][2]);
-                temp.push_back(twinfraction_conv[cellID][q][3]);
-                temp.push_back(twinfraction_conv[cellID][q][4]);
-                temp.push_back(twinfraction_conv[cellID][q][5]);
-                temp.push_back(twin[cellID][q]);*/
+
                 orientations.addToOutputOrientations(temp);
                 local_F_e=local_F_e+twin[cellID][q]*fe_values.JxW(q);
-                for(unsigned int i=0;i<6;i++){
+                for(unsigned int i=0;i<numTwinSystems;i++){
                     local_F_r=local_F_r+twinfraction_conv[cellID][q][i]*fe_values.JxW(q);
                 }
                 
@@ -274,8 +261,7 @@ void crystalPlasticity<dim>::updateAfterIncrement()
   if (!writeOutput) return;
 #endif
      //write stress and strain data to file
-#ifdef output
-ectory
+#ifdef output Directory
      std::string dir(outputDirectory);
      dir+="/";
 #else
@@ -308,7 +294,7 @@ ectory
             //loop over quadrature points
             for (unsigned int q=0; q<num_quad_points; ++q){
                 std::vector<double> local_twin;
-                local_twin.resize(6,0.0);
+                local_twin.resize(numTwinSystems,0.0);
                 local_twin=twinfraction_conv[cellID][q];
                 std::vector<double>::iterator result;
                 result = std::max_element(local_twin.begin(), local_twin.end());
@@ -316,7 +302,7 @@ ectory
                 twin_pos= std::distance(local_twin.begin(), result);
                 twin_max=local_twin[twin_pos];
                 
-                if(twin_max>=(twinThresholdFraction+twinSaturationFactor*F_e/F_r)){
+                if(twin_max>=(twinThresholdFraction)){
                     
                     FullMatrix<double> FE_t(dim,dim), FP_t(dim,dim),Twin_T(dim,dim),temp(dim,dim);
                     
@@ -356,8 +342,13 @@ ectory
                     Fe_conv[cellID][q]=FE_t;
                     Fp_conv[cellID][q]=FP_t;
                     
-                    
-                    twin[cellID][q]=1.0;
+ 
+		  if(twin[cellID][q]>0.0){
+ 			twin[cellID][q]=0.0;
+			}
+			else{
+			twin[cellID][q]=1.0;
+			}
                     
                 }
                 

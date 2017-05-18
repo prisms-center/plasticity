@@ -229,7 +229,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
         
         // Single slip hardening rate
         for(unsigned int i=0;i<n_slip_systems;i++){
-            h_beta(i)=initialSlipResistance[i]*pow((1-s_beta(i)/saturationStress[i]),powerLawExponent[i]);
+             h_beta(i)=initialHardeningModulus[i]*pow((1-s_beta(i)/saturationStress[i]),powerLawExponent[i]);
         }
         
         
@@ -315,13 +315,13 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
                     }
                 }
                 
-                temp.mmult(temp2,FP_t);
+               
                 for (unsigned int j=0;j<dim;j++){
                     for (unsigned int k=0;k<dim;k++){
                         if(resolved_shear_tau_trial(i)>0)
-                            del_FP[j][k]=del_FP[j][k]+x_beta_old(i)*temp2[j][k];
+                            del_FP[j][k]=del_FP[j][k]+x_beta_old(i)*temp[j][k];
                         else
-                            del_FP[j][k]=del_FP[j][k]-x_beta_old(i)*temp2[j][k];
+                            del_FP[j][k]=del_FP[j][k]-x_beta_old(i)*temp[j][k];
                     }
                 }
                 
@@ -485,7 +485,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
         
         // Hardening modulus
         for(unsigned int i=0;i<n_slip_systems;i++){
-            delh_beta_dels(i)=initialSlipResistance[i]*pow((1-s_alpha_tau(i)/saturationStress[i]),(powerLawExponent[i]-1))*(-1.0/saturationStress[i]);
+            delh_beta_dels(i)=initialHardeningModulus[i]*pow((1-s_alpha_tau(i)/saturationStress[i]),(powerLawExponent[i]-1))*(-1.0/saturationStress[i]);
         }
         
         FullMatrix<double> term_ds(n_slip_systems,n_slip_systems);
