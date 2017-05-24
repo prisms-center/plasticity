@@ -261,7 +261,7 @@ void crystalPlasticity<dim>::updateAfterIncrement()
   if (!writeOutput) return;
 #endif
      //write stress and strain data to file
-#ifdef output Directory
+#ifdef outputDirectory
      std::string dir(outputDirectory);
      dir+="/";
 #else
