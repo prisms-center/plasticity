@@ -199,6 +199,8 @@ private:
      */
     double microvol;
     
+    double signstress;
+    
     
     //Store crystal orientations
     /**

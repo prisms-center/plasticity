@@ -26,7 +26,8 @@ public:
 #endif 
     void reorient();
     void tangent_modulus(FullMatrix<double> &F_trial, FullMatrix<double> &Fpn_inv, FullMatrix<double> &SCHMID_TENSOR1, FullMatrix<double> &A,FullMatrix<double> &A_PA,FullMatrix<double> &B,FullMatrix<double> &T_tau, FullMatrix<double> &PK1_Stiff, Vector<double> &active, Vector<double> &resolved_shear_tau_trial, Vector<double> &x_beta, Vector<double> &PA, int &n_PA, double &det_F_tau, double &det_FE_tau );
-    void inactive_slip_removal(Vector<double> &active,Vector<double> &x_beta_old, Vector<double> &x_beta, int &n_PA, Vector<double> &PA, Vector<double> b,FullMatrix<double> A,FullMatrix<double> &A_PA);
+    void inactive_slip_removal1(Vector<double> &active,Vector<double> &x_beta_old, Vector<double> &x_beta, int &n_PA, Vector<double> &PA, Vector<double> b,FullMatrix<double> A,FullMatrix<double> &A_PA);
+    void inactive_slip_removal2(Vector<double> &active,Vector<double> &x_beta_old, Vector<double> &x_beta, int &n_PA, Vector<double> &PA, Vector<double> b,FullMatrix<double> A,FullMatrix<double> &A_PA);
     //material properties
     materialProperties properties;
     //orientation maps
@@ -34,7 +35,9 @@ public:
 private:
     void init(unsigned int num_quad_points);
     void setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value); 
-    void calculatePlasticity(unsigned int cellID,
+    void calculatePlasticity1(unsigned int cellID,
+                              unsigned int quadPtID);
+    void calculatePlasticity2(unsigned int cellID,
                              unsigned int quadPtID);
     void getElementalValues(FEValues<dim>& fe_values,
                             unsigned int dofs_per_cell,
@@ -81,14 +84,14 @@ private:
     std::vector< std::vector< FullMatrix<double> > > Fp_conv;
     std::vector< std::vector< FullMatrix<double> > >   Fe_iter;
     std::vector< std::vector< FullMatrix<double> > > Fe_conv;
-    std::vector<std::vector<  Vector<double> > >  s_alpha_iter;
-    std::vector<std::vector<  Vector<double> > >  s_alpha_conv;
-    std::vector<std::vector<  vector<double> > >  twinfraction_iter, slipfraction_iter,twinfraction_conv, slipfraction_conv;
-    std::vector<std::vector<double> >  twin;
+    std::vector<std::vector<  Vector<double> > >  s_alpha_iter1,s_alpha_iter2;
+    std::vector<std::vector<  Vector<double> > >  s_alpha_conv1,s_alpha_conv2;
+    std::vector<std::vector<  vector<double> > >  twinfraction_iter, slipfraction_iter1,twinfraction_conv, slipfraction_conv1,slipfraction_iter2,slipfraction_conv2;
+    std::vector<std::vector<double> >  twin,phaseID;
     
-    unsigned int n_slip_systems,n_twin_systems; //No. of slip systems
-    FullMatrix<double> m_alpha,n_alpha,q,sres,Dmat;
-    Vector<double> sres_tau;
+    unsigned int n_slip_systems1,n_slip_systems2,n_twin_systems; //No. of slip systems
+    FullMatrix<double> m_alpha1,n_alpha1,q1,sres1,Dmat11,m_alpha2,n_alpha2,q2,sres2,Dmat12;
+    Vector<double> sres_tau1,sres_tau2;
     bool initCalled;
     
     //orientatations data for each quadrature point
@@ -99,12 +102,14 @@ private:
 //(these are source files, which will are temporarily treated as
 //header files till library packaging scheme is finalized)
 #include "model.cc"
-#include "calculatePlasticity.cc"
+#include "calculatePlasticity1.cc"
+#include "calculatePlasticity2.cc"
 #include "rotationOperations.cc"
 #include "init.cc"
 #include "matrixOperations.cc"
 //#include "tangentModulus.cc"
-#include "inactiveSlipRemoval.cc"
+#include "inactiveSlipRemoval1.cc"
+#include "inactiveSlipRemoval2.cc"
 #include "reorient.cc"
 #include "loadOrientations.cc"
 

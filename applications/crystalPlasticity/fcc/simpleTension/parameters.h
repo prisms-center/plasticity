@@ -14,7 +14,7 @@
 #define subdivisionsX 1
 #define subdivisionsY 1
 #define subdivisionsZ 1
-#define meshRefineFactor 3 // 2^n*2^n*2^n elements(3->8*8*8 =512 elements)
+#define meshRefineFactor 4 // 2^n*2^n*2^n elements(3->8*8*8 =512 elements)
 #define writeMeshToEPS  true //Only written for serial runs and if number of elements < 10000
 
 /*Solution output parameters*/
@@ -60,6 +60,12 @@ double initialHardeningModulus[numSlipSystems]= {180.0, 180.0, 180.0, 180.0, 180
 double powerLawExponent[numSlipSystems]= {2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25}; // Power law coefficient 
 double saturationStress[numSlipSystems]= {148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0}; // Saturation stress
 
+
+//Backstress factor
+
+#define backstressFactor 0.0 //(Ratio between backstress and CRSS during load reversal)
+
+
 //Slip systems files
 #define slipDirectionsFile "slipDirections.txt" // Slip Directions File
 #define slipNormalsFile "slipNormals.txt" // Slip Normals File
@@ -67,8 +73,8 @@ double saturationStress[numSlipSystems]= {148.0, 148.0, 148.0, 148.0, 148.0, 148
 
 // Crystal Plasticity Constitutive model tolerances (for advanced users) 
 #define modelStressTolerance 1.0e-6 // Stress tolerance for the yield surface (MPa)
-#define modelMaxSlipSearchIterations 20 // Maximum no. of active slip search iterations
-#define modelMaxSolverIterations 10 // Maximum no. of iterations to achieve non-linear convergence
+#define modelMaxSlipSearchIterations 1 // Maximum no. of active slip search iterations
+#define modelMaxSolverIterations 4 // Maximum no. of iterations to achieve non-linear convergence
 #define modelMaxPlasticSlipL2Norm 0.8 // L2-Norm of plastic slip strain-used for load-step adaptivity
 
 

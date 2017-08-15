@@ -36,6 +36,13 @@ void ellipticBVP<dim>::output(){
     if (postprocessed_solution_names[field].compare(std::string("Grain_ID"))==0) continue;
 #endif
 #endif
+
+#ifdef output_Phase_ID
+#if output_Phase_ID==false
+      if (postprocessed_solution_names[field].compare(std::string("Phase_ID"))==0) continue;
+#endif
+#endif
+      
 #ifdef output_Twin
 #if output_Twin==false
     if (postprocessed_solution_names[field].compare(std::string("Twin"))==0) continue;

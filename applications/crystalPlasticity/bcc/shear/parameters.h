@@ -62,6 +62,12 @@ double powerLawExponent[numSlipSystems]= {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
 double saturationStress[numSlipSystems]= {500.0, 500.0, 500.0, 500.0, 500.0, 500.0, 500.0, 500.0, 500.0, 500.0, 500.0, 500.0}; // Saturation stress
 
 
+//Backstress factor
+
+#define backstressFactor 0.0 //(Ratio between backstress and CRSS during load reversal)
+
+
+
 //Slip systems files
 #define slipDirectionsFile "slipDirections.txt" // Slip Directions File
 #define slipNormalsFile "slipNormals.txt" // Slip Normals File
@@ -70,8 +76,8 @@ double saturationStress[numSlipSystems]= {500.0, 500.0, 500.0, 500.0, 500.0, 500
 // Crystal Plasticity Constitutive model parameters
 
 #define modelStressTolerance 1.0e-6 // Stress tolerance for the yield surface (MPa)
-#define modelMaxSlipSearchIterations 20 // Maximum no. of active slip search iterations
-#define modelMaxSolverIterations 10 // Maximum no. of iterations to achieve non-linear convergence
+#define modelMaxSlipSearchIterations 1 // Maximum no. of active slip search iterations
+#define modelMaxSolverIterations 3 // Maximum no. of iterations to achieve non-linear convergence
 #define modelMaxPlasticSlipL2Norm 0.8 // L2-Norm of plastic slip strain-used for load-step adaptivity
 #define adaptiveLoadStepFactor 0.5 // Load step factor
 

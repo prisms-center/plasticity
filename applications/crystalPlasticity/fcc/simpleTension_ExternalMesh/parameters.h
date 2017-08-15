@@ -60,6 +60,11 @@ double initialHardeningModulus[numSlipSystems]= {180.0, 180.0, 180.0, 180.0, 180
 double powerLawExponent[numSlipSystems]= {2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25}; // Power law coefficient 
 double saturationStress[numSlipSystems]= {148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0}; // Saturation stress
 
+//Backstress factor
+
+#define backstressFactor 0.0 //(Ratio between backstress and CRSS during load reversal)
+
+
 //Slip systems files
 #define slipDirectionsFile "slipDirections.txt" // Slip Directions File
 #define slipNormalsFile "slipNormals.txt" // Slip Normals File

@@ -71,8 +71,11 @@ double saturationStressTwin[numTwinSystems]= {50.0, 50.0, 50.0, 50.0, 50.0, 50.0
 
 #define twinThresholdFraction 0.25 // threshold fraction of characteristic twin shear (<1)  
 #define twinSaturationFactor 0.25 // twin growth saturation factor  (<(1-twinThresholdFraction)) 
-#define twinShear 0.129 // characteristic twin shear 
+#define twinShear 0.129 // characteristic twin shear
 
+//Backstress factor
+
+#define backstressFactor 0.0 //(Ratio between backstress and CRSS during load reversal)
 
 //Slip systems files
 #define slipDirectionsFile "slipDirections.txt" // Slip Directions File

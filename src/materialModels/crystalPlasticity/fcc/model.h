@@ -200,6 +200,8 @@ private:
     double microvol;
     
     
+    double signstress;
+    
     //Store crystal orientations
     /**
      * Stores original crystal orientations as rodrigues vectors by element number and quadratureID

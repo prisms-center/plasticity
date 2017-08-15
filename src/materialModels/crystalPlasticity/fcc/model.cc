@@ -265,8 +265,45 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
        outputFile << global_strain[0][0]<<'\t'<<global_strain[1][1]<<'\t'<<global_strain[2][2]<<'\t'<<global_strain[1][2]<<'\t'<<global_strain[0][2]<<'\t'<<global_strain[0][1]<<'\t'<<global_stress[0][0]<<'\t'<<global_stress[1][1]<<'\t'<<global_stress[2][2]<<'\t'<<global_stress[1][2]<<'\t'<<global_stress[0][2]<<'\t'<<global_stress[0][1]<<'\n';
      }
      outputFile.close();
+
+     
+     
+     //Adding backstress term during loading reversal
+     
+     if(this->currentIncrement==0){
+         signstress=global_stress.trace();
+     }
+     
+    this->pcout<<signstress<<'\t'<<backstressFactor<<'\n';
+     
+     if(signstress*global_stress.trace()<0){
+         signstress=global_stress.trace();
+         //if(signstress<0){
+         //loop over elements
+         unsigned int cellID=0;
+         typename DoFHandler<dim>::active_cell_iterator cell = this->dofHandler.begin_active(), endc = this->dofHandler.end();
+         for (; cell!=endc; ++cell) {
+             if (cell->is_locally_owned()){
+                 fe_values.reinit(cell);
+                 //loop over quadrature points
+                 for (unsigned int q=0; q<num_quad_points; ++q){
+                     for(unsigned int i=0;i<(numSlipSystems);i++){
+
+                         s_alpha_conv[cellID][q][i]=s_alpha_conv[cellID][q][i]-backstressFactor*s_alpha_conv[cellID][q][i];
+                     }
+                 }
+                 cellID++;
+             }
+             
+         }
+         
+         // }
+         
+     }
+     
      global_strain=0.0;
      global_stress=0.0;
+     
 
      //call base class project() function to project post processed fields
      ellipticBVP<dim>::project();

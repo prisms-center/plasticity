@@ -119,6 +119,10 @@ void crystalOrientationsIO<dim>::loadOrientationVector(std::string _eulerFileNam
       ss >> eulerAngles[id][0];
       ss >> eulerAngles[id][1];
       ss >> eulerAngles[id][2];
+#ifdef multiplePhase
+        if(multiplePhase)
+        ss >> eulerAngles[id][3];
+#endif
       //pcout << id << " " << eulerAngles[id][0] << " " << eulerAngles[id][1] << " " << eulerAngles[id][2] << std::endl;
     }
   }

@@ -12,11 +12,12 @@ P(dim,dim)
     initCalled = false;
     
     //post processing
-    ellipticBVP<dim>::numPostProcessedFields=4;
+    ellipticBVP<dim>::numPostProcessedFields=5;
     ellipticBVP<dim>::postprocessed_solution_names.push_back("Eqv_strain");
     ellipticBVP<dim>::postprocessed_solution_names.push_back("Eqv_stress");
     ellipticBVP<dim>::postprocessed_solution_names.push_back("Grain_ID");
     ellipticBVP<dim>::postprocessed_solution_names.push_back("Twin");
+    ellipticBVP<dim>::postprocessed_solution_names.push_back("Phase_ID");
     
     
 }
@@ -71,7 +72,12 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
         
         
         //Update strain, stress, and tangent for current time step/quadrature point
-        calculatePlasticity(cellID, q);
+        
+        if(phaseID[cellID][q]==1)
+        calculatePlasticity1(cellID, q);
+        else
+            calculatePlasticity2(cellID, q);
+        
         
         //Fill local residual
         for (unsigned int d=0; d<dofs_per_cell; ++d) {
@@ -135,6 +141,7 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
         this->postprocessValues(cellID, q, 1, 0)=eqvstrain;
         this->postprocessValues(cellID, q, 2, 0)=quadratureOrientationsMap[cellID][q];
         this->postprocessValues(cellID, q, 3, 0)=twin[cellID][q];
+        this->postprocessValues(cellID, q, 4, 0)=phaseID[cellID][q];
         
         
         
@@ -193,7 +200,8 @@ void crystalPlasticity<dim>::updateAfterIncrement()
     reorient();
     
     twinfraction_conv=twinfraction_iter;
-    slipfraction_conv=slipfraction_iter;
+    slipfraction_conv1=slipfraction_iter1;
+     slipfraction_conv2=slipfraction_iter2;
     
     
     //copy rotnew to output
@@ -234,7 +242,8 @@ void crystalPlasticity<dim>::updateAfterIncrement()
     //Update the history variables when convergence is reached for the current increment
     Fe_conv=Fe_iter;
     Fp_conv=Fp_iter;
-    s_alpha_conv=s_alpha_iter;
+    s_alpha_conv1=s_alpha_iter1;
+    s_alpha_conv2=s_alpha_iter2;
     
     //double temp4,temp5;
     //temp4=Lambda[0][0];
@@ -282,43 +291,11 @@ void crystalPlasticity<dim>::updateAfterIncrement()
        outputFile << global_strain[0][0]<<'\t'<<global_strain[1][1]<<'\t'<<global_strain[2][2]<<'\t'<<global_strain[1][2]<<'\t'<<global_strain[0][2]<<'\t'<<global_strain[0][1]<<'\t'<<global_stress[0][0]<<'\t'<<global_stress[1][1]<<'\t'<<global_stress[2][2]<<'\t'<<global_stress[1][2]<<'\t'<<global_stress[0][2]<<'\t'<<global_stress[0][1]<<'\n';
      }
      outputFile.close();
+   
+    
+    
     global_strain=0.0;
     global_stress=0.0;
-    
-    
-  //Adding backstress term during loading reversal
-    
-    if(this->currentIncrement==0){
-        signstress=global_stress.trace();
-    }
-    
-    
-    if(signstress*global_stress.trace()<0){
-        signstress=global_stress.trace();
-        //if(signstress<0){
-        //loop over elements
-        unsigned int cellID=0;
-        typename DoFHandler<dim>::active_cell_iterator cell = this->dofHandler.begin_active(), endc = this->dofHandler.end();
-        for (; cell!=endc; ++cell) {
-            if (cell->is_locally_owned()){
-                fe_values.reinit(cell);
-                //loop over quadrature points
-                for (unsigned int q=0; q<num_quad_points; ++q){
-                    for(unsigned int i=0;i<(numSlipSystems+numTwinSystems);i++){
-                        
-                        #ifdef backstressFactor
-                            s_alpha_conv[cellID][q][i]=s_alpha_conv[cellID][q][i]-backstressFactor*s_alpha_conv[cellID][q][i];
-                        #endif
-                    }
-                }
-                cellID++;
-            }
-            
-        }
-        
-        // }
-        
-    }
     
     
     
@@ -351,17 +328,17 @@ void crystalPlasticity<dim>::updateAfterIncrement()
                     
                     
                     Twin_image(twin_pos,cellID,q);
-                    double s_alpha_twin=s_alpha_conv[cellID][q][numSlipSystems+twin_pos];
+                    double s_alpha_twin=s_alpha_conv2[cellID][q][numSlipSystems2+twin_pos];
                     for(unsigned int i=0;i<numTwinSystems;i++){
                         twinfraction_conv[cellID][q][i]=0;
-                        s_alpha_conv[cellID][q][numSlipSystems+twin_pos]=s_alpha_twin;
+                        s_alpha_conv2[cellID][q][numSlipSystems2+twin_pos]=s_alpha_twin;
                         
                     }
                     
                     Vector<double> n(dim);
-                    n(0)=n_alpha[numSlipSystems+twin_pos][0];
-                    n(1)=n_alpha[numSlipSystems+twin_pos][1];
-                    n(2)=n_alpha[numSlipSystems+twin_pos][2];
+                    n(0)=n_alpha2[numSlipSystems2+twin_pos][0];
+                    n(1)=n_alpha2[numSlipSystems2+twin_pos][1];
+                    n(2)=n_alpha2[numSlipSystems2+twin_pos][2];
                     
                     for(unsigned int i=0;i<dim;i++){
                         for(unsigned int j=0;j<dim;j++){
@@ -415,8 +392,8 @@ void crystalPlasticity<dim>::Twin_image(double twin_pos,unsigned int cellID,
     
     rod2quat(quat2,rod);
     
-    quat1(0) = 0;quat1(1) = n_alpha[18+twin_pos][0];
-    quat1(2) = n_alpha[18+twin_pos][1];quat1(3) = n_alpha[18+twin_pos][2];
+    quat1(0) = 0;quat1(1) = n_alpha2[numSlipSystems2+twin_pos][0];
+    quat1(2) = n_alpha2[numSlipSystems2+twin_pos][1];quat1(3) = n_alpha2[numSlipSystems2+twin_pos][2];
     
     
     quatproduct(quatprod,quat2,quat1);
