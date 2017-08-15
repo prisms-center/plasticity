@@ -72,8 +72,8 @@ double saturationStress[numSlipSystems]= {148.0, 148.0, 148.0, 148.0, 148.0, 148
 
 // Crystal Plasticity Constitutive model tolerances (for advanced users) 
 #define modelStressTolerance 1.0e-6 // Stress tolerance for the yield surface (MPa)
-#define modelMaxSlipSearchIterations 20 // Maximum no. of active slip search iterations
-#define modelMaxSolverIterations 10 // Maximum no. of iterations to achieve non-linear convergence
+#define modelMaxSlipSearchIterations 1 // Maximum no. of active slip search iterations
+#define modelMaxSolverIterations 3 // Maximum no. of iterations to achieve non-linear convergence
 #define modelMaxPlasticSlipL2Norm 0.8 // L2-Norm of plastic slip strain-used for load-step adaptivity
 
 
