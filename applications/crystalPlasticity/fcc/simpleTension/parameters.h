@@ -14,7 +14,7 @@
 #define subdivisionsX 1
 #define subdivisionsY 1
 #define subdivisionsZ 1
-#define meshRefineFactor 4 // 2^n*2^n*2^n elements(3->8*8*8 =512 elements)
+#define meshRefineFactor 3 // 2^n*2^n*2^n elements(3->8*8*8 =512 elements)
 #define writeMeshToEPS  true //Only written for serial runs and if number of elements < 10000
 
 /*Solution output parameters*/

@@ -6,7 +6,7 @@ void crystalPlasticity<dim>::calculatePlasticity2(unsigned int cellID,
     
     F_tau=F; // Deformation Gradient
     FullMatrix<double> FE_t(dim,dim),FP_t(dim,dim);  //Elastic and Plastic deformation gradient
-    Vector<double> s_alpha_t(n_slip_systems2); // Slip resistance
+    Vector<double> s_alpha_t2(n_slip_systems2); // Slip resistance
     Vector<double> rot1(dim);// Crystal orientation (Rodrigues representation)
     
     int old_precision = std::cout.precision();
@@ -21,7 +21,7 @@ void crystalPlasticity<dim>::calculatePlasticity2(unsigned int cellID,
     
     FE_t=Fe_conv[cellID][quadPtID];
     FP_t=Fp_conv[cellID][quadPtID];
-    s_alpha_t=s_alpha_conv2[cellID][quadPtID];
+    s_alpha_t2=s_alpha_conv2[cellID][quadPtID];
     rot1=rot[cellID][quadPtID];
     
     
@@ -99,7 +99,7 @@ void crystalPlasticity<dim>::calculatePlasticity2(unsigned int cellID,
     FE_tau.reinit(dim,dim);
     Fpn_inv=0.0; Fpn_inv.invert(FP_t);
     F_tau.mmult(FE_tau,Fpn_inv);
-    s_alpha_tau=s_alpha_t;
+    s_alpha_tau=s_alpha_t2;
     
     Vector<double> s_beta(n_slip_systems2),h_beta(n_slip_systems2),delh_beta_dels(n_slip_systems2),h0(n_slip_systems2),a_pow(n_slip_systems2),s_s(n_slip_systems2);
     FullMatrix<double> h_alpha_beta_t(n_slip_systems2,n_slip_systems2),A(n_slip_systems2,n_slip_systems2);

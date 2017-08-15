@@ -274,7 +274,7 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
          signstress=global_stress.trace();
      }
      
-    this->pcout<<signstress<<'\t'<<backstressFactor<<'\n';
+    //this->pcout<<signstress<<'\t'<<backstressFactor<<'\n';
      
      if(signstress*global_stress.trace()<0){
          signstress=global_stress.trace();

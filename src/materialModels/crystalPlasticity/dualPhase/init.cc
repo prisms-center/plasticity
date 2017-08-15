@@ -41,7 +41,7 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
             ss >> n_alpha1[id][0];
             ss >> n_alpha1[id][1];
             ss >> n_alpha1[id][2];
-            //cout<<id<<'\t'<<n_alpha[id][0]<<'\t'<<n_alpha[id][1]<<'\t'<<n_alpha[id][2]<<'\n';
+            //cout<<id<<'\t'<<n_alpha1[id][0]<<'\t'<<n_alpha1[id][1]<<'\t'<<n_alpha1[id][2]<<'\n';
             id=id+1;
         }
     }
@@ -126,18 +126,18 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
 
       
       //open data file to read slip normals
-      slipNormalsDataFile.open(slipDirectionsFile2);
+      ifstream slipNormalsDataFile2(slipDirectionsFile2);
       //read data
        id=0;
-      if (slipNormalsDataFile.is_open()){
+      if (slipNormalsDataFile2.is_open()){
 	//cout << "reading slip Normals file\n";
 	//read data
-	while (getline (slipNormalsDataFile,line) && id<numSlipSystems2){
+	while (getline (slipNormalsDataFile2,line) && id<numSlipSystems2){
 	  stringstream ss(line);
 	  ss >> n_alpha2[id][0];
 	  ss >> n_alpha2[id][1];
 	  ss >> n_alpha2[id][2];
-	  //cout<<id<<'\t'<<n_alpha[id][0]<<'\t'<<n_alpha[id][1]<<'\t'<<n_alpha[id][2]<<'\n';
+	  //cout<<id<<'\t'<<n_alpha2[id][0]<<'\t'<<n_alpha2[id][1]<<'\t'<<n_alpha2[id][2]<<'\n';
 	  id=id+1;
 	}
       }
@@ -147,18 +147,19 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
       }
       
       //open data file to read slip directions
-      slipDirectionsDataFile.open(slipNormalsFile2);
+    ifstream slipDirectionsDataFile2(slipNormalsFile2);
+
       //read data
       id=0;
-      if (slipDirectionsDataFile.is_open()){
+      if (slipDirectionsDataFile2.is_open()){
 	//cout << "reading slip Directions file\n";
 	//read data
-	while (getline (slipDirectionsDataFile,line)&& id<numSlipSystems2){
+	while (getline (slipDirectionsDataFile2,line)&& id<numSlipSystems2){
 	  stringstream ss(line);
 	  ss >> m_alpha2[id][0];
 	  ss >> m_alpha2[id][1];
 	  ss >> m_alpha2[id][2];
-	  //cout<<id<<'\t'<<m_alpha[id][0]<<'\t'<<m_alpha[id][1]<<'\t'<<m_alpha[id][2]<<'\n';
+	  //cout<<id<<'\t'<<m_alpha2[id][0]<<'\t'<<m_alpha2[id][1]<<'\t'<<m_alpha2[id][2]<<'\n';
 	  id=id+1;
 	}
       }

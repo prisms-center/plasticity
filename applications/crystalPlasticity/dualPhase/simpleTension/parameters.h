@@ -48,23 +48,24 @@
 //Phase1
 
 
-double elasticStiffness1[6][6]={{97.7e3, 82.7e3, 82.7e3, 0, 0, 0},
-    {82.7e3, 97.7e3, 82.7e3, 0, 0, 0},
-    {82.7e3, 82.7e3, 97.7e3, 0, 0, 0},
-    {0, 0, 0, 37.5e3, 0, 0},
-    {0, 0, 0, 0, 37.5e3, 0},
-    {0, 0, 0, 0, 0, 37.5e3}}; // 	Elastic Stiffness Matrix -Voigt Notation (MPa)
+//Elastic Parameters
+double elasticStiffness1[6][6]={{170.0e3, 124.0e3, 124.0e3, 0, 0, 0},
+    {124.0e3, 170.0e3, 124.0e3, 0, 0, 0},
+    {124.0e3, 124.0e3, 170.0e3, 0, 0, 0},
+    {0, 0, 0, 75.0e3, 0, 0},
+    {0, 0, 0, 0, 75.0e3, 0},
+    {0, 0, 0, 0, 0, 75.0e3}}; // 	Elastic Stiffness Matrix -Voigt Notation (MPa)
+
 
 
 //Crystal Plasticity parameters
-
-#define numSlipSystems1 12 //
+#define numSlipSystems1 12 // generally 12 for FCC
 #define latentHardeningRatio1 1.4  //q1
 
-double initialSlipResistance1[numSlipSystems1]= {200.0, 200.0, 200.0, 200.0, 200.0, 200.0, 200.0, 200.0, 200.0, 200.0, 200.0, 200.0};  //CRSS of slip sytems
-double initialHardeningModulus1[numSlipSystems1]= {1500.0, 1500.0, 1500.0, 1500.0, 1500.0, 1500.0, 1500.0, 1500.0, 1500.0, 1500.0, 1500.0, 1500.0}; //Hardening moduli of slip systems
-double powerLawExponent1[numSlipSystems1]= {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0}; // Power law coefficient
-double saturationStress1[numSlipSystems1]= {500.0, 500.0, 500.0, 500.0, 500.0, 500.0, 500.0, 500.0, 500.0, 500.0, 500.0, 500.0}; // Saturation stress
+double initialSlipResistance1[numSlipSystems1]= {16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0}; //CRSS of the slip sytems
+double initialHardeningModulus1[numSlipSystems1]= {180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0}; //Hardening moduli of slip systems
+double powerLawExponent1[numSlipSystems1]= {2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25}; // Power law coefficient
+double saturationStress1[numSlipSystems1]= {148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0}; // Saturation stress
 
 
 //Slip systems files
@@ -76,12 +77,12 @@ double saturationStress1[numSlipSystems1]= {500.0, 500.0, 500.0, 500.0, 500.0, 5
 //Phase2
 
 //Elastic Parameters
-double elasticStiffness2[6][6]={{162e3, 92.0e3, 69.0e3, 0, 0, 0},
-    {92.0e3, 162e3, 69.0e3, 0, 0, 0},
-    {69.0e3, 69.0e3, 180e3, 0, 0, 0},
-    {0, 0, 0, 46.7e3, 0, 0},
-    {0, 0, 0, 0, 46.7e3, 0},
-    {0, 0, 0, 0, 0, 35e3}}; // 	Elastic Stiffness Matrix -Voigt Notation (MPa)
+double elasticStiffness2[6][6]={{59.3e3, 25.7e3, 21.4e3, 0, 0, 0},
+    {25.7e3, 59.3e3, 21.4e3, 0, 0, 0},
+    {21.4e3, 21.4e3, 61.5e3, 0, 0, 0},
+    {0, 0, 0, 16.4e3, 0, 0},
+    {0, 0, 0, 0, 16.4e3, 0},
+    {0, 0, 0, 0, 0, 16.8e3}}; // 	Elastic Stiffness Matrix -Voigt Notation (MPa)
 
 
 //Crystal Plasticity
@@ -89,24 +90,23 @@ double elasticStiffness2[6][6]={{162e3, 92.0e3, 69.0e3, 0, 0, 0},
 #define numSlipSystems2 18 // Total No. of slip systems (slip)
 #define latentHardeningRatio2 1.4  //q1
 
-double initialSlipResistance2[numSlipSystems2]= {49.0, 49.0, 49.0, 37.0, 37.0, 37.0, 197.0, 197.0, 197.0, 197.0, 197.0, 197.0, 200.0, 200.0, 200.0, 200.0, 200.0, 200.0}; //CRSS of slip sytems
-double initialHardeningModulus2[numSlipSystems2]= {150.0, 150.0, 150.0, 150.0, 150.0, 150.0, 150.0, 150.0, 150.0, 150.0, 150.0, 150.0, 150.0, 150.0, 150.0, 150.0, 150.0, 150.0}; //Hardening moduli of slip systems
-double powerLawExponent2[numSlipSystems2]= {1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5}; // Power law coefficient
-double saturationStress2[numSlipSystems2]= {200.0, 200.0, 200.0, 200.0, 200.0, 200.0, 550.0, 550.0, 550.0, 550.0, 550.0, 550.0, 550.0, 550.0, 550.0, 550.0, 550.0, 550.0}; // Saturation stress
+double initialSlipResistance2[numSlipSystems2]= {25.0, 25.0, 25.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0}; //CRSS of slip sytems
+double initialHardeningModulus2[numSlipSystems2]= {100.0, 100.0, 100.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0}; //Hardening moduli of slip systems
+double powerLawExponent2[numSlipSystems2]= {1.1, 1.1, 1.1, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8}; // Power law coefficient
+double saturationStress2[numSlipSystems2]= {70.0, 70.0, 70.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0}; // Saturation stress
 
 //Twin parameters
 
 #define numTwinSystems 6 // No. of twin systems
 
-double initialSlipResistanceTwin[numTwinSystems]= {213.0, 213.0, 213.0, 213.0, 213.0, 213.0}; //CRSS of twin sytems
-double initialHardeningModulusTwin[numTwinSystems]= {1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0}; //Hardening moduli of twin systems
-double powerLawExponentTwin[numTwinSystems]= {1.5, 1.5, 1.5, 1.5, 1.5, 1.5};// Power law coefficient
-double saturationStressTwin[numTwinSystems]= {700.0, 700.0, 700.0, 700.0, 700.0, 700.0}; // Saturation stress
+double initialSlipResistanceTwin[numTwinSystems]= {40.0, 40.0, 40.0, 40.0, 40.0, 40.0}; //CRSS of twin sytems
+double initialHardeningModulusTwin[numTwinSystems]= {50.0, 50.0, 50.0, 50.0, 50.0, 50.0}; //Hardening moduli of twin systems
+double powerLawExponentTwin[numTwinSystems]= {1.1, 1.1, 1.1, 1.1, 1.1, 1.1};// Power law coefficient
+double saturationStressTwin[numTwinSystems]= {50.0, 50.0, 50.0, 50.0, 50.0, 50.0}; // Saturation stress
 
 #define twinThresholdFraction 0.25 // threshold fraction of characteristic twin shear (<1)
 #define twinSaturationFactor 0.25 // twin growth saturation factor  (<(1-twinThresholdFraction))
-#define twinShear 0.169 // characteristic twin shear
-
+#define twinShear 0.129 // characteristic twin shear
 
 //Slip systems files
 #define slipDirectionsFile2 "slipDirections2.txt" // Slip Directions File
@@ -131,7 +131,7 @@ double saturationStressTwin[numTwinSystems]= {700.0, 700.0, 700.0, 700.0, 700.0,
 unsigned int numPts[3]={20, 20, 22}; // No. of voxels in x,y and z directions
 #define grainIDFile "grainID.txt" // Grain ID File
 #define headerLinesGrainIDFile 5 // No. of header Lines
-#define grainOrientationsFile "orientations1.txt" // Slip Normals File
+#define grainOrientationsFile "orientations.txt" // Slip Normals File
 
 
 
