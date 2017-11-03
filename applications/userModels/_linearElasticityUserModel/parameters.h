@@ -105,7 +105,7 @@
  *User model parameters. '#define enableUserModel' is required to 
  *enable the user model functionality
  */
-#define enableUserModel
+#define enableUs1erModel
 /**
  * Material properties (Lame' parameters)
  */

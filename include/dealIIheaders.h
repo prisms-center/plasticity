@@ -7,7 +7,6 @@
 #include <deal.II/lac/full_matrix.h>
 #include <deal.II/lac/constraint_matrix.h>
 #include <deal.II/lac/constraint_matrix.h>
-#include <deal.II/lac/compressed_simple_sparsity_pattern.h>
 #include <deal.II/lac/sparsity_tools.h>
 #include <deal.II/fe/fe_system.h>
 #include <deal.II/fe/fe_q.h>

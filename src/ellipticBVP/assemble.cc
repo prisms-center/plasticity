@@ -41,7 +41,7 @@ void ellipticBVP<dim>::assemble(){
 	fe_values.reinit (cell);
 	cell->get_dof_indices (local_dof_indices);
 	
-#ifdef enableUserModel
+#if enableUserModel == 1
 	//fill component indices
 	std::vector<unsigned int> componentIndices(dofs_per_cell);
 	for (unsigned int d1=0; d1<dofs_per_cell; ++d1) {

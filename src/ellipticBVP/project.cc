@@ -16,17 +16,17 @@ void ellipticBVP<dim>::initProject(){
     //residuals
     vectorType* v=new vectorType;
     v->reinit(locally_owned_dofs_Scalar, mpi_communicator); (*v)=0;
-    postResidual.push_back(v);   
-    
+    postResidual.push_back(v);
+
     //fields
     v=new vectorType;
     v->reinit(locally_owned_dofs_Scalar, mpi_communicator); (*v)=0;
-    postFields.push_back(v); 
+    postFields.push_back(v);
 
     //fields with ghosts
     v=new vectorType;
     v->reinit (locally_owned_dofs_Scalar, locally_relevant_dofs_Scalar, mpi_communicator); (*v)=0;
-    postFieldsWithGhosts.push_back(v); 
+    postFieldsWithGhosts.push_back(v);
   }
 
   //initialize postprocessValues data structure
@@ -36,20 +36,20 @@ void ellipticBVP<dim>::initProject(){
   postprocessValues.reinit(TableIndices<4>(num_local_cells, num_quad_points, numPostProcessedFields, dim));
 
   //create mass matrix
-  CompressedSimpleSparsityPattern csp (locally_relevant_dofs_Scalar);
-  DoFTools::make_sparsity_pattern (dofHandler_Scalar, csp, constraintsMassMatrix, false);
-  SparsityTools::distribute_sparsity_pattern (csp,
+  DynamicSparsityPattern dsp (locally_relevant_dofs_Scalar);
+  DoFTools::make_sparsity_pattern (dofHandler_Scalar, dsp, constraintsMassMatrix, false);
+  SparsityTools::distribute_sparsity_pattern (dsp,
 					      dofHandler_Scalar.n_locally_owned_dofs_per_processor(),
 					      mpi_communicator,
 					      locally_relevant_dofs_Scalar);
-  massMatrix.reinit (locally_owned_dofs_Scalar, locally_owned_dofs_Scalar, csp, mpi_communicator); massMatrix=0.0;
+  massMatrix.reinit (locally_owned_dofs_Scalar, locally_owned_dofs_Scalar, dsp, mpi_communicator); massMatrix=0.0;
 
   //local variables
   FEValues<dim> fe_values (FE_Scalar, quadrature, update_values | update_JxW_values);
   const unsigned int   dofs_per_cell   = FE_Scalar.dofs_per_cell;
   FullMatrix<double>   elementalMass(dofs_per_cell, dofs_per_cell);
   std::vector<types::global_dof_index> local_dof_indices (dofs_per_cell);
-  
+
   //parallel loop over all elements
   typename DoFHandler<dim>::active_cell_iterator cell = dofHandler_Scalar.begin_active(), endc = dofHandler_Scalar.end();
   unsigned int cellID=0;
@@ -60,7 +60,7 @@ void ellipticBVP<dim>::initProject(){
 
       //compute values for the current element
       fe_values.reinit (cell);
-      
+
       //elementalMass=N*N
       for (unsigned int d1=0; d1<dofs_per_cell; ++d1) {
 	unsigned int i = fe_values.get_fe().system_to_component_index(d1).first;
@@ -78,13 +78,13 @@ void ellipticBVP<dim>::initProject(){
 	  }
 	}
       }
-      
+
       //assemble
       cell->get_dof_indices (local_dof_indices);
       constraintsMassMatrix.distribute_local_to_global(elementalMass, local_dof_indices, massMatrix);
     }
   }
-  //MPI operation to sync data 
+  //MPI operation to sync data
   massMatrix.compress(VectorOperation::add);
 }
 
@@ -108,14 +108,14 @@ void ellipticBVP<dim>::project(){
   if (currentIncrement%skipSteps!=0){
     return;
   }
-  
+
   pcout << "projecting post processing fields\n";
 
-  //initialize global data structures to zero  
+  //initialize global data structures to zero
   for (unsigned int field=0; field<numPostProcessedFields; field++){
-    (*postResidual[field])=0.0;    
+    (*postResidual[field])=0.0;
   }
-  
+
   //local variables
   QGauss<dim>  quadrature(quadOrder);
   FEValues<dim> fe_values (FE_Scalar, quadrature, update_values | update_JxW_values);
@@ -123,7 +123,7 @@ void ellipticBVP<dim>::project(){
   const unsigned int   num_quad_points = quadrature.size();
   Vector<double>       elementalResidual (dofs_per_cell);
   std::vector<types::global_dof_index> local_dof_indices (dofs_per_cell);
-    
+
   //parallel loop over all elements
   typename DoFHandler<dim>::active_cell_iterator cell = dofHandler_Scalar.begin_active(), endc = dofHandler_Scalar.end();
   unsigned int cellID=0;
@@ -136,7 +136,7 @@ void ellipticBVP<dim>::project(){
       cell->get_dof_indices (local_dof_indices);
       for (unsigned int field=0; field<numPostProcessedFields; field++){
 	elementalResidual = 0;
-	
+
 	//elementalSolution=N*solution
 	for (unsigned int d1=0; d1<dofs_per_cell; ++d1) {
 	  unsigned int i = fe_values.get_fe().system_to_component_index(d1).first;
@@ -151,10 +151,10 @@ void ellipticBVP<dim>::project(){
     }
   }
 
-  //MPI operation to sync data 
+  //MPI operation to sync data
   for (unsigned int field=0; field<numPostProcessedFields; field++){
     postResidual[field]->compress(VectorOperation::add);
-    
+
     //L2 projection by solving for Mx=b problem
     *postFields[field]=0.0;
     solveLinearSystem2(constraintsMassMatrix, massMatrix, *postResidual[field], *postFields[field],  *postFieldsWithGhosts[field],  *postFieldsWithGhosts[field]);
