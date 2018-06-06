@@ -3,37 +3,13 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-
 using namespace std;
 
 //parameters
 #include "parameters.h"
 
 //FCC model header
-#include "../../../../src/materialModels/crystalPlasticity/fcc/model.h"
-
-#ifdef readExternalMeshes
-#if readExternalMeshes==true
-//overload mesh() method to generate the required polycrystal geometry
-template <int dim>
-void crystalPlasticity<dim>::mesh(){
-  //reading external mesh
-  this->pcout << "reading problem mesh\n";
-  GridIn<dim> gridin;
-  gridin.attach_triangulation(this->triangulation);
-  //Read mesh in UCD format generated from Cubit
-  std::ifstream f("n10-id2_hex.msh");
-  gridin.read_msh(f);
-
-  //Output image for viewing
-  std::ofstream out ("mesh.vtk");
-  GridOut grid_out;
-  grid_out.write_vtk (this->triangulation, out);
-  this->pcout << "writing mesh image to mesh.vtk\n";
-}
-#endif
-#endif
-
+#include "../../../../include/crystalPlasticity.h"
 
 //Specify Dirichlet boundary conditions
 template <int dim>
@@ -43,7 +19,7 @@ void crystalPlasticity<dim>::setBoundaryValues(const Point<dim>& node, const uns
     if (dof==0) {flag=true; value=0.0;}
   }
   //front boundary:  u_x=0.001
-  if (node[0] == 1.0){
+  if (node[0] == spanX){
     if (dof==0) {flag=true; value=0.0001;}
   }
   //left boundary:   u_y=0
@@ -56,7 +32,6 @@ void crystalPlasticity<dim>::setBoundaryValues(const Point<dim>& node, const uns
   }
 }
 
-
 //main
 int main (int argc, char **argv)
 {
@@ -66,8 +41,6 @@ int main (int argc, char **argv)
       deallog.depth_console(0);
       crystalPlasticity<3> problem;
 
-
-
       //reading materials atlas files
       double stencil[3]={spanX/(numPts[0]-1), spanY/(numPts[1]-1), spanZ/(numPts[2]-1)}; // Dimensions of voxel
       problem.orientations.loadOrientations(grainIDFile,
@@ -75,7 +48,7 @@ int main (int argc, char **argv)
 					    grainOrientationsFile,
 					    numPts,
 					    stencil);
-      problem.orientations.loadOrientationVector("orientations.txt");
+      problem.orientations.loadOrientationVector(grainOrientationsFile);
       problem.run ();
     }
   catch (std::exception &exc)
