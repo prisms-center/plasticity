@@ -80,3 +80,6 @@ submitSingleJob.py
 DoxygenWarningLog.txt
 test
 stressstrain.txt
+
+.cproject
+.project

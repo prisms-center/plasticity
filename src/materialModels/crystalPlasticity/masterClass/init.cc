@@ -19,34 +19,30 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
 
     // Read in the slip systems
     n_slip_systems=numSlipSystems;
+    n_alpha.reinit(n_slip_systems,3);
+    m_alpha.reinit(n_slip_systems,3);
+    string line;
 
-
-
-
-      n_alpha.reinit(n_slip_systems,3);
-      m_alpha.reinit(n_slip_systems,3);
-      string line;
-
-      //open data file to read slip normals
-      ifstream slipNormalsDataFile(slipDirectionsFile);
-      //read data
-      unsigned int id=0;
-      if (slipNormalsDataFile.is_open()){
-	cout << "reading slip Normals file\n";
-	//read data
-	while (getline (slipNormalsDataFile,line) && id<n_slip_systems){
-	  stringstream ss(line);
-	  ss >> n_alpha[id][0];
-	  ss >> n_alpha[id][1];
-	  ss >> n_alpha[id][2];
-	  //cout<<id<<'\t'<<n_alpha[id][0]<<'\t'<<n_alpha[id][1]<<'\t'<<n_alpha[id][2]<<'\n';
-	  id=id+1;
-	}
-      }
-      else{
-	cout << "Unable to open slipNormals.txt \n";
-	exit(1);
-      }
+    //open data file to read slip normals
+    ifstream slipNormalsDataFile(slipDirectionsFile);
+    //read data
+    unsigned int id=0;
+    if (slipNormalsDataFile.is_open()){
+    	cout << "reading slip Normals file\n";
+    	//read data
+    	while (getline (slipNormalsDataFile,line) && id<n_slip_systems){
+    	  stringstream ss(line);
+    	  ss >> n_alpha[id][0];
+    	  ss >> n_alpha[id][1];
+    	  ss >> n_alpha[id][2];
+    	  //cout<<id<<'\t'<<n_alpha[id][0]<<'\t'<<n_alpha[id][1]<<'\t'<<n_alpha[id][2]<<'\n';
+    	  id=id+1;
+    	}
+    }
+    else{
+    	cout << "Unable to open slipNormals.txt \n";
+    	exit(1);
+    }
 
       //open data file to read slip directions
       ifstream slipDirectionsDataFile(slipNormalsFile);

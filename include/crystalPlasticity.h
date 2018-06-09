@@ -31,6 +31,7 @@ public:
      *calculates the texture of the deformed polycrystal
      */
     void reorient();
+
     /**
      *calculates the material tangent modulus dPK1/dF at the quadrature point
      F_trial-trial Elastic strain (Fe_trial)
@@ -48,7 +49,11 @@ public:
      det_F_tau-det(F_tau)
      det_FE_tau-det(FE_tau)
     */
-    void tangent_modulus(FullMatrix<double> &F_trial, FullMatrix<double> &Fpn_inv, FullMatrix<double> &SCHMID_TENSOR1, FullMatrix<double> &A,FullMatrix<double> &A_PA,FullMatrix<double> &B,FullMatrix<double> &T_tau, FullMatrix<double> &PK1_Stiff, Vector<double> &active, Vector<double> &resolved_shear_tau_trial, Vector<double> &x_beta, Vector<double> &PA, int &n_PA, double &det_F_tau, double &det_FE_tau );
+    void tangent_modulus(FullMatrix<double> &F_trial, FullMatrix<double> &Fpn_inv, FullMatrix<double> &SCHMID_TENSOR1,
+      FullMatrix<double> &A,FullMatrix<double> &A_PA,FullMatrix<double> &B,FullMatrix<double> &T_tau, FullMatrix<double> &PK1_Stiff,
+      Vector<double> &active, Vector<double> &resolved_shear_tau_trial, Vector<double> &x_beta, Vector<double> &PA, int &n_PA,
+      double &det_F_tau, double &det_FE_tau );
+
     /**
      *calculates the incremental shear strain in the slip systems by active set search and removal of inactive slip systems
      A->Stiffness Matrix A
@@ -59,17 +64,19 @@ public:
      x_beta-incremental shear strain delta_gamma
      PA-active slip systems
     */
+    void inactive_slip_removal(Vector<double> &active,Vector<double> &x_beta_old, Vector<double> &x_beta, int &n_PA,
+      Vector<double> &PA, Vector<double> b,FullMatrix<double> A,FullMatrix<double> &A_PA);
 
-
-    void inactive_slip_removal(Vector<double> &active,Vector<double> &x_beta_old, Vector<double> &x_beta, int &n_PA, Vector<double> &PA, Vector<double> b,FullMatrix<double> A,FullMatrix<double> &A_PA);
     /**
      * Structure to hold material parameters
      */
     materialProperties properties;
+
     //orientation maps
     crystalOrientationsIO<dim> orientations;
 private:
     void init(unsigned int num_quad_points);
+
     void setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value);
     /**
      * Updates the stress and tangent modulus at a given quadrature point in a element for
@@ -80,24 +87,29 @@ private:
 
     void calculatePlasticity(unsigned int cellID,
                              unsigned int quadPtID);
+
     void getElementalValues(FEValues<dim>& fe_values,
                             unsigned int dofs_per_cell,
                             unsigned int num_quad_points,
                             FullMatrix<double>& elementalJacobian,
                             Vector<double>&     elementalResidual);
-    void updateAfterIncrement();
-    void updateBeforeIteration();
-    void updateBeforeIncrement();
 
+    void updateAfterIncrement();
+
+    void updateBeforeIteration();
+
+    void updateBeforeIncrement();
 
     /**
      *calculates the rotation matrix (OrientationMatrix) from the rodrigues vector (r)
      */
     void odfpoint(FullMatrix <double> &OrientationMatrix,Vector<double> r);
+
     /**
      *calculates the vector form (Voigt Notation) of the symmetric matrix A
      */
     Vector<double> vecform(FullMatrix<double> A);
+
     /**
      *calculates the symmetric matrix (A) from the vector form Av (Voigt Notation)
      */
@@ -106,13 +118,13 @@ private:
     /**
      *calculates the equivalent matrix Aright for the second order tensorial operation XA=B => A_r*{x}={b}
     */
-
     void right(FullMatrix<double> &Aright,FullMatrix<double> elm);
 
     /**
      *calculates the equivalent matrix A for the second order tensorial operation symm(AX)=B => A_r*{x}={b}
      */
     void symmf(FullMatrix<double> &A,FullMatrix<double> elm);
+
     /**
      *calculates the equivalent matrix Aleft for the second order tensorial operation AX=B => A_r*{x}={b}
      */
@@ -131,30 +143,33 @@ private:
     /**
      *calculates the matrix exponential of matrix A
      */
-
     FullMatrix<double> matrixExponential(FullMatrix<double> A);
-
 
     /**
      * Global deformation gradient F
     */
     FullMatrix<double> F;
+
     /**
      * Deformation gradient in crystal plasticity formulation. By default F=F_tau
      */
     FullMatrix<double> F_tau;
+
     /**
      * Plastic deformation gradient in crystal plasticity formulation. F_tau=Fe_tau*Fp_tau
      */
     FullMatrix<double> FP_tau;
+
     /**
      * Elastic deformation gradient in crystal plasticity formulation. F_tau=Fe_tau*Fp_tau
      */
     FullMatrix<double> FE_tau;
+
     /**
      * Cauchy Stress T
      */
     FullMatrix<double> T;
+
     /**
      * First Piola-Kirchhoff stress
      */
@@ -164,14 +179,17 @@ private:
      * volume weighted Cauchy stress per core
      */
     FullMatrix<double> local_stress;
+
     /**
      * volume weighted Lagrangian strain per core
      */
     FullMatrix<double> local_strain;
+
     /**
      * volume averaged global Cauchy stress
      */
     FullMatrix<double> global_stress;
+
     /**
      * volume averaged global Lagrangian strain
      */
@@ -186,27 +204,29 @@ private:
      * No. of elements
      */
     double No_Elem;
+
     /**
      * No. of quadrature points per element
      */
     double N_qpts;
+
     /**
      * volume of elements per core
      */
     double local_microvol;
+
     /**
      * global volume
      */
     double microvol;
 
-
     double signstress;
 
-    //Store crystal orientations
     /**
      * Stores original crystal orientations as rodrigues vectors by element number and quadratureID
      */
     std::vector<std::vector<  Vector<double> > >  rot;
+
     /**
      * Stores deformed crystal orientations as rodrigues vectors by element number and quadratureID
      */
@@ -216,23 +236,28 @@ private:
     /**
      * Stores Plastic deformation gradient by element number and quadratureID at each iteration
      */
-    std::vector< std::vector< FullMatrix<double> > >   Fp_iter;
+    std::vector< std::vector< FullMatrix<double> > > Fp_iter;
+
     /**
      * Stores Plastic deformation gradient by element number and quadratureID at each increment
      */
     std::vector< std::vector< FullMatrix<double> > > Fp_conv;
+
     /**
      * Stores Elastic deformation gradient by element number and quadratureID at each iteration
      */
     std::vector< std::vector< FullMatrix<double> > >   Fe_iter;
+
     /**
      * Stores Elastic deformation gradient by element number and quadratureID at each increment
      */
     std::vector< std::vector< FullMatrix<double> > > Fe_conv;
+
     /**
      * Stores slip resistance by element number and quadratureID at each iteration
      */
     std::vector<std::vector<  Vector<double> > >  s_alpha_iter;
+
     /**
      * Stores slip resistance by element number and quadratureID at each increment
      */
@@ -242,28 +267,34 @@ private:
      * No. of slip systems
      */
     unsigned int n_slip_systems; //No. of slip systems
+
     /**
      * Slip directions
      */
     FullMatrix<double> m_alpha;
+
     /**
      * Slip Normals
      */
     FullMatrix<double> n_alpha;
+
     /**
      * Latent Hardening Matrix
      */
     FullMatrix<double> q;
 
     FullMatrix<double> sres;
+
     /**
      * Elastic Stiffness Matrix
      */
     FullMatrix<double> Dmat;
+
     /**
      * slip resistance
      */
     Vector<double> sres_tau;
+
     bool initCalled;
 
     //orientatations data for each quadrature point
@@ -271,6 +302,7 @@ private:
      * Stores grainID No. by element number and quadratureID
      */
     std::vector<std::vector<unsigned int> > quadratureOrientationsMap;
+
     void loadOrientations();
 };
 
