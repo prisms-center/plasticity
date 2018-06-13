@@ -1,4 +1,5 @@
 //methods to allow for pre/post increment level updates
+#include "../../include/ellipticBVP.h"
 
 #ifndef UPDATEINCREMENT_H
 #define UPDATEINCREMENT_H

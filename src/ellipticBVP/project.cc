@@ -1,4 +1,5 @@
 //project method for ellipticBVP class
+#include "../../include/ellipticBVP.h"
 
 #ifndef PROJECT_H
 #define PROJECT_H

@@ -4,7 +4,7 @@
 
 //dealii headers
 #include "ellipticBVP.h"
-#include "../src/utilityObjects/crystalOrientationsIO.cc"
+#include "crystalOrientationsIO.h"
 #include <iostream>
 #include <fstream>
 
@@ -199,11 +199,6 @@ private:
      * Tangent modulus dPK1/dF
      */
     Tensor<4,dim,double> dP_dF;
-
-    /**
-     * No. of elements
-     */
-    double No_Elem;
 
     /**
      * No. of quadrature points per element

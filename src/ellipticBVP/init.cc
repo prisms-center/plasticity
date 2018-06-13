@@ -1,4 +1,5 @@
 //initialization method for ellipticBVP class
+#include "../../include/ellipticBVP.h"
 
 #ifndef INIT_ELLIPTICBVP_H
 #define INIT_ELLIPTICBVP_H

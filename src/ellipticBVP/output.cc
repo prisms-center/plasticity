@@ -1,4 +1,5 @@
 //output method for ellipticBVP class
+#include "../../include/ellipticBVP.h"
 
 #ifndef OUTPUT_ELLIPTICBVP_H
 #define OUTPUT_ELLIPTICBVP_H
@@ -13,9 +14,9 @@ void ellipticBVP<dim>::output(){
   data_out_Scalar.attach_dof_handler (dofHandler_Scalar);
 
   //add displacement field
-  data_out.add_data_vector (solutionWithGhosts, 
-			    nodal_solution_names, 
-			    DataOut<dim>::type_dof_data, 
+  data_out.add_data_vector (solutionWithGhosts,
+			    nodal_solution_names,
+			    DataOut<dim>::type_dof_data,
 			    nodal_data_component_interpretation);
 
   //add postprocessing fields
@@ -42,7 +43,7 @@ void ellipticBVP<dim>::output(){
       if (postprocessed_solution_names[field].compare(std::string("Phase_ID"))==0) continue;
 #endif
 #endif
-      
+
 #ifdef output_Twin
 #if output_Twin==false
     if (postprocessed_solution_names[field].compare(std::string("Twin"))==0) continue;
@@ -59,11 +60,11 @@ void ellipticBVP<dim>::output(){
 #endif
 #endif
     //
-    data_out_Scalar.add_data_vector (*postFieldsWithGhosts[field], 
+    data_out_Scalar.add_data_vector (*postFieldsWithGhosts[field],
 				     postprocessed_solution_names[field].c_str());
     numPostProcessedFieldsWritten++;
   }
-  
+
   //add subdomain id to output file
   Vector<float> subdomain (triangulation.n_active_cells());
   for (unsigned int i=0; i<subdomain.size(); ++i)
@@ -91,7 +92,7 @@ void ellipticBVP<dim>::output(){
     data_out_Scalar.build_patches ();
   }
 #endif
-#endif  
+#endif
 
   //write to results file
   //Set output directory, if provided
@@ -104,11 +105,11 @@ void ellipticBVP<dim>::output(){
   //
   unsigned int incrementDigits= (totalIncrements<10000 ? 4 : std::ceil(std::log10(totalIncrements))+1);
   unsigned int domainDigits   = (Utilities::MPI::n_mpi_processes(mpi_communicator)<10000 ? 4 : std::ceil(std::log10(Utilities::MPI::n_mpi_processes(mpi_communicator)))+1);
-  
+
   const std::string filename = (dir+"solution-" +
 				Utilities::int_to_string (currentIncrement,incrementDigits) +
 				"." +
-				Utilities::int_to_string (triangulation.locally_owned_subdomain(), 
+				Utilities::int_to_string (triangulation.locally_owned_subdomain(),
 							  domainDigits));
   std::ofstream outputFile ((filename + ".vtu").c_str());
   data_out.write_vtu (outputFile);
@@ -117,25 +118,25 @@ void ellipticBVP<dim>::output(){
     const std::string filenameForProjectedFields = (dir+"projectedFields-" +
 						    Utilities::int_to_string (currentIncrement,incrementDigits) +
 						    "." +
-						    Utilities::int_to_string (triangulation.locally_owned_subdomain(), 
+						    Utilities::int_to_string (triangulation.locally_owned_subdomain(),
 									      domainDigits));
     std::ofstream outputFileForProjectedFields ((filenameForProjectedFields + ".vtu").c_str());
     data_out_Scalar.write_vtu (outputFileForProjectedFields);
   }
-  
-  
+
+
   //create pvtu record
   if (Utilities::MPI::this_mpi_process(mpi_communicator) == 0){
     std::vector<std::string> filenames, filenamesForProjectedFields;
     for (unsigned int i=0;i<Utilities::MPI::n_mpi_processes (MPI_COMM_WORLD); ++i){
       filenames.push_back ("solution-" +
-			   Utilities::int_to_string (currentIncrement, incrementDigits) + 
+			   Utilities::int_to_string (currentIncrement, incrementDigits) +
 			   "." +
 			   Utilities::int_to_string (i, domainDigits) +
 			   + ".vtu");
       if (numPostProcessedFieldsWritten>0){
 	filenamesForProjectedFields.push_back ("projectedFields-" +
-					       Utilities::int_to_string (currentIncrement, incrementDigits) + 
+					       Utilities::int_to_string (currentIncrement, incrementDigits) +
 					       "." +
 					       Utilities::int_to_string (i, domainDigits) +
 					       + ".vtu");
@@ -161,4 +162,3 @@ void ellipticBVP<dim>::output(){
 }
 
 #endif
-

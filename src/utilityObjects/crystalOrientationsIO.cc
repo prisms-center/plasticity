@@ -1,27 +1,4 @@
-//class to read/write crystal orientations from/to external text files
-#include <fstream>
-#include <iostream>
-#include <sstream>
-
-template <int dim>
-class crystalOrientationsIO{
-public:
-  crystalOrientationsIO();
-  void loadOrientations(std::string _voxelFileName, 
-			unsigned int headerLines,
-			std::string _orientationFileName,
-			unsigned int _numPts[], 
-			double _stencil[]);
-  void loadOrientationVector(std::string _eulerFileName);
-  unsigned int getMaterialID(double _coords[]);
-  void addToOutputOrientations(std::vector<double>& _orientationsInfo);
-  void writeOutputOrientations();
-  std::map<unsigned int, std::vector<double> > eulerAngles;
-  std::vector<std::vector<double> > outputOrientations;
-private:
-  std::map<double,std::map<double, std::map<double, unsigned int> > > inputVoxelData;
-  ConditionalOStream  pcout;  
-};
+#include "../../include/crystalOrientationsIO.h"
 
 //constructor
 template <int dim>
@@ -42,7 +19,7 @@ void crystalOrientationsIO<dim>::writeOutputOrientations(){
 #ifdef writeOutput
   if (!writeOutput) return;
 #endif
-  //  
+  //
   pcout << "writing orientations data to file\n";
   //
   //set output directory, if provided
@@ -70,9 +47,9 @@ void crystalOrientationsIO<dim>::writeOutputOrientations(){
     pcout << "Unable to open file for writing orientations\n";
     exit(1);
   }
-  
-  //join files from all processors into a single file on processor 0 
-  //and delete individual processor files 
+
+  //join files from all processors into a single file on processor 0
+  //and delete individual processor files
   MPI_Barrier(MPI_COMM_WORLD);
   if (Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0){
      std::string fileName2("orientationsOutput");
@@ -89,7 +66,7 @@ void crystalOrientationsIO<dim>::writeOutputOrientations(){
   }
 }
 
-//loadOrientationVector reads the orientation euler angles file   
+//loadOrientationVector reads the orientation euler angles file
 template <int dim>
 void crystalOrientationsIO<dim>::loadOrientationVector(std::string _eulerFileName){
  //check if dim==3
@@ -100,9 +77,9 @@ void crystalOrientationsIO<dim>::loadOrientationVector(std::string _eulerFileNam
 
   //open data file
   std::ifstream eulerDataFile(_eulerFileName.c_str());
-  //read data 
-  std::string line; 
-  double value; 
+  //read data
+  std::string line;
+  double value;
   unsigned int id;
   if (eulerDataFile.is_open()){
     pcout << "reading orientation euler angles file\n";
@@ -111,8 +88,8 @@ void crystalOrientationsIO<dim>::loadOrientationVector(std::string _eulerFileNam
     //read data
     while (getline (eulerDataFile,line)){
       std::stringstream ss(line);
-      unsigned int id; 
-      ss >> id; 
+      unsigned int id;
+      ss >> id;
       //double temp;
       //ss >> temp;
       eulerAngles[id]=std::vector<double>(3);
@@ -127,17 +104,17 @@ void crystalOrientationsIO<dim>::loadOrientationVector(std::string _eulerFileNam
     }
   }
   else{
-    pcout << "Unable to open eulerDataFile\n"; 
+    pcout << "Unable to open eulerDataFile\n";
     exit(1);
   }
 }
 
-//loadOrientations reads the voxel data file and orientations file   
+//loadOrientations reads the voxel data file and orientations file
 template <int dim>
-void crystalOrientationsIO<dim>::loadOrientations(std::string _voxelFileName, 
+void crystalOrientationsIO<dim>::loadOrientations(std::string _voxelFileName,
 						  unsigned int headerLines,
 						  std::string _orientationFileName,
-						  unsigned int _numPts[], 
+						  unsigned int _numPts[],
 						  double _stencil[]){
   //check if dim==3
   if (dim!=3) {
@@ -147,9 +124,9 @@ void crystalOrientationsIO<dim>::loadOrientations(std::string _voxelFileName,
 
   //open voxel data file
   std::ifstream voxelDataFile(_voxelFileName.c_str());
-  //read voxel data 
-  std::string line; 
-  double value; 
+  //read voxel data
+  std::string line;
+  double value;
   unsigned int id;
   if (voxelDataFile.is_open()){
     pcout << "reading voxel data file\n";
@@ -174,7 +151,7 @@ void crystalOrientationsIO<dim>::loadOrientations(std::string _voxelFileName,
     }
   }
   else {
-    pcout << "Unable to open file voxelDataFile\n"; 
+    pcout << "Unable to open file voxelDataFile\n";
     exit(1);
   }
 }
@@ -189,13 +166,13 @@ unsigned int crystalOrientationsIO<dim>::getMaterialID(double _coords[]){
 
   //find nearest point
   //iterator to nearest x slice
-  std::map<double,std::map<double, std::map<double, unsigned int> > >::iterator itx=inputVoxelData.lower_bound(_coords[0]); 
+  std::map<double,std::map<double, std::map<double, unsigned int> > >::iterator itx=inputVoxelData.lower_bound(_coords[0]);
   if(itx != inputVoxelData.end()) --itx;
   //iterator to nearest y slice
-  std::map<double, std::map<double, unsigned int> >::iterator ity=itx->second.lower_bound(_coords[1]); 
+  std::map<double, std::map<double, unsigned int> >::iterator ity=itx->second.lower_bound(_coords[1]);
   if(ity == itx->second.end()) --ity;
   //iterator to nearest z slice
-  std::map<double, unsigned int>::iterator itz=ity->second.lower_bound(_coords[2]); 
+  std::map<double, unsigned int>::iterator itz=ity->second.lower_bound(_coords[2]);
   if(itz != ity->second.end()) --itz;
-  return itz->second; 
+  return itz->second;
 }

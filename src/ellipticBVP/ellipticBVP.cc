@@ -1,4 +1,5 @@
 //constructor and destructor for ellipticBVP class
+#include "../../include/ellipticBVP.h"
 
 #ifndef ELLIPTICBVP_SRC_H
 #define ELLIPTICBVP_SRC_H

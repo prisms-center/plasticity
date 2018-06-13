@@ -1,4 +1,5 @@
 //mesh generation/importing method for ellipticBVP class
+#include "../../include/ellipticBVP.h"
 
 #ifndef MESH_ELLIPTICBVP_H
 #define MESH_ELLIPTICBVP_H

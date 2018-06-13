@@ -1,4 +1,5 @@
 //run method for ellipticBVP class
+#include "../../include/ellipticBVP.h"
 
 #ifndef RUN_ELLIPTICBVP_H
 #define RUN_ELLIPTICBVP_H

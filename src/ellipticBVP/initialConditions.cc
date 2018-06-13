@@ -1,4 +1,5 @@
-//methods to apply initial conditions 
+//methods to apply initial conditions
+#include "../../include/ellipticBVP.h"
 
 #ifndef INITIALCONDITIONS_H
 #define INITIALCONDITIONS_H

@@ -1,4 +1,6 @@
-//methods to apply Dirichlet boundary conditons 
+//methods to apply Dirichlet boundary conditons
+#include "../../include/ellipticBVP.h"
+
 #ifndef BOUNDARYCONDITIONS_H
 #define BOUNDARYCONDITIONS_H
 //this source file is temporarily treated as a header file (hence
@@ -13,12 +15,12 @@ template <int dim>
 void ellipticBVP<dim>::applyDirichletBCs(){
   boundary_values.clear();
   constraints.clear();
-  
+
   const unsigned int   dofs_per_cell   = FE.dofs_per_cell;
   std::vector<types::global_dof_index> local_dof_indices (dofs_per_cell);
   FEValues<dim> fe_values (FE, QGauss<dim>(1), update_values);
   FEFaceValues<dim> fe_face_values (FE, QGauss<dim-1>(1), update_values);
-  
+
   //parallel loop over all elements
   typename DoFHandler<dim>::active_cell_iterator cell = dofHandler.begin_active(), endc = dofHandler.end();
   unsigned int cellID=0;

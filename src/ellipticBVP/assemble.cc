@@ -1,4 +1,5 @@
 //assemble method for ellipticBVP class
+#include "../../include/ellipticBVP.h"
 
 #ifndef ASSEMBLE_H
 #define ASSEMBLE_H
@@ -12,7 +13,7 @@ void ellipticBVP<dim>::assemble(){
   //The additional compress operations are only to flush out data and
   //switch to the correct write state. For  details look at the documentation
   //for PETScWrappers::MPI::Vector()
-  residual.compress(VectorOperation::add); residual=0.0; 
+  residual.compress(VectorOperation::add); residual=0.0;
   jacobian.compress(VectorOperation::add); jacobian=0.0;
 
   //local variables
@@ -23,9 +24,9 @@ void ellipticBVP<dim>::assemble(){
   FullMatrix<double>   elementalJacobian (dofs_per_cell, dofs_per_cell);
   Vector<double>       elementalResidual (dofs_per_cell);
   std::vector<types::global_dof_index> local_dof_indices (dofs_per_cell);
-  
+
   //apply Dirichlet BC's
-  applyDirichletBCs();  
+  applyDirichletBCs();
 
   try{
     //parallel loop over all elements
@@ -36,11 +37,11 @@ void ellipticBVP<dim>::assemble(){
 	elementalJacobian = 0;
 	elementalResidual = 0;
 	cell->set_user_index(cellID);
-	
+
 	//Compute values for the current element
 	fe_values.reinit (cell);
 	cell->get_dof_indices (local_dof_indices);
-	
+
 #if enableUserModel == 1
 	//fill component indices
 	std::vector<unsigned int> componentIndices(dofs_per_cell);
@@ -65,7 +66,7 @@ void ellipticBVP<dim>::assemble(){
 	      shapeGrads[d1*dim+i]=fe_values.shape_grad(d1, q)[i];
 	    }
 	  }
-	  
+
 	  //compute the deformation gradient at this quad point
 	  double gradU[dim*dim], F[dim*dim];
 	  for (unsigned int d1=0; d1<dim*dim; ++d1){
@@ -105,17 +106,17 @@ void ellipticBVP<dim>::assemble(){
 	  //store history variables
 	  for (unsigned int i=0; i<numQuadHistoryVariables; i++){
 	   quadHistory(cellID, q, i)= history[i];
-	  }	  
+	  }
 	}
-#else	
+#else
 	//get elemental jacobian and residual
 	getElementalValues(fe_values, dofs_per_cell, num_quad_points, elementalJacobian, elementalResidual);
 #endif
 	//
-	constraints.distribute_local_to_global(elementalJacobian, 
+	constraints.distribute_local_to_global(elementalJacobian,
 					       elementalResidual,
 					       local_dof_indices,
-					       jacobian, 
+					       jacobian,
 					       residual);
 	cellID++;
       }
@@ -130,8 +131,8 @@ void ellipticBVP<dim>::assemble(){
     resetIncrement=true;
     loadFactorSetByModel=Utilities::MPI::min(loadFactorSetByModel, mpi_communicator);
   }
-  
-  //MPI operation to sync data 
+
+  //MPI operation to sync data
   residual.compress(VectorOperation::add);
   jacobian.compress(VectorOperation::add);
   //pcout << "boundary size: " << boundary_values.size() << "\n";

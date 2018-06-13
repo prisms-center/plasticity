@@ -8,6 +8,7 @@
 
 //dealii headers
 #include "dealIIheaders.h"
+#include "userInputParameters.h"
 
 //compiler directives to handle warnings
 #pragma GCC diagnostic push
@@ -16,7 +17,7 @@
 
 using namespace dealii;
 
-//define data types  
+//define data types
 typedef PETScWrappers::MPI::Vector vectorType;
 typedef PETScWrappers::MPI::SparseMatrix matrixType;
 //LA::MPI::SparseMatrix
@@ -29,8 +30,8 @@ template <int dim>
 class ellipticBVP
 {
  public:
-  ellipticBVP(); 
-  ~ellipticBVP(); 
+  ellipticBVP();
+  ~ellipticBVP();
   void run   ();
 
  protected:
@@ -40,7 +41,7 @@ class ellipticBVP
   IndexSet   locally_owned_dofs_Scalar;
   IndexSet   locally_relevant_dofs;
   IndexSet   locally_relevant_dofs_Scalar;
-  
+
   //FE data structres
   parallel::distributed::Triangulation<dim> triangulation;
   FESystem<dim>      FE;
@@ -49,7 +50,7 @@ class ellipticBVP
   ConstraintMatrix   constraintsMassMatrix;
   DoFHandler<dim>    dofHandler;
   DoFHandler<dim>    dofHandler_Scalar;
-  
+
   //methods
   virtual void mesh();
   void init();
@@ -74,14 +75,14 @@ class ellipticBVP
 				   double* F,
 				   double* residual,
 				   double* jacobian,
-				   double* history) = 0; 
+				   double* history) = 0;
 #else
   virtual void getElementalValues(FEValues<dim>& fe_values,
 				  unsigned int dofs_per_cell,
 				  unsigned int num_quad_points,
 				  FullMatrix<double>& elementalJacobian,
 				  Vector<double>&     elementalResidual) = 0;
-#endif  
+#endif
   //methods to allow for pre/post iteration updates
   virtual void updateBeforeIteration();
   virtual void updateAfterIteration();
@@ -89,14 +90,14 @@ class ellipticBVP
   //methods to allow for pre/post increment updates
   virtual void updateBeforeIncrement();
   virtual void updateAfterIncrement();
-  
+
   //methods to apply dirichlet BC's and initial conditions
   void applyDirichletBCs();
   void applyInitialConditions();
   virtual void setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value);
   std::map<types::global_dof_index,double> boundary_values;
   std::map<types::global_dof_index, Point<dim> > supportPoints;
-  
+
   //parallel data structures
   vectorType solution, oldSolution, residual;
   vectorType solutionWithGhosts, solutionIncWithGhosts;
@@ -108,19 +109,19 @@ class ellipticBVP
   bool resetIncrement;
   double loadFactorSetByModel;
   double totalLoadFactor;
-  
+
   //parallel message stream
-  ConditionalOStream  pcout;  
-  
+  ConditionalOStream  pcout;
+
   //compute-time logger
   TimerOutput computing_timer;
 
   //output variables
-  //solution name array                                                                                      
+  //solution name array
   std::vector<std::string> nodal_solution_names;
   std::vector<DataComponentInterpretation::DataComponentInterpretation> nodal_data_component_interpretation;
 
-  //post processing 
+  //post processing
   unsigned int numPostProcessedFields;
   //postprocessed scalar variable name array (only scalar variables supported currently, will be extended later to vectors and tensors, if required.)
   std::vector<std::string> postprocessed_solution_names;
@@ -132,29 +133,9 @@ class ellipticBVP
   //user model related variables and methods
 #ifdef enableUserModel
   unsigned int numQuadHistoryVariables;
-  Table<3, double> quadHistory; 
+  Table<3, double> quadHistory;
   virtual void initQuadHistory();
 #endif
 };
-
-//other ellipticBVP headers 
-//(these are source files, which will are temporarily treated as
-//header files till library packaging scheme is finalized)
-#include "../src/ellipticBVP/ellipticBVP.cc"
-#include "../src/ellipticBVP/run.cc"
-#include "../src/ellipticBVP/mesh.cc"
-#include "../src/ellipticBVP/init.cc"
-//#include "../src/ellipticBVP/markBoundaries.cc"
-#include "../src/ellipticBVP/initialConditions.cc"
-#include "../src/ellipticBVP/boundaryConditions.cc"
-#include "../src/ellipticBVP/assemble.cc"
-#include "../src/ellipticBVP/solve.cc"
-#include "../src/ellipticBVP/solveNonLinearSystem.cc"
-#include "../src/ellipticBVP/solveLinearSystem.cc"
-#include "../src/ellipticBVP/iterationUpdates.cc"
-#include "../src/ellipticBVP/incrementUpdates.cc"
-#include "../src/ellipticBVP/output.cc"
-#include "../src/ellipticBVP/project.cc"
-#include "../src/ellipticBVP/userModelMethods.cc"
 
 #endif

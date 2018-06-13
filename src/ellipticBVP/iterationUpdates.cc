@@ -1,4 +1,5 @@
 //methods to allow for pre/post iteration level updates
+#include "../../include/ellipticBVP.h"
 
 #ifndef UPDATEITERATION_H
 #define UPDATEITERATION_H
@@ -24,7 +25,7 @@ bool ellipticBVP<dim>::testConvergenceAfterIteration(){
   if (resetIncrement){
     solution=oldSolution;
     solutionWithGhosts=oldSolution;
-    
+
     resetIncrement=false;
     char buffer[100];
     sprintf(buffer,
@@ -35,5 +36,5 @@ bool ellipticBVP<dim>::testConvergenceAfterIteration(){
   }
   return true;
 }
- 
+
 #endif

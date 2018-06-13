@@ -1,4 +1,6 @@
 //Methods related to the user model functionality
+#include "../../include/ellipticBVP.h"
+
 #ifndef USERMODEL_SRC_H
 #define USERMODEL_SRC_H
 //this source file is temporarily treated as a header file (hence

@@ -1,4 +1,5 @@
 //methods to mark boundaries
+#include "../../include/ellipticBVP.h"
 
 #ifndef MARKBOUNDARIES_H
 #define MARKBOUNDARIES_H

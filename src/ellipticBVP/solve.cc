@@ -1,11 +1,12 @@
 //solve method for ellipticBVP class
+#include "../../include/ellipticBVP.h"
 
 #ifndef SOLVE_ELLIPTICBVP_H
 #define SOLVE_ELLIPTICBVP_H
 //this source file is temporarily treated as a header file (hence
 //#ifndef's) till library packaging scheme is finalized
 
-//loop over increments and solve each increment 
+//loop over increments and solve each increment
 template <int dim>
 void ellipticBVP<dim>::solve(){
   pcout << "begin solve...\n\n";
@@ -37,7 +38,7 @@ void ellipticBVP<dim>::solve(){
 
     //solve time increment
     bool success=solveNonLinearSystem();
-    
+
     //call updateAfterIncrement, if any
     if (success){
       updateAfterIncrement();
@@ -49,7 +50,7 @@ void ellipticBVP<dim>::solve(){
       successiveIncs++;
 #ifdef enableAdaptiveTimeStepping
 #if enableAdaptiveTimeStepping==true
-#ifdef succesiveIncForIncreasingTimeStep 
+#ifdef succesiveIncForIncreasingTimeStep
       if (successiveIncs>=succesiveIncForIncreasingTimeStep){
 #ifdef adaptiveLoadIncreaseFactor
 	loadFactorSetByModel*=adaptiveLoadIncreaseFactor;
@@ -62,7 +63,7 @@ void ellipticBVP<dim>::solve(){
       }
 #endif
 #endif
-#endif 
+#endif
       //output results to file
       computing_timer.enter_section("postprocess");
 #ifndef skipOutputSteps
@@ -91,7 +92,7 @@ void ellipticBVP<dim>::solve(){
   sprintf(buffer, "\nfinal load factor  : %12.6e\n", totalLoadFactor);
   pcout << buffer;
 #endif
-#endif  
+#endif
 }
 
 #endif
