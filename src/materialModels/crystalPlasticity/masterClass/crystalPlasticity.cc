@@ -1,8 +1,9 @@
 #include "../../../../include/crystalPlasticity.h"
 //constructor
 template <int dim>
-crystalPlasticity<dim>::crystalPlasticity() :
-ellipticBVP<dim>(),
+crystalPlasticity<dim>::crystalPlasticity(userInputParameters<dim> _userInputs) :
+ellipticBVP<dim>(_userInputs),
+userInputs(_userInputs),
 F(dim,dim),
 F_tau(dim,dim),
 FP_tau(dim,dim),

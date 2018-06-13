@@ -1,4 +1,7 @@
 #include "../../../../include/crystalPlasticity.h"
+#include <iostream>
+#include <fstream>
+
 template <int dim>
 void crystalPlasticity<dim>::init(unsigned int num_quad_points)
 {
@@ -18,20 +21,20 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
     F.reinit(dim, dim);
 
     // Read in the slip systems
-    n_slip_systems=numSlipSystems;
+    n_slip_systems=userInputs.numSlipSystems;
     n_alpha.reinit(n_slip_systems,3);
     m_alpha.reinit(n_slip_systems,3);
-    string line;
+    std::string line;
 
     //open data file to read slip normals
-    ifstream slipNormalsDataFile(slipDirectionsFile);
+    std::ifstream slipNormalsDataFile(userInputs.slipDirectionsFile);
     //read data
     unsigned int id=0;
     if (slipNormalsDataFile.is_open()){
-    	cout << "reading slip Normals file\n";
+    	std::cout << "reading slip Normals file\n";
     	//read data
     	while (getline (slipNormalsDataFile,line) && id<n_slip_systems){
-    	  stringstream ss(line);
+    	  std::stringstream ss(line);
     	  ss >> n_alpha[id][0];
     	  ss >> n_alpha[id][1];
     	  ss >> n_alpha[id][2];
@@ -40,19 +43,19 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
     	}
     }
     else{
-    	cout << "Unable to open slipNormals.txt \n";
+    	std::cout << "Unable to open slipNormals.txt \n";
     	exit(1);
     }
 
       //open data file to read slip directions
-      ifstream slipDirectionsDataFile(slipNormalsFile);
+      std::ifstream slipDirectionsDataFile(userInputs.slipNormalsFile);
       //read data
       id=0;
       if (slipDirectionsDataFile.is_open()){
-	cout << "reading slip Directions file\n";
+	std::cout << "reading slip Directions file\n";
 	//read data
 	while (getline (slipDirectionsDataFile,line)&& id<n_slip_systems){
-	  stringstream ss(line);
+	  std::stringstream ss(line);
 	  ss >> m_alpha[id][0];
 	  ss >> m_alpha[id][1];
 	  ss >> m_alpha[id][2];
@@ -61,7 +64,7 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
 	}
       }
       else{
-	cout << "Unable to open slipDirections.txt \n";
+	std::cout << "Unable to open slipDirections.txt \n";
 	exit(1);
       }
 
@@ -72,7 +75,7 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
     q.reinit(n_slip_systems,n_slip_systems);
     for(unsigned int i=0;i<n_slip_systems;i++){
         for(unsigned int j=0;j<n_slip_systems;j++){
-            q[i][j] = latentHardeningRatio;
+            q[i][j] = userInputs.latentHardeningRatio;
         }
     }
 
@@ -85,7 +88,7 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
 
     for(unsigned int i=0;i<6;i++){
         for(unsigned int j=0;j<6;j++){
-            Dmat[i][j] = elasticStiffness[i][j];
+            Dmat[i][j] = userInputs.elasticStiffness[i][j];
         }
     }
 
@@ -99,7 +102,7 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
     Vector<double> s0_init (n_slip_systems),rot_init(dim),rotnew_init(dim);
 
     for (unsigned int i=0;i<n_slip_systems;i++){
-        s0_init(i)=initialSlipResistance[i];
+        s0_init(i)=userInputs.initialSlipResistance[i];
     }
 
     for (unsigned int i=0;i<dim;i++){

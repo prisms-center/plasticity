@@ -5,11 +5,9 @@
 //dealii headers
 #include "ellipticBVP.h"
 #include "crystalOrientationsIO.h"
-#include <iostream>
-#include <fstream>
 
 typedef struct {
-
+double C44;
 } materialProperties;
 
 //material model class for crystal plasticity
@@ -21,7 +19,7 @@ public:
     /**
      *crystalPlasticity class constructor.
      */
-    crystalPlasticity();
+    crystalPlasticity(userInputParameters<dim> _userInputs);
 #ifdef readExternalMeshes
 #if readExternalMeshes==true
     void mesh();
@@ -75,6 +73,9 @@ public:
     //orientation maps
     crystalOrientationsIO<dim> orientations;
 private:
+
+    const userInputParameters<dim> userInputs;
+
     void init(unsigned int num_quad_points);
 
     void setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value);

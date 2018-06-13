@@ -1,4 +1,6 @@
 #include "../../../../include/crystalPlasticity.h"
+#include <iostream>
+#include <fstream>
 
 //implementation of the updateAfterIncrement method
 template <int dim>
@@ -8,7 +10,7 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 
     //copy rotnew to output
     orientations.outputOrientations.clear();
-    QGauss<dim>  quadrature(quadOrder);
+    QGauss<dim>  quadrature(userInputs.quadOrder);
     const unsigned int num_quad_points = quadrature.size();
     FEValues<dim> fe_values (this->FE, quadrature, update_quadrature_points | update_JxW_values);
     //loop over elements
@@ -62,7 +64,7 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 #else
     std::string dir("./");
 #endif
-    ofstream outputFile;
+    std::ofstream outputFile;
     if(this->currentIncrement==0){
       dir += std::string("stressstrain.txt");
       outputFile.open(dir.c_str());
@@ -72,7 +74,7 @@ void crystalPlasticity<dim>::updateAfterIncrement()
     else{
     dir += std::string("stressstrain.txt");
     }
-    outputFile.open(dir.c_str(),ios::app);
+    outputFile.open(dir.c_str(),std::fstream::app);
     if(Utilities::MPI::this_mpi_process(this->mpi_communicator)==0){
       outputFile << global_strain[0][0]<<'\t'<<global_strain[1][1]<<'\t'<<global_strain[2][2]<<'\t'<<global_strain[1][2]<<'\t'<<global_strain[0][2]<<'\t'<<global_strain[0][1]<<'\t'<<global_stress[0][0]<<'\t'<<global_stress[1][1]<<'\t'<<global_stress[2][2]<<'\t'<<global_stress[1][2]<<'\t'<<global_stress[0][2]<<'\t'<<global_stress[0][1]<<'\n';
     }
@@ -99,9 +101,9 @@ void crystalPlasticity<dim>::updateAfterIncrement()
                 fe_values.reinit(cell);
                 //loop over quadrature points
                 for (unsigned int q=0; q<num_quad_points; ++q){
-                    for(unsigned int i=0;i<(numSlipSystems);i++){
+                    for(unsigned int i=0;i<(userInputs.numSlipSystems);i++){
 
-                        s_alpha_conv[cellID][q][i]=s_alpha_conv[cellID][q][i]-backstressFactor*s_alpha_conv[cellID][q][i];
+                        s_alpha_conv[cellID][q][i]=s_alpha_conv[cellID][q][i]-userInputs.backstressFactor*s_alpha_conv[cellID][q][i];
                     }
                 }
                 cellID++;
