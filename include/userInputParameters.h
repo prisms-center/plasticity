@@ -5,11 +5,6 @@
 #define INCLUDE_USERINPUTPARAMETERS_H_
 
 #include "dealIIheaders.h"
-#include "model_variables.h"
-#include "varBCs.h"
-#include "inputFileReader.h"
-#include "variableAttributeLoader.h"
-#include "nucleationParameters.h"
 
 template <int dim>
 class userInputParameters
@@ -57,7 +52,7 @@ public:
   double succesiveIncForIncreasingTimeStep;
 
   //Elastic Parameters
-  FullMatrix<double> elasticStiffness; // 	Elastic Stiffness Matrix -Voigt Notation (MPa)
+  dealii::FullMatrix<double> elasticStiffness; // 	Elastic Stiffness Matrix -Voigt Notation (MPa)
 
   //Crystal Plasticity parameters
   unsigned int numSlipSystems; // generally 12 for FCC

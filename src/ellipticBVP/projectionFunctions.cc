@@ -1,4 +1,4 @@
-//project method for ellipticBVP class
+//projections method for ellipticBVP class
 #include "../../include/ellipticBVP.h"
 
 #ifndef PROJECT_H
@@ -8,7 +8,7 @@
 
 //initialize post processed field projection
 template <int dim>
-void ellipticBVP<dim>::initProject(){
+void ellipticBVP<dim>::initProjection(){
   //return if no post processing fields
   if (numPostProcessedFields==0) return;
 
@@ -31,7 +31,7 @@ void ellipticBVP<dim>::initProject(){
   }
 
   //initialize postprocessValues data structure
-  QGauss<dim> quadrature(quadOrder);
+  QGauss<dim> quadrature(userInputs.quadOrder);
   const unsigned int num_quad_points = quadrature.size();
   const unsigned int num_local_cells = triangulation.n_locally_owned_active_cells();
   postprocessValues.reinit(TableIndices<4>(num_local_cells, num_quad_points, numPostProcessedFields, dim));
@@ -91,7 +91,7 @@ void ellipticBVP<dim>::initProject(){
 
 //post processed field projection operation
 template <int dim>
-void ellipticBVP<dim>::project(){
+void ellipticBVP<dim>::projection(){
   //return if no post processing fields
   if (numPostProcessedFields==0) return;
 
@@ -118,7 +118,7 @@ void ellipticBVP<dim>::project(){
   }
 
   //local variables
-  QGauss<dim>  quadrature(quadOrder);
+  QGauss<dim>  quadrature(userInputs.quadOrder);
   FEValues<dim> fe_values (FE_Scalar, quadrature, update_values | update_JxW_values);
   const unsigned int   dofs_per_cell   = FE_Scalar.dofs_per_cell;
   const unsigned int   num_quad_points = quadrature.size();

@@ -12,12 +12,8 @@ void ellipticBVP<dim>::mesh(){
   //creating mesh
   pcout << "generating problem mesh\n";
   //
-  std::vector<unsigned int> subdivisions;
-  subdivisions.push_back(subdivisionsX);
-  subdivisions.push_back(subdivisionsY);
-  subdivisions.push_back(subdivisionsZ);
-  GridGenerator::subdivided_hyper_rectangle (triangulation, subdivisions, Point<dim>(), Point<dim>(spanX,spanY,spanZ));
-  triangulation.refine_global (meshRefineFactor);
+  GridGenerator::subdivided_hyper_rectangle (triangulation, userInputs.subdivisions, Point<dim>(), Point<dim>(userInputs.span));
+  triangulation.refine_global (userInputs.meshRefineFactor);
 
   //Output image of the mesh in eps format
 #ifdef  writeMeshToEPS

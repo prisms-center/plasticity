@@ -9,15 +9,12 @@
 //solve linear system of equations AX=b using iterative solver
 template <int dim>
 void ellipticBVP<dim>::solveLinearSystem(ConstraintMatrix& constraintmatrix, matrixType& A, vectorType& b, vectorType& x, vectorType& xGhosts, vectorType& dxGhosts){
+
   vectorType completely_distributed_solutionInc (locally_owned_dofs, mpi_communicator);
-#ifdef linearSolverType
-  SolverControl solver_control(maxLinearSolverIterations, relLinearSolverTolerance*b.l2_norm());
-  linearSolverType solver(solver_control, mpi_communicator);
+  SolverControl solver_control(userInputs.maxLinearSolverIterations, userInputs.relLinearSolverTolerance*b.l2_norm());
+  PETScWrappers::SolverCG solver(solver_control, mpi_communicator);
   PETScWrappers::PreconditionJacobi preconditioner(A);
-#else
-  pcout << "\nError: solverType not defined. This is required for ELLIPTIC BVP.\n\n";
-  exit (-1);
-#endif
+
   //solve Ax=b
   try{
     solver.solve (A, completely_distributed_solutionInc, b, preconditioner);
@@ -43,15 +40,12 @@ void ellipticBVP<dim>::solveLinearSystem(ConstraintMatrix& constraintmatrix, mat
 //the projection of scalar post-processing fields
 template <int dim>
 void ellipticBVP<dim>::solveLinearSystem2(ConstraintMatrix& constraintmatrix, matrixType& A, vectorType& b, vectorType& x, vectorType& xGhosts, vectorType& dxGhosts){
+
   vectorType completely_distributed_solutionInc (locally_owned_dofs_Scalar, mpi_communicator);
-#ifdef linearSolverType
-  SolverControl solver_control(maxLinearSolverIterations, relLinearSolverTolerance*b.l2_norm());
-  linearSolverType solver(solver_control, mpi_communicator);
+  SolverControl solver_control(userInputs.maxLinearSolverIterations, userInputs.relLinearSolverTolerance*b.l2_norm());
+  PETScWrappers::SolverCG solver(solver_control, mpi_communicator);
   PETScWrappers::PreconditionJacobi preconditioner(A);
-#else
-  pcout << "\nError: solverType not defined. This is required for ELLIPTIC BVP.\n\n";
-  exit (-1);
-#endif
+
   //solve Ax=b
   try{
     solver.solve (A, completely_distributed_solutionInc, b, preconditioner);

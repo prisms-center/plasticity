@@ -17,7 +17,7 @@ void ellipticBVP<dim>::assemble(){
   jacobian.compress(VectorOperation::add); jacobian=0.0;
 
   //local variables
-  QGauss<dim>  quadrature(quadOrder);
+  QGauss<dim>  quadrature(userInputs.quadOrder);
   FEValues<dim> fe_values (FE, quadrature, update_values | update_gradients | update_JxW_values);
   const unsigned int   dofs_per_cell   = FE.dofs_per_cell;
   const unsigned int   num_quad_points = quadrature.size();

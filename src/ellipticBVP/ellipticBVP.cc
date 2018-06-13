@@ -15,13 +15,13 @@ ellipticBVP<dim>::ellipticBVP ()
 		 typename Triangulation<dim>::MeshSmoothing
 		 (Triangulation<dim>::smoothing_on_refinement |
 		  Triangulation<dim>::smoothing_on_coarsening)),
-  FE (FE_Q<dim>(feOrder), dim),
-  FE_Scalar (FE_Q<dim>(feOrder), 1),
+  FE (FE_Q<dim>(userInputs.feOrder), dim),
+  FE_Scalar (FE_Q<dim>(userInputs.feOrder), 1),
   dofHandler (triangulation),
   dofHandler_Scalar (triangulation),
   currentIteration(0),
   currentIncrement(0),
-  totalIncrements(totalNumIncrements),
+  totalIncrements(userInputs.totalNumIncrements),
   resetIncrement(false),
   loadFactorSetByModel(1.0),
   totalLoadFactor(0.0),

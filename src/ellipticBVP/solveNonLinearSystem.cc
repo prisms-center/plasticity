@@ -15,7 +15,7 @@ bool ellipticBVP<dim>::solveNonLinearSystem(){
   //non linear iterations
   char buffer[200];
   currentIteration=0;
-  while (currentIteration < maxNonLinearIterations){
+  while (currentIteration < userInputs.maxNonLinearIterations){
     //call updateBeforeIteration, if any
     updateBeforeIteration();
 
@@ -39,12 +39,12 @@ bool ellipticBVP<dim>::solveNonLinearSystem(){
       pcout << buffer;
 
       //check for convergence in abs tolerance
-      if (currentNorm<absNonLinearTolerance){
+      if (currentNorm<userInputs.absNonLinearTolerance){
 	pcout << "nonlinear iterations converged in absolute norm\n";
 	break;
       }
       //check for convergence in relative tolerance
-      else if(relNorm<relNonLinearTolerance){
+      else if(relNorm<userInputs.relNonLinearTolerance){
 	pcout << "nonlinear iterations converged in relative norm\n";
 	break;
       }
@@ -65,9 +65,9 @@ bool ellipticBVP<dim>::solveNonLinearSystem(){
   }
 
   //check if maxNonLinearIterations reached
-  if (currentIteration >= maxNonLinearIterations){
+  if (currentIteration >= userInputs.maxNonLinearIterations){
     pcout <<  "nonlinear iterations did not converge in maxNonLinearIterations\n";
-    if (stopOnConvergenceFailure) {exit (1);}
+    if (userInputs.stopOnConvergenceFailure) {exit (1);}
     else {pcout << "stopOnConvergenceFailure==false, so marching ahead\n";}
   }
 

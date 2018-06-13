@@ -10,12 +10,12 @@
 #include "dealIIheaders.h"
 #include "userInputParameters.h"
 
+using namespace dealii;
+
 //compiler directives to handle warnings
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wextra"
 #pragma GCC diagnostic pop
-
-using namespace dealii;
 
 //define data types
 typedef PETScWrappers::MPI::Vector vectorType;
@@ -60,8 +60,9 @@ class ellipticBVP
   bool solveNonLinearSystem();
   void solve();
   void output();
-  void initProject();
-  void project();
+  void initProjection();
+  void projection();
+  void markBoundaries();
 
   //virtual methods to be implemented in derived class
   //method to calculate elemental Jacobian and Residual,
@@ -90,6 +91,9 @@ class ellipticBVP
   //methods to allow for pre/post increment updates
   virtual void updateBeforeIncrement();
   virtual void updateAfterIncrement();
+
+  //User input parameters object
+  userInputParameters<dim> userInputs;
 
   //methods to apply dirichlet BC's and initial conditions
   void applyDirichletBCs();
