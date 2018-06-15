@@ -2,7 +2,6 @@
 #define feOrder   1 // Basis function interpolation order (1-linear)
 #define quadOrder 2 // Quadrature point order n^3 (2->8 quadrature points)
 
-
 /*Mesh parameters*/
 //Set the length of the domain in all three dimensions
 //Each axes spans from zero to the specified length
@@ -38,7 +37,7 @@
 /*Adaptive time-stepping parameters*/
 #define enableAdaptiveTimeStepping false //Flag to enable adaptive time steps
 #define adaptiveLoadStepFactor 0.5 // Load step factor
-#define adaptiveLoadIncreaseFactor 1.25 
+#define adaptiveLoadIncreaseFactor 1.25
 #define succesiveIncForIncreasingTimeStep 10
 
 //Elastic Parameters
@@ -46,7 +45,7 @@ double elasticStiffness[6][6]={{170.0e3, 124.0e3, 124.0e3, 0, 0, 0},
 				   {124.0e3, 170.0e3, 124.0e3, 0, 0, 0},
 				   {124.0e3, 124.0e3, 170.0e3, 0, 0, 0},
 				   {0, 0, 0, 75.0e3, 0, 0},
-				   {0, 0, 0, 0, 75.0e3, 0}, 
+				   {0, 0, 0, 0, 75.0e3, 0},
 				   {0, 0, 0, 0, 0, 75.0e3}}; // 	Elastic Stiffness Matrix -Voigt Notation (MPa)
 
 
@@ -57,7 +56,7 @@ double elasticStiffness[6][6]={{170.0e3, 124.0e3, 124.0e3, 0, 0, 0},
 
 double initialSlipResistance[numSlipSystems]= {16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0}; //CRSS of the slip sytems
 double initialHardeningModulus[numSlipSystems]= {180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0}; //Hardening moduli of slip systems
-double powerLawExponent[numSlipSystems]= {2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25}; // Power law coefficient 
+double powerLawExponent[numSlipSystems]= {2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25}; // Power law coefficient
 double saturationStress[numSlipSystems]= {148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0}; // Saturation stress
 
 
@@ -71,7 +70,7 @@ double saturationStress[numSlipSystems]= {148.0, 148.0, 148.0, 148.0, 148.0, 148
 #define slipNormalsFile "slipNormals.txt" // Slip Normals File
 
 
-// Crystal Plasticity Constitutive model tolerances (for advanced users) 
+// Crystal Plasticity Constitutive model tolerances (for advanced users)
 #define modelStressTolerance 1.0e-6 // Stress tolerance for the yield surface (MPa)
 #define modelMaxSlipSearchIterations 1 // Maximum no. of active slip search iterations
 #define modelMaxSolverIterations 4 // Maximum no. of iterations to achieve non-linear convergence
@@ -83,9 +82,3 @@ unsigned int numPts[3]={20, 20, 22}; // No. of voxels in x,y and z directions
 #define grainIDFile "grainID.txt" // Grain ID File
 #define headerLinesGrainIDFile 5 // No. of header Lines
 #define grainOrientationsFile "orientations.txt" // Slip Normals File
-
-
-
-
-
-

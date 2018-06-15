@@ -30,7 +30,7 @@ template <int dim>
 class ellipticBVP
 {
  public:
-  ellipticBVP();
+  ellipticBVP(userInputParameters _userInputs);
   ~ellipticBVP();
   void run   ();
 
@@ -93,7 +93,7 @@ class ellipticBVP
   virtual void updateAfterIncrement();
 
   //User input parameters object
-  userInputParameters<dim> userInputs;
+  userInputParameters userInputs;
 
   //methods to apply dirichlet BC's and initial conditions
   void applyDirichletBCs();

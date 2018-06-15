@@ -21,13 +21,13 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
     F.reinit(dim, dim);
 
     // Read in the slip systems
-    n_slip_systems=userInputs.numSlipSystems;
+    n_slip_systems=this->userInputs.numSlipSystems;
     n_alpha.reinit(n_slip_systems,3);
     m_alpha.reinit(n_slip_systems,3);
     std::string line;
 
     //open data file to read slip normals
-    std::ifstream slipNormalsDataFile(userInputs.slipDirectionsFile);
+    std::ifstream slipNormalsDataFile(this->userInputs.slipDirectionsFile);
     //read data
     unsigned int id=0;
     if (slipNormalsDataFile.is_open()){
@@ -48,7 +48,7 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
     }
 
       //open data file to read slip directions
-      std::ifstream slipDirectionsDataFile(userInputs.slipNormalsFile);
+      std::ifstream slipDirectionsDataFile(this->userInputs.slipNormalsFile);
       //read data
       id=0;
       if (slipDirectionsDataFile.is_open()){
@@ -75,7 +75,7 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
     q.reinit(n_slip_systems,n_slip_systems);
     for(unsigned int i=0;i<n_slip_systems;i++){
         for(unsigned int j=0;j<n_slip_systems;j++){
-            q[i][j] = userInputs.latentHardeningRatio;
+            q[i][j] = this->userInputs.latentHardeningRatio;
         }
     }
 
@@ -88,7 +88,7 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
 
     for(unsigned int i=0;i<6;i++){
         for(unsigned int j=0;j<6;j++){
-            Dmat[i][j] = userInputs.elasticStiffness[i][j];
+            Dmat[i][j] = this->userInputs.elasticStiffness[i][j];
         }
     }
 
@@ -102,7 +102,7 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
     Vector<double> s0_init (n_slip_systems),rot_init(dim),rotnew_init(dim);
 
     for (unsigned int i=0;i<n_slip_systems;i++){
-        s0_init(i)=userInputs.initialSlipResistance[i];
+        s0_init(i)=this->userInputs.initialSlipResistance[i];
     }
 
     for (unsigned int i=0;i<dim;i++){

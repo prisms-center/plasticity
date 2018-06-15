@@ -10,7 +10,7 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 
     //copy rotnew to output
     orientations.outputOrientations.clear();
-    QGauss<dim>  quadrature(userInputs.quadOrder);
+    QGauss<dim>  quadrature(this->userInputs.quadOrder);
     const unsigned int num_quad_points = quadrature.size();
     FEValues<dim> fe_values (this->FE, quadrature, update_quadrature_points | update_JxW_values);
     //loop over elements
@@ -101,9 +101,9 @@ void crystalPlasticity<dim>::updateAfterIncrement()
                 fe_values.reinit(cell);
                 //loop over quadrature points
                 for (unsigned int q=0; q<num_quad_points; ++q){
-                    for(unsigned int i=0;i<(userInputs.numSlipSystems);i++){
+                    for(unsigned int i=0;i<(this->userInputs.numSlipSystems);i++){
 
-                        s_alpha_conv[cellID][q][i]=s_alpha_conv[cellID][q][i]-userInputs.backstressFactor*s_alpha_conv[cellID][q][i];
+                        s_alpha_conv[cellID][q][i]=s_alpha_conv[cellID][q][i]-this->userInputs.backstressFactor*s_alpha_conv[cellID][q][i];
                     }
                 }
                 cellID++;

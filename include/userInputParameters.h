@@ -6,11 +6,19 @@
 
 #include "dealIIheaders.h"
 
-template <int dim>
 class userInputParameters
 {
 
 public:
+
+  userInputParameters(std::string input_file_name);
+
+  void declare_parameters(dealii::ParameterHandler & parameter_handler);
+
+  dealii::ParameterHandler parameter_handler;
+
+  unsigned int dim;
+
   /*FE parameters*/
   unsigned int feOrder; // Basis function interpolation order (1-linear)
   unsigned int quadOrder;// Quadrature point order n^3 (2->8 quadrature points)
@@ -25,6 +33,7 @@ public:
   std::vector<double> subdivisions;
 
   unsigned int meshRefineFactor; // 2^n*2^n*2^n elements(3->8*8*8 =512 elements)
+
   bool writeMeshToEPS; //Only written for serial runs and if number of elements < 10000
 
   /*Solution output parameters*/
@@ -34,9 +43,9 @@ public:
   bool output_Eqv_strain;
   bool output_Eqv_stress;
   bool output_Grain_ID;
+  bool output_Twin;
 
   /*Solver parameters*/
-  std::string linearSolverType; // Type of linear solver
   unsigned int totalNumIncrements; // No. of increments
   unsigned int maxLinearSolverIterations; // Maximum iterations for linear solver
   unsigned int maxNonLinearIterations; // Maximum no. of non-linear iterations
@@ -55,20 +64,27 @@ public:
   dealii::FullMatrix<double> elasticStiffness; // 	Elastic Stiffness Matrix -Voigt Notation (MPa)
 
   //Crystal Plasticity parameters
-  unsigned int numSlipSystems; // generally 12 for FCC
+  unsigned int numSlipSystems;
   double latentHardeningRatio; //q1
-
   std::vector<double> initialSlipResistance; //CRSS of the slip sytems
   std::vector<double> initialHardeningModulus; //Hardening moduli of slip systems
   std::vector<double> powerLawExponent; // Power law coefficient
   std::vector<double> saturationStress; // Saturation stress
-
-  //Backstress factor
-  double backstressFactor; //(Ratio between backstress and CRSS during load reversal)
-
-  //Slip systems files
   std::string slipDirectionsFile; // Slip Directions File
   std::string slipNormalsFile; // Slip Normals File
+
+  unsigned int numTwinSystems;
+  std::vector<double> initialSlipResistanceTwin; //CRSS of the slip sytems
+  std::vector<double> initialHardeningModulusTwin; //Hardening moduli of slip systems
+  std::vector<double> powerLawExponentTwin; // Power law coefficient
+  std::vector<double> saturationStressTwin; // Saturation stress
+  std::string twinDirectionsFile; // Twin Directions File
+  std::string twinNormalsFile; // Twin Normals File
+
+  double backstressFactor; //Ratio between backstress and CRSS during load reversal
+  double twinThresholdFraction; // threshold fraction of characteristic twin shear (<1)
+  double twinSaturationFactor; // twin growth saturation factor  (<(1-twinThresholdFraction))
+  double twinShear; // characteristic twin shear
 
   // Crystal Plasticity Constitutive model tolerances (for advanced users)
   double modelStressTolerance; // Stress tolerance for the yield surface (MPa)
@@ -77,10 +93,11 @@ public:
   double modelMaxPlasticSlipL2Norm; // L2-Norm of plastic slip strain-used for load-step adaptivity
 
   //Read Input Microstructure
-  std::vector<unsigned int> numPts; // No. of voxels in x,y and z directions
   std::string grainIDFile; // Grain ID File
-  unsigned int headerLinesGrainIDFile; // No. of header Lines
-  std::string grainOrientationsFile; // Slip Normals File
+  std::vector<unsigned int> numPts; // No. of voxels in x,y and z directions
+
+  std::string grainOrientationsFile; // Grain orientations file
+  unsigned int headerLinesGrainIDFile; // No. of header Lines in grain orientations file
 
 private:
 };

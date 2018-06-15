@@ -20,10 +20,10 @@
 #define writeOutput true // flag to write output vtu and pvtu files
 #define outputDirectory "."
 #define skipOutputSteps 0
-#define output_Eqv_strain true
-#define output_Eqv_stress true
-#define output_Grain_ID   true
-#define output_Twin true
+#define outputEqvstrain true
+#define outputEqvstress true
+#define outputGrainID   true
+#define outputTwin true
 
 /*Solver parameters*/
 #define linearSolverType PETScWrappers::SolverCG // Type of linear solver
@@ -38,7 +38,7 @@
 /*Adaptive time-stepping parameters*/
 #define enableAdaptiveTimeStepping false //Flag to enable adaptive time steps
 #define adaptiveLoadStepFactor 0.5 // Load step factor
-#define adaptiveLoadIncreaseFactor 1.25 
+#define adaptiveLoadIncreaseFactor 1.25
 #define succesiveIncForIncreasingTimeStep 10
 
 //Elastic Parameters
@@ -46,18 +46,18 @@ double elasticStiffness[6][6]={{59.3e3, 25.7e3, 21.4e3, 0, 0, 0},
 				   {25.7e3, 59.3e3, 21.4e3, 0, 0, 0},
 				   {21.4e3, 21.4e3, 61.5e3, 0, 0, 0},
 				   {0, 0, 0, 16.4e3, 0, 0},
-				   {0, 0, 0, 0, 16.4e3, 0}, 
+				   {0, 0, 0, 0, 16.4e3, 0},
 				   {0, 0, 0, 0, 0, 16.8e3}}; // 	Elastic Stiffness Matrix -Voigt Notation (MPa)
 
 
-//Crystal Plasticity 
+//Crystal Plasticity
 //slip parameters
 #define numSlipSystems 18 // Total No. of slip systems (slip)
 #define latentHardeningRatio 1.4  //q1
 
 double initialSlipResistance[numSlipSystems]= {25.0, 25.0, 25.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0, 68.0}; //CRSS of slip sytems
 double initialHardeningModulus[numSlipSystems]= {100.0, 100.0, 100.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0, 130.0}; //Hardening moduli of slip systems
-double powerLawExponent[numSlipSystems]= {1.1, 1.1, 1.1, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8}; // Power law coefficient 
+double powerLawExponent[numSlipSystems]= {1.1, 1.1, 1.1, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8}; // Power law coefficient
 double saturationStress[numSlipSystems]= {70.0, 70.0, 70.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0, 210.0}; // Saturation stress
 
 //Twin parameters
@@ -69,8 +69,8 @@ double initialHardeningModulusTwin[numTwinSystems]= {50.0, 50.0, 50.0, 50.0, 50.
 double powerLawExponentTwin[numTwinSystems]= {1.1, 1.1, 1.1, 1.1, 1.1, 1.1};// Power law coefficient
 double saturationStressTwin[numTwinSystems]= {50.0, 50.0, 50.0, 50.0, 50.0, 50.0}; // Saturation stress
 
-#define twinThresholdFraction 0.25 // threshold fraction of characteristic twin shear (<1)  
-#define twinSaturationFactor 0.25 // twin growth saturation factor  (<(1-twinThresholdFraction)) 
+#define twinThresholdFraction 0.25 // threshold fraction of characteristic twin shear (<1)
+#define twinSaturationFactor 0.25 // twin growth saturation factor  (<(1-twinThresholdFraction))
 #define twinShear 0.129 // characteristic twin shear
 
 //Backstress factor
@@ -93,7 +93,7 @@ double saturationStressTwin[numTwinSystems]= {50.0, 50.0, 50.0, 50.0, 50.0, 50.0
 #define modelMaxSlipSearchIterations 1 // Maximum no. of active slip search iterations
 #define modelMaxSolverIterations 3 // Maximum no. of iterations to achieve non-linear convergence
 #define modelMaxPlasticSlipL2Norm 2.5 // L2-Norm of plastic slip strain-used for load-step adaptivity
- 
+
 
 
 
@@ -102,9 +102,3 @@ unsigned int numPts[3]={20, 20, 22}; // No. of voxels in x,y and z directions
 #define grainIDFile "grainID.txt" // Grain ID File
 #define headerLinesGrainIDFile 5 // No. of header Lines
 #define grainOrientationsFile "orientations.txt" // Slip Normals File
-
-
-
-
-
-

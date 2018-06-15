@@ -31,25 +31,9 @@ ADD_CUSTOM_TARGET(run COMMAND main
 # Set up the paths to the library files
 INCLUDE_DIRECTORIES(include)
 
-FILE(GLOB headers include/ellipticBVP.h include/crystalPlasticity.h)
+FILE(GLOB headers include/*.h)
 FILE(GLOB EBVPfunctions src/ellipticBVP/*.cc)
-
 FILE(GLOB CP_masterclass src/materialModels/crystalPlasticity/masterClass/*.cc)
-
-PROJECT(prisms_cp_ebvp)
-SET(CMAKE_BUILD_TYPE Release)
-
-# Append extra flags for the GNU compiler to suppress some warnings
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-        #set(DEAL_II_CXX_FLAGS_DEBUG "${DEAL_II_CXX_FLAGS_DEBUG} -Wno-maybe-uninitialized -Wno-unused-parameter -Wno-extra")
-        #set(DEAL_II_CXX_FLAGS_RELEASE "${DEAL_II_CXX_FLAGS_RELEASE} -Wno-maybe-uninitialized -Wno-unused-parameter -Wno-extra")
-        set(DEAL_II_CXX_FLAGS_DEBUG "${DEAL_II_CXX_FLAGS_DEBUG} -Wno-maybe-uninitialized -Wno-deprecated-declarations -Wno-comment -Wno-unused-parameter -Wno-unused-variable -Wno-unused-but-set-variable")
-        set(DEAL_II_CXX_FLAGS_RELEASE "${DEAL_II_CXX_FLAGS_RELEASE} -Wno-maybe-uninitialized -Wno-deprecated-declarations -Wno-comment -Wno-unused-parameter -Wno-unused-variable -Wno-unused-but-set-variable")
-        #set(CMAKE_CXX_FLAGS "-Wno-maybe-uninitialized -Wno-deprecated-declarations -Wno-comment -Wno-unused-parameter -Wno-unused-variable -Wno-unused-but-set-variable")
-endif()
-
-ADD_LIBRARY(${PROJECT_NAME} ${EBVPfunctions})
-DEAL_II_SETUP_TARGET(${PROJECT_NAME})
 
 PROJECT(prisms_cp)
 SET(CMAKE_BUILD_TYPE Release)
@@ -63,7 +47,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
         #set(CMAKE_CXX_FLAGS "-Wno-maybe-uninitialized -Wno-deprecated-declarations -Wno-comment -Wno-unused-parameter -Wno-unused-variable -Wno-unused-but-set-variable")
 endif()
 
-ADD_LIBRARY(${PROJECT_NAME} ${CP_masterclass})
+ADD_LIBRARY(${PROJECT_NAME} ${EBVPfunctions} ${CP_masterclass})
 DEAL_II_SETUP_TARGET(${PROJECT_NAME})
 
 PROJECT(prisms_cp_debug)

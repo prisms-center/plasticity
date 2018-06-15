@@ -2,7 +2,7 @@
 
 template <int dim>
 void crystalPlasticity<dim>::loadOrientations(){
-    QGauss<dim>  quadrature(userInputs.quadOrder);
+    QGauss<dim>  quadrature(this->userInputs.quadOrder);
     const unsigned int num_quad_points = quadrature.size();
     FEValues<dim> fe_values (this->FE, quadrature, update_quadrature_points);
     //loop over elements

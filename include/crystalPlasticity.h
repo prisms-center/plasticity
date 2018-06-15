@@ -19,7 +19,7 @@ public:
     /**
      *crystalPlasticity class constructor.
      */
-    crystalPlasticity(userInputParameters<dim> _userInputs);
+    crystalPlasticity(userInputParameters _userInputs);
 #ifdef readExternalMeshes
 #if readExternalMeshes==true
     void mesh();
@@ -73,8 +73,6 @@ public:
     //orientation maps
     crystalOrientationsIO<dim> orientations;
 private:
-
-    const userInputParameters<dim> userInputs;
 
     void init(unsigned int num_quad_points);
 

@@ -14,7 +14,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
     // Tolerance
 
-    double tol1=userInputs.modelStressTolerance;
+    double tol1=this->userInputs.modelStressTolerance;
 
     std::cout.precision(16);
 
@@ -72,7 +72,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
     for(unsigned int i=0;i<6;i++){
         for(unsigned int j=0;j<6;j++){
-            Dmat2[i][j] = userInputs.elasticStiffness[i][j];
+            Dmat2[i][j] = this->userInputs.elasticStiffness[i][j];
         }
     }
 
@@ -127,7 +127,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
     while (iter1) {
 
-        if(iter1>userInputs.modelMaxSlipSearchIterations){
+        if(iter1>this->userInputs.modelMaxSlipSearchIterations){
             flag2=1;
             break;
         }
@@ -223,7 +223,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
         // Single slip hardening rate
         for(unsigned int i=0;i<n_slip_systems;i++){
-           h_beta(i)=userInputs.initialHardeningModulus[i]*pow((1-s_beta(i)/userInputs.saturationStress[i]),userInputs.powerLawExponent[i]);
+           h_beta(i)=this->userInputs.initialHardeningModulus[i]*pow((1-s_beta(i)/this->userInputs.saturationStress[i]),this->userInputs.powerLawExponent[i]);
         }
 
 
@@ -289,7 +289,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
             count1=count1+1;
 
 
-            if(count1>userInputs.modelMaxSolverIterations)
+            if(count1>this->userInputs.modelMaxSolverIterations)
                 break;
 
             x_beta=0.0;
@@ -377,8 +377,8 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
                 }
                 s_alpha_tau(i)=s_alpha_tau(i)+h1;
 
-                if(s_alpha_tau(i)>userInputs.saturationStress[i])
-                    s_alpha_tau=userInputs.saturationStress[i];
+                if(s_alpha_tau(i)>this->userInputs.saturationStress[i])
+                    s_alpha_tau=this->userInputs.saturationStress[i];
             }
 
 
@@ -479,7 +479,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
         // Hardening modulus
         for(unsigned int i=0;i<n_slip_systems;i++){
-              delh_beta_dels(i)=userInputs.initialHardeningModulus[i]*pow((1-s_alpha_tau(i)/userInputs.saturationStress[i]),(userInputs.powerLawExponent[i]-1))*(-1.0/userInputs.saturationStress[i]);
+              delh_beta_dels(i)=this->userInputs.initialHardeningModulus[i]*pow((1-s_alpha_tau(i)/this->userInputs.saturationStress[i]),(this->userInputs.powerLawExponent[i]-1))*(-1.0/this->userInputs.saturationStress[i]);
 
         }
 
