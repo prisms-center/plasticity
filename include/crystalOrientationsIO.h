@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include "dealIIheaders.h"
 
 
 template <int dim>
@@ -11,7 +12,7 @@ public:
   void loadOrientations(std::string _voxelFileName,
 			unsigned int headerLines,
 			std::string _orientationFileName,
-			unsigned int _numPts[],
+			std::vector<unsigned int> _numPts,
 			double _stencil[]);
   void loadOrientationVector(std::string _eulerFileName);
   unsigned int getMaterialID(double _coords[]);
@@ -21,5 +22,5 @@ public:
   std::vector<std::vector<double> > outputOrientations;
 private:
   std::map<double,std::map<double, std::map<double, unsigned int> > > inputVoxelData;
-  ConditionalOStream  pcout;
+  dealii::ConditionalOStream  pcout;
 };

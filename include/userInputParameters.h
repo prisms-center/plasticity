@@ -13,7 +13,7 @@ public:
 
   userInputParameters(std::string input_file_name);
 
-  void declare_parameters(dealii::ParameterHandler & parameter_handler);
+  void declare_parameters();
 
   dealii::ParameterHandler parameter_handler;
 
@@ -34,9 +34,9 @@ public:
 
   unsigned int meshRefineFactor; // 2^n*2^n*2^n elements(3->8*8*8 =512 elements)
 
-  bool writeMeshToEPS; //Only written for serial runs and if number of elements < 10000
 
   /*Solution output parameters*/
+  bool writeMeshToEPS; //Only written for serial runs and if number of elements < 10000
   bool writeOutput; // flag to write output vtu and pvtu files
   std::string outputDirectory;
   unsigned int skipOutputSteps;
@@ -61,7 +61,7 @@ public:
   double succesiveIncForIncreasingTimeStep;
 
   //Elastic Parameters
-  dealii::FullMatrix<double> elasticStiffness; // 	Elastic Stiffness Matrix -Voigt Notation (MPa)
+  std::vector<std::vector<double>> elasticStiffness; // 	Elastic Stiffness Matrix -Voigt Notation (MPa)
 
   //Crystal Plasticity parameters
   unsigned int numSlipSystems;

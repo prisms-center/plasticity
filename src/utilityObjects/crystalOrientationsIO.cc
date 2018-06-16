@@ -3,7 +3,7 @@
 //constructor
 template <int dim>
 crystalOrientationsIO<dim>::crystalOrientationsIO():
-  pcout (std::cout, Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
+  pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
 {}
 
 //addToOutputOrientations adds data to be written out to output oreintations file
@@ -30,7 +30,7 @@ void crystalOrientationsIO<dim>::writeOutputOrientations(){
   std::string dir("./");
 #endif
   std::string fileName("orientationsOutputProc");
-  fileName += std::to_string(Utilities::MPI::this_mpi_process(MPI_COMM_WORLD));
+  fileName += std::to_string(dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD));
   std::ofstream file((dir+fileName).c_str());
   char buffer[200];
   if (file.is_open()){
@@ -51,10 +51,10 @@ void crystalOrientationsIO<dim>::writeOutputOrientations(){
   //join files from all processors into a single file on processor 0
   //and delete individual processor files
   MPI_Barrier(MPI_COMM_WORLD);
-  if (Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0){
+  if (dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0){
      std::string fileName2("orientationsOutput");
       std::ofstream file2((dir+fileName2).c_str());
-      for (unsigned int proc=0; proc<Utilities::MPI::n_mpi_processes(MPI_COMM_WORLD); proc++){
+      for (unsigned int proc=0; proc<dealii::Utilities::MPI::n_mpi_processes(MPI_COMM_WORLD); proc++){
 	std::string fileName3("orientationsOutputProc");
 	fileName3 += std::to_string(proc);
 	std::ofstream file3((dir+fileName3).c_str(), std::ofstream::in);
@@ -114,7 +114,7 @@ template <int dim>
 void crystalOrientationsIO<dim>::loadOrientations(std::string _voxelFileName,
 						  unsigned int headerLines,
 						  std::string _orientationFileName,
-						  unsigned int _numPts[],
+						  std::vector<unsigned int> _numPts,
 						  double _stencil[]){
   //check if dim==3
   if (dim!=3) {

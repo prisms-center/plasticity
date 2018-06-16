@@ -5,11 +5,9 @@
 #include <iostream>
 using namespace std;
 
-//parameters
-#include "parameters.h"
-
 //FCC model header
 #include "../../../../include/crystalPlasticity.h"
+#include "../../../../include/userInputParameters.h"
 
 //Specify Dirichlet boundary conditions
 template <int dim>
@@ -19,7 +17,7 @@ void crystalPlasticity<dim>::setBoundaryValues(const Point<dim>& node, const uns
     if (dof==0) {flag=true; value=0.0;}
   }
   //front boundary:  u_x=0.001
-  if (node[0] == spanX){
+  if (node[0] == this->userInputs.span[0]){
     if (dof==0) {flag=true; value=0.0001;}
   }
   //left boundary:   u_y=0
@@ -39,16 +37,19 @@ int main (int argc, char **argv)
   try
     {
       deallog.depth_console(0);
-      crystalPlasticity<3> problem;
+
+      userInputParameters userInputs("prm.in");
+
+      crystalPlasticity<3> problem(userInputs);
 
       //reading materials atlas files
-      double stencil[3]={spanX/(numPts[0]-1), spanY/(numPts[1]-1), spanZ/(numPts[2]-1)}; // Dimensions of voxel
-      problem.orientations.loadOrientations(grainIDFile,
-					    headerLinesGrainIDFile,
-					    grainOrientationsFile,
-					    numPts,
+      double stencil[3]={userInputs.span[0]/(userInputs.numPts[0]-1), userInputs.span[0]/(userInputs.numPts[1]-1), userInputs.span[0]/(userInputs.numPts[2]-1)}; // Dimensions of voxel
+      problem.orientations.loadOrientations(userInputs.grainIDFile,
+					    userInputs.headerLinesGrainIDFile,
+					    userInputs.grainOrientationsFile,
+					    userInputs.numPts,
 					    stencil);
-      problem.orientations.loadOrientationVector(grainOrientationsFile);
+      problem.orientations.loadOrientationVector(userInputs.grainOrientationsFile);
       problem.run ();
     }
   catch (std::exception &exc)
