@@ -2,7 +2,8 @@
 //constructor
 template <int dim>
 crystalPlasticity<dim>::crystalPlasticity(userInputParameters _userInputs) :
-ellipticBVP<dim>(_userInputs),
+ellipticBVP<dim>(),
+this->userInputs(_userInputs)
 F(dim,dim),
 F_tau(dim,dim),
 FP_tau(dim,dim),

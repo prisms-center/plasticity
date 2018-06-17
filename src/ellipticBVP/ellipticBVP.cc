@@ -10,7 +10,6 @@
 template <int dim>
 ellipticBVP<dim>::ellipticBVP (userInputParameters _userInputs)
   :
-  userInputs(_userInputs),
   mpi_communicator (MPI_COMM_WORLD),
   triangulation (mpi_communicator,
 		 typename Triangulation<dim>::MeshSmoothing
