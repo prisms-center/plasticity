@@ -1,11 +1,6 @@
 //output method for ellipticBVP class
 #include "../../include/ellipticBVP.h"
 
-#ifndef OUTPUT_ELLIPTICBVP_H
-#define OUTPUT_ELLIPTICBVP_H
-//this source file is temporarily treated as a header file (hence
-//#ifndef's) till library packaging scheme is finalized
-
 //output results
 template <int dim>
 void ellipticBVP<dim>::output(){
@@ -160,5 +155,3 @@ void ellipticBVP<dim>::output(){
     pcout << " \n\n";
   }
 }
-
-#endif

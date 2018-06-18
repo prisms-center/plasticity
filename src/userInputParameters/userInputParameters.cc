@@ -4,7 +4,7 @@
 
 userInputParameters::userInputParameters(std::string inputfile){
 
-  declare_parameters();
+  declare_parameters(parameter_handler);
 
   parameter_handler.read_input(inputfile);
 
@@ -102,7 +102,7 @@ userInputParameters::userInputParameters(std::string inputfile){
 
 }
 
-void userInputParameters::declare_parameters(){
+void userInputParameters::declare_parameters(dealii::ParameterHandler & parameter_handler){
 
   parameter_handler.declare_entry("Number of dimensions","-1",dealii::Patterns::Integer(),"Number of physical dimensions for the simulation");
   parameter_handler.declare_entry("Order of finite elements","-1",dealii::Patterns::Integer(),"Basis function interpolation order (1-linear)");

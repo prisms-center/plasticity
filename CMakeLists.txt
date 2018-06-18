@@ -31,7 +31,6 @@ ADD_CUSTOM_TARGET(run COMMAND main
 # Set up the paths to the library files
 INCLUDE_DIRECTORIES(include)
 
-FILE(GLOB headers include/*.h)
 FILE(GLOB userInputParameters src/userInputParameters/*.cc)
 FILE(GLOB EBVPfunctions src/ellipticBVP/*.cc)
 FILE(GLOB CP_masterclass src/materialModels/crystalPlasticity/masterClass/*.cc)

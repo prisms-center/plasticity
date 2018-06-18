@@ -1,11 +1,6 @@
 //mesh generation/importing method for ellipticBVP class
 #include "../../include/ellipticBVP.h"
 
-#ifndef MESH_ELLIPTICBVP_H
-#define MESH_ELLIPTICBVP_H
-//this source file is temporarily treated as a header file (hence
-//#ifndef's) till library packaging scheme is finalized
-
 //generate or import mesh
 template <int dim>
 void ellipticBVP<dim>::mesh(){
@@ -27,5 +22,3 @@ void ellipticBVP<dim>::mesh(){
 #endif
 #endif
 }
-
-#endif

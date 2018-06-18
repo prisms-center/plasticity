@@ -1,11 +1,6 @@
 //methods to allow for pre/post iteration level updates
 #include "../../include/ellipticBVP.h"
 
-#ifndef UPDATEITERATION_H
-#define UPDATEITERATION_H
-//this source file is temporarily treated as a header file (hence
-//#ifndef's) till library packaging scheme is finalized
-
 //method called before each iteration
 template <int dim>
 void ellipticBVP<dim>::updateBeforeIteration(){
@@ -36,5 +31,3 @@ bool ellipticBVP<dim>::testConvergenceAfterIteration(){
   }
   return true;
 }
-
-#endif

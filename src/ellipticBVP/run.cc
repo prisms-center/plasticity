@@ -1,8 +1,6 @@
 //run method for ellipticBVP class
 #include "../../include/ellipticBVP.h"
 
-#ifndef RUN_ELLIPTICBVP_H
-#define RUN_ELLIPTICBVP_H
 //this source file is temporarily treated as a header file (hence
 //#ifndef's) till library packaging scheme is finalized
 
@@ -25,5 +23,3 @@ void ellipticBVP<dim>::run(){
   //solve();
   solve();
 }
-
-#endif

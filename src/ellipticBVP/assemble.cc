@@ -1,11 +1,6 @@
 //assemble method for ellipticBVP class
 #include "../../include/ellipticBVP.h"
 
-#ifndef ASSEMBLE_H
-#define ASSEMBLE_H
-//this source file is temporarily treated as a header file (hence
-//#ifndef's) till library packaging scheme is finalized
-
 //FE assemble operation
 template <int dim>
 void ellipticBVP<dim>::assemble(){
@@ -139,5 +134,3 @@ void ellipticBVP<dim>::assemble(){
   //MatrixTools::apply_boundary_values (boundary_values, jacobian, solution, residual, false);
   //pcout << "boundary size: " << residual.linfty_norm() << "\n";
 }
-
-#endif

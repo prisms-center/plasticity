@@ -7,7 +7,6 @@ using namespace std;
 
 //FCC model header
 #include "../../../../include/crystalPlasticity.h"
-#include "../../../../include/userInputParameters.h"
 
 //Specify Dirichlet boundary conditions
 template <int dim>

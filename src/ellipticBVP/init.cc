@@ -1,11 +1,6 @@
 //initialization method for ellipticBVP class
 #include "../../include/ellipticBVP.h"
 
-#ifndef INIT_ELLIPTICBVP_H
-#define INIT_ELLIPTICBVP_H
-//this source file is temporarily treated as a header file (hence
-//#ifndef's) till library packaging scheme is finalized
-
 //initialize all FE objects and data structures
 template <int dim>
 void ellipticBVP<dim>::init(){
@@ -65,5 +60,3 @@ void ellipticBVP<dim>::init(){
   solutionWithGhosts=solution;
   oldSolution=solution;
 }
-
-#endif

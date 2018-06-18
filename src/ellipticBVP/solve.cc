@@ -1,11 +1,6 @@
 //solve method for ellipticBVP class
 #include "../../include/ellipticBVP.h"
 
-#ifndef SOLVE_ELLIPTICBVP_H
-#define SOLVE_ELLIPTICBVP_H
-//this source file is temporarily treated as a header file (hence
-//#ifndef's) till library packaging scheme is finalized
-
 //loop over increments and solve each increment
 template <int dim>
 void ellipticBVP<dim>::solve(){
@@ -94,5 +89,3 @@ void ellipticBVP<dim>::solve(){
 #endif
 #endif
 }
-
-#endif

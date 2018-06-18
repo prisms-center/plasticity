@@ -1,11 +1,6 @@
 //solve non linear system of equations for ellipticBVP class
 #include "../../include/ellipticBVP.h"
 
-#ifndef SOLVENONLINEAR_ELLIPTICBVP_H
-#define SOLVENONLINEAR_ELLIPTICBVP_H
-//this source file is temporarily treated as a header file (hence
-//#ifndef's) till library packaging scheme is finalized
-
 //solve non-linear system of equations
 template <int dim>
 bool ellipticBVP<dim>::solveNonLinearSystem(){
@@ -75,4 +70,3 @@ bool ellipticBVP<dim>::solveNonLinearSystem(){
   oldSolution=solution;
   return true;
 }
-#endif

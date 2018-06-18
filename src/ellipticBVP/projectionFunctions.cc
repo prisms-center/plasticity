@@ -1,11 +1,6 @@
 //projections method for ellipticBVP class
 #include "../../include/ellipticBVP.h"
 
-#ifndef PROJECT_H
-#define PROJECT_H
-//this source file is temporarily treated as a header file (hence
-//#ifndef's) till library packaging scheme is finalized
-
 //initialize post processed field projection
 template <int dim>
 void ellipticBVP<dim>::initProjection(){
@@ -161,5 +156,3 @@ void ellipticBVP<dim>::projection(){
     solveLinearSystem2(constraintsMassMatrix, massMatrix, *postResidual[field], *postFields[field],  *postFieldsWithGhosts[field],  *postFieldsWithGhosts[field]);
   }
 }
-
-#endif

@@ -30,7 +30,7 @@ template <int dim>
 class ellipticBVP
 {
  public:
-  ellipticBVP(userInputParameters _userInputs);
+  ellipticBVP(userInputParameters & _userInputs);
   ~ellipticBVP();
   void run   ();
 

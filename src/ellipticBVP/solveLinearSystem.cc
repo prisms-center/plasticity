@@ -1,11 +1,6 @@
 //solve Ax=b
 #include "../../include/ellipticBVP.h"
 
-#ifndef SOLVELINEAR_ELLIPTICBVP_H
-#define SOLVELINEAR_ELLIPTICBVP_H
-//this source file is temporarily treated as a header file (hence
-//#ifndef's) till library packaging scheme is finalized
-
 //solve linear system of equations AX=b using iterative solver
 template <int dim>
 void ellipticBVP<dim>::solveLinearSystem(ConstraintMatrix& constraintmatrix, matrixType& A, vectorType& b, vectorType& x, vectorType& xGhosts, vectorType& dxGhosts){
@@ -65,5 +60,3 @@ void ellipticBVP<dim>::solveLinearSystem2(ConstraintMatrix& constraintmatrix, ma
   x+=completely_distributed_solutionInc;
   xGhosts=x;
 }
-
-#endif

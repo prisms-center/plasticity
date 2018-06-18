@@ -19,7 +19,7 @@ public:
     /**
      *crystalPlasticity class constructor.
      */
-    crystalPlasticity(userInputParameters _userInputs);
+    crystalPlasticity(userInputParameters & _userInputs);
 #ifdef readExternalMeshes
 #if readExternalMeshes==true
     void mesh();

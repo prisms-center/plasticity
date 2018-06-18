@@ -13,7 +13,7 @@ public:
 
   userInputParameters(std::string input_file_name);
 
-  void declare_parameters();
+  void declare_parameters(dealii::ParameterHandler & parameter_handler);
 
   dealii::ParameterHandler parameter_handler;
 

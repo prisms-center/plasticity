@@ -1,11 +1,6 @@
 //methods to apply Dirichlet boundary conditons
 #include "../../include/ellipticBVP.h"
 
-#ifndef BOUNDARYCONDITIONS_H
-#define BOUNDARYCONDITIONS_H
-//this source file is temporarily treated as a header file (hence
-//#ifndef's) till library packaging scheme is finalized
-
 template <int dim>
 void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value){
 }
@@ -60,5 +55,3 @@ void ellipticBVP<dim>::applyDirichletBCs(){
   //
   constraints.close();
 }
-
-#endif
