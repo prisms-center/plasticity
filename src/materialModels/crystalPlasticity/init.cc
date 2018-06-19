@@ -1,4 +1,4 @@
-#include "../../../../include/crystalPlasticity.h"
+#include "../../../include/crystalPlasticity.h"
 #include <iostream>
 #include <fstream>
 
@@ -134,4 +134,4 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
     initCalled=true;
 }
 
-#include "../../../../include/crystalPlasticity_template_instantiations.h"
+#include "../../../include/crystalPlasticity_template_instantiations.h"

@@ -1,4 +1,4 @@
-#include "../../../../include/crystalPlasticity.h"
+#include "../../../include/crystalPlasticity.h"
 
 template <int dim>
 void crystalPlasticity<dim>::updateBeforeIncrement()
@@ -8,4 +8,4 @@ void crystalPlasticity<dim>::updateBeforeIncrement()
     //ellipticBVP<dim>::project();
 }
 
-#include "../../../../include/crystalPlasticity_template_instantiations.h"
+#include "../../../include/crystalPlasticity_template_instantiations.h"

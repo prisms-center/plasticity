@@ -1,4 +1,4 @@
-#include "../../../../include/crystalPlasticity.h"
+#include "../../../include/crystalPlasticity.h"
 
 template <int dim>
 void crystalPlasticity<dim>::loadOrientations(){
@@ -47,4 +47,4 @@ void crystalPlasticity<dim>::loadOrientations(){
 
 }
 
-#include "../../../../include/crystalPlasticity_template_instantiations.h"
+#include "../../../include/crystalPlasticity_template_instantiations.h"

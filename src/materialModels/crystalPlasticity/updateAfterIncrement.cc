@@ -1,4 +1,4 @@
-#include "../../../../include/crystalPlasticity.h"
+#include "../../../include/crystalPlasticity.h"
 #include <iostream>
 #include <fstream>
 
@@ -123,4 +123,4 @@ void crystalPlasticity<dim>::updateAfterIncrement()
     ellipticBVP<dim>::projection();
 }
 
-#include "../../../../include/crystalPlasticity_template_instantiations.h"
+#include "../../../include/crystalPlasticity_template_instantiations.h"

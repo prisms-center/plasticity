@@ -33,7 +33,7 @@ INCLUDE_DIRECTORIES(include)
 
 FILE(GLOB userInputParameters src/userInputParameters/*.cc)
 FILE(GLOB EBVPfunctions src/ellipticBVP/*.cc)
-FILE(GLOB CP_masterclass src/materialModels/crystalPlasticity/masterClass/*.cc)
+FILE(GLOB CP_masterclass src/materialModels/crystalPlasticity/*.cc)
 FILE(GLOB crystalOrientationsIO src/utilityObjects/*.cc)
 
 PROJECT(prisms_cp)

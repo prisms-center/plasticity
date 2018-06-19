@@ -1,4 +1,4 @@
-#include "../../../../include/crystalPlasticity.h"
+#include "../../../include/crystalPlasticity.h"
 
 //implementation of the getElementalValues method
 template <int dim>
@@ -146,4 +146,4 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
     // this->pcout<<Rlocal[0]<<"\t"<<Rlocal[1]<<"\t"<<Rlocal[2]<<"\n";
  }
 
- #include "../../../../include/crystalPlasticity_template_instantiations.h"
+ #include "../../../include/crystalPlasticity_template_instantiations.h"

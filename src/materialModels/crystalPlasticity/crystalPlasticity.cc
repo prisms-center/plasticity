@@ -1,4 +1,4 @@
-#include "../../../../include/crystalPlasticity.h"
+#include "../../../include/crystalPlasticity.h"
 //constructor
 template <int dim>
 crystalPlasticity<dim>::crystalPlasticity(userInputParameters & _userInputs):
@@ -19,4 +19,4 @@ P(dim,dim)
     ellipticBVP<dim>::postprocessed_solution_names.push_back("Grain_ID");
 }
 
-#include "../../../../include/crystalPlasticity_template_instantiations.h"
+#include "../../../include/crystalPlasticity_template_instantiations.h"
