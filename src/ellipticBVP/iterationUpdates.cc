@@ -31,3 +31,4 @@ bool ellipticBVP<dim>::testConvergenceAfterIteration(){
   }
   return true;
 }
+#include "../../include/ellipticBVP_template_instantiations.h"

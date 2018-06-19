@@ -22,3 +22,4 @@ void ellipticBVP<dim>::mesh(){
 #endif
 #endif
 }
+#include "../../include/ellipticBVP_template_instantiations.h"

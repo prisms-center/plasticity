@@ -27,10 +27,10 @@ typedef PETScWrappers::MPI::SparseMatrix matrixType;
 //base class for elliptic PDE's
 //
 template <int dim>
-class ellipticBVP
+class ellipticBVP : public Subscriptor
 {
  public:
-  ellipticBVP(userInputParameters & _userInputs);
+  ellipticBVP(userInputParameters _userInputs);
   ~ellipticBVP();
   void run   ();
 

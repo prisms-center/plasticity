@@ -55,3 +55,4 @@ void ellipticBVP<dim>::applyDirichletBCs(){
   //
   constraints.close();
 }
+#include "../../include/ellipticBVP_template_instantiations.h"

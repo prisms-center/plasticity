@@ -60,3 +60,4 @@ void ellipticBVP<dim>::init(){
   solutionWithGhosts=solution;
   oldSolution=solution;
 }
+#include "../../include/ellipticBVP_template_instantiations.h"

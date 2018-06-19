@@ -10,3 +10,4 @@ void ellipticBVP<dim>::applyInitialConditions(){
 			    ZeroFunction<dim>(dim),
 			    solution);
 }
+#include "../../include/ellipticBVP_template_instantiations.h"

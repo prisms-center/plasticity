@@ -5,3 +5,4 @@
 template <int dim>
 void ellipticBVP<dim>::markBoundaries(){
 }
+#include "../../include/ellipticBVP_template_instantiations.h"

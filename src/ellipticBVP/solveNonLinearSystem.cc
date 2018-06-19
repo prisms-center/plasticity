@@ -70,3 +70,4 @@ bool ellipticBVP<dim>::solveNonLinearSystem(){
   oldSolution=solution;
   return true;
 }
+#include "../../include/ellipticBVP_template_instantiations.h"

@@ -3,8 +3,10 @@
 
 //constructor
 template <int dim>
-ellipticBVP<dim>::ellipticBVP (userInputParameters & _userInputs):
+ellipticBVP<dim>::ellipticBVP (userInputParameters _userInputs):
+  Subscriptor(),
   mpi_communicator (MPI_COMM_WORLD),
+  userInputs(_userInputs),
   triangulation (mpi_communicator,
 		 typename Triangulation<dim>::MeshSmoothing
 		 (Triangulation<dim>::smoothing_on_refinement |
@@ -35,3 +37,5 @@ template <int dim>
 ellipticBVP<dim>::~ellipticBVP ()
 {
 }
+
+#include "../../include/ellipticBVP_template_instantiations.h"

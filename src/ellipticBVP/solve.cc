@@ -89,3 +89,4 @@ void ellipticBVP<dim>::solve(){
 #endif
 #endif
 }
+#include "../../include/ellipticBVP_template_instantiations.h"

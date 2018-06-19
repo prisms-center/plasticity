@@ -134,3 +134,5 @@ void ellipticBVP<dim>::assemble(){
   //MatrixTools::apply_boundary_values (boundary_values, jacobian, solution, residual, false);
   //pcout << "boundary size: " << residual.linfty_norm() << "\n";
 }
+
+#include "../../include/ellipticBVP_template_instantiations.h"

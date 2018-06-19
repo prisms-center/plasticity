@@ -156,3 +156,4 @@ void ellipticBVP<dim>::projection(){
     solveLinearSystem2(constraintsMassMatrix, massMatrix, *postResidual[field], *postFields[field],  *postFieldsWithGhosts[field],  *postFieldsWithGhosts[field]);
   }
 }
+#include "../../include/ellipticBVP_template_instantiations.h"

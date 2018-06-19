@@ -60,3 +60,4 @@ void ellipticBVP<dim>::solveLinearSystem2(ConstraintMatrix& constraintmatrix, ma
   x+=completely_distributed_solutionInc;
   xGhosts=x;
 }
+#include "../../include/ellipticBVP_template_instantiations.h"

@@ -155,3 +155,4 @@ void ellipticBVP<dim>::output(){
     pcout << " \n\n";
   }
 }
+#include "../../include/ellipticBVP_template_instantiations.h"

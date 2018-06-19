@@ -23,3 +23,4 @@ void ellipticBVP<dim>::run(){
   //solve();
   solve();
 }
+#include "../../include/ellipticBVP_template_instantiations.h"

@@ -10,3 +10,4 @@ void ellipticBVP<dim>::initQuadHistory(){
   quadHistory.reinit(TableIndices<3> (triangulation.n_locally_owned_active_cells(), num_quad_points, numQuadHistoryVariables));
 }
 #endif
+#include "../../include/ellipticBVP_template_instantiations.h"
