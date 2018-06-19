@@ -32,7 +32,6 @@ public:
 
   unsigned int meshRefineFactor; // 2^n*2^n*2^n elements(3->8*8*8 =512 elements)
 
-
   /*Solution output parameters*/
   bool writeMeshToEPS; //Only written for serial runs and if number of elements < 10000
   bool writeOutput; // flag to write output vtu and pvtu files

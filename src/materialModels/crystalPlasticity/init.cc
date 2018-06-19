@@ -27,7 +27,7 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
     std::string line;
 
     //open data file to read slip normals
-    std::ifstream slipNormalsDataFile(this->userInputs.slipDirectionsFile);
+    std::ifstream slipNormalsDataFile(this->userInputs.slipNormalsFile);
     //read data
     unsigned int id=0;
     if (slipNormalsDataFile.is_open()){
@@ -48,7 +48,7 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
     }
 
       //open data file to read slip directions
-      std::ifstream slipDirectionsDataFile(this->userInputs.slipNormalsFile);
+      std::ifstream slipDirectionsDataFile(this->userInputs.slipDirectionsFile);
       //read data
       id=0;
       if (slipDirectionsDataFile.is_open()){
