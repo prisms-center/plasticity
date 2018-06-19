@@ -18,3 +18,5 @@ P(dim,dim)
     ellipticBVP<dim>::postprocessed_solution_names.push_back("Eqv_stress");
     ellipticBVP<dim>::postprocessed_solution_names.push_back("Grain_ID");
 }
+
+#include "../../../../include/crystalPlasticity_template_instantiations.h"

@@ -49,3 +49,5 @@ void crystalPlasticity<dim>::odfpoint(FullMatrix <double> &OrientationMatrix,Vec
 
 
 }
+
+#include "../../../../include/crystalPlasticity_template_instantiations.h"

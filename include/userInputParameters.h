@@ -11,11 +11,9 @@ class userInputParameters
 
 public:
 
-  userInputParameters(std::string input_file_name);
+  userInputParameters(std::string input_file_name, dealii::ParameterHandler & parameter_handler);
 
   void declare_parameters(dealii::ParameterHandler & parameter_handler);
-
-  dealii::ParameterHandler parameter_handler;
 
   unsigned int dim;
 
@@ -30,7 +28,7 @@ public:
 
   // The number of elements in each direction is 2^(refineFactor) * subdivisions
   // For optimal performance, use meshRefineFactor primarily to determine the element size
-  std::vector<double> subdivisions;
+  std::vector<unsigned int> subdivisions;
 
   unsigned int meshRefineFactor; // 2^n*2^n*2^n elements(3->8*8*8 =512 elements)
 

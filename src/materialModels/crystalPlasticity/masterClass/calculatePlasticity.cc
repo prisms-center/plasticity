@@ -534,7 +534,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
         temp2.reinit(dim,dim);
         temp1=0.0;
         temp2=IdentityMatrix(dim);
-        while(tol2>this->max(tol1/1e4,1e-12)){
+        while(tol2>std::max(tol1/1e4,1e-12)){
             count3=count3+1;
             del_FP.mmult(temp1,temp2);
             temp1.equ((1.0/count3),temp1);
@@ -881,3 +881,5 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
 
 }
+
+#include "../../../../include/crystalPlasticity_template_instantiations.h"

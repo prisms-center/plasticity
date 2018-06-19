@@ -285,3 +285,5 @@ void crystalPlasticity<dim>::tangent_modulus(FullMatrix<double> &F_trial, FullMa
 
 
 }
+
+#include "../../../../include/crystalPlasticity_template_instantiations.h"

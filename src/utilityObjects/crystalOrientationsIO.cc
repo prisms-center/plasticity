@@ -176,3 +176,5 @@ unsigned int crystalOrientationsIO<dim>::getMaterialID(double _coords[]){
   if(itz != ity->second.end()) --itz;
   return itz->second;
 }
+
+#include "../../include/crystalOrientationsIO_template_instantiations.h"

@@ -136,3 +136,5 @@ void crystalPlasticity<dim>::inactive_slip_removal(Vector<double> &active, Vecto
 
 
 }
+
+#include "../../../../include/crystalPlasticity_template_instantiations.h"

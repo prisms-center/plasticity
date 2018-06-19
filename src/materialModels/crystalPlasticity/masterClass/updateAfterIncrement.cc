@@ -119,6 +119,8 @@ void crystalPlasticity<dim>::updateAfterIncrement()
     global_stress=0.0;
 
 
-    //call base class project() function to project post processed fields
-    ellipticBVP<dim>::project();
+    //call base class projection() function to project post processed fields
+    ellipticBVP<dim>::projection();
 }
+
+#include "../../../../include/crystalPlasticity_template_instantiations.h"

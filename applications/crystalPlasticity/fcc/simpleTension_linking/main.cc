@@ -7,6 +7,7 @@ using namespace std;
 
 //FCC model header
 #include "../../../../include/crystalPlasticity.h"
+#include "../../../../include/crystalPlasticity_template_instantiations.h"
 
 //Specify Dirichlet boundary conditions
 template <int dim>
@@ -37,7 +38,9 @@ int main (int argc, char **argv)
     {
       deallog.depth_console(0);
 
-      userInputParameters userInputs("prm.in");
+      dealii::ParameterHandler parameter_handler;
+
+      userInputParameters userInputs("prm.in",parameter_handler);
 
       crystalPlasticity<3> problem(userInputs);
 

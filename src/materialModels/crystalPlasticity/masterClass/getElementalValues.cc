@@ -145,3 +145,5 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
      //this->pcout<<K_local[0][0]<<"\t"<<K_local[0][1]<<"\t"<<K_local[0][2]<<"\t"<<K_local[1][0]<<"\t"<<K_local[1][1]<<"\t"<<K_local[1][2]<<"\t"<<K_local[2][0]<<"\t"<<K_local[2][1]<<"\t"<<K_local[2][2]<<"\n";
     // this->pcout<<Rlocal[0]<<"\t"<<Rlocal[1]<<"\t"<<Rlocal[2]<<"\n";
  }
+
+ #include "../../../../include/crystalPlasticity_template_instantiations.h"

@@ -46,3 +46,5 @@ void crystalPlasticity<dim>::loadOrientations(){
     }
 
 }
+
+#include "../../../../include/crystalPlasticity_template_instantiations.h"

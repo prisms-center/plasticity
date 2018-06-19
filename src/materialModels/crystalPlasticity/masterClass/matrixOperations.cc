@@ -185,3 +185,5 @@ FullMatrix<double> crystalPlasticity<dim>::matrixExponential(FullMatrix<double> 
     return matExp;
 
 }
+
+#include "../../../../include/crystalPlasticity_template_instantiations.h"

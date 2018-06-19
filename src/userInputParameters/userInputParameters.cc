@@ -2,7 +2,7 @@
 
 #include "../../include/userInputParameters.h"
 
-userInputParameters::userInputParameters(std::string inputfile){
+userInputParameters::userInputParameters(std::string inputfile, dealii::ParameterHandler & parameter_handler){
 
   declare_parameters(parameter_handler);
 
@@ -45,8 +45,8 @@ userInputParameters::userInputParameters(std::string inputfile){
   maxLinearSolverIterations=parameter_handler.get_integer("Maximum linear solver iterations");
   maxNonLinearIterations=parameter_handler.get_integer("Maximum non linear iterations");
   relLinearSolverTolerance=parameter_handler.get_double("Relative linear solver tolerance");
-  absNonLinearTolerance=parameter_handler.get_double("Absolute nonLinear tolerance");
-  relNonLinearTolerance=parameter_handler.get_double("Relative nonLinear tolerance");
+  absNonLinearTolerance=parameter_handler.get_double("Absolute nonLinear solver tolerance");
+  relNonLinearTolerance=parameter_handler.get_double("Relative nonLinear solver tolerance");
   stopOnConvergenceFailure = parameter_handler.get_bool("Stop on convergence failure");
   enableAdaptiveTimeStepping = parameter_handler.get_bool("Enable adaptive Time stepping");
   adaptiveLoadStepFactor=parameter_handler.get_double("Adaptive load step factor");

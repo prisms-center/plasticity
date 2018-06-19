@@ -133,3 +133,5 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
     N_qpts=num_quad_points;
     initCalled=true;
 }
+
+#include "../../../../include/crystalPlasticity_template_instantiations.h"

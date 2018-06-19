@@ -89,3 +89,5 @@ void crystalPlasticity<dim>::reorient() {
 
 
 }
+
+#include "../../../../include/crystalPlasticity_template_instantiations.h"

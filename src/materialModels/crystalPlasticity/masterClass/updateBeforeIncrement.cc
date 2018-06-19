@@ -7,3 +7,5 @@ void crystalPlasticity<dim>::updateBeforeIncrement()
     //call base class project() function to project post processed fields
     //ellipticBVP<dim>::project();
 }
+
+#include "../../../../include/crystalPlasticity_template_instantiations.h"
