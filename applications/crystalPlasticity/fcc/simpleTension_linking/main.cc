@@ -5,7 +5,6 @@
 #include <iostream>
 using namespace std;
 
-//FCC model header
 #include "../../../../include/crystalPlasticity.h"
 #include "../../../../include/crystalPlasticity_template_instantiations.h"
 
@@ -38,7 +37,7 @@ int main (int argc, char **argv)
     {
       deallog.depth_console(0);
 
-      dealii::ParameterHandler parameter_handler;
+      ParameterHandler parameter_handler;
 
       userInputParameters userInputs("prm.in",parameter_handler);
 
