@@ -6,7 +6,11 @@ userInputParameters::userInputParameters(std::string inputfile, dealii::Paramete
 
   declare_parameters(parameter_handler);
 
+  #if (DEAL_II_VERSION_MAJOR < 9 && DEAL_II_VERSION_MINOR < 5)
   parameter_handler.read_input(inputfile);
+  #else
+  parameter_handler.parse_input(inputfile);
+  #endif
 
   dim=parameter_handler.get_integer("Number of dimensions");
 
