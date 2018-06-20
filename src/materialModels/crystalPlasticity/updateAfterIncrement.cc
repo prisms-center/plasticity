@@ -36,7 +36,7 @@ void crystalPlasticity<dim>::updateAfterIncrement()
       cellID++;
   }
     }
-    orientations.writeOutputOrientations();
+    orientations.writeOutputOrientations(this->userInputs.writeOutput,this->userInputs.outputDirectory);
 
     //Update the history variables when convergence is reached for the current increment
     Fe_conv=Fe_iter;
@@ -103,6 +103,7 @@ void crystalPlasticity<dim>::updateAfterIncrement()
                 for (unsigned int q=0; q<num_quad_points; ++q){
                     for(unsigned int i=0;i<(this->userInputs.numSlipSystems);i++){
 
+                        if(this->userInputs.backstressFactor > 1e-5)
                         s_alpha_conv[cellID][q][i]=s_alpha_conv[cellID][q][i]-this->userInputs.backstressFactor*s_alpha_conv[cellID][q][i];
                     }
                 }

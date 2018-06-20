@@ -57,6 +57,8 @@ public:
   double adaptiveLoadIncreaseFactor;
   double succesiveIncForIncreasingTimeStep;
 
+  std::string crystalStructure;
+
   //Elastic Parameters
   std::vector<std::vector<double>> elasticStiffness; // 	Elastic Stiffness Matrix -Voigt Notation (MPa)
 

@@ -17,7 +17,7 @@ public:
   void loadOrientationVector(std::string _eulerFileName);
   unsigned int getMaterialID(double _coords[]);
   void addToOutputOrientations(std::vector<double>& _orientationsInfo);
-  void writeOutputOrientations();
+  void writeOutputOrientations(bool writeOutput,std::string outputDirectory);
   std::map<unsigned int, std::vector<double> > eulerAngles;
   std::vector<std::vector<double> > outputOrientations;
 private:

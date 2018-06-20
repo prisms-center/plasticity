@@ -53,6 +53,8 @@ userInputParameters::userInputParameters(std::string inputfile, dealii::Paramete
   adaptiveLoadIncreaseFactor=parameter_handler.get_double("Adaptive load increase Factor");
   succesiveIncForIncreasingTimeStep=parameter_handler.get_double("Succesive increment for increasing time step");
 
+  crystalStructure = parameter_handler.get("Crystal Structure");
+
   //elasticStiffness.reinit(6,6);
   elasticStiffness.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness row 1"))));
   elasticStiffness.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness row 2"))));
@@ -137,6 +139,8 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Adaptive load step factor","-1",dealii::Patterns::Double(),"Load step factor");
   parameter_handler.declare_entry("Adaptive load increase Factor","-1",dealii::Patterns::Double(),"adaptive Load Increase Factor");
   parameter_handler.declare_entry("Succesive increment for increasing time step","-1",dealii::Patterns::Double(),"Succesive Inc For Increasing Time Step");
+
+  parameter_handler.declare_entry("Crystal Structure","",dealii::Patterns::Anything(),"Crystal structure of problem");
 
   parameter_handler.declare_entry("Elastic Stiffness row 1","",dealii::Patterns::List(dealii::Patterns::Double()),"	Elastic Stiffness Matrix -Voigt Notation (MPa)");
   parameter_handler.declare_entry("Elastic Stiffness row 2","",dealii::Patterns::List(dealii::Patterns::Double()),"	Elastic Stiffness Matrix -Voigt Notation (MPa)");

@@ -14,21 +14,17 @@ void crystalOrientationsIO<dim>::addToOutputOrientations(std::vector<double>& _o
 
 //writeOutputOreintations writes outputOrientations to file
 template <int dim>
-void crystalOrientationsIO<dim>::writeOutputOrientations(){
+void crystalOrientationsIO<dim>::writeOutputOrientations(bool _writeOutput,std::string _outputDirectory){
   //check whether to write to file
-#ifdef writeOutput
-  if (!writeOutput) return;
-#endif
-  //
+ if(!_writeOutput) return;
+
   pcout << "writing orientations data to file\n";
   //
   //set output directory, if provided
-#ifdef outputDirectory
-  std::string dir(outputDirectory);
-  dir+="/";
-#else
-  std::string dir("./");
-#endif
+  std::string dir(_outputDirectory);
+
+  if(_outputDirectory.back()!='/') dir+="/";
+
   std::string fileName("orientationsOutputProc");
   fileName += std::to_string(dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD));
   std::ofstream file((dir+fileName).c_str());
@@ -96,6 +92,7 @@ void crystalOrientationsIO<dim>::loadOrientationVector(std::string _eulerFileNam
       ss >> eulerAngles[id][0];
       ss >> eulerAngles[id][1];
       ss >> eulerAngles[id][2];
+
 #ifdef multiplePhase
         if(multiplePhase)
         ss >> eulerAngles[id][3];

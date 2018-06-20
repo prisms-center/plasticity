@@ -15,9 +15,6 @@ set Backstress Factor                            = 0.0
 # characteristic twin shear
 set Characteristic Twin Shear                    = -1
 
-# Crystal structure of problem
-set Crystal Structure                            = fcc
-
 # The size of the domain in the x direction.
 set Domain size X                                = 1.0
 
@@ -28,22 +25,22 @@ set Domain size Y                                = 1.0
 set Domain size Z                                = 1.0
 
 # 	Elastic Stiffness Matrix -Voigt Notation (MPa)
-set Elastic Stiffness row 1                      = 170.0e3, 124.0e3, 124.0e3, 0, 0, 0
+set Elastic Stiffness row 1                      = 97.7e3, 82.7e3, 82.7e3, 0, 0, 0
 
 # 	Elastic Stiffness Matrix -Voigt Notation (MPa)
-set Elastic Stiffness row 2                      = 124.0e3, 170.0e3, 124.0e3, 0, 0, 0
+set Elastic Stiffness row 2                      = 82.7e3, 97.7e3, 82.7e3, 0, 0, 0
 
 # 	Elastic Stiffness Matrix -Voigt Notation (MPa)
-set Elastic Stiffness row 3                      = 124.0e3, 124.0e3, 170.0e3, 0, 0, 0
+set Elastic Stiffness row 3                      = 82.7e3, 82.7e3, 97.7e3, 0, 0, 0
 
 # 	Elastic Stiffness Matrix -Voigt Notation (MPa)
-set Elastic Stiffness row 4                      = 0, 0, 0, 75.0e3, 0, 0
+set Elastic Stiffness row 4                      = 0, 0, 0, 37.5e3, 0, 0
 
 # 	Elastic Stiffness Matrix -Voigt Notation (MPa)
-set Elastic Stiffness row 5                      = 0, 0, 0, 0, 75.0e3, 0
+set Elastic Stiffness row 5                      = 0, 0, 0, 0, 37.5e3, 0
 
 # 	Elastic Stiffness Matrix -Voigt Notation (MPa)
-set Elastic Stiffness row 6                      = 0, 0, 0, 0, 0, 75.0e3
+set Elastic Stiffness row 6                      = 0, 0, 0, 0, 0, 37.5e3
 
 # lag to enable adaptive time steps
 set Enable adaptive Time stepping                = false
@@ -55,13 +52,13 @@ set Grain ID file name                           = grainID.txt
 set Header Lines GrainID File                    = 5
 
 # ardening moduli of slip systems
-set Initial Hardening Modulus                    = 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0
+set Initial Hardening Modulus                    = 1500.0, 1500.0, 1500.0, 1500.0, 1500.0, 1500.0, 1500.0, 1500.0, 1500.0, 1500.0, 1500.0, 1500.0
 
 # Hardening moduli of twin systems
 set Initial Hardening Modulus Twin               =
 
 # RSS of the slip sytems
-set Initial Slip Resistance                      = 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0
+set Initial Slip Resistance                      = 200.0, 200.0, 200.0, 200.0, 200.0, 200.0, 200.0, 200.0, 200.0, 200.0, 200.0, 200.0
 
 # Initial CRSS of the twin sytems
 set Initial Slip Resistance Twin                 =
@@ -76,7 +73,7 @@ set Max Plastic Slip L2 Norm                     = 0.8
 set Max Slip Search Iterations                   = 1
 
 # Maximum no. of iterations to achieve non-linear convergence
-set Max Solver Iterations                        = 4
+set Max Solver Iterations                        = 3
 
 # Maximum iterations for linear solver
 set Maximum linear solver iterations             = 50000
@@ -118,7 +115,7 @@ set Output Grain ID                              = true
 set Output Twin fractions                        = false
 
 # Power law coefficient
-set Power Law Exponent                           = 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25
+set Power Law Exponent                           = 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
 
 # Power law exponents of twin systems
 set Power Law Exponent Twin                      =
@@ -133,7 +130,7 @@ set Relative linear solver tolerance             = 1.0e-10
 set Relative nonLinear solver tolerance          = 1.0e-3
 
 # Saturation stress
-set Saturation Stress                            = 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0
+set Saturation Stress                            = 500.0, 500.0, 500.0, 500.0, 500.0, 500.0, 500.0, 500.0, 500.0, 500.0, 500.0, 500.0
 
 # Saturation stress of twin systems
 set Saturation Stress Twin                       =
