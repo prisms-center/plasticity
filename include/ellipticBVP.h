@@ -35,12 +35,16 @@ class ellipticBVP : public Subscriptor
   void run   ();
 
  protected:
+
   //parallel objects
   MPI_Comm   mpi_communicator;
   IndexSet   locally_owned_dofs;
   IndexSet   locally_owned_dofs_Scalar;
   IndexSet   locally_relevant_dofs;
   IndexSet   locally_relevant_dofs_Scalar;
+
+  //User input parameters object
+  userInputParameters userInputs;
 
   //FE data structres
   parallel::distributed::Triangulation<dim> triangulation;
@@ -91,9 +95,6 @@ class ellipticBVP : public Subscriptor
   //methods to allow for pre/post increment updates
   virtual void updateBeforeIncrement();
   virtual void updateAfterIncrement();
-
-  //User input parameters object
-  userInputParameters userInputs;
 
   //methods to apply dirichlet BC's and initial conditions
   void applyDirichletBCs();

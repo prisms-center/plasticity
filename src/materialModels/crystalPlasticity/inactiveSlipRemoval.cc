@@ -1,7 +1,7 @@
 #include "../../../include/crystalPlasticity.h"
 
 template <int dim>
-void crystalPlasticity<dim>::inactive_slip_removal(Vector<double> &active, Vector<double> &x_beta_old, Vector<double> &x_beta, int &n_PA, Vector<double> &PA, Vector<double> b,FullMatrix<double> A,FullMatrix<double> &A_PA){
+void crystalPlasticity<dim>::inactive_slip_removal(Vector<double> &active, Vector<double> &x_beta_old, Vector<double> &x_beta, unsigned int &n_PA, Vector<double> &PA, Vector<double> b,FullMatrix<double> A,FullMatrix<double> &A_PA){
 
     Vector<double> inactive;
 

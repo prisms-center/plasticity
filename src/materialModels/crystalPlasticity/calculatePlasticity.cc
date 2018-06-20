@@ -118,11 +118,11 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     dels_delF=0.0;
 
     double det_FE_tau,det_F_tau, det_FP_tau;
-    int n_PA=0;	// Number of active slip systems
+    unsigned int n_PA=0;	// Number of active slip systems
 
 
 
-    int iter1=1;
+    unsigned int iter1=1;
     int flag2=0;
 
     while (iter1) {
@@ -271,7 +271,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
         x_beta_old=0.0;
 
-        int count1=0;
+        unsigned int count1=0;
 
         Vector<double> b_PA(n_PA);
 
@@ -529,7 +529,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
 
         double tol2=1.0;
-        int count3=0;
+        unsigned int count3=0;
         temp1.reinit(dim,dim);
         temp2.reinit(dim,dim);
         temp1=0.0;

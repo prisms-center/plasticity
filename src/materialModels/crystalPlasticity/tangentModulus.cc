@@ -1,7 +1,7 @@
 #include "../../../include/crystalPlasticity.h"
 
 template <int dim>
-void crystalPlasticity<dim>::tangent_modulus(FullMatrix<double> &F_trial, FullMatrix<double> &Fpn_inv, FullMatrix<double> &SCHMID_TENSOR1, FullMatrix<double> &A,FullMatrix<double> &A_PA,FullMatrix<double> &B,FullMatrix<double> &T_tau, FullMatrix<double> &PK1_Stiff, Vector<double> &active, Vector<double> &resolved_shear_tau_trial, Vector<double> &x_beta, Vector<double> &PA, int &n_PA, double &det_F_tau, double &det_FE_tau ) {
+void crystalPlasticity<dim>::tangent_modulus(FullMatrix<double> &F_trial, FullMatrix<double> &Fpn_inv, FullMatrix<double> &SCHMID_TENSOR1, FullMatrix<double> &A,FullMatrix<double> &A_PA,FullMatrix<double> &B,FullMatrix<double> &T_tau, FullMatrix<double> &PK1_Stiff, Vector<double> &active, Vector<double> &resolved_shear_tau_trial, Vector<double> &x_beta, Vector<double> &PA, unsigned int &n_PA, double &det_F_tau, double &det_FE_tau ) {
 
     int iter=0,iter1=0,iter2=0,iter3=0;
     FullMatrix<double> temp(dim,dim),temp1(dim,dim),temp2(dim,dim),temp3(dim,dim);
@@ -91,7 +91,7 @@ void crystalPlasticity<dim>::tangent_modulus(FullMatrix<double> &F_trial, FullMa
                 else
                     temps2.equ(x_beta(iter3),temps2);
 
-                s2.add(temps2);
+                s2+=temps2;
 
             }
 
