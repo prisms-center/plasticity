@@ -94,7 +94,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     F_tau.mmult(FE_tau,Fpn_inv);
     s_alpha_tau=s_alpha_t;
 
-    Vector<double> s_beta(n_slip_systems),h_beta(n_slip_systems),delh_beta_dels(n_slip_systems);
+    Vector<double> s_beta(n_slip_systems),h_beta(n_slip_systems),delh_beta_dels(n_slip_systems),h0(n_slip_systems),a_pow(n_slip_systems),s_s(n_slip_systems);
     FullMatrix<double> h_alpha_beta_t(n_slip_systems,n_slip_systems),A(n_slip_systems,n_slip_systems);
     FullMatrix<double> del_FP(dim,dim);
     FullMatrix<double> A_PA;
