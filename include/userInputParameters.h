@@ -72,6 +72,7 @@ public:
   std::string slipDirectionsFile; // Slip Directions File
   std::string slipNormalsFile; // Slip Normals File
 
+  bool enableTwinning;
   unsigned int numTwinSystems;
   std::vector<double> initialSlipResistanceTwin; //CRSS of the slip sytems
   std::vector<double> initialHardeningModulusTwin; //Hardening moduli of slip systems

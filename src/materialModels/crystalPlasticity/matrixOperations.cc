@@ -21,8 +21,6 @@ void crystalPlasticity<dim>::tracev(FullMatrix<double> &Atrace, FullMatrix<doubl
 }
 
 
-
-
 template <int dim>
 void crystalPlasticity<dim>::ElasticProd(FullMatrix<double> &stress,FullMatrix<double> elm, FullMatrix<double> ElasticityTensor) {
 
@@ -183,6 +181,54 @@ FullMatrix<double> crystalPlasticity<dim>::matrixExponential(FullMatrix<double> 
     }
 
     return matExp;
+
+}
+
+template <int dim>
+void crystalPlasticity<dim>::elasticmoduli(FullMatrix<double> &Ar, FullMatrix<double> R, FullMatrix<double> Av) {
+
+	Ar.reinit(2 * dim, 2 * dim);
+	FullMatrix<double> newr(2 * dim, 2 * dim), temp(2 * dim, 2 * dim);
+
+	newr[0][0] = R[0][0]*R[0][0];
+	newr[0][1] = R[0][1]*R[0][1];
+	newr[0][2] = R[0][2]*R[0][2];
+	newr[0][3] = 2.0*R[0][1]*R[0][2];
+	newr[0][4] = 2.0*R[0][2]*R[0][0];
+	newr[0][5] = 2.0*R[0][0]*R[0][1];
+	newr[1][0] = R[1][0]*R[1][0];
+	newr[1][1] = R[1][1]*R[1][1];
+	newr[1][2] = R[1][2]*R[1][2];
+	newr[1][3] = 2.0*R[1][1]*R[1][2];
+	newr[1][4] = 2.0*R[1][2]*R[1][0];
+	newr[1][5] = 2.0*R[1][0]*R[1][1];
+	newr[2][0] = R[2][0]*R[2][0];
+	newr[2][1] = R[2][1]*R[2][1];
+	newr[2][2] = R[2][2]*R[2][2];
+	newr[2][3] = 2.0*R[2][1]*R[2][2];
+	newr[2][4] = 2.0*R[2][2]*R[2][0];
+	newr[2][5] = 2.0*R[2][0]*R[2][1];
+	newr[3][0] = R[1][0]*R[2][0];
+	newr[3][1] = R[1][1]*R[2][1];
+	newr[3][2] = R[1][2]*R[2][2];
+	newr[3][3] = R[1][1]*R[2][2] + R[1][2]*R[2][1];
+	newr[3][4] = R[1][2]*R[2][0] + R[1][0]*R[2][2];
+	newr[3][5] = R[1][0]*R[2][1] + R[1][1]*R[2][0];
+	newr[4][0] = R[2][0]*R[0][0];
+	newr[4][1] = R[2][1]*R[0][1];
+	newr[4][2] = R[2][2]*R[0][2];
+	newr[4][3] = R[0][1]*R[2][2] + R[0][2]*R[2][1];
+	newr[4][4] = R[0][2]*R[2][0] + R[0][0]*R[2][2];
+	newr[4][5] = R[0][0]*R[2][1] + R[0][1]*R[2][0];
+	newr[5][0] = R[0][0]*R[1][0];
+	newr[5][1] = R[0][1]*R[1][1];
+	newr[5][2] = R[0][2]*R[1][2];
+	newr[5][3] = R[0][1]*R[1][2] + R[0][2]*R[1][1];
+	newr[5][4] = R[0][2]*R[1][0] + R[0][0]*R[1][2];
+	newr[5][5] = R[0][0]*R[1][1] + R[0][1]*R[1][0];
+
+	newr.mmult(temp, Av);
+	temp.mTmult(Ar, newr);
 
 }
 

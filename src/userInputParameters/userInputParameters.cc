@@ -76,13 +76,19 @@ userInputParameters::userInputParameters(std::string inputfile, dealii::Paramete
   slipDirectionsFile = parameter_handler.get("Slip Directions File");
   slipNormalsFile = parameter_handler.get("Slip Normals File");
 
-  numTwinSystems=parameter_handler.get_integer("Number of Twin Systems");
-  initialSlipResistanceTwin = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Slip Resistance Twin")));
-  initialHardeningModulusTwin = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Hardening Modulus Twin")));
-  powerLawExponentTwin = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Power Law Exponent Twin")));
-  saturationStressTwin = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Saturation Stress Twin")));
-  twinDirectionsFile = parameter_handler.get("Twin Directions File");
-  twinNormalsFile = parameter_handler.get("Twin Normals File");
+  enableTwinning = parameter_handler.get_bool("Twinning enabled");
+  if(enableTwinning){
+    numTwinSystems=parameter_handler.get_integer("Number of Twin Systems");
+    initialSlipResistanceTwin = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Slip Resistance Twin")));
+    initialHardeningModulusTwin = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Hardening Modulus Twin")));
+    powerLawExponentTwin = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Power Law Exponent Twin")));
+    saturationStressTwin = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Saturation Stress Twin")));
+    twinDirectionsFile = parameter_handler.get("Twin Directions File");
+    twinNormalsFile = parameter_handler.get("Twin Normals File");}
+  else{
+    numTwinSystems=1;
+    initialSlipResistanceTwin.push_back(10e5);
+  }
 
   backstressFactor=parameter_handler.get_double("Backstress Factor");
   twinThresholdFraction=parameter_handler.get_double("Twin Threshold Fraction");
@@ -162,6 +168,7 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Slip Directions File","",dealii::Patterns::Anything(),"Slip Directions File");
   parameter_handler.declare_entry("Slip Normals File","",dealii::Patterns::Anything(),"Slip Normals File");
 
+  parameter_handler.declare_entry("Twinning enabled","false",dealii::Patterns::Bool(),"Flag to indicate if system twins");
   parameter_handler.declare_entry("Number of Twin Systems","-1",dealii::Patterns::Integer(),"Number of Twin Systems");
   parameter_handler.declare_entry("Initial Slip Resistance Twin","",dealii::Patterns::List(dealii::Patterns::Double()),"Initial CRSS of the twin sytems");
   parameter_handler.declare_entry("Initial Hardening Modulus Twin","",dealii::Patterns::List(dealii::Patterns::Double()),"Hardening moduli of twin systems");

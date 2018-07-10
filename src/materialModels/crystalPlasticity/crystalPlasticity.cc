@@ -17,7 +17,7 @@ P(dim,dim)
     ellipticBVP<dim>::postprocessed_solution_names.push_back("Eqv_strain");
     ellipticBVP<dim>::postprocessed_solution_names.push_back("Eqv_stress");
     ellipticBVP<dim>::postprocessed_solution_names.push_back("Grain_ID");
-    if(this->userInputs.crystalStructure=="hcp")
+    if(this->userInputs.enableTwinning)
       ellipticBVP<dim>::postprocessed_solution_names.push_back("Twin");
 }
 

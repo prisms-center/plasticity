@@ -7,9 +7,8 @@
 #include "crystalOrientationsIO.h"
 
 typedef struct {
-double C44;
+     FullMatrix<double> m_alpha,n_alpha, eulerAngles2;
 } materialProperties;
-
 //material model class for crystal plasticity
 //derives from ellipticBVP base abstract class
 template <int dim>
@@ -138,6 +137,10 @@ private:
      *calculates the equivalent matrix Aleft for the second order tensorial operation trace(AX)=B => A_r*{x}={b}
      */
     void tracev(FullMatrix<double> &Atrace, FullMatrix<double> elm, FullMatrix<double> B);
+    void rod2quat(Vector<double> &quat,Vector<double> &rod);
+    void quatproduct(Vector<double> &quatp,Vector<double> &quat2,Vector<double> &quat1);
+    void quat2rod(Vector<double> &quat,Vector<double> &rod);
+	  void elasticmoduli(FullMatrix<double> &Ar, FullMatrix<double> R, FullMatrix<double> Av);
 
     /**
      *calculates the matrix exponential of matrix A
@@ -198,23 +201,10 @@ private:
      * Tangent modulus dPK1/dF
      */
     Tensor<4,dim,double> dP_dF;
-
-    /**
-     * No. of quadrature points per element
-     */
-    double N_qpts;
-
-    /**
-     * volume of elements per core
-     */
-    double local_microvol;
-
-    /**
-     * global volume
-     */
-    double microvol;
-
+    double No_Elem, N_qpts,local_F_e,local_F_r,F_e,F_r,local_F_r_Twin,F_r_Twin,local_microvol,microvol,F_s,local_F_s,F_T;
     double signstress;
+    double backstressflag;
+
 
     /**
      * Stores original crystal orientations as rodrigues vectors by element number and quadratureID
@@ -256,33 +246,11 @@ private:
      * Stores slip resistance by element number and quadratureID at each increment
      */
     std::vector<std::vector<  Vector<double> > >  s_alpha_conv;
+    std::vector<std::vector<  Vector<double> > >  twinfraction_iter, slipfraction_iter,twinfraction_conv, slipfraction_conv, twinfraction_iter_Twin, twinfraction_conv_Twin;
+    std::vector<std::vector<double> >  twin;
 
-    /**
-     * No. of slip systems
-     */
-    unsigned int n_slip_systems; //No. of slip systems
-
-    /**
-     * Slip directions
-     */
-    FullMatrix<double> m_alpha;
-
-    /**
-     * Slip Normals
-     */
-    FullMatrix<double> n_alpha;
-
-    /**
-     * Latent Hardening Matrix
-     */
-    FullMatrix<double> q;
-
-    FullMatrix<double> sres;
-
-    /**
-     * Elastic Stiffness Matrix
-     */
-    FullMatrix<double> Dmat;
+    unsigned int n_slip_systems,n_twin_systems; //No. of slip systems
+    FullMatrix<double> m_alpha,n_alpha,q,sres,Dmat, eulerAngles2;
 
     /**
      * slip resistance
