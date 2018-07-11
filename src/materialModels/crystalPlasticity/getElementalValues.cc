@@ -48,8 +48,6 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 	     F[i][i]+=1;
 	 }
 
-     //this->pcout<<F[0][0]<<"\t"<<F[1][1]<<"\t"<<F[2][2]<<"\n";
-
 	 //Update strain, stress, and tangent for current time step/quadrature point
 	 calculatePlasticity(cellID, q);
 
@@ -75,7 +73,7 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 	 for(unsigned int i=0;i<dim;i++){
 	     for(unsigned int j=0;j<dim;j++){
 		 E_tau[i][j] = 0.5*(E_tau[i][j]-temp[i][j]);
-		 temp2[i][j]=E_tau[i][j]*fe_values.JxW(q);
+		 temp2[i][j]=(0.5*(F[i][j]+F[j][i])-temp[i][j])*fe_values.JxW(q);
 		 temp3[i][j]=T[i][j]*fe_values.JxW(q);
 	     }
 	 }
@@ -87,17 +85,6 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
          //calculate von-Mises stress and equivalent strain
          double traceE, traceT,vonmises,eqvstrain;
          FullMatrix<double> deve(dim,dim),devt(dim,dim);
-
-         CE_tau=0.0;
-         temp=F;
-         F.Tmmult(CE_tau,temp);
-         E_tau=CE_tau;
-         temp=IdentityMatrix(dim);
-         for(unsigned int i=0;i<dim;i++){
-             for(unsigned int j=0;j<dim;j++){
-                 E_tau[i][j] = 0.5*(E_tau[i][j]-temp[i][j]);
-             }
-         }
 
 
          traceE=E_tau.trace();
@@ -122,9 +109,11 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 
          //fill in post processing field values
 
-         this->postprocessValues(cellID, q, 0, 0)=eqvstrain;
-         this->postprocessValues(cellID, q, 1, 0)=vonmises;
+				 this->postprocessValues(cellID, q, 0, 0)=vonmises;
+         this->postprocessValues(cellID, q, 1, 0)=eqvstrain;
          this->postprocessValues(cellID, q, 2, 0)=quadratureOrientationsMap[cellID][q];
+				 if(this->userInputs.enableTwinning)
+	         this->postprocessValues(cellID, q, 3, 0)=twin[cellID][q];
 
 				 //evaluate elemental stiffness matrix, K_{ij} = N_{i,k}*C_{mknl}*F_{im}*F{jn}*N_{j,l} + N_{i,k}*F_{kl}*N_{j,l}*del{ij} dV
 				 for (unsigned int d1=0; d1<dofs_per_cell; ++d1) {
@@ -142,8 +131,6 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
      elementalJacobian = K_local;
      elementalResidual = Rlocal;
 
-     //this->pcout<<K_local[0][0]<<"\t"<<K_local[0][1]<<"\t"<<K_local[0][2]<<"\t"<<K_local[1][0]<<"\t"<<K_local[1][1]<<"\t"<<K_local[1][2]<<"\t"<<K_local[2][0]<<"\t"<<K_local[2][1]<<"\t"<<K_local[2][2]<<"\n";
-    // this->pcout<<Rlocal[0]<<"\t"<<Rlocal[1]<<"\t"<<Rlocal[2]<<"\n";
  }
 
  #include "../../../include/crystalPlasticity_template_instantiations.h"

@@ -11,8 +11,6 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     Vector<double> s_alpha_t(n_slip_systems); // Slip resistance
     Vector<double> rot1(dim);// Crystal orientation (Rodrigues representation)
 
-    int old_precision = std::cout.precision();
-
     // Tolerance
 
     double tol1=this->userInputs.modelStressTolerance;
@@ -555,7 +553,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 						else
 							temps2.equ(x_beta_old(iter3), temps2);
 
-						s2.add(temps2);
+						s2+=temps2;
 
 					}
 
