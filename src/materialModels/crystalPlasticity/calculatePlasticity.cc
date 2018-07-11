@@ -458,7 +458,6 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
          for (unsigned int i=0;i<this->userInputs.numTwinSystems;i++){
             twinfraction_iter[cellID][quadPtID][i]=twinfraction_conv[cellID][quadPtID][i]+x_beta_old[i+this->userInputs.numSlipSystems]/this->userInputs.twinShear;
-			twinfraction_iter_Twin[cellID][quadPtID][i] = twinfraction_conv_Twin[cellID][quadPtID][i] + x_beta_old[i + this->userInputs.numSlipSystems] / this->userInputs.twinShear;
         }
 
         for (unsigned int i=0;i<this->userInputs.numSlipSystems;i++){
