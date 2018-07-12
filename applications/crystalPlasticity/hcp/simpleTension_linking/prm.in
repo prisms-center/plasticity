@@ -134,22 +134,22 @@ set Elastic Stiffness row 6                      = 0, 0, 0, 0, 0, 75.0e3
 # Slip parameters
 ####################################
 # Number of Slip Systems
-set Number of Slip Systems                       = 12
+set Number of Slip Systems                       = 18
 
 # Latent Hardening Ratio
 set Latent Hardening Ratio                       = 1.4
 
 # RSS of the slip sytems
-set Initial Slip Resistance                      = 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0
+set Initial Slip Resistance                      = 0.25, 0.25, 0.25, 10, 10, 10, 10, 10, 10, 10, 10, 10, 15, 15.0, 15.0, 15.0, 15.0, 15.0
 
 # Heardening moduli of slip systems
-set Initial Hardening Modulus                    = 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0
+set Initial Hardening Modulus                    = 5.0, 5.0, 5.0, 100, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 200.0, 200.0, 200.0, 200.0, 200.0, 200.0
 
 # Power law coefficient
-set Power Law Exponent                           = 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25
+set Power Law Exponent                           = 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
 
 # Saturation stress
-set Saturation Stress                            = 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0
+set Saturation Stress                            = 185.0, 185.0, 185.0, 160.0, 160.0, 160.0, 160.0, 160.0, 160.0, 160.0, 160.0, 160.0, 200.0, 200.0, 200.0, 200.0, 200.0, 200.0
 
 # Slip Directions File
 set Slip Directions File                         = slipDirections.txt
