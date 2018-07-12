@@ -108,7 +108,7 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
          }
       }
       else{
-         std::cout<<"Twinning is not enabled";
+         std::cout<<"Twinning is not enabled \n";
          n_alpha[id][0]=1;
          n_alpha[id][1]=0;
          n_alpha[id][2]=0;

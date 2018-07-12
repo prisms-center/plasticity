@@ -273,6 +273,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
             h_beta(i)=this->userInputs.initialHardeningModulus[i]*pow((1-s_beta(i)/this->userInputs.saturationStress[i]),this->userInputs.powerLawExponent[i]);
         }
 
+
         for(unsigned int i=0;i<this->userInputs.numTwinSystems;i++){
             h_beta(this->userInputs.numSlipSystems+i)=this->userInputs.initialHardeningModulusTwin[i]*pow((1-s_beta(this->userInputs.numSlipSystems+i)/this->userInputs.saturationStressTwin[i]),this->userInputs.powerLawExponentTwin[i]);
         }

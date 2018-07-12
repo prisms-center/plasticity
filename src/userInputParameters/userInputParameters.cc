@@ -88,6 +88,9 @@ userInputParameters::userInputParameters(std::string inputfile, dealii::Paramete
   else{
     numTwinSystems=1;
     initialSlipResistanceTwin.push_back(10e5);
+    initialHardeningModulusTwin.push_back(1);
+    powerLawExponentTwin.push_back(0);
+    saturationStressTwin.push_back(10e10);
   }
 
   backstressFactor=parameter_handler.get_double("Backstress Factor");
