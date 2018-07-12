@@ -1,5 +1,6 @@
 //output method for ellipticBVP class
 #include "../../include/ellipticBVP.h"
+#include <fstream>
 
 //output results
 template <int dim>

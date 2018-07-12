@@ -2,10 +2,6 @@
 #ifndef ELLIPTICBVP_H
 #define ELLIPTICBVP_H
 
-//general headers
-#include <fstream>
-#include <sstream>
-
 //dealii headers
 #include "dealIIheaders.h"
 #include "userInputParameters.h"

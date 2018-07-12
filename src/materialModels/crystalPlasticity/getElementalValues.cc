@@ -106,7 +106,6 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
          eqvstrain=deve.frobenius_norm();
          eqvstrain=sqrt(2.0/3.0)*eqvstrain;
 
-
          //fill in post processing field values
 
 				 this->postprocessValues(cellID, q, 0, 0)=vonmises;

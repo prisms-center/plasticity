@@ -165,7 +165,7 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Number of Slip Systems","-1",dealii::Patterns::Integer(),"Number of Slip Systems");
   parameter_handler.declare_entry("Latent Hardening Ratio","-1",dealii::Patterns::Double(),"Latent Hardening Ratio");
   parameter_handler.declare_entry("Initial Slip Resistance","",dealii::Patterns::List(dealii::Patterns::Double()),"RSS of the slip sytems");
-  parameter_handler.declare_entry("Initial Hardening Modulus","",dealii::Patterns::List(dealii::Patterns::Double()),"ardening moduli of slip systems");
+  parameter_handler.declare_entry("Initial Hardening Modulus","",dealii::Patterns::List(dealii::Patterns::Double()),"Heardening moduli of slip systems");
   parameter_handler.declare_entry("Power Law Exponent","",dealii::Patterns::List(dealii::Patterns::Double()),"Power law coefficient");
   parameter_handler.declare_entry("Saturation Stress","",dealii::Patterns::List(dealii::Patterns::Double()),"Saturation stress");
   parameter_handler.declare_entry("Slip Directions File","",dealii::Patterns::Anything(),"Slip Directions File");
