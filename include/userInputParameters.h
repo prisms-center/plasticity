@@ -32,8 +32,12 @@ public:
 
   unsigned int meshRefineFactor; // 2^n*2^n*2^n elements(3->8*8*8 =512 elements)
 
-  /*Solution output parameters*/
   bool writeMeshToEPS; //Only written for serial runs and if number of elements < 10000
+
+  bool readExternalMesh;
+  std::string externalMeshFileName;
+
+  /*Solution output parameters*/
   bool writeOutput; // flag to write output vtu and pvtu files
   std::string outputDirectory;
   unsigned int skipOutputSteps;

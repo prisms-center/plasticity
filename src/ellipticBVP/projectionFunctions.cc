@@ -87,23 +87,19 @@ void ellipticBVP<dim>::initProjection(){
 //post processed field projection operation
 template <int dim>
 void ellipticBVP<dim>::projection(){
+  unsigned int skipSteps;
+
   //return if no post processing fields
   if (numPostProcessedFields==0) return;
 
   //check whether to project in current increment
-#ifdef writeOutput
-    if (!writeOutput) return;
-#endif
-#ifndef skipOutputSteps
-  unsigned int skipSteps=1;
-#elif skipOutputSteps<=0
-  unsigned int skipSteps=1;
-#else
-  unsigned int skipSteps=skipOutputSteps;
-#endif
-  if (currentIncrement%skipSteps!=0){
+  if(userInputs.skipOutputSteps<=0)
+      skipSteps=1;
+  else
+      skipSteps=userInputs.skipOutputSteps;
+
+  if (currentIncrement%skipSteps!=0)
     return;
-  }
 
   pcout << "projecting post processing fields\n";
 

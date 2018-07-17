@@ -12,29 +12,6 @@ using namespace std;
 //FCC model header
 #include "../../../../src/materialModels/crystalPlasticity/fcc/model.h"
 
-#ifdef readExternalMeshes
-#if readExternalMeshes==true
-//overload mesh() method to generate the required polycrystal geometry
-template <int dim>
-void crystalPlasticity<dim>::mesh(){
-  //reading external mesh
-  this->pcout << "reading problem mesh\n";
-  GridIn<dim> gridin;
-  gridin.attach_triangulation(this->triangulation);
-  //Read mesh in UCD format generated from Cubit
-  std::ifstream f("n10-id2_hex.msh");
-  gridin.read_msh(f);
-
-  //Output image for viewing
-  std::ofstream out ("mesh.vtk");
-  GridOut grid_out;
-  grid_out.write_vtk (this->triangulation, out);
-  this->pcout << "writing mesh image to mesh.vtk\n";
-}
-#endif
-#endif
-
-
 //Specify Dirichlet boundary conditions
 template <int dim>
 void crystalPlasticity<dim>::setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value){

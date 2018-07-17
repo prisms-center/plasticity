@@ -12,6 +12,10 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 	std::vector<unsigned int> local_dof_indices(dofs_per_cell);
 	//loop over elements
 	unsigned int cellID = 0;
+	FullMatrix<double> rotmat(dim, dim);
+	Vector<double> quat1(4), rod(3), quat2(4), quatprod(4);
+
+
 	typename DoFHandler<dim>::active_cell_iterator cell = this->dofHandler.begin_active(), endc = this->dofHandler.end();
 	for (; cell != endc; ++cell) {
 		if (cell->is_locally_owned()) {
@@ -45,240 +49,197 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 		}
 	}
 
-
-
-
-
 	reorient();
 
-    twinfraction_conv=twinfraction_iter;
-    slipfraction_conv=slipfraction_iter;
-    local_F_r=0.0; //adde by Reza as a modification
-	  local_F_s=0.0; //adde by Reza as a modification
+  twinfraction_conv=twinfraction_iter;
+  slipfraction_conv=slipfraction_iter;
+  local_F_r=0.0;
+  local_F_s=0.0;
 
-    char buffer[200];
-    //copy rotnew to output
-    orientations.outputOrientations.clear();
-	  //loop over elements
-    cellID=0;
-    cell = this->dofHandler.begin_active(), endc = this->dofHandler.end();
-    for (; cell!=endc; ++cell) {
-        if (cell->is_locally_owned()){
-            fe_values.reinit(cell);
-            //loop over quadrature points
-            for (unsigned int q=0; q<num_quad_points; ++q){
-                std::vector<double> temp;
-                temp.push_back(fe_values.get_quadrature_points()[q][0]);
-                temp.push_back(fe_values.get_quadrature_points()[q][1]);
-                temp.push_back(fe_values.get_quadrature_points()[q][2]);
-                temp.push_back(rotnew[cellID][q][0]);
-                temp.push_back(rotnew[cellID][q][1]);
-                temp.push_back(rotnew[cellID][q][2]);
-                temp.push_back(fe_values.JxW(q));
-                temp.push_back(quadratureOrientationsMap[cellID][q]);
+  char buffer[200];
+  //copy rotnew to output
+  orientations.outputOrientations.clear();
+  //loop over elements
+  cellID=0;
+  cell = this->dofHandler.begin_active(), endc = this->dofHandler.end();
+  for (; cell!=endc; ++cell) {
+    if (cell->is_locally_owned()){
+      fe_values.reinit(cell);
 
-				        twin[cellID][q] = 0.0;
+			//loop over quadrature points
+      for (unsigned int q=0; q<num_quad_points; ++q){
+          std::vector<double> temp;
+          temp.push_back(fe_values.get_quadrature_points()[q][0]);
+          temp.push_back(fe_values.get_quadrature_points()[q][1]);
+          temp.push_back(fe_values.get_quadrature_points()[q][2]);
+          temp.push_back(rotnew[cellID][q][0]);
+          temp.push_back(rotnew[cellID][q][1]);
+          temp.push_back(rotnew[cellID][q][2]);
+          temp.push_back(fe_values.JxW(q));
+          temp.push_back(quadratureOrientationsMap[cellID][q]);
 
-                orientations.addToOutputOrientations(temp);
-                for(unsigned int i=0;i<this->userInputs.numTwinSystems;i++){
-                    local_F_r=local_F_r+twinfraction_conv[cellID][q][i]*fe_values.JxW(q);
-                }
-                for(unsigned int i=0;i<this->userInputs.numSlipSystems;i++){
-                    local_F_s=local_F_s+slipfraction_conv[cellID][q][i]*fe_values.JxW(q);
-                }
+	        twin[cellID][q] = 0.0;
 
-            }
-            cellID++;
-        }
+          orientations.addToOutputOrientations(temp);
+          for(unsigned int i=0;i<this->userInputs.numTwinSystems;i++){
+              local_F_r=local_F_r+twinfraction_conv[cellID][q][i]*fe_values.JxW(q);
+          }
+
+					for(unsigned int i=0;i<this->userInputs.numSlipSystems;i++){
+              local_F_s=local_F_s+slipfraction_conv[cellID][q][i]*fe_values.JxW(q);
+          }
+      }
+      cellID++;
     }
-    orientations.writeOutputOrientations(this->userInputs.writeOutput,this->userInputs.outputDirectory);
+  }
+  orientations.writeOutputOrientations(this->userInputs.writeOutput,this->userInputs.outputDirectory);
 
-    //Update the history variables when convergence is reached for the current increment
-    Fe_conv=Fe_iter;
-    Fp_conv=Fp_iter;
-    s_alpha_conv=s_alpha_iter;
+  //Update the history variables when convergence is reached for the current increment
+  Fe_conv=Fe_iter;
+  Fp_conv=Fp_iter;
+  s_alpha_conv=s_alpha_iter;
 	if (this->currentIncrement==0) {
 		F_T = this->userInputs.twinThresholdFraction;
-		local_F_e = 0.0; //adde by Reza as a modificatio
+		local_F_e = 0.0;
 	}
-    //double temp4,temp5;
-    //temp4=Lambda[0][0];
-    //temp5=Utilities::MPI::sum(temp4,this->mpi_communicator);
-    //cout << temp5<<"\n";
-    microvol=Utilities::MPI::sum(local_microvol,this->mpi_communicator);
 
-    for(unsigned int i=0;i<dim;i++){
-        for(unsigned int j=0;j<dim;j++){
-            global_strain[i][j]=Utilities::MPI::sum(local_strain[i][j]/microvol,this->mpi_communicator);
-            global_stress[i][j]=Utilities::MPI::sum(local_stress[i][j]/microvol,this->mpi_communicator);
-        }
+  microvol=Utilities::MPI::sum(local_microvol,this->mpi_communicator);
 
+  for(unsigned int i=0;i<dim;i++){
+    for(unsigned int j=0;j<dim;j++){
+        global_strain[i][j]=Utilities::MPI::sum(local_strain[i][j]/microvol,this->mpi_communicator);
+        global_stress[i][j]=Utilities::MPI::sum(local_stress[i][j]/microvol,this->mpi_communicator);
     }
+  }
 
-	  F_r=Utilities::MPI::sum(local_F_r/microvol,this->mpi_communicator);
-    F_s=Utilities::MPI::sum(local_F_s/microvol,this->mpi_communicator);
+  F_r=Utilities::MPI::sum(local_F_r/microvol,this->mpi_communicator);
+  F_s=Utilities::MPI::sum(local_F_s/microvol,this->mpi_communicator);
 
+  //check whether to write stress and strain data to file
+  //write stress and strain data to file
+  std::string dir(this->userInputs.outputDirectory);
+  dir+="/";
 
-
-
-
-     //check whether to write stress and strain data to file
-#ifdef stressstrainOutput
-  if (!stressstrainOutput) return;
-#endif
-     //write stress and strain data to file
-#ifdef outputDirectory
-     std::string dir(outputDirectory);
-     dir+="/";
-#else
-     std::string dir("./");
-#endif
-     std::ofstream outputFile;
-     if(this->currentIncrement==0){
-       dir += std::string("stressstrain.txt");
-       outputFile.open(dir.c_str());
-       outputFile << "Exx"<<'\t'<<"Eyy"<<'\t'<<"Ezz"<<'\t'<<"Eyz"<<'\t'<<"Exz"<<'\t'<<"Exy"<<'\t'<<"Txx"<<'\t'<<"Tyy"<<'\t'<<"Tzz"<<'\t'<<"Tyz"<<'\t'<<"Txz"<<'\t'<<"Txy"<<'\t'<<"TwinRealVF"<<'\t'<<"TwinMade"<<'\t'<<"SlipTotal"<<'\n';
-	 outputFile.close();
-     }
-     else{
-     dir += std::string("stressstrain.txt");
-     }
-     outputFile.open(dir.c_str(),std::fstream::app);
-     if(Utilities::MPI::this_mpi_process(this->mpi_communicator)==0){
-       outputFile << global_strain[0][0]<<'\t'<<global_strain[1][1]<<'\t'<<global_strain[2][2]<<'\t'<<global_strain[1][2]<<'\t'<<global_strain[0][2]<<'\t'<<global_strain[0][1]<<'\t'<<global_stress[0][0]<<'\t'<<global_stress[1][1]<<'\t'<<global_stress[2][2]<<'\t'<<global_stress[1][2]<<'\t'<<global_stress[0][2]<<'\t'<<global_stress[0][1]<<'\t'<<F_r<<'\t'<<F_e<<'\t'<<F_s<<'\n';
-     }
-     outputFile.close();
-//    global_strain=0.0;
-//    global_stress=0.0;
-
+  std::ofstream outputFile;
+  if(this->currentIncrement==0){
+    dir += std::string("stressstrain.txt");
+    outputFile.open(dir.c_str());
+    outputFile << "Exx"<<'\t'<<"Eyy"<<'\t'<<"Ezz"<<'\t'<<"Eyz"<<'\t'<<"Exz"<<'\t'<<"Exy"<<'\t'<<"Txx"<<'\t'<<"Tyy"<<'\t'<<"Tzz"<<'\t'<<"Tyz"<<'\t'<<"Txz"<<'\t'<<"Txy"<<'\t'<<"TwinRealVF"<<'\t'<<"TwinMade"<<'\t'<<"SlipTotal"<<'\n';
+ 	  outputFile.close();
+  }
+  else{
+  dir += std::string("stressstrain.txt");
+  }
+  outputFile.open(dir.c_str(),std::fstream::app);
+  if(Utilities::MPI::this_mpi_process(this->mpi_communicator)==0){
+    outputFile << global_strain[0][0]<<'\t'<<global_strain[1][1]<<'\t'<<global_strain[2][2]<<'\t'<<global_strain[1][2]<<'\t'<<global_strain[0][2]<<'\t'<<global_strain[0][1]<<'\t'<<global_stress[0][0]<<'\t'<<global_stress[1][1]<<'\t'<<global_stress[2][2]<<'\t'<<global_stress[1][2]<<'\t'<<global_stress[0][2]<<'\t'<<global_stress[0][1]<<'\t'<<F_r<<'\t'<<F_e<<'\t'<<F_s<<'\n';
+  }
+  outputFile.close();
 
   //Adding backstress term during loading reversal
-	 if (this->currentIncrement == 0) {
-		 signstress = 1;
-		 backstressflag = 0;
-	 }
-	 //            sprintf(buffer,"backstress: %8.2e , initial residual: %8.2e \n",signstress,global_stress[2][2]);
-	 //                      this->pcout<< buffer;
-	 if (backstressflag>10) {
-		 if (signstress*global_stress[2][2]<0) {
-			 signstress = global_stress[2][2];
-			 if (signstress<0) {
-				 unsigned int cellID = 0;
-				 typename DoFHandler<dim>::active_cell_iterator cell = this->dofHandler.begin_active(), endc = this->dofHandler.end();
-				 for (; cell != endc; ++cell) {
-					 if (cell->is_locally_owned()) {
-						 fe_values.reinit(cell);
+  if (this->currentIncrement == 0) {
+ 	 signstress = 1;
+ 	 backstressflag = 0;
+  }
 
-						 for (unsigned int q = 0; q<num_quad_points; ++q) {
-							 for (unsigned int i = 0;i<n_slip_systems;i++) {
+  if (backstressflag>10) {
+		if (signstress*global_stress[2][2]<0) {
+	 	  signstress = global_stress[2][2];
+	 	  if (signstress<0) {
+	 		  unsigned int cellID = 0;
+	 		  typename DoFHandler<dim>::active_cell_iterator cell = this->dofHandler.begin_active(), endc = this->dofHandler.end();
+	 		  for (; cell != endc; ++cell) {
+	 			  if (cell->is_locally_owned()) {
+	 				  fe_values.reinit(cell);
+	 	 				  for (unsigned int q = 0; q<num_quad_points; ++q)
+		 					  for (unsigned int i = 0;i<n_slip_systems;i++) {
+			 	 					if(this->userInputs.backstressFactor>1.0e-5)
+		 							s_alpha_conv[cellID][q][i] = s_alpha_conv[cellID][q][i] - this->userInputs.backstressFactor*s_alpha_conv[cellID][q][i];
+				 				}
 
-#ifdef backstressFactor
+		 			backstressflag = 0;
+	 				cellID++;
+	 			 	}
+	 	 		}
+	 	 	}
+	  }
+  }
+  backstressflag = backstressflag + 1;
 
-								 s_alpha_conv[cellID][q][i] = s_alpha_conv[cellID][q][i] - backstressFactor*s_alpha_conv[cellID][q][i];
-#endif
-								 backstressflag = 0;
-							 }
-						 }
-						 cellID++;
-					 }
+  cellID=0;
+  cell = this->dofHandler.begin_active(), endc = this->dofHandler.end();
+  for (; cell!=endc; ++cell) {
+	  if (cell->is_locally_owned()){
 
-				 }
+      fe_values.reinit(cell);
 
-			 }
-		 }
-	 }
-	 backstressflag = backstressflag + 1;
+			//loop over quadrature points
+      for (unsigned int q = 0; q < num_quad_points; ++q){
+        std::vector<double> local_twin;
+        local_twin.resize(this->userInputs.numTwinSystems,0.0);
+        local_twin=twinfraction_conv[cellID][q];
+        std::vector<double>::iterator result;
+        result = std::max_element(local_twin.begin(), local_twin.end());
+        double twin_pos, twin_max;
+        twin_pos= std::distance(local_twin.begin(), result);
+        twin_max=local_twin[twin_pos];
 
+        if(F_r>0){
+          if(twin_max > F_T){
+	          FullMatrix<double> FE_t(dim,dim), FP_t(dim,dim),Twin_T(dim,dim),temp(dim,dim);
+	          FE_t=Fe_conv[cellID][q];
+	          FP_t=Fp_conv[cellID][q];
 
+						rod(0) = rot[cellID][q][0];rod(1) = rot[cellID][q][1];rod(2) = rot[cellID][q][2];
 
-
-    cellID=0;
-    cell = this->dofHandler.begin_active(), endc = this->dofHandler.end();
-    for (; cell!=endc; ++cell) {
-        if (cell->is_locally_owned()){
-            fe_values.reinit(cell);
-            //loop over quadrature points
-
-            for (unsigned int q = 0; q < num_quad_points; ++q){
-                std::vector<double> local_twin;
-                local_twin.resize(this->userInputs.numTwinSystems,0.0);
-                local_twin=twinfraction_conv[cellID][q];
-                std::vector<double>::iterator result;
-                result = std::max_element(local_twin.begin(), local_twin.end());
-                double twin_pos, twin_max;
-                twin_pos= std::distance(local_twin.begin(), result);
-                twin_max=local_twin[twin_pos];
-
-                if(F_r>0){
-
-                    if(twin_max > F_T){
+	    			odfpoint(rotmat, rod);
 
 
-                    FullMatrix<double> FE_t(dim,dim), FP_t(dim,dim),Twin_T(dim,dim),temp(dim,dim);
+						temp = 0.0;
+						FE_t.mmult(temp, rotmat);
+						rotmat.Tmmult(FE_t, temp);
 
-                    FE_t=Fe_conv[cellID][q];
-                    FP_t=Fp_conv[cellID][q];
-
-
-                    double s_alpha_twin=s_alpha_conv[cellID][q][this->userInputs.numSlipSystems+twin_pos];
-
+						FP_t.mmult(temp, rotmat);
+						rotmat.Tmmult(FP_t, temp);
 
 
+						rod2quat(quat2, rod);
+						quat1(0) = 0;
+			      quat1(1) = n_alpha[this->userInputs.numSlipSystems + twin_pos][0];
+						quat1(2) = n_alpha[this->userInputs.numSlipSystems + twin_pos][1];
+			      quat1(3) = n_alpha[this->userInputs.numSlipSystems + twin_pos][2];
 
-					FullMatrix<double> rotmat(dim, dim);
-					Vector<double> quat1(4), rod(3), quat2(4), quatprod(4);
-
-					rod(0) = rot[cellID][q][0];rod(1) = rot[cellID][q][1];rod(2) = rot[cellID][q][2];
-
-                      			odfpoint(rotmat, rod);
-
-
-			temp = 0.0;
-					FE_t.mmult(temp, rotmat);
-					rotmat.Tmmult(FE_t, temp);
-
-					FP_t.mmult(temp, rotmat);
-					rotmat.Tmmult(FP_t, temp);
+						quatproduct(quatprod, quat2, quat1);
 
 
-				rod2quat(quat2, rod);
-					quat1(0) = 0;
-          quat1(1) = n_alpha[this->userInputs.numSlipSystems + twin_pos][0];
-					quat1(2) = n_alpha[this->userInputs.numSlipSystems + twin_pos][1];
-          quat1(3) = n_alpha[this->userInputs.numSlipSystems + twin_pos][2];
+						quat2rod(quatprod, rod);
 
-					quatproduct(quatprod, quat2, quat1);
+	      		odfpoint(rotmat, rod);
 
-
-			quat2rod(quatprod, rod);
-
-                              		odfpoint(rotmat, rod);
-
-					rot[cellID][q][0] = rod(0);rot[cellID][q][1] = rod(1);rot[cellID][q][2] = rod(2);
-					rotnew[cellID][q][0] = rod(0);rotnew[cellID][q][1] = rod(1);rotnew[cellID][q][2] = rod(2);
+						rot[cellID][q][0] = rod(0);rot[cellID][q][1] = rod(1);rot[cellID][q][2] = rod(2);
+						rotnew[cellID][q][0] = rod(0);rotnew[cellID][q][1] = rod(1);rotnew[cellID][q][2] = rod(2);
 
 
-					FE_t.mTmult(temp, rotmat);
-					rotmat.mmult(FE_t, temp);
+						FE_t.mTmult(temp, rotmat);
+						rotmat.mmult(FE_t, temp);
 
-					FP_t.mTmult(temp, rotmat);
-					rotmat.mmult(FP_t, temp);
+						FP_t.mTmult(temp, rotmat);
+						rotmat.mmult(FP_t, temp);
 
-                    Fe_conv[cellID][q]=FE_t;
-                    Fp_conv[cellID][q]=FP_t;
-
-
-				//loop over elements
-				twin[cellID][q] = 1.0;
+	          Fe_conv[cellID][q]=FE_t;
+	          Fp_conv[cellID][q]=FP_t;
 
 
-                }
+						//loop over elements
+						twin[cellID][q] = 1.0;
 
-                }
-            }
-            cellID++;
+
+	        }
         }
+      }
+      cellID++;
     }
+  }
 
 	cellID = 0;
 	cell = this->dofHandler.begin_active(), endc = this->dofHandler.end();

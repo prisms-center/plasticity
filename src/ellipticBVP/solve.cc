@@ -8,26 +8,61 @@ void ellipticBVP<dim>::solve(){
 
   //load increments
   unsigned int successiveIncs=0;
-#ifdef enableAdaptiveTimeStepping
-#if enableAdaptiveTimeStepping==true
-  for (;totalLoadFactor<totalNumIncrements;){
-    ++currentIncrement;
-    loadFactorSetByModel=std::min(loadFactorSetByModel, totalNumIncrements-totalLoadFactor);
-#else
-  for (;currentIncrement<totalIncrements; ++currentIncrement){
-#endif
-#else
-  for (;currentIncrement<totalIncrements; ++currentIncrement){
-#endif
-    pcout << "\nincrement: "  << currentIncrement << std::endl;
-#ifdef enableAdaptiveTimeStepping
-#if enableAdaptiveTimeStepping==true
-    char buffer[100];
-    sprintf(buffer, "current load factor: %12.6e\ntotal load factor:   %12.6e\n", loadFactorSetByModel, totalLoadFactor);
-    pcout << buffer;
-#endif
-#endif
+  unsigned int skipSteps;
 
+  if(userInputs.enableAdaptiveTimeStepping){
+    for (;totalLoadFactor<userInputs.totalNumIncrements;){
+      ++currentIncrement;
+      loadFactorSetByModel=std::min(loadFactorSetByModel, userInputs.totalNumIncrements-totalLoadFactor);
+      pcout << "\nincrement: "  << currentIncrement << std::endl;
+      char buffer[100];
+      sprintf(buffer, "current load factor: %12.6e\ntotal load factor:   %12.6e\n", loadFactorSetByModel, totalLoadFactor);
+      pcout << buffer;
+
+      //call updateBeforeIncrement, if any
+      updateBeforeIncrement();
+
+      //solve time increment
+      bool success=solveNonLinearSystem();
+
+      //call updateAfterIncrement, if any
+      if (success){
+        updateAfterIncrement();
+
+        //update totalLoadFactor
+        totalLoadFactor+=loadFactorSetByModel;
+
+        //increase loadFactorSetByModel, if succesiveIncForIncreasingTimeStep satisfied.
+        successiveIncs++;
+
+        if (successiveIncs>=userInputs.succesiveIncForIncreasingTimeStep){
+          loadFactorSetByModel*=userInputs.adaptiveLoadIncreaseFactor;
+          char buffer1[100];
+        	sprintf(buffer1, "current increment increased. Restarting increment with loadFactorSetByModel: %12.6e\n", loadFactorSetByModel);
+        	pcout << buffer1;
+        }
+
+        computing_timer.enter_section("postprocess");
+        if(userInputs.skipOutputSteps<=0)
+            unsigned int skipSteps=1;
+        else
+            unsigned int skipSteps=userInputs.skipOutputSteps;
+
+        if (currentIncrement%skipSteps==0)
+          if (userInputs.writeOutput) output();
+        computing_timer.exit_section("postprocess");
+        }
+      else{
+        successiveIncs=0;
+      }
+    }
+    char buffer[100];
+    sprintf(buffer, "\nfinal load factor  : %12.6e\n", totalLoadFactor);
+    pcout << buffer;
+  }
+  else
+    for (;currentIncrement<userInputs.totalNumIncrements; ++currentIncrement){
+    pcout << "\nincrement: "  << currentIncrement << std::endl;
     //call updateBeforeIncrement, if any
     updateBeforeIncrement();
 
@@ -43,50 +78,20 @@ void ellipticBVP<dim>::solve(){
 
       //increase loadFactorSetByModel, if succesiveIncForIncreasingTimeStep satisfied.
       successiveIncs++;
-#ifdef enableAdaptiveTimeStepping
-#if enableAdaptiveTimeStepping==true
-#ifdef succesiveIncForIncreasingTimeStep
-      if (successiveIncs>=succesiveIncForIncreasingTimeStep){
-#ifdef adaptiveLoadIncreaseFactor
-	loadFactorSetByModel*=adaptiveLoadIncreaseFactor;
-#else
-	loadFactorSetByModel*=2.0;
-#endif
-	char buffer1[100];
-	sprintf(buffer1, "current increment increased. Restarting increment with loadFactorSetByModel: %12.6e\n", loadFactorSetByModel);
-	pcout << buffer1;
-      }
-#endif
-#endif
-#endif
       //output results to file
       computing_timer.enter_section("postprocess");
-#ifndef skipOutputSteps
-      unsigned int skipSteps=1;
-#elif skipOutputSteps<=0
-      unsigned int skipSteps=1;
-#else
-      unsigned int skipSteps=skipOutputSteps;
-#endif
-      if (currentIncrement%skipSteps==0){
-#ifdef writeOutput
-      if (writeOutput) output();
-#else
-      output();
-#endif
-      }
+      if(userInputs.skipOutputSteps<=0)
+          skipSteps=1;
+      else
+          skipSteps=userInputs.skipOutputSteps;
+
+      if (currentIncrement%skipSteps==0)
+        if (userInputs.writeOutput) output();
       computing_timer.exit_section("postprocess");
-    }
+      }
     else{
       successiveIncs=0;
     }
   }
-#ifdef enableAdaptiveTimeStepping
-#if enableAdaptiveTimeStepping==true
-  char buffer[100];
-  sprintf(buffer, "\nfinal load factor  : %12.6e\n", totalLoadFactor);
-  pcout << buffer;
-#endif
-#endif
 }
 #include "../../include/ellipticBVP_template_instantiations.h"

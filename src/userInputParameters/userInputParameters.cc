@@ -35,8 +35,13 @@ userInputParameters::userInputParameters(std::string inputfile, dealii::Paramete
 
   meshRefineFactor = parameter_handler.get_integer("Refine factor");
 
-  //output parameters
   writeMeshToEPS = parameter_handler.get_bool("Write Mesh To EPS");
+
+  //External mesh parameters
+  readExternalMesh = parameter_handler.get_bool("Use external mesh");
+  externalMeshFileName = parameter_handler.get("Name of file containing external mesh");
+
+  //output parameters
   writeOutput = parameter_handler.get_bool("Write Output");
   outputDirectory = parameter_handler.get("Output Directory");
   skipOutputSteps=parameter_handler.get_integer("Skip Output Steps");
@@ -132,8 +137,12 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Refine factor","-1",dealii::Patterns::Integer(),"The number of initial refinements of the coarse mesh.");
 
   parameter_handler.declare_entry("Write Mesh To EPS","false",dealii::Patterns::Bool(),"Only written for serial runs and if number of elements < 10000");
+
+  parameter_handler.declare_entry("Use external mesh","false",dealii::Patterns::Bool(),"Flag to indicate whether to use external mesh");
+  parameter_handler.declare_entry("Name of file containing external mesh","",dealii::Patterns::Anything(),"Name of external mesh file");
+
   parameter_handler.declare_entry("Write Output","false",dealii::Patterns::Bool(),"Flag to write output vtu and pvtu files");
-  parameter_handler.declare_entry("Output Directory","",dealii::Patterns::Anything(),"Output Directory");
+  parameter_handler.declare_entry("Output Directory",".",dealii::Patterns::Anything(),"Output Directory");
   parameter_handler.declare_entry("Skip Output Steps","-1",dealii::Patterns::Integer(),"Skip Output Steps");
   parameter_handler.declare_entry("Output Equivalent strain","false",dealii::Patterns::Bool(),"Output Equivalent strain");
   parameter_handler.declare_entry("Output Equivalent stress","false",dealii::Patterns::Bool(),"Output Equivalent stress");

@@ -18,43 +18,18 @@ void ellipticBVP<dim>::output(){
   //add postprocessing fields
   unsigned int numPostProcessedFieldsWritten=0;
   for (unsigned int field=0; field<numPostProcessedFields; field++){
-#ifdef output_Eqv_strain
-#if output_Eqv_strain==false
+  if(!userInputs.output_Eqv_strain)
     if (postprocessed_solution_names[field].compare(std::string("Eqv_strain"))==0) continue;
-#endif
-#endif
-#ifdef output_Eqv_stress
-#if output_Eqv_stress==false
+  if(!userInputs.output_Eqv_stress)
     if (postprocessed_solution_names[field].compare(std::string("Eqv_stress"))==0) continue;
-#endif
-#endif
-#ifdef output_Grain_ID
-#if output_Grain_ID==false
+  if(!userInputs.output_Grain_ID)
     if (postprocessed_solution_names[field].compare(std::string("Grain_ID"))==0) continue;
-#endif
-#endif
-
-#ifdef output_Phase_ID
-#if output_Phase_ID==false
-      if (postprocessed_solution_names[field].compare(std::string("Phase_ID"))==0) continue;
-#endif
-#endif
-
-#ifdef output_Twin
-#if output_Twin==false
+  if(!userInputs.output_Twin)
     if (postprocessed_solution_names[field].compare(std::string("Twin"))==0) continue;
-#endif
-#endif
-#ifdef output_alpha
-#if output_alpha==false
-    if (postprocessed_solution_names[field].compare(std::string("alpha"))==0) continue;
-#endif
-#endif
-#ifdef output_tau_vm
-#if output_tau_vm==false
-    if (postprocessed_solution_names[field].compare(std::string("tau_vm"))==0) continue;
-#endif
-#endif
+  //if(!userInputs.output_alpha)
+    //if (postprocessed_solution_names[field].compare(std::string("alpha"))==0) continue;
+  //if(!userInputs.output_tau_vm)
+    //if (postprocessed_solution_names[field].compare(std::string("tau_vm"))==0) continue;
     //
     data_out_Scalar.add_data_vector (*postFieldsWithGhosts[field],
 				     postprocessed_solution_names[field].c_str());
@@ -72,32 +47,25 @@ void ellipticBVP<dim>::output(){
     data_out_Scalar.build_patches ();
   }
 
-#ifdef readExternalMeshes
-#if readExternalMeshes==true
-  //add material id to output file
-  Vector<float> material (triangulation.n_active_cells());
-  unsigned int matID=0;
-  typename parallel::distributed::Triangulation<dim>::active_cell_iterator cell = triangulation.begin_active(), endc = triangulation.end();
-  for (; cell!=endc; ++cell) {
-     material(matID) = cell->material_id(); matID++;
-  }
-  data_out.add_data_vector (material, "meshGrain_ID");
-  data_out.build_patches ();
-  if (numPostProcessedFieldsWritten>0){
-    data_out_Scalar.add_data_vector (material, "meshGrain_ID");
-    data_out_Scalar.build_patches ();
-  }
-#endif
-#endif
+ if(userInputs.readExternalMesh){
+   //add material id to output file
+   Vector<float> material (triangulation.n_active_cells());
+   unsigned int matID=0;
+   typename parallel::distributed::Triangulation<dim>::active_cell_iterator cell = triangulation.begin_active(), endc = triangulation.end();
+   for (; cell!=endc; ++cell){
+       material(matID) = cell->material_id(); matID++;}
+   data_out.add_data_vector (material, "meshGrain_ID");
+   data_out.build_patches ();
+   if (numPostProcessedFieldsWritten>0){
+     data_out_Scalar.add_data_vector (material, "meshGrain_ID");
+     data_out_Scalar.build_patches ();
+   }
+ }
 
   //write to results file
-  //Set output directory, if provided
-#ifdef outputDirectory
-  std::string dir(outputDirectory);
+  std::string dir(userInputs.outputDirectory);
   dir+="/";
-#else
-  std::string dir("./");
-#endif
+
   //
   unsigned int incrementDigits= (totalIncrements<10000 ? 4 : std::ceil(std::log10(totalIncrements))+1);
   unsigned int domainDigits   = (Utilities::MPI::n_mpi_processes(mpi_communicator)<10000 ? 4 : std::ceil(std::log10(Utilities::MPI::n_mpi_processes(mpi_communicator)))+1);
