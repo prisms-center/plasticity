@@ -22,8 +22,6 @@ void ellipticBVP<dim>::output(){
     if (postprocessed_solution_names[field].compare(std::string("Eqv_strain"))==0) continue;
   if(!userInputs.output_Eqv_stress)
     if (postprocessed_solution_names[field].compare(std::string("Eqv_stress"))==0) continue;
-  if(!userInputs.output_Grain_ID)
-    if (postprocessed_solution_names[field].compare(std::string("Grain_ID"))==0) continue;
   if(!userInputs.output_Twin)
     if (postprocessed_solution_names[field].compare(std::string("Twin"))==0) continue;
   //if(!userInputs.output_alpha)
@@ -47,20 +45,28 @@ void ellipticBVP<dim>::output(){
     data_out_Scalar.build_patches ();
   }
 
- if(userInputs.readExternalMesh){
    //add material id to output file
    Vector<float> material (triangulation.n_active_cells());
    unsigned int matID=0;
    typename parallel::distributed::Triangulation<dim>::active_cell_iterator cell = triangulation.begin_active(), endc = triangulation.end();
-   for (; cell!=endc; ++cell){
+   if(userInputs.readExternalMesh){
+     for (; cell!=endc; ++cell){
        material(matID) = cell->material_id(); matID++;}
+   }
+   else{
+     unsigned int cellID=0;
+     for (; cell!=endc; ++cell){
+       if(cell->is_locally_owned()){
+         material(cellID)=postprocessValuesAtCellCenters(cellID,0);
+         cellID++;}
+     }
+   }
    data_out.add_data_vector (material, "meshGrain_ID");
    data_out.build_patches ();
    if (numPostProcessedFieldsWritten>0){
      data_out_Scalar.add_data_vector (material, "meshGrain_ID");
      data_out_Scalar.build_patches ();
    }
- }
 
   //write to results file
   std::string dir(userInputs.outputDirectory);

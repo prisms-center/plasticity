@@ -164,13 +164,13 @@ unsigned int crystalOrientationsIO<dim>::getMaterialID(double _coords[]){
   //find nearest point
   //iterator to nearest x slice
   std::map<double,std::map<double, std::map<double, unsigned int> > >::iterator itx=inputVoxelData.lower_bound(_coords[0]);
-  if(itx != inputVoxelData.end()) --itx;
+  if(itx == inputVoxelData.end()) --itx;
   //iterator to nearest y slice
   std::map<double, std::map<double, unsigned int> >::iterator ity=itx->second.lower_bound(_coords[1]);
   if(ity == itx->second.end()) --ity;
   //iterator to nearest z slice
   std::map<double, unsigned int>::iterator itz=ity->second.lower_bound(_coords[2]);
-  if(itz != ity->second.end()) --itz;
+  if(itz == ity->second.end()) --itz;
   return itz->second;
 }
 

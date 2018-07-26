@@ -256,7 +256,7 @@ private:
     /**
      * Stores grainID No. by element number and quadratureID
      */
-    std::vector<std::vector<unsigned int> > quadratureOrientationsMap;
+    std::vector<unsigned int> cellOrientationMap;
 
     void loadOrientations();
 };

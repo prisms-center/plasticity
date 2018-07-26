@@ -8,7 +8,6 @@ void ellipticBVP<dim>::solve(){
 
   //load increments
   unsigned int successiveIncs=0;
-  unsigned int skipSteps;
 
   if(userInputs.enableAdaptiveTimeStepping){
     for (;totalLoadFactor<userInputs.totalNumIncrements;){
@@ -43,12 +42,8 @@ void ellipticBVP<dim>::solve(){
         }
 
         computing_timer.enter_section("postprocess");
-        if(userInputs.skipOutputSteps<=0)
-            unsigned int skipSteps=1;
-        else
-            unsigned int skipSteps=userInputs.skipOutputSteps;
 
-        if (currentIncrement%skipSteps==0)
+        if (currentIncrement%userInputs.skipOutputSteps==0)
           if (userInputs.writeOutput) output();
         computing_timer.exit_section("postprocess");
         }
@@ -80,12 +75,8 @@ void ellipticBVP<dim>::solve(){
       successiveIncs++;
       //output results to file
       computing_timer.enter_section("postprocess");
-      if(userInputs.skipOutputSteps<=0)
-          skipSteps=1;
-      else
-          skipSteps=userInputs.skipOutputSteps;
 
-      if (currentIncrement%skipSteps==0)
+      if (currentIncrement%userInputs.skipOutputSteps==0)
         if (userInputs.writeOutput) output();
       computing_timer.exit_section("postprocess");
       }

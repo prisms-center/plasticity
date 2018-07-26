@@ -44,11 +44,6 @@ void ellipticBVP<dim>::solveLinearSystem2(ConstraintMatrix& constraintmatrix, ma
   //solve Ax=b
   try{
     solver.solve (A, completely_distributed_solutionInc, b, preconditioner);
-    char buffer[200];
-    sprintf(buffer,
-	    "linear system solved in %3u iterations\n",
-	    solver_control.last_step());
-    pcout << buffer;
   }
   catch (...) {
     pcout << "\nWarning: solver did not converge in "

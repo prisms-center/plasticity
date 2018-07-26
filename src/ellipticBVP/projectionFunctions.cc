@@ -30,6 +30,7 @@ void ellipticBVP<dim>::initProjection(){
   const unsigned int num_quad_points = quadrature.size();
   const unsigned int num_local_cells = triangulation.n_locally_owned_active_cells();
   postprocessValues.reinit(TableIndices<4>(num_local_cells, num_quad_points, numPostProcessedFields, dim));
+  postprocessValuesAtCellCenters.reinit(TableIndices<2>(num_local_cells, numPostProcessedFieldsAtCellCenters));
 
   //create mass matrix
   DynamicSparsityPattern dsp (locally_relevant_dofs_Scalar);
@@ -87,18 +88,12 @@ void ellipticBVP<dim>::initProjection(){
 //post processed field projection operation
 template <int dim>
 void ellipticBVP<dim>::projection(){
-  unsigned int skipSteps;
 
   //return if no post processing fields
   if (numPostProcessedFields==0) return;
 
   //check whether to project in current increment
-  if(userInputs.skipOutputSteps<=0)
-      skipSteps=1;
-  else
-      skipSteps=userInputs.skipOutputSteps;
-
-  if (currentIncrement%skipSteps!=0)
+  if (currentIncrement%userInputs.skipOutputSteps!=0)
     return;
 
   pcout << "projecting post processing fields\n";

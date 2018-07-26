@@ -45,6 +45,10 @@ userInputParameters::userInputParameters(std::string inputfile, dealii::Paramete
   writeOutput = parameter_handler.get_bool("Write Output");
   outputDirectory = parameter_handler.get("Output Directory");
   skipOutputSteps=parameter_handler.get_integer("Skip Output Steps");
+
+  if(skipOutputSteps<=0)
+      skipOutputSteps=1;
+
   output_Eqv_strain = parameter_handler.get_bool("Output Equivalent strain");
   output_Eqv_stress = parameter_handler.get_bool("Output Equivalent stress");
   output_Grain_ID = parameter_handler.get_bool("Output Grain ID");

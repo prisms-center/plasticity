@@ -110,9 +110,8 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 
 				 this->postprocessValues(cellID, q, 0, 0)=vonmises;
          this->postprocessValues(cellID, q, 1, 0)=eqvstrain;
-         this->postprocessValues(cellID, q, 2, 0)=quadratureOrientationsMap[cellID][q];
 				 if(this->userInputs.enableTwinning)
-	         this->postprocessValues(cellID, q, 3, 0)=twin[cellID][q];
+	         this->postprocessValues(cellID, q, 2, 0)=twin[cellID][q];
 
 				 //evaluate elemental stiffness matrix, K_{ij} = N_{i,k}*C_{mknl}*F_{im}*F{jn}*N_{j,l} + N_{i,k}*F_{kl}*N_{j,l}*del{ij} dV
 				 for (unsigned int d1=0; d1<dofs_per_cell; ++d1) {
@@ -127,6 +126,7 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 			     }
 				 }
      }
+		 this->postprocessValuesAtCellCenters(cellID,0)=cellOrientationMap[cellID];
      elementalJacobian = K_local;
      elementalResidual = Rlocal;
 

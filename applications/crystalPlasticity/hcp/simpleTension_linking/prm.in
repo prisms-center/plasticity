@@ -65,7 +65,7 @@ set Output Equivalent stress                     = true
 set Output Grain ID                              = true
 
 # Output Twin fractions
-set Output Twin fractions                        = false
+set Output Twin fractions                        = true
 
 ####################################
 # Solver parameters
