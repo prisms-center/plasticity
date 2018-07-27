@@ -44,12 +44,11 @@ int main (int argc, char **argv)
       crystalPlasticity<3> problem(userInputs);
 
       //reading materials atlas files
-      double stencil[3]={userInputs.span[0]/(userInputs.numPts[0]-1), userInputs.span[1]/(userInputs.numPts[1]-1), userInputs.span[2]/(userInputs.numPts[2]-1)}; // Dimensions of voxel
       problem.orientations.loadOrientations(userInputs.grainIDFile,
 					    userInputs.headerLinesGrainIDFile,
 					    userInputs.grainOrientationsFile,
 					    userInputs.numPts,
-					    stencil);
+					    span);
       problem.orientations.loadOrientationVector(userInputs.grainOrientationsFile);
       problem.run ();
     }

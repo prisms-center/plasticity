@@ -112,12 +112,15 @@ void crystalOrientationsIO<dim>::loadOrientations(std::string _voxelFileName,
 						  unsigned int headerLines,
 						  std::string _orientationFileName,
 						  std::vector<unsigned int> _numPts,
-						  double _stencil[]){
+						  double _span[]){
   //check if dim==3
   if (dim!=3) {
     pcout << "voxelDataFile read only implemented for dim==3\n";
     exit(1);
   }
+
+  double _stencil[3];
+  double stencil[3]={_span[0]/(_numPts[0]), _span[1]/(_numPts[1]), _span[2]/(_numPts[2])}; // Dimensions of voxel
 
   //open voxel data file
   std::ifstream voxelDataFile(_voxelFileName.c_str());
@@ -131,15 +134,15 @@ void crystalOrientationsIO<dim>::loadOrientations(std::string _voxelFileName,
     for (unsigned int i=0; i<headerLines; i++) std::getline (voxelDataFile,line);
     //read data
     for (unsigned int x=0; x<_numPts[0]; x++){
-      double xVal=x*_stencil[0];
+      double xVal=x*_stencil[0]+_stencil[0]/2;
       if (inputVoxelData.count(xVal)==0) inputVoxelData[xVal]=std::map<double, std::map<double, unsigned int> >();
       for (unsigned int y=0; y<_numPts[1]; y++){
-	double yVal=y*_stencil[1];
+	double yVal=y*_stencil[1]+_stencil[1]/2;
 	if (inputVoxelData[xVal].count(yVal)==0) inputVoxelData[xVal][yVal]=std::map<double, unsigned int>();
 	std::getline (voxelDataFile,line);
 	std::stringstream ss(line);
 	for (unsigned int z=0; z<_numPts[2]; z++){
-	  double zVal=z*_stencil[2];
+	  double zVal=z*_stencil[2]+_stencil[2]/2;
 	  ss >> inputVoxelData[xVal][yVal][zVal];
 	  //pcout <<  inputVoxelData[xVal][yVal][zVal] << " ";
 	}
