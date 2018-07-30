@@ -13,7 +13,7 @@ public:
 			unsigned int headerLines,
 			std::string _orientationFileName,
 			std::vector<unsigned int> _numPts,
-			double _stencil[]);
+			std::vector<double> _span);
   void loadOrientationVector(std::string _eulerFileName);
   unsigned int getMaterialID(double _coords[]);
   void addToOutputOrientations(std::vector<double>& _orientationsInfo);

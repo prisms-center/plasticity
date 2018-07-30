@@ -112,15 +112,14 @@ void crystalOrientationsIO<dim>::loadOrientations(std::string _voxelFileName,
 						  unsigned int headerLines,
 						  std::string _orientationFileName,
 						  std::vector<unsigned int> _numPts,
-						  double _span[]){
+						  std::vector<double> _span){
   //check if dim==3
   if (dim!=3) {
     pcout << "voxelDataFile read only implemented for dim==3\n";
     exit(1);
   }
 
-  double _stencil[3];
-  double stencil[3]={_span[0]/(_numPts[0]), _span[1]/(_numPts[1]), _span[2]/(_numPts[2])}; // Dimensions of voxel
+  double _stencil[3]={_span[0]/(_numPts[0]), _span[1]/(_numPts[1]), _span[2]/(_numPts[2])}; // Dimensions of voxel
 
   //open voxel data file
   std::ifstream voxelDataFile(_voxelFileName.c_str());

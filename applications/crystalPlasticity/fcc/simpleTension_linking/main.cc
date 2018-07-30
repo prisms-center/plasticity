@@ -48,7 +48,7 @@ int main (int argc, char **argv)
 					    userInputs.headerLinesGrainIDFile,
 					    userInputs.grainOrientationsFile,
 					    userInputs.numPts,
-					    span);
+					    userInputs.span);
       problem.orientations.loadOrientationVector(userInputs.grainOrientationsFile);
       problem.run ();
     }
