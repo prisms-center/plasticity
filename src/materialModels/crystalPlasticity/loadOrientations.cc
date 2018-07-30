@@ -30,7 +30,6 @@ void crystalPlasticity<dim>::loadOrientations(){
 
         }
     }
-    std::cout<<"Done \n";
 }
 
 #include "../../../include/crystalPlasticity_template_instantiations.h"

@@ -95,6 +95,7 @@ userInputParameters::userInputParameters(std::string inputfile, dealii::Paramete
     twinDirectionsFile = parameter_handler.get("Twin Directions File");
     twinNormalsFile = parameter_handler.get("Twin Normals File");}
   else{
+    std::cout<<"Twinning is not enabled \n";
     numTwinSystems=1;
     initialSlipResistanceTwin.push_back(10e5);
     initialHardeningModulusTwin.push_back(1);
