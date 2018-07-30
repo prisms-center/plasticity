@@ -97,7 +97,7 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
     twinDirectionsFile = parameter_handler.get("Twin Directions File");
     twinNormalsFile = parameter_handler.get("Twin Normals File");}
   else{
-    std::cout<<"Twinning is not enabled \n";
+    pcout<<"Twinning is not enabled \n";
 
     numTwinSystems=1;
     initialSlipResistanceTwin.push_back(10e5);
