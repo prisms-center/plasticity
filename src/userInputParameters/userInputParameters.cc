@@ -2,7 +2,9 @@
 
 #include "../../include/userInputParameters.h"
 
-userInputParameters::userInputParameters(std::string inputfile, dealii::ParameterHandler & parameter_handler){
+userInputParameters::userInputParameters(std::string inputfile, dealii::ParameterHandler & parameter_handler):
+pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
+{
 
   declare_parameters(parameter_handler);
 
@@ -96,6 +98,7 @@ userInputParameters::userInputParameters(std::string inputfile, dealii::Paramete
     twinNormalsFile = parameter_handler.get("Twin Normals File");}
   else{
     std::cout<<"Twinning is not enabled \n";
+
     numTwinSystems=1;
     initialSlipResistanceTwin.push_back(10e5);
     initialHardeningModulusTwin.push_back(1);

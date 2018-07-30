@@ -104,6 +104,7 @@ public:
   unsigned int headerLinesGrainIDFile; // No. of header Lines in grain orientations file
 
 private:
+  dealii::ConditionalOStream  pcout;
 };
 
 #endif /* INCLUDE_USERINPUTPARAMETERS_H_ */
