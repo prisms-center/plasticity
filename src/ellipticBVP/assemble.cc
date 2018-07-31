@@ -130,9 +130,6 @@ void ellipticBVP<dim>::assemble(){
   //MPI operation to sync data
   residual.compress(VectorOperation::add);
   jacobian.compress(VectorOperation::add);
-  //pcout << "boundary size: " << boundary_values.size() << "\n";
-  //MatrixTools::apply_boundary_values (boundary_values, jacobian, solution, residual, false);
-  //pcout << "boundary size: " << residual.linfty_norm() << "\n";
 }
 
 #include "../../include/ellipticBVP_template_instantiations.h"

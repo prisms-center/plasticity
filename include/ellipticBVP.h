@@ -96,7 +96,6 @@ class ellipticBVP : public Subscriptor
   void applyDirichletBCs();
   void applyInitialConditions();
   virtual void setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value);
-  std::map<types::global_dof_index,double> boundary_values;
   std::map<types::global_dof_index, Point<dim> > supportPoints;
 
   //parallel data structures
