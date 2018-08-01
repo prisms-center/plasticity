@@ -11,60 +11,6 @@ using namespace std;
 //FCC model header
 #include "../../../../src/materialModels/crystalPlasticity/fcc/model.h"
 
-//Specify Dirichlet boundary conditions
-template <int dim>
-void crystalPlasticity<dim>::setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value){
-    
-    
-    if(this->currentIncrement<100) {
-        
-        //top boundary:  u_z=0.0001
-        if (node[0] == spanX){
-            if (dof==0) {flag=true; value=0.0001;}
-        }
-    }
-    
-    else if(((this->currentIncrement-100)/200)%2==0){
-        //top boundary:  u_z=-0.0001
-        if (node[0] == spanX){
-            if (dof==0) {flag=true; value=-0.0001;}
-        }
-    }
-    
-    else{
-        
-        //top boundary:  u_z=0.0001
-        if (node[0] == spanX){
-            if (dof==0) {flag=true; value=0.0001;}
-        }
-        
-    }
-    
-    //left boundary:   u_z=0
-    if (node[0] == 0.0){
-        if (dof==0) {flag=true; value=0.0;}
-    }
-    
-    //bottom boundary: u_z=0
-    if (node[0] == 0.0){
-        if(node[1]== 0.0){
-            if(node[2]== 0.0){
-                if (dof==1) {flag=true; value=0.0;}
-                if (dof==2) {flag=true; value=0.0;}
-            }
-        }
-        
-        if (node[1] == spanY){
-            if(node[2]== 0.0){
-                if (dof==2) {flag=true; value=0.0;}
-            }
-        }
-        
-        
-    }
-  		
-    
-}
 
 //main
 int main (int argc, char **argv)
@@ -74,7 +20,7 @@ int main (int argc, char **argv)
     {
         deallog.depth_console(0);
         crystalPlasticity<3> problem;
-        
+
         //reading materials atlas files
         double stencil[3]={spanX/(numPts[0]-1), spanY/(numPts[1]-1), spanZ/(numPts[2]-1)}; // Dimensions of voxel
         problem.orientations.loadOrientations(grainIDFile,
@@ -108,7 +54,6 @@ int main (int argc, char **argv)
         << std::endl;
         return 1;
     }
-    
+
     return 0;
 }
-

@@ -4,14 +4,14 @@
 #include <sstream>
 #include <iostream>
 using namespace std;
- 
+
 //parameters
 #include "parameters.h"
 
 //FCC model header
 #include "../../../../src/materialModels/crystalPlasticity/fcc/model.h"
 
-//Specify Dirichlet boundary conditions 
+//Specify Dirichlet boundary conditions
 template <int dim>
 void crystalPlasticity<dim>::setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value){
   //back boundary:   u_x=0
@@ -31,7 +31,7 @@ void crystalPlasticity<dim>::setBoundaryValues(const Point<dim>& node, const uns
     if (dof==2) {flag=true; value=0.0;}
   }
 }
-  
+
 //main
 int main (int argc, char **argv)
 {
@@ -40,7 +40,7 @@ int main (int argc, char **argv)
     {
       deallog.depth_console(0);
       crystalPlasticity<3> problem;
-      
+
       //reading materials atlas files
       double stencil[3]={spanX/(numPts[0]-1), spanY/(numPts[1]-1), spanZ/(numPts[2]-1)}; // Dimensions of voxel
       problem.orientations.loadOrientations(grainIDFile,
@@ -74,7 +74,6 @@ int main (int argc, char **argv)
 		<< std::endl;
       return 1;
     }
-  
+
   return 0;
 }
-
