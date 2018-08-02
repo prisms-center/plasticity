@@ -77,7 +77,7 @@ set Boundary condition filename                  = BCinfo.txt
 set BC file number of header lines               = 2
 
 #Number of boundary conditions
-set Number of boundary conditios                 = 4
+set Number of boundary conditions                 = 4
 
 ####################################
 # Solver parameters
