@@ -77,9 +77,6 @@ void crystalPlasticity<dim>::updateAfterIncrement()
           temp.push_back(rotnew[cellID][q][2]);
           temp.push_back(fe_values.JxW(q));
 					temp.push_back(cellOrientationMap[cellID]);
-					temp.push_back(cell->center()[0]);
-					temp.push_back(cell->center()[1]);
-          temp.push_back(cell->center()[2]);
 
 	        twin[cellID][q] = 0.0;
 
