@@ -8,8 +8,10 @@ void ellipticBVP<dim>::init(){
   double totalU;
   unsigned int i,faceID,dof;
 
-  faceDOFConstrained.init(2*dim,dim,false);
-  deluConstraint.init(2*dim,dim,0.0);
+  for(i=0;i<2*dim;i++){
+    faceDOFConstrained.push_back({false,false,false});
+    deluConstraint.push_back({0.0,0.0,0.0});
+  }
 
 
   pcout << "number of MPI processes: "
@@ -72,14 +74,14 @@ void ellipticBVP<dim>::init(){
     //skip header lines
     for (i=0; i<userInputs.BCheaderLines; i++) std::getline (BCfile,line);
     for (i=0; i<userInputs.NumberofBCs; i++){
-    	std::getline (voxelDataFile,line);
+    	std::getline (BCfile,line);
     	std::stringstream ss(line);
       ss>>faceID>>dof;
       faceDOFConstrained[faceID-1][dof-1]=true;
       ss>>totalU;
       deluConstraint[faceID-1][dof-1]=totalU/totalIncrements;
     }
-
+  }
   //apply initial conditions
   applyInitialConditions();
   solutionWithGhosts=solution;

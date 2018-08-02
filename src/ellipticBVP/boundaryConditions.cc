@@ -4,7 +4,7 @@
 //Specify Dirichlet boundary conditions
 template <int dim>
 void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value){
-  unsigned int i,faceDOF;
+  unsigned int i ;
   //back boundary:   u_x=0
   for (i=0;i<2*dim;i++){
     if(faceDOFConstrained[i][dof])
@@ -43,7 +43,6 @@ void ellipticBVP<dim>::applyDirichletBCs(){
 
   //parallel loop over all elements
   typename DoFHandler<dim>::active_cell_iterator cell = dofHandler.begin_active(), endc = dofHandler.end();
-  unsigned int cellID=0;
   for (; cell!=endc; ++cell) {
     if (cell->is_locally_owned()){
       cell->get_dof_indices (local_dof_indices);
