@@ -104,8 +104,8 @@ class ellipticBVP : public Subscriptor
   matrixType jacobian;
 
   // Boundary condition variables
-  std::vector<std::vector<bool>> faceDOFConstrained(2*dim,dim,false);
-  std::vector<std::vector<double>> deluConstraint(2*dim,dim,0.0);
+  std::vector<std::vector<bool>> faceDOFConstrained(2*dim,std::vector<bool>(dim, false));
+  std::vector<std::vector<double>> deluConstraint(2*dim,std::vector<double>(dim, 0.0));
 
   //misc variables
   double delT,totalT;
