@@ -31,60 +31,6 @@ void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned 
   }
 }
 
-//Specify Dirichlet boundary conditions
-template <int dim>
-void crystalPlasticity<dim>::setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value){
-
-
-    if(this->currentIncrement<100) {
-
-        //top boundary:  u_z=0.0001
-        if (node[0] == spanX){
-            if (dof==0) {flag=true; value=0.0001;}
-        }
-    }
-
-    else if(((this->currentIncrement-100)/200)%2==0){
-        //top boundary:  u_z=-0.0001
-        if (node[0] == spanX){
-            if (dof==0) {flag=true; value=-0.0001;}
-        }
-    }
-
-    else{
-
-        //top boundary:  u_z=0.0001
-        if (node[0] == spanX){
-            if (dof==0) {flag=true; value=0.0001;}
-        }
-
-    }
-
-    //left boundary:   u_z=0
-    if (node[0] == 0.0){
-        if (dof==0) {flag=true; value=0.0;}
-    }
-
-    //bottom boundary: u_z=0
-    if (node[0] == 0.0){
-        if(node[1]== 0.0){
-            if(node[2]== 0.0){
-                if (dof==1) {flag=true; value=0.0;}
-                if (dof==2) {flag=true; value=0.0;}
-        }
-
-        if (node[1] == spanY){
-            if(node[2]== 0.0){
-                if (dof==2) {flag=true; value=0.0;}
-            }
-        }
-
-
-    }
-
-
-}
-
 //methods to apply dirichlet BC's
 template <int dim>
 void ellipticBVP<dim>::applyDirichletBCs(){
