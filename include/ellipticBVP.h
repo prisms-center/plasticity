@@ -103,7 +103,12 @@ class ellipticBVP : public Subscriptor
   vectorType solutionWithGhosts, solutionIncWithGhosts;
   matrixType jacobian;
 
+  // Boundary condition variables
+  std::vector<std::vector<bool>> faceDOFConstrained;
+  std::vector<std::vector<double>> deluConstraint;
+
   //misc variables
+  double delT,totalT;
   unsigned int currentIteration, currentIncrement;
   unsigned int totalIncrements;
   bool resetIncrement;

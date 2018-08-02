@@ -51,6 +51,13 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
   if(skipOutputSteps<=0)
       skipOutputSteps=1;
 
+  delT=parameter_handler.get_double("Time increments");
+  totalTime=parameter_handler.get_double("Total time");
+
+  BCfilename=parameter_handler.get("Boundary condition filename");
+  BCheaderLines=parameter_handler.get_integer("BC file number of header lines");
+  NumberofBCs=parameter_handler.get_integer("Number of boundary conditios ");
+
   output_Eqv_strain = parameter_handler.get_bool("Output Equivalent strain");
   output_Eqv_stress = parameter_handler.get_bool("Output Equivalent stress");
   output_Grain_ID = parameter_handler.get_bool("Output Grain ID");
@@ -149,6 +156,13 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Use external mesh","false",dealii::Patterns::Bool(),"Flag to indicate whether to use external mesh");
   parameter_handler.declare_entry("Name of file containing external mesh","",dealii::Patterns::Anything(),"Name of external mesh file");
 
+  parameter_handler.declare_entry("Time increments","-1",dealii::Patterns::Double(),"delta T for every increment");
+  parameter_handler.declare_entry("Total time","-1",dealii::Patterns::Double(),"Total simulation time");
+
+  parameter_handler.declare_entry("Boundary condition filename","boundaryConditions.txt",dealii::Patterns::Anything(),"File name containing BC information");
+  parameter_handler.declare_entry("BC file number of header lines","1",dealii::Patterns::Integer(),"BC file number of header lines");
+  parameter_handler.declare_entry("Number of boundary conditios ","1",dealii::Patterns::Integer(),"Number of boundary conditions");
+
   parameter_handler.declare_entry("Write Output","false",dealii::Patterns::Bool(),"Flag to write output vtu and pvtu files");
   parameter_handler.declare_entry("Output Directory",".",dealii::Patterns::Anything(),"Output Directory");
   parameter_handler.declare_entry("Skip Output Steps","-1",dealii::Patterns::Integer(),"Skip Output Steps");
@@ -157,7 +171,6 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Output Grain ID","false",dealii::Patterns::Bool(),"Output Grain ID");
   parameter_handler.declare_entry("Output Twin fractions","false",dealii::Patterns::Bool(),"Output Twin fractions");
 
-  parameter_handler.declare_entry("Total number of increments","-1",dealii::Patterns::Integer(), "No. of increments");
 
   parameter_handler.declare_entry("Maximum linear solver iterations","-1",dealii::Patterns::Integer(), "Maximum iterations for linear solver");
   parameter_handler.declare_entry("Maximum non linear iterations","-1",dealii::Patterns::Integer(),"Maximum no. of non-linear iterations");

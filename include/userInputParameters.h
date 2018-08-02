@@ -37,6 +37,13 @@ public:
   bool readExternalMesh;
   std::string externalMeshFileName;
 
+  double delT; // Time increment
+  double totalTime; // Total simulation time
+
+  std::string BCfilename; // Boundary conditions file
+  unsigned int BCheaderLines; // No. of header Lines in BC file
+  unsigned int NumberofBCs; // No. of boundary conditions
+
   /*Solution output parameters*/
   bool writeOutput; // flag to write output vtu and pvtu files
   std::string outputDirectory;
@@ -47,7 +54,6 @@ public:
   bool output_Twin;
 
   /*Solver parameters*/
-  unsigned int totalNumIncrements; // No. of increments
   unsigned int maxLinearSolverIterations; // Maximum iterations for linear solver
   unsigned int maxNonLinearIterations; // Maximum no. of non-linear iterations
   double relLinearSolverTolerance; // Relative linear solver tolerance

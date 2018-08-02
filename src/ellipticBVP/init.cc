@@ -4,6 +4,14 @@
 //initialize all FE objects and data structures
 template <int dim>
 void ellipticBVP<dim>::init(){
+  std::string line;
+  double totalU;
+  unsigned int i,faceID,dof;
+
+  faceDOFConstrained.reinit(2*dim,dim,false);
+  deluConstraint.reinit(2*dim,dim,0.0);
+
+
   pcout << "number of MPI processes: "
 	<< Utilities::MPI::n_mpi_processes(mpi_communicator)
 	<< std::endl;
@@ -54,6 +62,23 @@ void ellipticBVP<dim>::init(){
 					      mpi_communicator,
 					      locally_relevant_dofs);
   jacobian.reinit (locally_owned_dofs, locally_owned_dofs, dsp, mpi_communicator);
+
+  // Read boundary conditions
+  std::ifstream BCfile(this->userInputs.BCfilename);
+  //read data
+
+  if (BCfile.is_open()){
+    pcout << "Reading boundary conditions\n";
+    //skip header lines
+    for (i=0; i<userInputs.BCheaderLines; i++) std::getline (BCfile,line);
+    for (i=0; i<userInputs.NumberofBCs; i++){
+    	std::getline (voxelDataFile,line);
+    	std::stringstream ss(line);
+      ss>>faceID>>dof;
+      faceDOFConstrained[faceID-1][dof-1]=true;
+      ss>>totalU;
+      deluConstraint[faceID-1][dof-1]=totalU/totalIncrements;
+    }
 
   //apply initial conditions
   applyInitialConditions();

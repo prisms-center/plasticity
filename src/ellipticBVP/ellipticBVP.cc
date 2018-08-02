@@ -17,7 +17,8 @@ ellipticBVP<dim>::ellipticBVP (userInputParameters _userInputs):
   dofHandler_Scalar (triangulation),
   currentIteration(0),
   currentIncrement(0),
-  totalIncrements(_userInputs.totalNumIncrements),
+  delT(_userInputs.delT),
+  totalT(_userInputs.totalT),
   resetIncrement(false),
   loadFactorSetByModel(1.0),
   totalLoadFactor(0.0),
@@ -30,6 +31,7 @@ ellipticBVP<dim>::ellipticBVP (userInputParameters _userInputs):
     nodal_solution_names.push_back("u");
     nodal_data_component_interpretation.push_back(DataComponentInterpretation::component_is_part_of_vector);
   }
+  totalIncrements=totalT/delT;
 }
 
 //destructor
