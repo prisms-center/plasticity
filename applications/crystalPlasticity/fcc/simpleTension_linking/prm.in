@@ -68,10 +68,25 @@ set Output Grain ID                              = true
 set Output Twin fractions                        = false
 
 ####################################
+# Boundary condition information
+####################################
+#File name containing BC information
+set Boundary condition filename                  = BCinfo.txt
+
+#BC file number of header lines
+set BC file number of header lines               = 2
+
+#Number of boundary conditions
+set Number of boundary conditios                 = 4
+
+####################################
 # Solver parameters
 ####################################
-# No. of increments
-set Total number of increments                   = 100
+#delta T for every increment
+set Time increments                              = 0.01
+
+#Total simulation time
+set Total time                                   = 1
 
 # Maximum iterations for linear solver
 set Maximum linear solver iterations             = 50000
