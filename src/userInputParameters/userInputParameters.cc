@@ -63,7 +63,6 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
   output_Grain_ID = parameter_handler.get_bool("Output Grain ID");
   output_Twin = parameter_handler.get_bool("Output Twin fractions");
 
-  totalNumIncrements=parameter_handler.get_integer("Total number of increments");
   maxLinearSolverIterations=parameter_handler.get_integer("Maximum linear solver iterations");
   maxNonLinearIterations=parameter_handler.get_integer("Maximum non linear iterations");
   relLinearSolverTolerance=parameter_handler.get_double("Relative linear solver tolerance");

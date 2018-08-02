@@ -18,7 +18,7 @@ ellipticBVP<dim>::ellipticBVP (userInputParameters _userInputs):
   currentIteration(0),
   currentIncrement(0),
   delT(_userInputs.delT),
-  totalT(_userInputs.totalT),
+  totalT(_userInputs.totalTime),
   resetIncrement(false),
   loadFactorSetByModel(1.0),
   totalLoadFactor(0.0),
