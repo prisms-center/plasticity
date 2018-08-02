@@ -1,6 +1,6 @@
 //initialization method for ellipticBVP class
 #include "../../include/ellipticBVP.h"
-
+#include <fstream>
 //initialize all FE objects and data structures
 template <int dim>
 void ellipticBVP<dim>::init(){
