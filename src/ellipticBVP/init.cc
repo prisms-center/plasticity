@@ -8,8 +8,8 @@ void ellipticBVP<dim>::init(){
   double totalU;
   unsigned int i,faceID,dof;
 
-  faceDOFConstrained.reinit(2*dim,dim,false);
-  deluConstraint.reinit(2*dim,dim,0.0);
+  faceDOFConstrained.init(2*dim,dim,false);
+  deluConstraint.init(2*dim,dim,0.0);
 
 
   pcout << "number of MPI processes: "
