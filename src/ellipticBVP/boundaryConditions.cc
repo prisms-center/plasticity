@@ -6,51 +6,52 @@ template <int dim>
 void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value){
   unsigned int i ;
 
+  pcout<<node[0]<<" "<<node[1]<<" "<<node[2]<<" "<<dof<<std::endl;
 
   if(userInputs.enableCyclicLoading){
     if(dof==userInputs.cyclicLoadingDOF){
       switch (userInputs.cyclicLoadingFace){
         case 1:
         if (node[0] == 0.0)
-          if((currentIncrement*delT)%totalT<userInputs.quarterCycleTime){
+          if(fmod((currentIncrement*delT),cycleTime)<userInputs.quarterCycleTime){
             flag=true; value=deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
-          else if((currentIncrement*delT)%totalT<3*userInputs.quarterCycleTime){
-            flag=true; value=deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
+          else if(fmod((currentIncrement*delT),cycleTime)<3*userInputs.quarterCycleTime){
+            flag=true; value=-deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
           else{flag=true; value=deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
         case 2:
         if (node[0] == userInputs.span[0])
-          if((currentIncrement*delT)%totalT<userInputs.quarterCycleTime){
+          if(fmod((currentIncrement*delT),cycleTime)<userInputs.quarterCycleTime){
             flag=true; value=deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
-          else if((currentIncrement*delT)%totalT<3*userInputs.quarterCycleTime){
-            flag=true; value=deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
+          else if(fmod((currentIncrement*delT),cycleTime)<3*userInputs.quarterCycleTime){
+            flag=true; value=-deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
           else{flag=true; value=deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
         case 3:
         if (node[1] == 0.0)
-          if((currentIncrement*delT)%totalT<userInputs.quarterCycleTime){
+          if(fmod((currentIncrement*delT),cycleTime)<userInputs.quarterCycleTime){
             flag=true; value=deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
-          else if((currentIncrement*delT)%totalT<3*userInputs.quarterCycleTime){
-            flag=true; value=deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
+          else if(fmod((currentIncrement*delT),cycleTime)<3*userInputs.quarterCycleTime){
+            flag=true; value=-deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
           else{flag=true; value=deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
         case 4:
         if (node[1] == userInputs.span[1])
-          if((currentIncrement*delT)%totalT<userInputs.quarterCycleTime){
+          if(fmod((currentIncrement*delT),cycleTime)<userInputs.quarterCycleTime){
             flag=true; value=deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
-          else if((currentIncrement*delT)%totalT<3*userInputs.quarterCycleTime){
-            flag=true; value=deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
+          else if(fmod((currentIncrement*delT),cycleTime)<3*userInputs.quarterCycleTime){
+            flag=true; value=-deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
           else{flag=true; value=deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
         case 5:
         if (node[2] == 0.0)
-          if((currentIncrement*delT)%totalT<userInputs.quarterCycleTime){
+          if(fmod((currentIncrement*delT),cycleTime)<userInputs.quarterCycleTime){
             flag=true; value=deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
-          else if((currentIncrement*delT)%totalT<3*userInputs.quarterCycleTime){
-            flag=true; value=deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
+          else if(fmod((currentIncrement*delT),cycleTime)<3*userInputs.quarterCycleTime){
+            flag=true; value=-deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
           else{flag=true; value=deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
         case 6:
         if (node[2] == userInputs.span[2])
-          if((currentIncrement*delT)%totalT<userInputs.quarterCycleTime){
+          if(fmod((currentIncrement*delT),cycleTime)<userInputs.quarterCycleTime){
             flag=true; value=deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
-          else if((currentIncrement*delT)%totalT<3*userInputs.quarterCycleTime){
-            flag=true; value=deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
+          else if(fmod((currentIncrement*delT),cycleTime)<3*userInputs.quarterCycleTime){
+            flag=true; value=-deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
           else{flag=true; value=deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
       }
     }
@@ -58,25 +59,36 @@ void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned 
 
   for (i=0;i<2*dim;i++){
     if(faceDOFConstrained[i][dof])
-      switch (i){
+      switch (i+1){
         case 1:
         if (node[0] == 0.0)
-            {flag=true; value=deluConstraint[i][dof];return;}
+            {//pcout<<i<<" "<<dof<<std::endl;
+              flag=true; value=deluConstraint[i][dof];return;}
+        break;
         case 2:
         if (node[0] == userInputs.span[0])
-            {flag=true; value=deluConstraint[i][dof];return;}
+            {pcout<<i<<" "<<dof<<std::endl;
+              flag=true; value=deluConstraint[i][dof];return;}
+        break;
         case 3:
         if (node[1] == 0.0)
-            {flag=true; value=deluConstraint[i][dof];return;}
+            {//pcout<<i<<" "<<dof<<std::endl;
+              flag=true; value=deluConstraint[i][dof];return;}
+        break;
         case 4:
         if (node[1] == userInputs.span[1])
-            {flag=true; value=deluConstraint[i][dof];return;}
+            {//pcout<<i<<" "<<dof<<std::endl;
+              flag=true; value=deluConstraint[i][dof];return;}
+        break;
         case 5:
         if (node[2] == 0.0)
-            {flag=true; value=deluConstraint[i][dof];return;}
+            {//pcout<<i<<" "<<dof<<std::endl;
+              flag=true; value=deluConstraint[i][dof];return;}
+        break;
         case 6:
         if (node[2] == userInputs.span[2])
-            {flag=true; value=deluConstraint[i][dof];return;}
+            {//pcout<<i<<" "<<dof<<std::endl;
+              flag=true; value=deluConstraint[i][dof];return;}
       }
   }
 }

@@ -95,7 +95,7 @@ class ellipticBVP : public Subscriptor
   //methods to apply dirichlet BC's and initial conditions
   void applyDirichletBCs();
   void applyInitialConditions();
-  virtual void setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value);
+  void setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value);
   std::map<types::global_dof_index, Point<dim> > supportPoints;
 
   //parallel data structures
@@ -108,7 +108,7 @@ class ellipticBVP : public Subscriptor
   std::vector<std::vector<double>> deluConstraint;
 
   //misc variables
-  double delT,totalT;
+  double delT,totalT,cycleTime;
   unsigned int currentIteration, currentIncrement;
   unsigned int totalIncrements;
   bool resetIncrement;

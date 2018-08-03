@@ -82,6 +82,7 @@ void ellipticBVP<dim>::init(){
       deluConstraint[faceID-1][dof-1]=totalU/totalIncrements;
     }
   }
+  
   //apply initial conditions
   applyInitialConditions();
   solutionWithGhosts=solution;

@@ -15,10 +15,10 @@ ellipticBVP<dim>::ellipticBVP (userInputParameters _userInputs):
   FE_Scalar (FE_Q<dim>(_userInputs.feOrder), 1),
   dofHandler (triangulation),
   dofHandler_Scalar (triangulation),
-  currentIteration(0),
-  currentIncrement(0),
   delT(_userInputs.delT),
   totalT(_userInputs.totalTime),
+  currentIteration(0),
+  currentIncrement(0),
   resetIncrement(false),
   loadFactorSetByModel(1.0),
   totalLoadFactor(0.0),
@@ -31,6 +31,8 @@ ellipticBVP<dim>::ellipticBVP (userInputParameters _userInputs):
     nodal_solution_names.push_back("u");
     nodal_data_component_interpretation.push_back(DataComponentInterpretation::component_is_part_of_vector);
   }
+  if(userInputs.enableCyclicLoading)
+    cycleTime=4*userInputs.quarterCycleTime;
   totalIncrements=totalT/delT;
 }
 
