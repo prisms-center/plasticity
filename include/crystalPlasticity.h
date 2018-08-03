@@ -196,7 +196,7 @@ private:
      * Tangent modulus dPK1/dF
      */
     Tensor<4,dim,double> dP_dF;
-    double No_Elem, N_qpts,local_F_e,local_F_r,F_e,F_r,local_microvol,microvol,F_s,local_F_s,F_T;
+    double No_Elem, N_qpts,local_F_e,local_F_r,F_e,F_r,local_microvol,microvol,F_s,local_F_s,F_T,local_F_r_Twin,F_r_Twin;
     double signstress;
     double backstressflag;
 
@@ -239,7 +239,7 @@ private:
 
     std::vector<std::vector<  Vector<double> > >  s_alpha_conv;
 
-    std::vector<std::vector<  std::vector<double> > >  twinfraction_iter, slipfraction_iter,twinfraction_conv, slipfraction_conv;
+    std::vector<std::vector<  std::vector<double> > >  twinfraction_iter,twinfraction_iter_Twin, slipfraction_iter,twinfraction_conv, slipfraction_conv,twinfraction_conv_Twin;
     std::vector<std::vector<double> >  twin;
 
     unsigned int n_slip_systems,n_twin_systems; //No. of slip systems

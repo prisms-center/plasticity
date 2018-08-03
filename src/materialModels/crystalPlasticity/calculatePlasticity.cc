@@ -198,9 +198,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////Start Nonlinear iteration for Slip increments////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			if (quadPtID == 2) {
-				temp.reinit(dim, dim);
-			}
+
 
 			while (iter1) {
 				x_beta = 0.0;
@@ -417,26 +415,26 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
             }
 
 
-           for (unsigned int i=0;i<this->userInputs.numSlipSystems;i++){
+//           for (unsigned int i=0;i<this->userInputs.numSlipSystems;i++){//
 
-                    if(s_alpha_tau(i)>(this->userInputs.saturationStress[i])){
-                        s_alpha_tau(i)=this->userInputs.saturationStress[i];
+//                    //if(s_alpha_tau(i)>(this->userInputs.saturationStress[i])){
+//                      // s_alpha_tau(i)=this->userInputs.saturationStress[i];
+////abort();//
+
+//              }//
+
+//            }//
+
+//     for (unsigned int i=0;i<this->userInputs.numTwinSystems;i++){//
+
+//                if(s_alpha_tau(this->userInputs.numSlipSystems+i)>(this->userInputs.saturationStressTwin[i])){
+//                s_alpha_tau(this->userInputs.numSlipSystems+i)=this->userInputs.saturationStressTwin[i];
+
 //abort();
-
-              }
-
-            }
-
-     for (unsigned int i=0;i<this->userInputs.numTwinSystems;i++){
-
-                if(s_alpha_tau(this->userInputs.numSlipSystems+i)>(this->userInputs.saturationStressTwin[i])){
-                s_alpha_tau(this->userInputs.numSlipSystems+i)=this->userInputs.saturationStressTwin[i];
-
-//abort();
-}
+//}
 
 
-    }
+//    }
 
 
 		iter1 = iter1 + 1;
@@ -459,7 +457,8 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
          for (unsigned int i=0;i<this->userInputs.numTwinSystems;i++){
             twinfraction_iter[cellID][quadPtID][i]=twinfraction_conv[cellID][quadPtID][i]+x_beta_old[i+this->userInputs.numSlipSystems]/this->userInputs.twinShear;
-        }
+            twinfraction_iter_Twin[cellID][quadPtID][i] = twinfraction_conv_Twin[cellID][quadPtID][i] + x_beta_old[i + this->userInputs.numSlipSystems] / this->userInputs.twinShear;
+}
 
         for (unsigned int i=0;i<this->userInputs.numSlipSystems;i++){
             slipfraction_iter[cellID][quadPtID][i]=slipfraction_conv[cellID][quadPtID][i]+x_beta_old[i]/this->userInputs.twinShear;

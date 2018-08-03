@@ -52,8 +52,10 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 	reorient();
 
   twinfraction_conv=twinfraction_iter;
-  slipfraction_conv=slipfraction_iter;
-  local_F_r=0.0;
+	twinfraction_conv_Twin = twinfraction_iter_Twin;
+	slipfraction_conv=slipfraction_iter;
+	local_F_r_Twin = 0.0; //adde by Reza as a modification
+	local_F_r=0.0;
   local_F_s=0.0;
 
   char buffer[200];
@@ -83,7 +85,8 @@ void crystalPlasticity<dim>::updateAfterIncrement()
           orientations.addToOutputOrientations(temp);
           for(unsigned int i=0;i<this->userInputs.numTwinSystems;i++){
               local_F_r=local_F_r+twinfraction_conv[cellID][q][i]*fe_values.JxW(q);
-          }
+							local_F_r_Twin = local_F_r_Twin + twinfraction_conv_Twin[cellID][q][i] * fe_values.JxW(q);
+}
 
 					for(unsigned int i=0;i<this->userInputs.numSlipSystems;i++){
               local_F_s=local_F_s+slipfraction_conv[cellID][q][i]*fe_values.JxW(q);
@@ -112,7 +115,8 @@ void crystalPlasticity<dim>::updateAfterIncrement()
     }
   }
 
-  F_r=Utilities::MPI::sum(local_F_r/microvol,this->mpi_communicator);
+	F_r_Twin = Utilities::MPI::sum(local_F_r_Twin / microvol, this->mpi_communicator);
+	F_r=Utilities::MPI::sum(local_F_r/microvol,this->mpi_communicator);
   F_s=Utilities::MPI::sum(local_F_s/microvol,this->mpi_communicator);
 
   //check whether to write stress and strain data to file
@@ -177,18 +181,22 @@ void crystalPlasticity<dim>::updateAfterIncrement()
       for (unsigned int q = 0; q < num_quad_points; ++q){
         std::vector<double> local_twin;
         local_twin.resize(this->userInputs.numTwinSystems,0.0);
-        local_twin=twinfraction_conv[cellID][q];
+        local_twin=twinfraction_conv_Twin[cellID][q];
         std::vector<double>::iterator result;
         result = std::max_element(local_twin.begin(), local_twin.end());
         double twin_pos, twin_max;
         twin_pos= std::distance(local_twin.begin(), result);
         twin_max=local_twin[twin_pos];
 
-        if(F_r>0){
+        if(F_r_Twin>0){
           if(twin_max > F_T){
 	          FullMatrix<double> FE_t(dim,dim), FP_t(dim,dim),Twin_T(dim,dim),temp(dim,dim);
 	          FE_t=Fe_conv[cellID][q];
 	          FP_t=Fp_conv[cellID][q];
+						for(unsigned int i=0;i<this->userInputs.numTwinSystems;i++){
+                   twinfraction_conv_Twin[cellID][q][i]=0;
+//                   s_alpha_conv[cellID][q][numSlipSystems+twin_pos]=s_alpha_twin;
+							}
 
 						rod(0) = rot[cellID][q][0];rod(1) = rot[cellID][q][1];rod(2) = rot[cellID][q][2];
 

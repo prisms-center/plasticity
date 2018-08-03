@@ -44,6 +44,11 @@ public:
   unsigned int BCheaderLines; // No. of header Lines in BC file
   unsigned int NumberofBCs; // No. of boundary conditions
 
+  bool enableCyclicLoading;
+  unsigned int cyclicLoadingFace;
+  unsigned int cyclicLoadingDOF;
+  double quarterCycleTime;
+  
   /*Solution output parameters*/
   bool writeOutput; // flag to write output vtu and pvtu files
   std::string outputDirectory;

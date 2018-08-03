@@ -58,6 +58,11 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
   BCheaderLines=parameter_handler.get_integer("BC file number of header lines");
   NumberofBCs=parameter_handler.get_integer("Number of boundary conditions");
 
+  enableCyclicLoading=parameter_handler.get_bool("Enable cyclic loading");
+  cyclicLoadingFace=parameter_handler.get_integer("Cyclic loading face");
+  cyclicLoadingDOF=parameter_handler.get_integer("Cyclic loading direction");
+  quarterCycleTime=parameter_handler.get_double("Quarter cycle time");
+
   output_Eqv_strain = parameter_handler.get_bool("Output Equivalent strain");
   output_Eqv_stress = parameter_handler.get_bool("Output Equivalent stress");
   output_Grain_ID = parameter_handler.get_bool("Output Grain ID");
@@ -162,6 +167,11 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("BC file number of header lines","1",dealii::Patterns::Integer(),"BC file number of header lines");
   parameter_handler.declare_entry("Number of boundary conditions","1",dealii::Patterns::Integer(),"Number of boundary conditions");
 
+  parameter_handler.declare_entry("Enable cyclic loading","false",dealii::Patterns::Bool(),"Flag to indicate if cyclic loading is enabled");
+  parameter_handler.declare_entry("Cyclic loading face","1",dealii::Patterns::Integer(),"Face that is cyclically loaded");
+  parameter_handler.declare_entry("Cyclic loading direction","1",dealii::Patterns::Integer(),"Direction that is cyclically loaded");
+  parameter_handler.declare_entry("Quarter cycle time","-1",dealii::Patterns::Double(),"Time for finishing quarter of a cyclic loading cycle. One cycle is time taken for starting from 0 displacement and ending at 0 displacement");
+
   parameter_handler.declare_entry("Write Output","false",dealii::Patterns::Bool(),"Flag to write output vtu and pvtu files");
   parameter_handler.declare_entry("Output Directory",".",dealii::Patterns::Anything(),"Output Directory");
   parameter_handler.declare_entry("Skip Output Steps","-1",dealii::Patterns::Integer(),"Skip Output Steps");
@@ -169,7 +179,6 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Output Equivalent stress","false",dealii::Patterns::Bool(),"Output Equivalent stress");
   parameter_handler.declare_entry("Output Grain ID","false",dealii::Patterns::Bool(),"Output Grain ID");
   parameter_handler.declare_entry("Output Twin fractions","false",dealii::Patterns::Bool(),"Output Twin fractions");
-
 
   parameter_handler.declare_entry("Maximum linear solver iterations","-1",dealii::Patterns::Integer(), "Maximum iterations for linear solver");
   parameter_handler.declare_entry("Maximum non linear iterations","-1",dealii::Patterns::Integer(),"Maximum no. of non-linear iterations");
