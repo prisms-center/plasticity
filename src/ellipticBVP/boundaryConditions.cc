@@ -6,7 +6,7 @@ template <int dim>
 void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value){
   unsigned int i ;
 
-  pcout<<node[0]<<" "<<node[1]<<" "<<node[2]<<" "<<dof<<std::endl;
+  //pcout<<node[0]<<" "<<node[1]<<" "<<node[2]<<" "<<dof<<std::endl;
 
   if(userInputs.enableCyclicLoading){
     if(dof==userInputs.cyclicLoadingDOF){
@@ -67,7 +67,7 @@ void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned 
         break;
         case 2:
         if (node[0] == userInputs.span[0])
-            {pcout<<i<<" "<<dof<<std::endl;
+            {//pcout<<i<<" "<<dof<<std::endl;
               flag=true; value=deluConstraint[i][dof];return;}
         break;
         case 3:

@@ -50,7 +50,8 @@ set Write Mesh To EPS                            = true
 set Write Output                                 = true
 
 # Output Directory
-set Output Directory                             = .
+# Need to create directory before using this. Will be corrected in future versions of the software
+set Output Directory                             = tension/
 
 # Skip Output Steps
 set Skip Output Steps                            = 0
@@ -86,7 +87,7 @@ set Number of boundary conditions                 = 4
 set Time increments                              = 0.01
 
 #Total simulation time
-set Total time                                   = 0.20
+set Total time                                   = 1
 
 # Maximum iterations for linear solver
 set Maximum linear solver iterations             = 50000
