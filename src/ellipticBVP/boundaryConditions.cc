@@ -9,50 +9,58 @@ void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned 
   //pcout<<node[0]<<" "<<node[1]<<" "<<node[2]<<" "<<dof<<std::endl;
 
   if(userInputs.enableCyclicLoading){
-    if(dof==userInputs.cyclicLoadingDOF){
+    if(dof==(userInputs.cyclicLoadingDOF-1)){
       switch (userInputs.cyclicLoadingFace){
         case 1:
         if (node[0] == 0.0)
           if(fmod((currentIncrement*delT),cycleTime)<userInputs.quarterCycleTime){
-            flag=true; value=deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
+            flag=true; value=deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
           else if(fmod((currentIncrement*delT),cycleTime)<3*userInputs.quarterCycleTime){
-            flag=true; value=-deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
-          else{flag=true; value=deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
+            flag=true; value=-deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
+          else{flag=true; value=deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
+        break;
         case 2:
         if (node[0] == userInputs.span[0])
           if(fmod((currentIncrement*delT),cycleTime)<userInputs.quarterCycleTime){
-            flag=true; value=deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
+            //pcout<<"Positive"<<std::endl;
+            flag=true; value=deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
           else if(fmod((currentIncrement*delT),cycleTime)<3*userInputs.quarterCycleTime){
-            flag=true; value=-deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
-          else{flag=true; value=deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
+            //pcout<<"negative"<<std::endl;
+            flag=true; value=-deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
+          else{//pcout<<"Positive"<<std::endl;flag=true;
+          value=deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
+        break;
         case 3:
         if (node[1] == 0.0)
           if(fmod((currentIncrement*delT),cycleTime)<userInputs.quarterCycleTime){
-            flag=true; value=deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
+            flag=true; value=deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
           else if(fmod((currentIncrement*delT),cycleTime)<3*userInputs.quarterCycleTime){
-            flag=true; value=-deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
-          else{flag=true; value=deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
+            flag=true; value=-deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
+          else{flag=true; value=deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
+        break;
         case 4:
         if (node[1] == userInputs.span[1])
           if(fmod((currentIncrement*delT),cycleTime)<userInputs.quarterCycleTime){
-            flag=true; value=deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
+            flag=true; value=deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
           else if(fmod((currentIncrement*delT),cycleTime)<3*userInputs.quarterCycleTime){
-            flag=true; value=-deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
-          else{flag=true; value=deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
+            flag=true; value=-deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
+          else{flag=true; value=deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
+        break;
         case 5:
         if (node[2] == 0.0)
           if(fmod((currentIncrement*delT),cycleTime)<userInputs.quarterCycleTime){
-            flag=true; value=deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
+            flag=true; value=deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
           else if(fmod((currentIncrement*delT),cycleTime)<3*userInputs.quarterCycleTime){
-            flag=true; value=-deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
-          else{flag=true; value=deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
+            flag=true; value=-deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
+          else{flag=true; value=deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
+        break;
         case 6:
         if (node[2] == userInputs.span[2])
           if(fmod((currentIncrement*delT),cycleTime)<userInputs.quarterCycleTime){
-            flag=true; value=deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
+            flag=true; value=deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
           else if(fmod((currentIncrement*delT),cycleTime)<3*userInputs.quarterCycleTime){
-            flag=true; value=-deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
-          else{flag=true; value=deluConstraint[userInputs.cyclicLoadingFace][dof];return;}
+            flag=true; value=-deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
+          else{flag=true; value=deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
       }
     }
   }

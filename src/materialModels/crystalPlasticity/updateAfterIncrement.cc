@@ -140,6 +140,7 @@ void crystalPlasticity<dim>::updateAfterIncrement()
   }
   outputFile.close();
 
+	if(this->userInputs.enableCyclicLoading){
   //Adding backstress term during loading reversal
   if (this->currentIncrement == 0) {
  	 signstress = 1;
@@ -147,8 +148,8 @@ void crystalPlasticity<dim>::updateAfterIncrement()
   }
 
   if (backstressflag>10) {
-		if (signstress*global_stress[2][2]<0) {
-	 	  signstress = global_stress[2][2];
+		if (signstress*global_stress[this->userInputs.cyclicLoadingFace/2-1][this->userInputs.cyclicLoadingDOF-1]<0) {
+	 	  signstress = global_stress[this->userInputs.cyclicLoadingFace/2-1][this->userInputs.cyclicLoadingDOF-1];
 	 	  if (signstress<0) {
 	 		  unsigned int cellID = 0;
 	 		  typename DoFHandler<dim>::active_cell_iterator cell = this->dofHandler.begin_active(), endc = this->dofHandler.end();
@@ -169,7 +170,7 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 	  }
   }
   backstressflag = backstressflag + 1;
-
+ }
   cellID=0;
   cell = this->dofHandler.begin_active(), endc = this->dofHandler.end();
   for (; cell!=endc; ++cell) {

@@ -24,7 +24,6 @@ void crystalOrientationsIO<dim>::writeOutputOrientations(bool _writeOutput,std::
   std::string dir(_outputDirectory);
 
   if(_outputDirectory.back()!='/') dir+="/";
-  pcout<<dir;
 
   std::string fileName("orientationsOutputProc");
   fileName += std::to_string(dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD));
