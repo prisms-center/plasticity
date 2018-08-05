@@ -17,7 +17,16 @@ int main (int argc, char **argv)
 
       ParameterHandler parameter_handler;
 
-      userInputParameters userInputs("prm.in",parameter_handler);
+      std::list<std::string> args;
+      for (int i=1; i<argc; ++i) args.push_back (argv[i]);
+
+      if (args.size() == 0){
+        std::cerr<<"Provide name of a parameter file."<<std::endl;
+        exit (1);
+      }
+
+      const std::string parameter_file = args.front ();
+      userInputParameters userInputs(parameter_file,parameter_handler);
 
       crystalPlasticity<3> problem(userInputs);
 

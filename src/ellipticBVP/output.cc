@@ -39,10 +39,8 @@ void ellipticBVP<dim>::output(){
   for (unsigned int i=0; i<subdomain.size(); ++i)
     subdomain(i) = triangulation.locally_owned_subdomain();
   data_out.add_data_vector (subdomain, "subdomain");
-  data_out.build_patches ();
   if (numPostProcessedFieldsWritten>0){
     data_out_Scalar.add_data_vector (subdomain, "subdomain");
-    data_out_Scalar.build_patches ();
   }
 
    //add material id to output file
@@ -57,12 +55,20 @@ void ellipticBVP<dim>::output(){
      unsigned int cellID=0;
      for (; cell!=endc; ++cell){
        if(cell->is_locally_owned()){
-         material(cellID)=postprocessValuesAtCellCenters(cellID,0);
-         cellID++;}
+         //if (Utilities::MPI::this_mpi_process(mpi_communicator) == 0)
+         {material(cell->active_cell_index())=postprocessValuesAtCellCenters(cellID,0);}
+        //if (Utilities::MPI::this_mpi_process(mpi_communicator) == 1){material(cell->active_cell_index())=-25;}
+         //if (Utilities::MPI::this_mpi_process(mpi_communicator) == 1)
+         //{std::cout<<cell->active_cell_index()<<" "<<material(cell->active_cell_index())<<"\n";}
+         cellID++;
+       }
+       //else{material(cellID)=-10;}
      }
    }
+
    data_out.add_data_vector (material, "meshGrain_ID");
    data_out.build_patches ();
+
    if (numPostProcessedFieldsWritten>0){
      data_out_Scalar.add_data_vector (material, "meshGrain_ID");
      data_out_Scalar.build_patches ();

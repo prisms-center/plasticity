@@ -38,7 +38,7 @@ set Subdivisions Y                               = 1
 set Subdivisions Z                               = 1
 
 # The number of initial refinements of the coarse mesh.
-set Refine factor                                = 1
+set Refine factor                                = 5
 
 # Only written for serial runs and if number of elements < 10000
 set Write Mesh To EPS                            = true
@@ -237,7 +237,7 @@ set Voxels in Y direction                        = 32
 set Voxels in Z direction                        = 32
 
 # Grain ID file name
-set Grain ID file name                           = grainID2.txt
+set Grain ID file name                           = grainID.txt
 
 # Number of header Lines in grain orientations file
 set Header Lines GrainID File                    = 5
