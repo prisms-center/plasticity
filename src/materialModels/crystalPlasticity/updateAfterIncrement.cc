@@ -205,11 +205,11 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 
 
 						temp = 0.0;
-						FE_t.mmult(temp, rotmat);
-						rotmat.Tmmult(FE_t, temp);
+						//FE_t.mmult(temp, rotmat);
+						//rotmat.Tmmult(FE_t, temp);
 
-						FP_t.mmult(temp, rotmat);
-						rotmat.Tmmult(FP_t, temp);
+						//FP_t.mmult(temp, rotmat);
+						//rotmat.Tmmult(FP_t, temp);
 
 
 						rod2quat(quat2, rod);
@@ -229,11 +229,11 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 						rotnew[cellID][q][0] = rod(0);rotnew[cellID][q][1] = rod(1);rotnew[cellID][q][2] = rod(2);
 
 
-						FE_t.mTmult(temp, rotmat);
-						rotmat.mmult(FE_t, temp);
+						//FE_t.mTmult(temp, rotmat);
+						//rotmat.mmult(FE_t, temp);
 
-						FP_t.mTmult(temp, rotmat);
-						rotmat.mmult(FP_t, temp);
+						//FP_t.mTmult(temp, rotmat);
+						//rotmat.mmult(FP_t, temp);
 
 	          Fe_conv[cellID][q]=FE_t;
 	          Fp_conv[cellID][q]=FP_t;
@@ -265,7 +265,7 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 
 	F_e = Utilities::MPI::sum(local_F_e / microvol, this->mpi_communicator);
 	if (F_r > 0) {
-		F_T = this->userInputs.twinThresholdFraction + (this->userInputs.twinSaturationFactor*F_e / F_r);
+		F_T = this->userInputs.twinThresholdFraction + (this->userInputs.twinSaturationFactor*F_e / F_r_Twin);
 	}
 	else {
 		F_T = this->userInputs.twinThresholdFraction;
