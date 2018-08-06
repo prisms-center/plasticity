@@ -50,7 +50,7 @@ set Write Mesh To EPS                            = true
 set Write Output                                 = true
 
 # Output Directory
-set Output Directory                             = .
+set Output Directory                             = results
 
 # Skip Output Steps
 set Skip Output Steps                            = 0
@@ -184,7 +184,7 @@ set Saturation Stress Twin                       = 185.00, 185.00, 185.00, 185.0
 # characteristic twin shear
 set Characteristic Twin Shear                    = 0.126
 
-# Twin growth saturation factor  (<(1-twinThresholdFraction))
+# Twin growth saturation factor
 set Twin Saturation Factor                       = 0.25
 
 # Threshold fraction of characteristic twin shear (<1)
