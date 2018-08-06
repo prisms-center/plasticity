@@ -28,20 +28,11 @@ set Domain size Z                                = 1.0
 ####################################
 # Mesh parameters
 ####################################
-# The number of mesh subdivisions in the x direction.
-set Subdivisions X                               = 1
+#Flag to indicate whether to use external mesh
+set Use external mesh                            = true
 
-# The number of mesh subdivisions in the y direction.
-set Subdivisions Y                               = 1
-
-# The number of mesh subdivisions in the z direction.
-set Subdivisions Z                               = 1
-
-# The number of initial refinements of the coarse mesh.
-set Refine factor                                = 3
-
-# Only written for serial runs and if number of elements < 10000
-set Write Mesh To EPS                            = false
+#Name of external mesh file
+set Name of file containing external mesh        = n10-id2_hex.msh
 
 ####################################
 # Solver output parameters
@@ -79,21 +70,6 @@ set BC file number of header lines               = 2
 
 #Number of boundary conditions
 set Number of boundary conditions                = 4
-
-####################################
-# Cyclic loading information
-####################################
-#Flag to indicate if cyclic loading is enabled
-set Enable cyclic loading                        = true
-
-#Face that is cyclically loaded
-set Cyclic loading face                          = 2
-
-#Direction that is cyclically loaded
-set Cyclic loading direction                     = 1
-
-#Time for finishing quarter of a cyclic loading cycle. One cycle is time taken for starting from 0 displacement and ending at 0 displacement
-set Quarter cycle time                           = 0.05
 
 ####################################
 # Solver parameters
@@ -210,16 +186,16 @@ set Max Solver Iterations                        = 4
 # Input microstructure
 ####################################
 # Number of voxels in x direction
-set Voxels in X direction                        = 1
+set Voxels in X direction                        = 32
 
 # Number of voxels in y direction
-set Voxels in Y direction                        = 1
+set Voxels in Y direction                        = 32
 
 # Number of voxels in z direction
-set Voxels in Z direction                        = 1
+set Voxels in Z direction                        = 32
 
 # Grain ID file name
-set Grain ID file name                           = grainID2.txt
+set Grain ID file name                           = grainID.txt
 
 # Number of header Lines in grain orientations file
 set Header Lines GrainID File                    = 5

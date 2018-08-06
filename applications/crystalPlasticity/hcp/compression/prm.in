@@ -41,7 +41,7 @@ set Subdivisions Z                               = 1
 set Refine factor                                = 3
 
 # Only written for serial runs and if number of elements < 10000
-set Write Mesh To EPS                            = false
+set Write Mesh To EPS                            = true
 
 ####################################
 # Solver output parameters
@@ -50,8 +50,7 @@ set Write Mesh To EPS                            = false
 set Write Output                                 = true
 
 # Output Directory
-# Need to create directory before using this. Will be corrected in future versions of the software
-set Output Directory                             = results
+set Output Directory                             = .
 
 # Skip Output Steps
 set Skip Output Steps                            = 0
@@ -66,55 +65,25 @@ set Output Equivalent stress                     = true
 set Output Grain ID                              = true
 
 # Output Twin fractions
-set Output Twin fractions                        = false
-
-####################################
-# Boundary condition information
-####################################
-#File name containing BC information
-set Boundary condition filename                  = BCinfo.txt
-
-#BC file number of header lines
-set BC file number of header lines               = 2
-
-#Number of boundary conditions
-set Number of boundary conditions                = 4
-
-####################################
-# Cyclic loading information
-####################################
-#Flag to indicate if cyclic loading is enabled
-set Enable cyclic loading                        = true
-
-#Face that is cyclically loaded
-set Cyclic loading face                          = 2
-
-#Direction that is cyclically loaded
-set Cyclic loading direction                     = 1
-
-#Time for finishing quarter of a cyclic loading cycle. One cycle is time taken for starting from 0 displacement and ending at 0 displacement
-set Quarter cycle time                           = 0.05
+set Output Twin fractions                        = true
 
 ####################################
 # Solver parameters
 ####################################
-#delta T for every increment
-set Time increments                              = 0.01
-
-#Total simulation time
-set Total time                                   = 1
+# No. of increments
+set Total number of increments                   = 100
 
 # Maximum iterations for linear solver
 set Maximum linear solver iterations             = 50000
 
 # Relative linear solver tolerance
-set Relative linear solver tolerance             = 1.0e-5
+set Relative linear solver tolerance             = 1.0e-10
 
 # Maximum no. of non-linear iterations
 set Maximum non linear iterations                = 4
 
 # Non-linear solver tolerance
-set Absolute nonLinear solver tolerance          = 1.0e-5
+set Absolute nonLinear solver tolerance          = 1.0e-18
 
 # Relative non-linear solver tolerance
 set Relative nonLinear solver tolerance          = 1.0e-3
@@ -141,7 +110,7 @@ set Succesive increment for increasing time step = 10
 # Elasticity parameters
 ####################################
 # Crystal structure of problem
-set Crystal Structure                            = fcc
+set Crystal Structure                            = hcp
 
 #   Elastic Stiffness Matrix -Voigt Notation (MPa)
 set Elastic Stiffness row 1                      = 170.0e3, 124.0e3, 124.0e3, 0, 0, 0
@@ -165,22 +134,22 @@ set Elastic Stiffness row 6                      = 0, 0, 0, 0, 0, 75.0e3
 # Slip parameters
 ####################################
 # Number of Slip Systems
-set Number of Slip Systems                       = 12
+set Number of Slip Systems                       = 18
 
 # Latent Hardening Ratio
 set Latent Hardening Ratio                       = 1.4
 
 # RSS of the slip sytems
-set Initial Slip Resistance                      = 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0
+set Initial Slip Resistance                      = 0.25, 0.25, 0.25, 10, 10, 10, 10, 10, 10, 10, 10, 10, 15, 15.0, 15.0, 15.0, 15.0, 15.0
 
 # Heardening moduli of slip systems
-set Initial Hardening Modulus                    = 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0
+set Initial Hardening Modulus                    = 5.0, 5.0, 5.0, 100, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 200.0, 200.0, 200.0, 200.0, 200.0, 200.0
 
 # Power law coefficient
-set Power Law Exponent                           = 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25
+set Power Law Exponent                           = 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
 
 # Saturation stress
-set Saturation Stress                            = 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0
+set Saturation Stress                            = 185.0, 185.0, 185.0, 160.0, 160.0, 160.0, 160.0, 160.0, 160.0, 160.0, 160.0, 160.0, 200.0, 200.0, 200.0, 200.0, 200.0, 200.0
 
 # Slip Directions File
 set Slip Directions File                         = slipDirections.txt
@@ -192,34 +161,70 @@ set Slip Normals File                            = slipNormals.txt
 set Backstress Factor                            = 0.0
 
 ####################################
+# Twin parameters
+####################################
+#Flag to indicate if system twins
+set Twinning enabled                             = true
+
+# Number of Twin Systems
+set Number of Twin Systems                       = 6
+
+# Initial CRSS of the twin sytems
+set Initial Slip Resistance Twin                 = 2.0, 2.0, 2.0, 2.0, 2.0, 2.0
+
+# Hardening moduli of twin systems
+set Initial Hardening Modulus Twin               = 10.00, 10.00, 10.00, 10.00, 10.00, 10.00
+
+# Power law exponents of twin systems
+set Power Law Exponent Twin                      = 0.25, 0.25, 0.25, 0.25, 0.25, 0.25
+
+# Saturation stress of twin systems
+set Saturation Stress Twin                       = 185.00, 185.00, 185.00, 185.00, 185.00, 185.00
+
+# characteristic twin shear
+set Characteristic Twin Shear                    = 0.126
+
+# Twin growth saturation factor  (<(1-twinThresholdFraction))
+set Twin Saturation Factor                       = 0.25
+
+# Threshold fraction of characteristic twin shear (<1)
+set Twin Threshold Fraction                      = 0.25
+
+# Twin Directions File
+set Twin Directions File                         = twinDirections.txt
+
+# Twin Normals File
+set Twin Normals File                            = twinNormals.txt
+
+####################################
 # Constitutive model parameters
 ####################################
 # Stress tolerance for the yield surface (MPa)
-set Stress Tolerance                             = 1.0e-6
+set Stress Tolerance                             = 1.0e-9
 
 # L2-Norm of plastic slip strain-used for load-step adaptivity
-set Max Plastic Slip L2 Norm                     = 0.8
+set Max Plastic Slip L2 Norm                     = 2.5
 
 # Maximum no. of active slip search iterations
 set Max Slip Search Iterations                   = 1
 
 # Maximum no. of iterations to achieve non-linear convergence
-set Max Solver Iterations                        = 4
+set Max Solver Iterations                        = 1
 
 ####################################
 # Input microstructure
 ####################################
 # Number of voxels in x direction
-set Voxels in X direction                        = 1
+set Voxels in X direction                        = 20
 
 # Number of voxels in y direction
-set Voxels in Y direction                        = 1
+set Voxels in Y direction                        = 20
 
 # Number of voxels in z direction
-set Voxels in Z direction                        = 1
+set Voxels in Z direction                        = 22
 
 # Grain ID file name
-set Grain ID file name                           = grainID2.txt
+set Grain ID file name                           = grainID.txt
 
 # Number of header Lines in grain orientations file
 set Header Lines GrainID File                    = 5

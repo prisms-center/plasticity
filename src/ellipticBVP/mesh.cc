@@ -15,7 +15,11 @@ void ellipticBVP<dim>::mesh(){
     gridin.read_msh(extMesh);
 
     //Output image for viewing
-    std::ofstream out ("mesh.vtk");
+    std::string dir(userInputs.outputDirectory);
+    dir+="/";
+
+    const std::string filename = (dir+"mesh.vtk");
+    std::ofstream out ((filename).c_str());
     GridOut grid_out;
     grid_out.write_vtk (this->triangulation, out);
     pcout << "writing mesh image to mesh.vtk\n";
@@ -31,7 +35,11 @@ void ellipticBVP<dim>::mesh(){
     //Output image of the mesh in eps format
     if(userInputs.writeMeshToEPS)
       if ((triangulation.n_global_active_cells()<10000) and (Utilities::MPI::n_mpi_processes(mpi_communicator)==1)){
-        std::ofstream out ("mesh.eps");
+        std::string dir(userInputs.outputDirectory);
+        dir+="/";
+
+        const std::string filename = (dir+"mesh.eps");
+        std::ofstream out ((filename).c_str());
         GridOut grid_out;
         grid_out.write_eps (triangulation, out);
         pcout << "writing mesh image to mesh.eps" << std::endl;
