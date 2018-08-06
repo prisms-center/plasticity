@@ -1,26 +1,24 @@
 //constructor and destructor for ellipticBVP class
-
-#ifndef ELLIPTICBVP_SRC_H
-#define ELLIPTICBVP_SRC_H
-//this source file is temporarily treated as a header file (hence
-//#ifndef's) till library packaging scheme is finalized
+#include "../../include/ellipticBVP.h"
 
 //constructor
 template <int dim>
-ellipticBVP<dim>::ellipticBVP ()
-  :
+ellipticBVP<dim>::ellipticBVP (userInputParameters _userInputs):
+  Subscriptor(),
   mpi_communicator (MPI_COMM_WORLD),
+  userInputs(_userInputs),
   triangulation (mpi_communicator,
 		 typename Triangulation<dim>::MeshSmoothing
 		 (Triangulation<dim>::smoothing_on_refinement |
 		  Triangulation<dim>::smoothing_on_coarsening)),
-  FE (FE_Q<dim>(feOrder), dim),
-  FE_Scalar (FE_Q<dim>(feOrder), 1),
+  FE (FE_Q<dim>(_userInputs.feOrder), dim),
+  FE_Scalar (FE_Q<dim>(_userInputs.feOrder), 1),
   dofHandler (triangulation),
   dofHandler_Scalar (triangulation),
+  delT(_userInputs.delT),
+  totalT(_userInputs.totalTime),
   currentIteration(0),
   currentIncrement(0),
-  totalIncrements(totalNumIncrements),
   resetIncrement(false),
   loadFactorSetByModel(1.0),
   totalLoadFactor(0.0),
@@ -33,6 +31,9 @@ ellipticBVP<dim>::ellipticBVP ()
     nodal_solution_names.push_back("u");
     nodal_data_component_interpretation.push_back(DataComponentInterpretation::component_is_part_of_vector);
   }
+  if(userInputs.enableCyclicLoading)
+    cycleTime=4*userInputs.quarterCycleTime;
+  totalIncrements=totalT/delT;
 }
 
 //destructor
@@ -41,4 +42,4 @@ ellipticBVP<dim>::~ellipticBVP ()
 {
 }
 
-#endif
+#include "../../include/ellipticBVP_template_instantiations.h"

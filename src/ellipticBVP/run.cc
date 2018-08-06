@@ -1,7 +1,6 @@
 //run method for ellipticBVP class
+#include "../../include/ellipticBVP.h"
 
-#ifndef RUN_ELLIPTICBVP_H
-#define RUN_ELLIPTICBVP_H
 //this source file is temporarily treated as a header file (hence
 //#ifndef's) till library packaging scheme is finalized
 
@@ -13,7 +12,7 @@ void ellipticBVP<dim>::run(){
   mesh();
   //initialize FE objects and global data structures
   init();
-  initProject();
+  initProjection();
   //user model related variables and methods
 #ifdef enableUserModel
   initQuadHistory();
@@ -24,5 +23,4 @@ void ellipticBVP<dim>::run(){
   //solve();
   solve();
 }
-
-#endif
+#include "../../include/ellipticBVP_template_instantiations.h"

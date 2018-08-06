@@ -7,7 +7,6 @@
 #include <deal.II/lac/full_matrix.h>
 #include <deal.II/lac/constraint_matrix.h>
 #include <deal.II/lac/constraint_matrix.h>
-#include <deal.II/lac/compressed_simple_sparsity_pattern.h>
 #include <deal.II/lac/sparsity_tools.h>
 #include <deal.II/fe/fe_system.h>
 #include <deal.II/fe/fe_q.h>
@@ -36,7 +35,6 @@
 #include <deal.II/grid/grid_out.h>
 #include <deal.II/dofs/dof_renumbering.h>
 #include <deal.II/dofs/dof_accessor.h>
-#include <deal.II/lac/petsc_vector.h>
 #include <deal.II/lac/petsc_parallel_vector.h>
 #include <deal.II/lac/petsc_parallel_sparse_matrix.h>
 #include <deal.II/lac/petsc_solver.h>

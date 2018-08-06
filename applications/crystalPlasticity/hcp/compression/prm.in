@@ -1,0 +1,233 @@
+# Listing of Parameters
+# ---------------------
+
+####################################
+# FE parameters
+####################################
+# Basis function interpolation order (1-linear)
+set Order of finite elements                     = 1
+
+# Quadrature point order n^3 (2->8 quadrature points)
+set Order of quadrature                          = 2
+
+####################################
+# Domain parameters
+####################################
+# Number of physical dimensions for the simulation
+set Number of dimensions                         = 3
+
+# The size of the domain in the x direction.
+set Domain size X                                = 1.0
+
+# The size of the domain in the y direction.
+set Domain size Y                                = 1.0
+
+# The size of the domain in the z direction.
+set Domain size Z                                = 1.0
+
+####################################
+# Mesh parameters
+####################################
+# The number of mesh subdivisions in the x direction.
+set Subdivisions X                               = 1
+
+# The number of mesh subdivisions in the y direction.
+set Subdivisions Y                               = 1
+
+# The number of mesh subdivisions in the z direction.
+set Subdivisions Z                               = 1
+
+# The number of initial refinements of the coarse mesh.
+set Refine factor                                = 3
+
+# Only written for serial runs and if number of elements < 10000
+set Write Mesh To EPS                            = true
+
+####################################
+# Solver output parameters
+####################################
+# Flag to write output vtu and pvtu files
+set Write Output                                 = true
+
+# Output Directory
+set Output Directory                             = .
+
+# Skip Output Steps
+set Skip Output Steps                            = 0
+
+# Output Equivalent strain
+set Output Equivalent strain                     = true
+
+# Output Equivalent stress
+set Output Equivalent stress                     = true
+
+# Output Grain ID
+set Output Grain ID                              = true
+
+# Output Twin fractions
+set Output Twin fractions                        = true
+
+####################################
+# Solver parameters
+####################################
+# No. of increments
+set Total number of increments                   = 100
+
+# Maximum iterations for linear solver
+set Maximum linear solver iterations             = 50000
+
+# Relative linear solver tolerance
+set Relative linear solver tolerance             = 1.0e-10
+
+# Maximum no. of non-linear iterations
+set Maximum non linear iterations                = 4
+
+# Non-linear solver tolerance
+set Absolute nonLinear solver tolerance          = 1.0e-18
+
+# Relative non-linear solver tolerance
+set Relative nonLinear solver tolerance          = 1.0e-3
+
+# Flag to stop problem if convergence fails
+set Stop on convergence failure                  = false
+
+####################################
+# Adaptive time-stepping parameters
+####################################
+# lag to enable adaptive time steps
+set Enable adaptive Time stepping                = false
+
+# Load step factor
+set Adaptive load step factor                    = 0.5
+
+# adaptive Load Increase Factor
+set Adaptive load increase Factor                = 1.25
+
+# Succesive Inc For Increasing Time Step
+set Succesive increment for increasing time step = 10
+
+####################################
+# Elasticity parameters
+####################################
+# Crystal structure of problem
+set Crystal Structure                            = hcp
+
+#   Elastic Stiffness Matrix -Voigt Notation (MPa)
+set Elastic Stiffness row 1                      = 170.0e3, 124.0e3, 124.0e3, 0, 0, 0
+
+# 	Elastic Stiffness Matrix -Voigt Notation (MPa)
+set Elastic Stiffness row 2                      = 124.0e3, 170.0e3, 124.0e3, 0, 0, 0
+
+# 	Elastic Stiffness Matrix -Voigt Notation (MPa)
+set Elastic Stiffness row 3                      = 124.0e3, 124.0e3, 170.0e3, 0, 0, 0
+
+# 	Elastic Stiffness Matrix -Voigt Notation (MPa)
+set Elastic Stiffness row 4                      = 0, 0, 0, 75.0e3, 0, 0
+
+# 	Elastic Stiffness Matrix -Voigt Notation (MPa)
+set Elastic Stiffness row 5                      = 0, 0, 0, 0, 75.0e3, 0
+
+# 	Elastic Stiffness Matrix -Voigt Notation (MPa)
+set Elastic Stiffness row 6                      = 0, 0, 0, 0, 0, 75.0e3
+
+####################################
+# Slip parameters
+####################################
+# Number of Slip Systems
+set Number of Slip Systems                       = 18
+
+# Latent Hardening Ratio
+set Latent Hardening Ratio                       = 1.4
+
+# RSS of the slip sytems
+set Initial Slip Resistance                      = 0.25, 0.25, 0.25, 10, 10, 10, 10, 10, 10, 10, 10, 10, 15, 15.0, 15.0, 15.0, 15.0, 15.0
+
+# Heardening moduli of slip systems
+set Initial Hardening Modulus                    = 5.0, 5.0, 5.0, 100, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 200.0, 200.0, 200.0, 200.0, 200.0, 200.0
+
+# Power law coefficient
+set Power Law Exponent                           = 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+
+# Saturation stress
+set Saturation Stress                            = 185.0, 185.0, 185.0, 160.0, 160.0, 160.0, 160.0, 160.0, 160.0, 160.0, 160.0, 160.0, 200.0, 200.0, 200.0, 200.0, 200.0, 200.0
+
+# Slip Directions File
+set Slip Directions File                         = slipDirections.txt
+
+# Slip Normals File
+set Slip Normals File                            = slipNormals.txt
+
+# Ratio between backstress and CRSS during load reversal
+set Backstress Factor                            = 0.0
+
+####################################
+# Twin parameters
+####################################
+#Flag to indicate if system twins
+set Twinning enabled                             = true
+
+# Number of Twin Systems
+set Number of Twin Systems                       = 6
+
+# Initial CRSS of the twin sytems
+set Initial Slip Resistance Twin                 = 2.0, 2.0, 2.0, 2.0, 2.0, 2.0
+
+# Hardening moduli of twin systems
+set Initial Hardening Modulus Twin               = 10.00, 10.00, 10.00, 10.00, 10.00, 10.00
+
+# Power law exponents of twin systems
+set Power Law Exponent Twin                      = 0.25, 0.25, 0.25, 0.25, 0.25, 0.25
+
+# Saturation stress of twin systems
+set Saturation Stress Twin                       = 185.00, 185.00, 185.00, 185.00, 185.00, 185.00
+
+# characteristic twin shear
+set Characteristic Twin Shear                    = 0.126
+
+# Twin growth saturation factor  (<(1-twinThresholdFraction))
+set Twin Saturation Factor                       = 0.25
+
+# Threshold fraction of characteristic twin shear (<1)
+set Twin Threshold Fraction                      = 0.25
+
+# Twin Directions File
+set Twin Directions File                         = twinDirections.txt
+
+# Twin Normals File
+set Twin Normals File                            = twinNormals.txt
+
+####################################
+# Constitutive model parameters
+####################################
+# Stress tolerance for the yield surface (MPa)
+set Stress Tolerance                             = 1.0e-9
+
+# L2-Norm of plastic slip strain-used for load-step adaptivity
+set Max Plastic Slip L2 Norm                     = 2.5
+
+# Maximum no. of active slip search iterations
+set Max Slip Search Iterations                   = 1
+
+# Maximum no. of iterations to achieve non-linear convergence
+set Max Solver Iterations                        = 1
+
+####################################
+# Input microstructure
+####################################
+# Number of voxels in x direction
+set Voxels in X direction                        = 20
+
+# Number of voxels in y direction
+set Voxels in Y direction                        = 20
+
+# Number of voxels in z direction
+set Voxels in Z direction                        = 22
+
+# Grain ID file name
+set Grain ID file name                           = grainID.txt
+
+# Number of header Lines in grain orientations file
+set Header Lines GrainID File                    = 5
+
+# Grain orientations file name
+set Orientations file name                       = orientations.txt

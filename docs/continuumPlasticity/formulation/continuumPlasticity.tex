@@ -292,7 +292,7 @@ The element residual and jacobian have the same form as finite strain elasticity
 \begin{align}
 r_e &= \int_{\Omega_e} \Big(P^h_{iJ} \frac{\partial w^h_i}{\partial X_J} - w^h_i f_i \Big) \, dV
 - \sum_i \int_{\partial \Omega_{e_{T_i}}} w^h_i T_i \, dS\\
-j_e &=  \int_{\Omega_e} \Big( \frac{\partial w^h_i}{\partial x_j} c^{ep}_{ijkl} \frac{\partial \Delta u^h_k}{\partial x_l} 
+j_e &=  \int_{\Omega_e} \Big( \frac{\partial w^h_i}{\partial x_j} c^{ep}_{ijkl} \frac{\partial \Delta u^h_k}{\partial x_l}
 + \frac{\partial w^h_i}{\partial x_j} \tau^h_{jk} \frac{\partial \Delta u^h_i}{\partial x_k} \Big) \, dV
 \end{align}
 However, note that instead of the spatial elastic tangent, we are using the spatial algorithmic elastoplastic tangent $\bc^{ep}$. Assuming the yield function $f$ can be written as $f(\Bbeta,q) = g(\Bbeta) + h(q)$ for some functions $g$ and $h$, we can write $\bc^{ep}$ as the following [1]:
@@ -334,7 +334,7 @@ a^e_{AB} &= \frac{\partial^2 w}{\partial \lambda^A_e \partial \lambda^B_e}
 \bigg]
 \end{aligned}\\
 \mathbb{I}^{b^{tr}_e}_{ijkl} &= \half(b^{tr}_{e_{ik}}b^{tr}_{e_{jl}} + b^{tr}_{e_{il}}b^{tr}_{e_{jk}})\\
-d_A &= \frac{\lambda^{A^{tr^2}}_e - \lambda^{B^{tr^2}}_e}{\lambda^{A^{tr^2}}_e - \lambda^{C^{tr^2}}_e}, 
+d_A &= \frac{\lambda^{A^{tr^2}}_e - \lambda^{B^{tr^2}}_e}{\lambda^{A^{tr^2}}_e - \lambda^{C^{tr^2}}_e},
 \text{ with $A,B,C$ even permutations of } \{1,2,3\}
 \end{align}
 
@@ -357,7 +357,7 @@ where $\bar{H}$ is the kinematic hardening coefficient and $\Bxi^{tr}_{n+1} = \B
 \ba^{e} &= \frac{\partial \Bbeta}{\partial \Bepsilon}
 \end{aligned}
 \end{equation}
-where $\epsilon^A = \log(\lambda^A_e)$. 
+where $\epsilon^A = \log(\lambda^A_e)$.
 %Then we can write equation (\ref{eqn:beta}) as
 %\begin{equation}
 %\begin{aligned}
@@ -371,7 +371,7 @@ Then we can write
 \mathrm{d}\Bbeta = \ba^e\mathrm{d}\Bepsilon
 \label{eqn:dbeta}
 \end{equation}
-and we write equation (\ref{eqn:lambda}) at $t_{n+1}$ as 
+and we write equation (\ref{eqn:lambda}) at $t_{n+1}$ as
 \begin{equation}
 \begin{aligned}
 \Bepsilon &= \Bepsilon^{tr}-\gamma\Delta t
@@ -397,34 +397,34 @@ and we write equation (\ref{eqn:lambda}) at $t_{n+1}$ as
 The differential of equation (\ref{eqn:xi}) at $t_{n+1}$ is
 \begin{equation}
 \begin{aligned}
-\mathrm{d}\Bxi &= \mathrm{d}\Bxi^{tr} + 
+\mathrm{d}\Bxi &= \mathrm{d}\Bxi^{tr} +
 \frac{2}{3}\bar{H}\left[
 \mathrm{d}(\gamma\Delta t)\frac{\partial f}{\partial\Bbeta}
-+ 
++
 \gamma\Delta t\left(
 \frac{\partial^2 f}{\partial\Bbeta^2}\mathrm{d}\Bbeta
 + \frac{\partial^2 f}{\partial\Bxi\partial\Bbeta}\mathrm{d}\Bxi\right)
 \right]\\
-&= \mathrm{d}\Bxi^{tr} + 
+&= \mathrm{d}\Bxi^{tr} +
 \frac{2}{3}\bar{H}\left[
 \mathrm{d}(\gamma\Delta t)\frac{\partial f}{\partial\Bbeta}
-+ 
++
 \gamma\Delta t\
 \frac{\partial^2 f}{\partial\Bbeta^2}
 (\mathrm{d}\Bbeta
 - \mathrm{d}\Bxi)
 \right]\\
 \implies
-\mathrm{d}\Bxi  &= 
+\mathrm{d}\Bxi  &=
 \left(\iso + \frac{2}{3}\bar{H}
 \gamma\Delta t\
 \frac{\partial^2 f}{\partial\Bbeta^2}
 \right)^{-1}
 \left[
-\mathrm{d}\Bxi^{tr} + 
+\mathrm{d}\Bxi^{tr} +
 \frac{2}{3}\bar{H}\left(
 \mathrm{d}(\gamma\Delta t)\frac{\partial f}{\partial\Bbeta}
-+ 
++
 \gamma\Delta t\
 \frac{\partial^2 f}{\partial\Bbeta^2}
 \mathrm{d}\Bbeta
@@ -455,18 +455,18 @@ Substitute equations (\ref{eqn:dxi}) and (\ref{eqn:depsilon}) into equation (\re
 -
 \bh_1
 \left[
-\mathrm{d}\Bxi^{tr} + 
+\mathrm{d}\Bxi^{tr} +
 \frac{2}{3}\bar{H}\left(
 \mathrm{d}(\gamma\Delta t)\frac{\partial f}{\partial\Bbeta}
-+ 
++
 \gamma\Delta t\
 \frac{\partial^2 f}{\partial\Bbeta^2}
 \mathrm{d}\Bbeta
 \right)\right]
 \right)\right]\\
-\implies 
+\implies
 \mathrm{d}\Bbeta
-&= 
+&=
 \bh_3
 \left[
  \mathrm{d}\Bepsilon^{tr}
@@ -476,19 +476,19 @@ Substitute equations (\ref{eqn:dxi}) and (\ref{eqn:depsilon}) into equation (\re
 \frac{\partial^2 f}{\partial \Bbeta^2}
 \bh_1
 \left(
-\mathrm{d}\Bxi^{tr} + 
+\mathrm{d}\Bxi^{tr} +
 \frac{2}{3}\bar{H}
 \mathrm{d}(\gamma\Delta t)\frac{\partial f}{\partial\Bbeta}
 \right)
 \right]\\
-&= 
+&=
 \bh_3
 \left[
  \mathrm{d}\Bepsilon^{tr}
  +\gamma\Delta t
 \frac{\partial^2 f}{\partial \Bbeta^2}
 \bh_1
-\mathrm{d}\Bxi^{tr} 
+\mathrm{d}\Bxi^{tr}
 - \bh_2
 \mathrm{d}(\gamma\Delta t)\frac{\partial f}{\partial\Bbeta}
 \right]
@@ -538,10 +538,10 @@ From the Kuhn-Tucker relations, we have $\mathrm{d}f = 0$, which we use to solve
 \left(\mathrm{d}\Bbeta
 - \bh_1
 \left[
-\mathrm{d}\Bxi^{tr} + 
+\mathrm{d}\Bxi^{tr} +
 \frac{2}{3}\bar{H}\left(
 \mathrm{d}(\gamma\Delta t)\frac{\partial f}{\partial\Bbeta}
-+ 
++
 \gamma\Delta t\
 \frac{\partial^2 f}{\partial\Bbeta^2}
 \mathrm{d}\Bbeta
@@ -553,7 +553,7 @@ From the Kuhn-Tucker relations, we have $\mathrm{d}f = 0$, which we use to solve
 \bh_2\mathrm{d}\Bbeta
 - \frac{\partial f}{\partial \Bbeta}\cdot\bh_1
 \left[
-\mathrm{d}\Bxi^{tr} + 
+\mathrm{d}\Bxi^{tr} +
 \frac{2}{3}\bar{H}
 \mathrm{d}(\gamma\Delta t)\frac{\partial f}{\partial\Bbeta}
 \right]
@@ -572,13 +572,13 @@ Now substitute the equations for $\mathrm{d}\Bbeta$ and $\mathrm{d}q$.
  +\gamma\Delta t
 \frac{\partial^2 f}{\partial \Bbeta^2}
 \bh_1
-\mathrm{d}\Bxi^{tr} 
+\mathrm{d}\Bxi^{tr}
 - \bh_2
 \mathrm{d}(\gamma\Delta t)\frac{\partial f}{\partial\Bbeta}
 \right]\\
 &\phantom{=} - \frac{\partial f}{\partial \Bbeta}\cdot\bh_1
 \left[
-\mathrm{d}\Bxi^{tr} + 
+\mathrm{d}\Bxi^{tr} +
 \frac{2}{3}\bar{H}
 \mathrm{d}(\gamma\Delta t)\frac{\partial f}{\partial\Bbeta}
 \right]
@@ -655,9 +655,9 @@ Using this equation and equation (\ref{eqn:dbeta2}), we can find $\ba^{ep} = \pa
 \begin{equation}
 \begin{aligned}
 \ba^{ep}
-&= 
+&=
 \bh_3
-- 
+-
 \frac{h_4
 \left(\bh_3\bh_2\frac{\partial f}{\partial\Bbeta}\right)\otimes
 \left(\bh_3\bh_2\frac{\partial f}{\partial \Bbeta}\right)}
@@ -669,7 +669,7 @@ Using this equation and equation (\ref{eqn:dbeta2}), we can find $\ba^{ep} = \pa
 \frac{2}{3}\bar{H}\bh_1
 \right)
 \frac{\partial f}{\partial\Bbeta}
- - 
+ -
 {\frac{\partial q}{\partial \alpha}
 \left(\frac{\partial f}{\partial q}\right)^2}}
 \end{aligned}
@@ -690,7 +690,7 @@ It is possible to create your own pfunctions using Integration Tools Writer, sim
 \item Strain energy density function:
 \vspace{-3mm}
 \begin{enumerate}
-\itemsep-0.5em 
+\itemsep-0.5em
 \item first Lam\'e parameter $\lambda$
 \item second Lam\'e parameter $\mu$
 \item first principle stretch $\lambda_1$
@@ -698,7 +698,7 @@ It is possible to create your own pfunctions using Integration Tools Writer, sim
 \item third principle stretch $\lambda_3$
 \end{enumerate}
 %
-\item Yield function: 
+\item Yield function:
 \begin{enumerate}
 \vspace{-3mm}
 \itemsep-0.5em
@@ -712,7 +712,7 @@ It is possible to create your own pfunctions using Integration Tools Writer, sim
 \item third principle back stress $\xi_3$
 \end{enumerate}
 %
-\item Hardening function: 
+\item Hardening function:
 \begin{enumerate}
 \vspace{-3mm}
 \itemsep-0.5em
@@ -741,4 +741,4 @@ Simo, J.C. and Hughes, T.J.R., \textit{Computational Inelasicity}, Springer, New
 [2]  Simo, J.C. and Armero, F., ``Improved versions of assumed enhanced strain tri-linear elements for 3D finite deformation problems,"  \textit{Computer Methods in Applied Mechanics and Engineering}, 110 (1993), 359-386.
 
 
-\end{document} 
+\end{document}

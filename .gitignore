@@ -25,6 +25,7 @@
 *vtu
 *vts
 *eps
+*results*
 
 #Temporary files
 .#*
@@ -80,3 +81,6 @@ submitSingleJob.py
 DoxygenWarningLog.txt
 test
 stressstrain.txt
+
+.cproject
+.project

@@ -1,14 +1,8 @@
 //methods to mark boundaries
-
-#ifndef MARKBOUNDARIES_H
-#define MARKBOUNDARIES_H
-//this source file is temporarily treated as a header file (hence
-//#ifndef's) till library packaging scheme is finalized
+#include "../../include/ellipticBVP.h"
 
 //methods to mark boundaries
 template <int dim>
 void ellipticBVP<dim>::markBoundaries(){
 }
-
-
-#endif
+#include "../../include/ellipticBVP_template_instantiations.h"
