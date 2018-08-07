@@ -31,11 +31,12 @@ int main (int argc, char **argv)
       crystalPlasticity<3> problem(userInputs);
 
       //reading materials atlas files
-      problem.orientations.loadOrientations(userInputs.grainIDFile,
-					    userInputs.headerLinesGrainIDFile,
-					    userInputs.grainOrientationsFile,
-					    userInputs.numPts,
-					    userInputs.span);
+      if(!userInputs.readExternalMesh){
+        problem.orientations.loadOrientations(userInputs.grainIDFile,
+  					    userInputs.headerLinesGrainIDFile,
+  					    userInputs.grainOrientationsFile,
+  					    userInputs.numPts,
+  					    userInputs.span);}
       problem.orientations.loadOrientationVector(userInputs.grainOrientationsFile);
       problem.run ();
     }
