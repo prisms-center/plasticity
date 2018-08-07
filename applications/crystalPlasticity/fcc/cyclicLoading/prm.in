@@ -119,9 +119,6 @@ set Absolute nonLinear solver tolerance          = 1.0e-5
 # Relative non-linear solver tolerance
 set Relative nonLinear solver tolerance          = 1.0e-3
 
-# Flag to stop problem if convergence fails
-set Stop on convergence failure                  = false
-
 ####################################
 # Elasticity parameters
 ####################################
