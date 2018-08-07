@@ -99,21 +99,6 @@ set Relative nonLinear solver tolerance          = 1.0e-3
 set Stop on convergence failure                  = false
 
 ####################################
-# Adaptive time-stepping parameters
-####################################
-# lag to enable adaptive time steps
-set Enable adaptive Time stepping                = false
-
-# Load step factor
-set Adaptive load step factor                    = 0.5
-
-# adaptive Load Increase Factor
-set Adaptive load increase Factor                = 1.25
-
-# Succesive Inc For Increasing Time Step
-set Succesive increment for increasing time step = 10
-
-####################################
 # Elasticity parameters
 ####################################
 # Crystal structure of problem
