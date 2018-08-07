@@ -81,8 +81,12 @@ void ellipticBVP<dim>::init(){
       ss>>totalU;
       deluConstraint[faceID-1][dof-1]=totalU/totalIncrements;
     }
+
+    if(userInputs.enableCyclicLoading){
+        deluConstraint[userInputs.cyclicLoadingFace-1][userInputs.cyclicLoadingDOF-1]=deluConstraint[userInputs.cyclicLoadingFace-1][userInputs.cyclicLoadingDOF-1]*totalIncrements*userInputs.delT/userInputs.quarterCycleTime;
+      }
   }
-  
+
   //apply initial conditions
   applyInitialConditions();
   solutionWithGhosts=solution;

@@ -50,7 +50,7 @@ set Write Mesh To EPS                            = true
 set Write Output                                 = true
 
 # Output Directory
-set Output Directory                             = .
+set Output Directory                             = results
 
 # Skip Output Steps
 set Skip Output Steps                            = 0
@@ -68,10 +68,25 @@ set Output Grain ID                              = true
 set Output Twin fractions                        = true
 
 ####################################
+# Boundary condition information
+####################################
+#File name containing BC information
+set Boundary condition filename                  = BCinfo.txt
+
+#BC file number of header lines
+set BC file number of header lines               = 2
+
+#Number of boundary conditions
+set Number of boundary conditions                = 4
+
+####################################
 # Solver parameters
 ####################################
-# No. of increments
-set Total number of increments                   = 100
+#delta T for every increment
+set Time increments                              = 0.01
+
+#Total simulation time
+set Total time                                   = 1
 
 # Maximum iterations for linear solver
 set Maximum linear solver iterations             = 50000
@@ -87,24 +102,6 @@ set Absolute nonLinear solver tolerance          = 1.0e-18
 
 # Relative non-linear solver tolerance
 set Relative nonLinear solver tolerance          = 1.0e-3
-
-# Flag to stop problem if convergence fails
-set Stop on convergence failure                  = false
-
-####################################
-# Adaptive time-stepping parameters
-####################################
-# lag to enable adaptive time steps
-set Enable adaptive Time stepping                = false
-
-# Load step factor
-set Adaptive load step factor                    = 0.5
-
-# adaptive Load Increase Factor
-set Adaptive load increase Factor                = 1.25
-
-# Succesive Inc For Increasing Time Step
-set Succesive increment for increasing time step = 10
 
 ####################################
 # Elasticity parameters
@@ -184,7 +181,7 @@ set Saturation Stress Twin                       = 185.00, 185.00, 185.00, 185.0
 # characteristic twin shear
 set Characteristic Twin Shear                    = 0.126
 
-# Twin growth saturation factor  (<(1-twinThresholdFraction))
+# Twin growth saturation factor
 set Twin Saturation Factor                       = 0.25
 
 # Threshold fraction of characteristic twin shear (<1)

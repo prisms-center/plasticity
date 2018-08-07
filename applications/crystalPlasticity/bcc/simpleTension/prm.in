@@ -38,7 +38,7 @@ set Subdivisions Y                               = 1
 set Subdivisions Z                               = 1
 
 # The number of initial refinements of the coarse mesh.
-set Refine factor                                = 3
+set Refine factor                                = 2
 
 # Only written for serial runs and if number of elements < 10000
 set Write Mesh To EPS                            = false
@@ -103,24 +103,6 @@ set Absolute nonLinear solver tolerance          = 1.0e-5
 
 # Relative non-linear solver tolerance
 set Relative nonLinear solver tolerance          = 1.0e-3
-
-# Flag to stop problem if convergence fails
-set Stop on convergence failure                  = false
-
-####################################
-# Adaptive time-stepping parameters
-####################################
-# lag to enable adaptive time steps
-set Enable adaptive Time stepping                = false
-
-# Load step factor
-set Adaptive load step factor                    = 0.5
-
-# adaptive Load Increase Factor
-set Adaptive load increase Factor                = 1.25
-
-# Succesive Inc For Increasing Time Step
-set Succesive increment for increasing time step = 10
 
 ####################################
 # Elasticity parameters
@@ -195,13 +177,13 @@ set Max Solver Iterations                        = 4
 # Input microstructure
 ####################################
 # Number of voxels in x direction
-set Voxels in X direction                        = 32
+set Voxels in X direction                        = 20
 
 # Number of voxels in y direction
-set Voxels in Y direction                        = 32
+set Voxels in Y direction                        = 20
 
 # Number of voxels in z direction
-set Voxels in Z direction                        = 32
+set Voxels in Z direction                        = 22
 
 # Grain ID file name
 set Grain ID file name                           = grainID.txt

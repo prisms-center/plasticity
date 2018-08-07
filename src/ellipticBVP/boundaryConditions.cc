@@ -13,22 +13,27 @@ void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned 
       switch (userInputs.cyclicLoadingFace){
         case 1:
         if (node[0] == 0.0)
+        {
           if(fmod((currentIncrement*delT),cycleTime)<userInputs.quarterCycleTime){
             flag=true; value=deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
           else if(fmod((currentIncrement*delT),cycleTime)<3*userInputs.quarterCycleTime){
             flag=true; value=-deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
           else{flag=true; value=deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
         break;
+      }
         case 2:
         if (node[0] == userInputs.span[0])
+        {
+          //pcout<<"Positive12"<<std::endl;
           if(fmod((currentIncrement*delT),cycleTime)<userInputs.quarterCycleTime){
             //pcout<<"Positive"<<std::endl;
             flag=true; value=deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
           else if(fmod((currentIncrement*delT),cycleTime)<3*userInputs.quarterCycleTime){
             //pcout<<"negative"<<std::endl;
             flag=true; value=-deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
-          else{//pcout<<"Positive"<<std::endl;flag=true;
-          value=deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
+          else{//pcout<<"Positive12"<<std::endl;
+          flag=true;value=deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
+        }
         break;
         case 3:
         if (node[1] == 0.0)
