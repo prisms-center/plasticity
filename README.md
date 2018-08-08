@@ -34,7 +34,6 @@ PRISMS-Plasticity
   + $ cmake CMakeLists.txt -DCMAKE_BUILD_TYPE=Release <br>
   + $ make -jN <br>
   + $ export PLAS_DIR=$PWD <br>
-
   Here N refers to number of processor cores available, this helps in quicker compilation. <br>
 
   3. Compile plasticity applications
