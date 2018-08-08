@@ -240,6 +240,7 @@ private:
     std::vector<std::vector<  Vector<double> > >  s_alpha_conv;
 
     std::vector<std::vector<  std::vector<double> > >  twinfraction_iter,twinfraction_iter_Twin, slipfraction_iter,twinfraction_conv, slipfraction_conv,twinfraction_conv_Twin;
+    std::vector<std::vector<double> >  twin_ouput;
     std::vector<std::vector<double> >  twin;
 
     unsigned int n_slip_systems,n_twin_systems; //No. of slip systems

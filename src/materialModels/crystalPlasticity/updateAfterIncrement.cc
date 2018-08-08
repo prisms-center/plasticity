@@ -80,6 +80,7 @@ void crystalPlasticity<dim>::updateAfterIncrement()
           temp.push_back(fe_values.JxW(q));
 					temp.push_back(cellOrientationMap[cellID]);
 
+					twin_ouput[cellID][q]+=twin[cellID][q];
 	        twin[cellID][q] = 0.0;
 
           orientations.addToOutputOrientations(temp);

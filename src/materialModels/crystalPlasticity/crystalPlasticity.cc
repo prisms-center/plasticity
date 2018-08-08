@@ -13,8 +13,8 @@ P(dim,dim)
     initCalled = false;
 
     //post processing
-    ellipticBVP<dim>::postprocessed_solution_names.push_back("Eqv_strain");
     ellipticBVP<dim>::postprocessed_solution_names.push_back("Eqv_stress");
+    ellipticBVP<dim>::postprocessed_solution_names.push_back("Eqv_strain");
     if(this->userInputs.enableTwinning){
       ellipticBVP<dim>::numPostProcessedFields=3;
       ellipticBVP<dim>::postprocessed_solution_names.push_back("Twin");

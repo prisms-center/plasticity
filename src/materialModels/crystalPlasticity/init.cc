@@ -185,7 +185,11 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
     slipfraction_conv.resize(num_local_cells,std::vector<std::vector<double> >(num_quad_points,slip_init));
     rot.resize(num_local_cells,std::vector<Vector<double> >(num_quad_points,rot_init));
     rotnew.resize(num_local_cells,std::vector<Vector<double> >(num_quad_points,rotnew_init));
-    twin.resize(num_local_cells,std::vector<double>(num_quad_points,0.0));
+
+    if(this->userInputs.enableTwinning){
+      twin_ouput.resize(num_local_cells,std::vector<double>(num_quad_points,0.0));
+      twin.resize(num_local_cells,std::vector<double>(num_quad_points,0.0));
+    }
 
     //load rot and rotnew
     for (unsigned int cell=0; cell<num_local_cells; cell++){
