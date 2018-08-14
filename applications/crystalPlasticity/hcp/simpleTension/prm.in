@@ -99,10 +99,10 @@ set Relative linear solver tolerance             = 1.0e-11
 set Maximum non linear iterations                = 3
 
 # Non-linear solver tolerance
-set Absolute nonLinear solver tolerance          = 0.0e-18
+set Absolute nonLinear solver tolerance          = 1.0e-18
 
 # Relative non-linear solver tolerance
-set Relative nonLinear solver tolerance          = 0.0e-3
+set Relative nonLinear solver tolerance          = 1.0e-3
 
 # Flag to stop problem if convergence fails
 set Stop on convergence failure                  = false
