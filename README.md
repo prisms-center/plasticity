@@ -114,7 +114,7 @@ PRISMS-Plasticity
 
  + Mohammadreza Yaghoobi Yaghoobi@umich.edu
  + Srihari Sundar sriharis@umich.edu 
-
+ + Aaditya Lakshmanan aadityal@umich.edu
 
 <B>Further information, questions, issues and bugs:</B>
 
