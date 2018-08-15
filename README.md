@@ -109,6 +109,11 @@ PRISMS-Plasticity
 
  + prismsplasticity.users@umich.edu
  + prismsplasticity.dev@umich.edu  
+ 
+ <B>Current Developers:</B>
+
+ + Mohammadreza Yaghoobi Yaghoobi@umich.edu
+ + Srihari Sundar sriharis@umich.edu 
 
 
 <B>Further information, questions, issues and bugs:</B>
