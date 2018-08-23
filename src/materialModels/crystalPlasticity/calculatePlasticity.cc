@@ -461,7 +461,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 }
 
         for (unsigned int i=0;i<this->userInputs.numSlipSystems;i++){
-            slipfraction_iter[cellID][quadPtID][i]=slipfraction_conv[cellID][quadPtID][i]+x_beta_old[i]/this->userInputs.twinShear;
+            slipfraction_iter[cellID][quadPtID][i]=slipfraction_conv[cellID][quadPtID][i]+x_beta_old[i];
         }
 
 		n_PA = 0;
