@@ -464,27 +464,27 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
             slipfraction_iter[cellID][quadPtID][i]=slipfraction_conv[cellID][quadPtID][i]+x_beta_old[i];
         }
 
-		n_PA = 0;
-		for (unsigned int i = 0;i<n_slip_systems;i++) {
-			if (x_beta_old(i) > 0) {
-				if (n_PA == 0) {
-					n_PA = n_PA + 1;
-					PA.reinit(n_PA);
-					PA(0) = i;
-				}
-				else {
-					PA_temp = PA;
-					n_PA = n_PA + 1;
-					PA.reinit(n_PA);
-					for (unsigned int j = 0;j<(n_PA - 1);j++) {
-						PA(j) = PA_temp(j);
-					}
-					PA(n_PA - 1) = i;
-					PA_temp.reinit(n_PA);     //%%%%% Potentially active slip systems
-				}
-			}
-		}
-		active.reinit(n_PA); active = PA;
+	//	n_PA = 0;
+	//	for (unsigned int i = 0;i<n_slip_systems;i++) {
+	//		if (x_beta_old(i) > 0) {
+	//			if (n_PA == 0) {
+	//				n_PA = n_PA + 1;
+	//				PA.reinit(n_PA);
+	//				PA(0) = i;
+	//			}
+	//			else {
+	//				PA_temp = PA;
+	//				n_PA = n_PA + 1;
+	//				PA.reinit(n_PA);
+	//				for (unsigned int j = 0;j<(n_PA - 1);j++) {
+	//					PA(j) = PA_temp(j);
+	//				}
+	//				PA(n_PA - 1) = i;
+	//				PA_temp.reinit(n_PA);     //%%%%% Potentially active slip systems
+	//			}
+	//		}
+	//	}
+	//	active.reinit(n_PA); active = PA;
 
 
 			FullMatrix<double> F_temp(dim, dim);
