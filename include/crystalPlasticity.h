@@ -181,7 +181,17 @@ private:
      * volume weighted Lagrangian strain per core
      */
     FullMatrix<double> local_strain;
+    
+    /**
+     * volume weighted True strain per core
+     */
+     Vector<double> local_Truestrain;
 
+    /**
+     * volume averaged global True strain
+     */
+     Vector<double> global_Truestrain;
+    
     /**
      * volume averaged global Cauchy stress
      */
