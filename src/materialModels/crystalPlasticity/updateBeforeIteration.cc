@@ -3,6 +3,7 @@
 template <int dim>
 void crystalPlasticity<dim>::updateBeforeIteration()
 {
+    local_Truestrain = 0.0;
     local_strain=0.0;
     local_stress=0.0;
     local_microvol=0.0;
