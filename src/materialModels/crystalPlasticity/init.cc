@@ -9,6 +9,10 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
     //call loadOrientations to load material orientations
     loadOrientations();
 
+    local_Truestrain.reinit(dim);
+    local_Truestrain = 0.0;
+    global_Truestrain.reinit(dim);
+    global_Truestrain = 0.0;
     local_strain.reinit(dim,dim);
     local_stress.reinit(dim,dim);
     global_strain.reinit(dim,dim);
