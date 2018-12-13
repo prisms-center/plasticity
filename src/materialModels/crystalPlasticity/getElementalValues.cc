@@ -62,58 +62,7 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 
 	 }
 
-	 temp.reinit(dim,dim); temp=0.0;
-	 temp2.reinit(dim,dim); temp2=0.0;
-	 temp3.reinit(dim,dim); temp3=0.0;
-	 CE_tau=0.0;
-	 temp=F;
-	 F.Tmmult(CE_tau,temp);
-	 E_tau=CE_tau;
-	 temp=IdentityMatrix(dim);
-	 for(unsigned int i=0;i<dim;i++){
-	     for(unsigned int j=0;j<dim;j++){
-		 E_tau[i][j] = 0.5*(E_tau[i][j]-temp[i][j]);
-		 temp2[i][j]=(0.5*(F[i][j]+F[j][i])-temp[i][j])*fe_values.JxW(q);
-		 temp3[i][j]=T[i][j]*fe_values.JxW(q);
-	     }
-	 }
-
-	 local_strain.add(1.0,temp2);
-	 local_stress.add(1.0,temp3);
-	 local_microvol=local_microvol+fe_values.JxW(q);
-
-         //calculate von-Mises stress and equivalent strain
-         double traceE, traceT,vonmises,eqvstrain;
-         FullMatrix<double> deve(dim,dim),devt(dim,dim);
-
-
-         traceE=E_tau.trace();
-         traceT=T.trace();
-         temp=IdentityMatrix(3);
-         temp.equ(traceE/3,temp);
-
-         deve=E_tau;
-         deve.add(-1.0,temp);
-
-         temp=IdentityMatrix(3);
-         temp.equ(traceT/3,temp);
-
-         devt=T;
-         devt.add(-1.0,temp);
-
-         vonmises= devt.frobenius_norm();
-         vonmises=sqrt(3.0/2.0)*vonmises;
-         eqvstrain=deve.frobenius_norm();
-         eqvstrain=sqrt(2.0/3.0)*eqvstrain;
-
-         //fill in post processing field values
-
-				 this->postprocessValues(cellID, q, 0, 0)=vonmises;
-         this->postprocessValues(cellID, q, 1, 0)=eqvstrain;
-				 if(this->userInputs.enableTwinning)
-	         this->postprocessValues(cellID, q, 2, 0)=twin_ouput[cellID][q];
-
-				 //evaluate elemental stiffness matrix, K_{ij} = N_{i,k}*C_{mknl}*F_{im}*F{jn}*N_{j,l} + N_{i,k}*F_{kl}*N_{j,l}*del{ij} dV
+	 			 //evaluate elemental stiffness matrix, K_{ij} = N_{i,k}*C_{mknl}*F_{im}*F{jn}*N_{j,l} + N_{i,k}*F_{kl}*N_{j,l}*del{ij} dV
 				 for (unsigned int d1=0; d1<dofs_per_cell; ++d1) {
 			     unsigned int i = fe_values.get_fe().system_to_component_index(d1).first;
 			     for (unsigned int d2=0; d2<dofs_per_cell; ++d2) {
@@ -126,7 +75,7 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 			     }
 				 }
      }
-		 this->postprocessValuesAtCellCenters(cellID,0)=cellOrientationMap[cellID];
+
      elementalJacobian = K_local;
      elementalResidual = Rlocal;
 
