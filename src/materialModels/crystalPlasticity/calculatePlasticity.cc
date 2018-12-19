@@ -415,26 +415,25 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
             }
 
 
-//           for (unsigned int i=0;i<this->userInputs.numSlipSystems;i++){//
+           for (unsigned int i=0;i<this->userInputs.numSlipSystems;i++){//
 
-//                    //if(s_alpha_tau(i)>(this->userInputs.saturationStress[i])){
-//                      // s_alpha_tau(i)=this->userInputs.saturationStress[i];
+                    if(s_alpha_tau(i)>(this->userInputs.saturationStress[i])){
+                       s_alpha_tau(i)=this->userInputs.saturationStress[i];
 ////abort();//
 
-//              }//
+              }//
 
-//            }//
+            }//
 
-//     for (unsigned int i=0;i<this->userInputs.numTwinSystems;i++){//
+     for (unsigned int i=0;i<this->userInputs.numTwinSystems;i++){//
 
-//                if(s_alpha_tau(this->userInputs.numSlipSystems+i)>(this->userInputs.saturationStressTwin[i])){
-//                s_alpha_tau(this->userInputs.numSlipSystems+i)=this->userInputs.saturationStressTwin[i];
+                if(s_alpha_tau(this->userInputs.numSlipSystems+i)>(this->userInputs.saturationStressTwin[i])){
+                s_alpha_tau(this->userInputs.numSlipSystems+i)=this->userInputs.saturationStressTwin[i];
 
 //abort();
-//}
+}
 
-
-//    }
+    }
 
 
 		iter1 = iter1 + 1;
