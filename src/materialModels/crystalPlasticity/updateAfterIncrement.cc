@@ -191,7 +191,8 @@ void crystalPlasticity<dim>::updateAfterIncrement()
   if(this->currentIncrement==0){
     dir += std::string("stressstrain.txt");
     outputFile.open(dir.c_str());
-    outputFile << "TrueExx" << '\t' << "TrueEyy" << '\t' << "TrueEzz" << '\t'<< "Exx"<<'\t'<<"Eyy"<<'\t'<<"Ezz"<<'\t'<<"Eyz"<<'\t'<<"Exz"<<'\t'<<"Exy"<<'\t'<<"Txx"<<'\t'<<"Tyy"<<'\t'<<"Tzz"<<'\t'<<"Tyz"<<'\t'<<"Txz"<<'\t'<<"Txy"<<'\t'<<"TwinRealVF"<<'\t'<<"TwinMade"<<'\t'<<"SlipTotal"<<'\n';
+    //outputFile << "TrueExx" << '\t' << "TrueEyy" << '\t' << "TrueEzz" << '\t'<< "Exx"<<'\t'<<"Eyy"<<'\t'<<"Ezz"<<'\t'<<"Eyz"<<'\t'<<"Exz"<<'\t'<<"Exy"<<'\t'<<"Txx"<<'\t'<<"Tyy"<<'\t'<<"Tzz"<<'\t'<<"Tyz"<<'\t'<<"Txz"<<'\t'<<"Txy"<<'\t'<<"TwinRealVF"<<'\t'<<"TwinMade"<<'\t'<<"SlipTotal"<<'\n';
+    outputFile << "Exx"<<'\t'<<"Eyy"<<'\t'<<"Ezz"<<'\t'<<"Eyz"<<'\t'<<"Exz"<<'\t'<<"Exy"<<'\t'<<"Txx"<<'\t'<<"Tyy"<<'\t'<<"Tzz"<<'\t'<<"Tyz"<<'\t'<<"Txz"<<'\t'<<"Txy"<<'\t'<<"TwinRealVF"<<'\t'<<"TwinMade"<<'\t'<<"SlipTotal"<<'\n';
  	  outputFile.close();
   }
   else{
@@ -199,7 +200,8 @@ void crystalPlasticity<dim>::updateAfterIncrement()
   }
   outputFile.open(dir.c_str(),std::fstream::app);
   if(Utilities::MPI::this_mpi_process(this->mpi_communicator)==0){
-    outputFile << global_Truestrain[0] << '\t' << global_Truestrain[1] << '\t' << global_Truestrain[2] << '\t' << global_strain[0][0]<<'\t'<<global_strain[1][1]<<'\t'<<global_strain[2][2]<<'\t'<<global_strain[1][2]<<'\t'<<global_strain[0][2]<<'\t'<<global_strain[0][1]<<'\t'<<global_stress[0][0]<<'\t'<<global_stress[1][1]<<'\t'<<global_stress[2][2]<<'\t'<<global_stress[1][2]<<'\t'<<global_stress[0][2]<<'\t'<<global_stress[0][1]<<'\t'<<F_r<<'\t'<<F_e<<'\t'<<F_s<<'\n';
+    //outputFile << global_Truestrain[0] << '\t' << global_Truestrain[1] << '\t' << global_Truestrain[2] << '\t' << global_strain[0][0]<<'\t'<<global_strain[1][1]<<'\t'<<global_strain[2][2]<<'\t'<<global_strain[1][2]<<'\t'<<global_strain[0][2]<<'\t'<<global_strain[0][1]<<'\t'<<global_stress[0][0]<<'\t'<<global_stress[1][1]<<'\t'<<global_stress[2][2]<<'\t'<<global_stress[1][2]<<'\t'<<global_stress[0][2]<<'\t'<<global_stress[0][1]<<'\t'<<F_r<<'\t'<<F_e<<'\t'<<F_s<<'\n';
+    outputFile << global_strain[0][0]<<'\t'<<global_strain[1][1]<<'\t'<<global_strain[2][2]<<'\t'<<global_strain[1][2]<<'\t'<<global_strain[0][2]<<'\t'<<global_strain[0][1]<<'\t'<<global_stress[0][0]<<'\t'<<global_stress[1][1]<<'\t'<<global_stress[2][2]<<'\t'<<global_stress[1][2]<<'\t'<<global_stress[0][2]<<'\t'<<global_stress[0][1]<<'\t'<<F_r<<'\t'<<F_e<<'\t'<<F_s<<'\n';  
   }
   outputFile.close();
 
