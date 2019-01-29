@@ -7,7 +7,7 @@ void ellipticBVP<dim>::solveLinearSystem(ConstraintMatrix& constraintmatrix, mat
 
   vectorType completely_distributed_solutionInc (locally_owned_dofs, mpi_communicator);
   SolverControl solver_control(userInputs.maxLinearSolverIterations, userInputs.relLinearSolverTolerance*b.l2_norm());
-  PETScWrappers::SolverCG solver(solver_control, mpi_communicator);
+  PETScWrappers::SolverBiCG solver(solver_control, mpi_communicator);
   PETScWrappers::PreconditionJacobi preconditioner(A);
 
   //solve Ax=b
