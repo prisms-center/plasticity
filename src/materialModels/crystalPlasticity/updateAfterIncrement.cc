@@ -117,7 +117,8 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 	slipfraction_conv=slipfraction_iter;
 	local_F_r_Twin = 0.0; //adde by Reza as a modification
 	local_F_r=0.0;
-  local_F_s=0.0;
+        local_F_s=0.0;
+	local_F_e = 0.0;
 
   char buffer[200];
   //copy rotnew to output
