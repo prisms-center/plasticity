@@ -375,8 +375,8 @@ void crystalPlasticity<dim>::quatproduct(Vector<double> &quatp,Vector<double> &q
     quatp(1) = a*quat1(1) + b*quat2(1)+ quat2(2)*quat1(3) - quat1(2)*quat2(3);
     quatp(2) = a*quat1(2) + b*quat2(2)- quat2(1)*quat1(3) + quat1(1)*quat2(3);
     quatp(3) = a*quat1(3) + b*quat2(3)+ quat2(1)*quat1(2) - quat1(1)*quat2(2);
-    //if (quatp(0) < 0)
-    //quatp.mult(-1);
+    if (quatp(0) < 0)
+       quatp.mult(-1);
 }
 //------------------------------------------------------------------------
 template <int dim>
