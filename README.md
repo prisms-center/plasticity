@@ -20,7 +20,7 @@ PRISMS-Plasticity
 <B>Installation:</B>
   Refer to the installation manual in docs/installation\ manual.pdf for detailed instructions on getting started with using the plasticity code.
 
-  This version of PRISMS-Plasticity is compatible with deal.ii 8.5.0 and 8.4.1 versions.
+  This version of PRISMS-Plasticity is compatible with deal.ii 8.5.0 and 8.4.1 versions. Also, you need to compile deal.ii without trilinos package. To do that, if you're using candi, you can turn it off in candi.cfg by commenting that as #PACKAGES="${PACKAGES} once:trilinos".
   With deal.ii installed and $DEAL_II_DIR setup, the following steps can be followed to download and compile the code.
 
   1. Clone the PRISMS Plasticity GitHub repo https://github.com/prisms-center/plasticity<br>
