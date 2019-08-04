@@ -18,7 +18,7 @@ PRISMS-Plasticity
   and Engineering under Award #DE-SC0008637
 
 <B>Installation:</B>
-  Refer to the installation manual in docs/installation\ manual.pdf for detailed instructions on getting started with using the plasticity code.
+  Refer to the installation manual in docs/installation manual.pdf for detailed instructions on getting started with using the plasticity code.
 
   you need to compile deal.ii without trilinos package. To do that, if you're using candi, you can turn it off in candi.cfg by commenting that as #PACKAGES="${PACKAGES} once:trilinos". With deal.ii installed and $DEAL_II_DIR setup, the following steps can be followed to download and compile the code.
 
