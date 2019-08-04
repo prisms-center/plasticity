@@ -1,7 +1,7 @@
 PRISMS-Plasticity
 =================
 <B>Code repository:</B> https://github.com/prisms-center/plasticity <br>
-<B>Code documentation:</B> https://goo.gl/B6lVpZ <br>
+<B>Code documentation:</B> https://github.com/prisms-center/plasticity/tree/master/docs <br>
 <B>User registration link:</B> https://goo.gl/forms/dkAdtoHzd1qsKJ673 <br>
 
 <B>What is PRISMS-Plasticity?</B>
