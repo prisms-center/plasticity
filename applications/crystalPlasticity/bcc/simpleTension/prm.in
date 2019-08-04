@@ -38,7 +38,7 @@ set Subdivisions Y                               = 1
 set Subdivisions Z                               = 1
 
 # The number of initial refinements of the coarse mesh.
-set Refine factor                                = 2
+set Refine factor                                = 3
 
 # Only written for serial runs and if number of elements < 10000
 set Write Mesh To EPS                            = false
@@ -87,7 +87,7 @@ set Number of boundary conditions                = 4
 set Time increments                              = 0.01
 
 #Total simulation time
-set Total time                                   = 50
+set Total time                                   = 20
 
 # Maximum iterations for linear solver
 set Maximum linear solver iterations             = 50000
@@ -98,18 +98,9 @@ set Relative linear solver tolerance             = 1.0e-5
 # Maximum no. of non-linear iterations
 set Maximum non linear iterations                = 4
 
-# Non-linear solver tolerance
-set Absolute nonLinear solver tolerance          = 1.0e-5
-
-# Relative non-linear solver tolerance
-set Relative nonLinear solver tolerance          = 1.0e-3
-
 ####################################
 # Elasticity parameters
 ####################################
-# Crystal structure of problem
-set Crystal Structure                            = bcc
-
 # 	Elastic Stiffness Matrix -Voigt Notation (MPa)
 set Elastic Stiffness row 1                      = 97.7e3, 82.7e3, 82.7e3, 0, 0, 0
 
@@ -155,23 +146,15 @@ set Slip Directions File                         = slipDirections.txt
 # Slip Normals File
 set Slip Normals File                            = slipNormals.txt
 
-# Ratio between backstress and CRSS during load reversal
-set Backstress Factor                            = 0.0
-
 ####################################
 # Constitutive model parameters
 ####################################
 # Stress tolerance for the yield surface (MPa)
 set Stress Tolerance                             = 1.0e-6
 
-# L2-Norm of plastic slip strain-used for load-step adaptivity
-set Max Plastic Slip L2 Norm                     = 0.8
-
 # Maximum no. of active slip search iterations
 set Max Slip Search Iterations                   = 1
 
-# Maximum no. of iterations to achieve non-linear convergence
-set Max Solver Iterations                        = 4
 
 ####################################
 # Input microstructure

@@ -38,7 +38,7 @@ set Subdivisions Y                               = 1
 set Subdivisions Z                               = 1
 
 # The number of initial refinements of the coarse mesh.
-set Refine factor                                = 2
+set Refine factor                                = 3
 
 # Only written for serial runs and if number of elements < 10000
 set Write Mesh To EPS                            = false
@@ -87,7 +87,7 @@ set Number of boundary conditions                = 4
 set Time increments                              = 0.01
 
 #Total simulation time
-set Total time                                   = 20
+set Total time                                   = 10
 
 # Maximum iterations for linear solver
 set Maximum linear solver iterations             = 100000
@@ -98,36 +98,10 @@ set Relative linear solver tolerance             = 1.0e-11
 # Maximum no. of non-linear iterations
 set Maximum non linear iterations                = 3
 
-# Non-linear solver tolerance
-set Absolute nonLinear solver tolerance          = 1.0e-18
-
-# Relative non-linear solver tolerance
-set Relative nonLinear solver tolerance          = 1.0e-3
-
-# Flag to stop problem if convergence fails
-set Stop on convergence failure                  = false
-
-####################################
-# Adaptive time-stepping parameters
-####################################
-# lag to enable adaptive time steps
-set Enable adaptive Time stepping                = false
-
-# Load step factor
-set Adaptive load step factor                    = 0.5
-
-# adaptive Load Increase Factor
-set Adaptive load increase Factor                = 1.25
-
-# Succesive Inc For Increasing Time Step
-set Succesive increment for increasing time step = 10
 
 ####################################
 # Elasticity parameters
 ####################################
-# Crystal structure of problem
-set Crystal Structure                            = hcp
-
 #   Elastic Stiffness Matrix -Voigt Notation (MPa)
 set Elastic Stiffness row 1                      = 59.3e3, 25.70e3, 21.40e3, 0, 0, 0
 
@@ -173,9 +147,6 @@ set Slip Directions File                         = slipDirections.txt
 # Slip Normals File
 set Slip Normals File                            = slipNormals.txt
 
-# Ratio between backstress and CRSS during load reversal
-set Backstress Factor                            = 0.0
-
 ####################################
 # Twin parameters
 ####################################
@@ -210,7 +181,7 @@ set Twin Directions File                         = twinDirections.txt
 set Twin Normals File                            = twinNormals.txt
 
 # characteristic twin shear
-set Characteristic Twin Shear                    = 0.126
+set Characteristic Twin Shear                    = 0.129
 
 ####################################
 # Constitutive model parameters
@@ -218,14 +189,10 @@ set Characteristic Twin Shear                    = 0.126
 # Stress tolerance for the yield surface (MPa)
 set Stress Tolerance                             = 1.0e-9
 
-# L2-Norm of plastic slip strain-used for load-step adaptivity
-set Max Plastic Slip L2 Norm                     = 2.5
 
 # Maximum no. of active slip search iterations
 set Max Slip Search Iterations                   = 1
 
-# Maximum no. of iterations to achieve non-linear convergence
-set Max Solver Iterations                        = 1
 
 ####################################
 # Input microstructure

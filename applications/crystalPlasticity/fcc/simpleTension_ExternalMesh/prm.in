@@ -34,6 +34,9 @@ set Use external mesh                            = true
 #Name of external mesh file
 set Name of file containing external mesh        = n10-id2_hex.msh
 
+#The external mesh parameter: The ratio of defiend region size to the Domain size
+set External mesh parameter        = 0.05
+
 ####################################
 # Solver output parameters
 ####################################
@@ -45,7 +48,7 @@ set Write Output                                 = true
 set Output Directory                             = results
 
 # Skip Output Steps
-set Skip Output Steps                            = 0
+set Skip Output Steps                            = 100000
 
 # Output Equivalent strain
 set Output Equivalent strain                     = true
@@ -78,19 +81,19 @@ set Number of boundary conditions                = 4
 set Time increments                              = 0.01
 
 #Total simulation time
-set Total time                                   = 5
+set Total time                                   = 10
 
 # Maximum iterations for linear solver
 set Maximum linear solver iterations             = 50000
 
 # Relative linear solver tolerance
-set Relative linear solver tolerance             = 1.0e-5
+set Relative linear solver tolerance             = 1.0e-10
 
 # Maximum no. of non-linear iterations
 set Maximum non linear iterations                = 4
 
 # Non-linear solver tolerance
-set Absolute nonLinear solver tolerance          = 1.0e-5
+set Absolute nonLinear solver tolerance          = 1.0e-18
 
 # Relative non-linear solver tolerance
 set Relative nonLinear solver tolerance          = 1.0e-3
@@ -98,8 +101,6 @@ set Relative nonLinear solver tolerance          = 1.0e-3
 ####################################
 # Elasticity parameters
 ####################################
-# Crystal structure of problem
-set Crystal Structure                            = fcc
 
 #   Elastic Stiffness Matrix -Voigt Notation (MPa)
 set Elastic Stiffness row 1                      = 170.0e3, 124.0e3, 124.0e3, 0, 0, 0
@@ -146,9 +147,6 @@ set Slip Directions File                         = slipDirections.txt
 # Slip Normals File
 set Slip Normals File                            = slipNormals.txt
 
-# Ratio between backstress and CRSS during load reversal
-set Backstress Factor                            = 0.0
-
 ####################################
 # Constitutive model parameters
 ####################################
@@ -162,13 +160,10 @@ set Max Plastic Slip L2 Norm                     = 0.8
 set Max Slip Search Iterations                   = 1
 
 # Maximum no. of iterations to achieve non-linear convergence
-set Max Solver Iterations                        = 4
+set Max Solver Iterations                        = 1
 
 ####################################
 # Input microstructure
 ####################################
-# Number of header Lines in grain orientations file
-set Header Lines GrainID File                    = 5
-
 # Grain orientations file name
 set Orientations file name                       = orientations.txt

@@ -52,7 +52,7 @@ void crystalPlasticity<dim>::reorient() {
             Omega=0.0; Omega.add(1.0,R_new); Omega.add(-1.0,R_old);
             temp=Omega; temp.mTmult(Omega,R_new);
 
-            rold=rotnew[i][j];
+            rold=rotnew_conv[i][j];
 
 
             Omega_vec(0)=-0.5*(Omega(1,2)-Omega(2,1));Omega_vec(1)=0.5*(Omega(0,2)-Omega(2,0));Omega_vec(2)=-0.5*(Omega(0,1)-Omega(1,0));
@@ -72,7 +72,7 @@ void crystalPlasticity<dim>::reorient() {
             rnew=0.0; rnew.add(1.0,rold); rnew.add(1.0,dr);
 
 
-            rotnew[i][j]=rnew;
+            rotnew_conv[i][j]=rnew;
 
 
         }

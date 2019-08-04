@@ -38,7 +38,7 @@ set Subdivisions Y                               = 1
 set Subdivisions Z                               = 1
 
 # The number of initial refinements of the coarse mesh.
-set Refine factor                                = 2
+set Refine factor                                = 3
 
 # Only written for serial runs and if number of elements < 10000
 set Write Mesh To EPS                            = false
@@ -54,7 +54,7 @@ set Write Output                                 = true
 set Output Directory                             = results
 
 # Skip Output Steps
-set Skip Output Steps                            = 0
+set Skip Output Steps                            = 2
 
 # Output Equivalent strain
 set Output Equivalent strain                     = true

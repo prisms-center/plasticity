@@ -27,21 +27,7 @@ void crystalPlasticity<dim>::inactive_slip_removal(Vector<double> &active, Vecto
     Vector<double> tempv3;
     temp7.vmult(x_beta1,b_PA);
 
-    //Check for model tolerance and activate adaptive time-stepping, if required
-    if(x_beta1.l2_norm()> this->userInputs.modelMaxPlasticSlipL2Norm){
-#ifdef enableAdaptiveTimeStepping
-#if enableAdaptiveTimeStepping==true
-        char buffer[200];
-        sprintf (buffer, "processor %u: time-step is very large. Consider reducing the time-step. current model norm: %12.6e, tolerance: %12.6e\n", this->triangulation.locally_owned_subdomain(), x_beta1.l2_norm(), modelMaxPlasticSlipL2Norm);
-        std::cout <<buffer;
-        this->loadFactorSetByModel*=adaptiveLoadStepFactor;
-        this->resetIncrement=true;
-        throw 0;
-#endif
-#endif
-    }
-
-    x_beta2=x_beta1; x_beta1.reinit(n_slip_systems);
+    x_beta2=x_beta1; x_beta1.reinit(n_Tslip_systems);
     x_beta1=0;
     for(unsigned int i=0;i<n_PA;i++){
         x_beta1(PA(i))=x_beta2(i);
@@ -58,7 +44,7 @@ void crystalPlasticity<dim>::inactive_slip_removal(Vector<double> &active, Vecto
     while (flag1==0){
 
         iter=0;
-        for(unsigned int i=0;i<n_slip_systems;i++){
+        for(unsigned int i=0;i<n_Tslip_systems;i++){
             if((x_beta_old(i)+x_beta1(i))<0){
                 iter++;
             }
@@ -68,7 +54,7 @@ void crystalPlasticity<dim>::inactive_slip_removal(Vector<double> &active, Vecto
 
             row.reinit(iter);
             iter=0;
-            for(unsigned int i=0;i<n_slip_systems;i++){
+            for(unsigned int i=0;i<n_Tslip_systems;i++){
                 if((x_beta_old(i)+x_beta1(i))<0){
                     row(iter)=i;
                     iter++;
@@ -114,7 +100,7 @@ void crystalPlasticity<dim>::inactive_slip_removal(Vector<double> &active, Vecto
 
             x_beta1.reinit(n_PA-n_IA_new); temp7.vmult(x_beta1,b_PA);
             x_beta2.reinit(n_PA-n_IA_new); x_beta2=x_beta1;
-            x_beta1.reinit(n_slip_systems);x_beta1=0.0;
+            x_beta1.reinit(n_Tslip_systems);x_beta1=0.0;
             n_PA=n_PA-n_IA_new;
 
             for(unsigned int i=0;i<n_PA;i++){
@@ -129,7 +115,7 @@ void crystalPlasticity<dim>::inactive_slip_removal(Vector<double> &active, Vecto
     }
 
     active.reinit(n_PA); active=PA;
-    x_beta.reinit(n_slip_systems); x_beta=x_beta1;
+    x_beta.reinit(n_Tslip_systems); x_beta=x_beta1;
     x_beta_old.add(1.0,x_beta);
 
 

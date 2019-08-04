@@ -6,28 +6,28 @@ template <int dim>
 void ellipticBVP<dim>::init(){
   std::string line;
   double totalU;
-  unsigned int i,faceID,dof;
+  unsigned int faceID,dof;
 
-  for(i=0;i<2*dim;i++){
+  for(unsigned int i=0;i<2*dim;i++){
     faceDOFConstrained.push_back({false,false,false});
     deluConstraint.push_back({0.0,0.0,0.0});
   }
 
 
   pcout << "number of MPI processes: "
-	<< Utilities::MPI::n_mpi_processes(mpi_communicator)
-	<< std::endl;
+  << Utilities::MPI::n_mpi_processes(mpi_communicator)
+  << std::endl;
 
   //initialize FE objects
   dofHandler.distribute_dofs (FE);
   locally_owned_dofs = dofHandler.locally_owned_dofs ();
   DoFTools::extract_locally_relevant_dofs (dofHandler, locally_relevant_dofs);
   pcout << "number of elements: "
-	<< triangulation.n_global_active_cells()
-	<< std::endl
-	<< "number of degrees of freedom: "
-	<< dofHandler.n_dofs()
-	<< std::endl;
+  << triangulation.n_global_active_cells()
+  << std::endl
+  << "number of degrees of freedom: "
+  << dofHandler.n_dofs()
+  << std::endl;
 
   //initialize FE objects for scalar field which will be used for post processing
   dofHandler_Scalar.distribute_dofs (FE_Scalar);
@@ -60,36 +60,47 @@ void ellipticBVP<dim>::init(){
   DynamicSparsityPattern dsp (locally_relevant_dofs);
   DoFTools::make_sparsity_pattern (dofHandler, dsp, constraints, false);
   SparsityTools::distribute_sparsity_pattern (dsp,
-					      dofHandler.n_locally_owned_dofs_per_processor(),
-					      mpi_communicator,
-					      locally_relevant_dofs);
-  jacobian.reinit (locally_owned_dofs, locally_owned_dofs, dsp, mpi_communicator);
+    dofHandler.n_locally_owned_dofs_per_processor(),
+    mpi_communicator,
+    locally_relevant_dofs);
+    jacobian.reinit (locally_owned_dofs, locally_owned_dofs, dsp, mpi_communicator);
 
-  // Read boundary conditions
-  std::ifstream BCfile(this->userInputs.BCfilename);
-  //read data
+    // Read boundary conditions
+    if(!userInputs.useVelocityGrad){
+      std::ifstream BCfile(userInputs.BCfilename);
 
-  if (BCfile.is_open()){
-    pcout << "Reading boundary conditions\n";
-    //skip header lines
-    for (i=0; i<userInputs.BCheaderLines; i++) std::getline (BCfile,line);
-    for (i=0; i<userInputs.NumberofBCs; i++){
-    	std::getline (BCfile,line);
-    	std::stringstream ss(line);
-      ss>>faceID>>dof;
-      faceDOFConstrained[faceID-1][dof-1]=true;
-      ss>>totalU;
-      deluConstraint[faceID-1][dof-1]=totalU/totalIncrements;
-    }
+      //read data
+      if (BCfile.is_open()){
+        pcout << "Reading boundary conditions\n";
+        //skip header lines
+        for (unsigned int i=0; i<userInputs.BCheaderLines; i++) std::getline (BCfile,line);
+        for (unsigned int i=0; i<userInputs.NumberofBCs; i++){
+          std::getline (BCfile,line);
+          std::stringstream ss(line);
+          ss>>faceID>>dof;
+          faceDOFConstrained[faceID-1][dof-1]=true;
+          ss>>totalU;
+          deluConstraint[faceID-1][dof-1]=totalU/totalIncrements;
+        }
 
-    if(userInputs.enableCyclicLoading){
-        deluConstraint[userInputs.cyclicLoadingFace-1][userInputs.cyclicLoadingDOF-1]=deluConstraint[userInputs.cyclicLoadingFace-1][userInputs.cyclicLoadingDOF-1]*totalIncrements*userInputs.delT/userInputs.quarterCycleTime;
+        if(userInputs.enableCyclicLoading){
+          deluConstraint[userInputs.cyclicLoadingFace-1][userInputs.cyclicLoadingDOF-1]=deluConstraint[userInputs.cyclicLoadingFace-1][userInputs.cyclicLoadingDOF-1]*totalIncrements*userInputs.delT/userInputs.quarterCycleTime;
+        }
       }
-  }
+    }
+    else{
+      targetVelGrad.reinit(3,3); targetVelGrad=0.0;
 
-  //apply initial conditions
-  applyInitialConditions();
-  solutionWithGhosts=solution;
-  oldSolution=solution;
-}
-#include "../../include/ellipticBVP_template_instantiations.h"
+      for(unsigned int i=0;i<3;i++){
+        for(unsigned int j=0;j<3;j++){
+          targetVelGrad[i][j] = userInputs.targetVelGrad[i][j];
+        }
+      }
+    }
+    Fprev=IdentityMatrix(dim);
+    //apply initial conditions
+    applyInitialConditions();
+    solutionWithGhosts=solution;
+    oldSolution=solution;
+  }
+  #include "../../include/ellipticBVP_template_instantiations.h"

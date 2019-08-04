@@ -1,0 +1,6 @@
+**Total header lines = 5
+**Grain ID File
+**3D Volume has dimensions [1 x 1 x 1] voxels
+**Data arranged in a 2D array of 1 x 1 integer values
+**
+1 2 3

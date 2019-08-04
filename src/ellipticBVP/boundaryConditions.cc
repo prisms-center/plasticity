@@ -6,13 +6,16 @@ template <int dim>
 void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value){
   unsigned int i ;
 
-  //pcout<<node[0]<<" "<<node[1]<<" "<<node[2]<<" "<<dof<<std::endl;
+  Vector<double> externalMeshParameterBCs(dim);
+  for (unsigned int i=0; i<dim; ++i) {
+    externalMeshParameterBCs(i)=userInputs.externalMeshParameter*userInputs.span[i];
+  }
 
   if(userInputs.enableCyclicLoading){
     if(dof==(userInputs.cyclicLoadingDOF-1)){
       switch (userInputs.cyclicLoadingFace){
         case 1:
-        if (node[0] == 0.0)
+        if (node[0] <= externalMeshParameterBCs(0))
         {
           if(fmod((currentIncrement*delT),cycleTime)<userInputs.quarterCycleTime){
             flag=true; value=deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
@@ -22,7 +25,7 @@ void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned 
         break;
       }
         case 2:
-        if (node[0] == userInputs.span[0])
+        if (node[0] >= (userInputs.span[0]-externalMeshParameterBCs(0)))
         {
           //pcout<<"Positive12"<<std::endl;
           if(fmod((currentIncrement*delT),cycleTime)<userInputs.quarterCycleTime){
@@ -36,7 +39,7 @@ void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned 
         }
         break;
         case 3:
-        if (node[1] == 0.0)
+        if (node[1] <= externalMeshParameterBCs(1))
           if(fmod((currentIncrement*delT),cycleTime)<userInputs.quarterCycleTime){
             flag=true; value=deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
           else if(fmod((currentIncrement*delT),cycleTime)<3*userInputs.quarterCycleTime){
@@ -44,7 +47,7 @@ void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned 
           else{flag=true; value=deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
         break;
         case 4:
-        if (node[1] == userInputs.span[1])
+        if (node[1] >= (userInputs.span[1]-externalMeshParameterBCs(1)))
           if(fmod((currentIncrement*delT),cycleTime)<userInputs.quarterCycleTime){
             flag=true; value=deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
           else if(fmod((currentIncrement*delT),cycleTime)<3*userInputs.quarterCycleTime){
@@ -52,7 +55,7 @@ void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned 
           else{flag=true; value=deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
         break;
         case 5:
-        if (node[2] == 0.0)
+        if (node[2] <= externalMeshParameterBCs(2))
           if(fmod((currentIncrement*delT),cycleTime)<userInputs.quarterCycleTime){
             flag=true; value=deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
           else if(fmod((currentIncrement*delT),cycleTime)<3*userInputs.quarterCycleTime){
@@ -60,7 +63,7 @@ void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned 
           else{flag=true; value=deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
         break;
         case 6:
-        if (node[2] == userInputs.span[2])
+        if (node[2] >= (userInputs.span[2]-externalMeshParameterBCs(2)))
           if(fmod((currentIncrement*delT),cycleTime)<userInputs.quarterCycleTime){
             flag=true; value=deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
           else if(fmod((currentIncrement*delT),cycleTime)<3*userInputs.quarterCycleTime){
@@ -70,40 +73,51 @@ void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned 
     }
   }
 
-  for (i=0;i<2*dim;i++){
-    if(faceDOFConstrained[i][dof])
-      switch (i+1){
-        case 1:
-        if (node[0] == 0.0)
-            {//pcout<<i<<" "<<dof<<std::endl;
-              flag=true; value=deluConstraint[i][dof];return;}
-        break;
-        case 2:
-        if (node[0] == userInputs.span[0])
-            {//pcout<<i<<" "<<dof<<std::endl;
-              flag=true; value=deluConstraint[i][dof];return;}
-        break;
-        case 3:
-        if (node[1] == 0.0)
-            {//pcout<<i<<" "<<dof<<std::endl;
-              flag=true; value=deluConstraint[i][dof];return;}
-        break;
-        case 4:
-        if (node[1] == userInputs.span[1])
-            {//pcout<<i<<" "<<dof<<std::endl;
-              flag=true; value=deluConstraint[i][dof];return;}
-        break;
-        case 5:
-        if (node[2] == 0.0)
-            {//pcout<<i<<" "<<dof<<std::endl;
-              flag=true; value=deluConstraint[i][dof];return;}
-        break;
-        case 6:
-        if (node[2] == userInputs.span[2])
-            {//pcout<<i<<" "<<dof<<std::endl;
-              flag=true; value=deluConstraint[i][dof];return;}
-      }
+  if(!userInputs.useVelocityGrad){
+    for (i=0;i<2*dim;i++){
+      if(faceDOFConstrained[i][dof])
+        switch (i+1){
+          case 1:
+          if (node[0] <= externalMeshParameterBCs(0))
+              {//pcout<<i<<" "<<dof<<std::endl;
+                flag=true; value=deluConstraint[i][dof];return;}
+          break;
+          case 2:
+          if (node[0] >= (userInputs.span[0]-externalMeshParameterBCs(0)))
+              {//pcout<<i<<" "<<dof<<std::endl;
+                flag=true; value=deluConstraint[i][dof];return;}
+          break;
+          case 3:
+          if (node[1] <= externalMeshParameterBCs(1))
+              {//pcout<<i<<" "<<dof<<std::endl;
+                flag=true; value=deluConstraint[i][dof];return;}
+          break;
+          case 4:
+          if (node[1] >= (userInputs.span[1]-externalMeshParameterBCs(1)))
+              {//pcout<<i<<" "<<dof<<std::endl;
+                flag=true; value=deluConstraint[i][dof];return;}
+          break;
+          case 5:
+          if (node[2] <= externalMeshParameterBCs(2))
+              {//pcout<<i<<" "<<dof<<std::endl;
+                flag=true; value=deluConstraint[i][dof];return;}
+          break;
+          case 6:
+          if (node[2] >= (userInputs.span[2]-externalMeshParameterBCs(2)))
+              {//pcout<<i<<" "<<dof<<std::endl;
+                flag=true; value=deluConstraint[i][dof];return;}
+        }
+    }
   }
+
+  if(userInputs.useVelocityGrad){
+    value = 0;
+    for(i=0;i<dim;i++)
+      value+=deltaF[dof][i]*node[i];
+    flag=true;
+    return;
+  }
+
 }
 
 //methods to apply dirichlet BC's

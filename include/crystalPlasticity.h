@@ -23,6 +23,11 @@ public:
      *calculates the texture of the deformed polycrystal
      */
     void reorient();
+    /**
+     *Initiation of Multiphase in calculatePlasticity.cc
+     */
+    void multiphaseInit(unsigned int cellID,
+                             unsigned int quadPtID);
 
     /**
      *calculates the material tangent modulus dPK1/dF at the quadrature point
@@ -92,6 +97,10 @@ private:
     void updateBeforeIteration();
 
     void updateBeforeIncrement();
+
+    void writeQuadratureOutput(std::string _outputDirectory, unsigned int _currentIncrement);
+
+    void addToQuadratureOutput(std::vector<double>& _QuadOutputs);
 
     /**
      *calculates the rotation matrix (OrientationMatrix) from the rodrigues vector (r)
@@ -181,17 +190,8 @@ private:
      * volume weighted Lagrangian strain per core
      */
     FullMatrix<double> local_strain;
-    
-    /**
-     * volume weighted True strain per core
-     */
-     Vector<double> local_Truestrain;
 
-    /**
-     * volume averaged global True strain
-     */
-     Vector<double> global_Truestrain;
-    
+
     /**
      * volume averaged global Cauchy stress
      */
@@ -206,20 +206,23 @@ private:
      * Tangent modulus dPK1/dF
      */
     Tensor<4,dim,double> dP_dF;
-    double No_Elem, N_qpts,local_F_e,local_F_r,F_e,F_r,local_microvol,microvol,F_s,local_F_s,F_T,local_F_r_Twin,F_r_Twin;
-    double signstress;
-    double backstressflag;
+    double No_Elem, N_qpts,local_F_e,local_F_r,F_e,F_r,local_microvol,microvol,F_s,local_F_s,F_T;
 
-
+    std::vector<std::vector<double> > outputQuadrature;
     /**
      * Stores original crystal orientations as rodrigues vectors by element number and quadratureID
      */
-    std::vector<std::vector<  Vector<double> > >  rot;
+    std::vector<std::vector<  Vector<double> > >  rot_conv,rot_iter;
 
     /**
      * Stores deformed crystal orientations as rodrigues vectors by element number and quadratureID
      */
-    std::vector<std::vector<  Vector<double> > >  rotnew;
+    std::vector<std::vector<  Vector<double> > >  rotnew_conv,rotnew_iter;
+
+    /**
+     * Stores the additional voxel data by element number and quadratureID
+     */
+    std::vector<std::vector<  Vector<double> > >  VoxelData;
 
     //Store history variables
     /**
@@ -243,18 +246,44 @@ private:
     std::vector< std::vector< FullMatrix<double> > > Fe_conv;
 
     /**
+     * Stores Cauchy Stress by element number and quadratureID at each increment
+     */
+    std::vector< std::vector< FullMatrix<double> > > CauchyStress;
+
+    /**
      * Stores slip resistance by element number and quadratureID at each iteration
      */
     std::vector<std::vector<  Vector<double> > >  s_alpha_iter;
 
     std::vector<std::vector<  Vector<double> > >  s_alpha_conv;
 
-    std::vector<std::vector<  std::vector<double> > >  twinfraction_iter,twinfraction_iter_Twin, slipfraction_iter,twinfraction_conv, slipfraction_conv,twinfraction_conv_Twin;
-    std::vector<std::vector<double> >  twin_ouput;
-    std::vector<std::vector<double> >  twin;
+    std::vector<std::vector<  Vector<double> > >  W_kh_conv, W_kh_iter;
+  	Vector<double> Wkh_tau;
 
-    unsigned int n_slip_systems,n_twin_systems; //No. of slip systems
-    FullMatrix<double> m_alpha,n_alpha,q,sres,Dmat, eulerAngles2;
+    /**
+     * Stores state variables by element number and quadratureID
+     */
+    std::vector<std::vector<  Vector<double> > >  stateVar_conv,stateVar_iter;
+    Vector<double> UserMatConstants;
+
+    std::vector<std::vector<  std::vector<double> > >  twinfraction_iter, slipfraction_iter,twinfraction_conv, slipfraction_conv;
+    std::vector<std::vector<unsigned int> >  twin_ouput;
+    std::vector<std::vector<unsigned int> >  twin_iter, twin_conv;
+
+    std::vector<unsigned int>  n_slip_systems_MultiPhase, n_twin_systems_MultiPhase, n_Tslip_systems_MultiPhase, n_UserMatStateVar_MultiPhase;
+    std::vector<std::vector<unsigned int>> phase;
+
+    unsigned int n_slip_systems,n_Tslip_systems,n_twin_systems,n_slip_systems_SinglePhase,n_Tslip_systems_SinglePhase,n_twin_systems_SinglePhase, phaseMaterial, numberofPhases, n_UserMatStateVar, n_UserMatStateVar_SinglePhase; //No. of slip systems
+    FullMatrix<double> m_alpha,n_alpha,m_alpha_SinglePhase,n_alpha_SinglePhase,m_alpha_MultiPhase,n_alpha_MultiPhase,q,sres,Dmat,Dmat_SinglePhase,Dmat_MultiPhase, eulerAngles2;
+
+    double twinShear;
+    Vector<double> initialHardeningModulus, saturationStress, powerLawExponent, initialHardeningModulusTwin, saturationStressTwin, powerLawExponentTwin;
+
+    FullMatrix<double> elasticStiffnessMatrix;
+    Vector<double> C_1, C_2; // Backstress
+    bool enableTwinning;
+    double twinThresholdFraction;
+    double twinSaturationFactor;
 
     /**
      * slip resistance

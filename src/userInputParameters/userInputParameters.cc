@@ -21,10 +21,10 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
 
   span.push_back(parameter_handler.get_double("Domain size X"));
   if (dim > 1){
-       span.push_back(parameter_handler.get_double("Domain size Y"));
-         if (dim > 2){
-             span.push_back(parameter_handler.get_double("Domain size Z"));
-         }
+    span.push_back(parameter_handler.get_double("Domain size Y"));
+    if (dim > 2){
+      span.push_back(parameter_handler.get_double("Domain size Z"));
+    }
   }
 
   subdivisions.push_back(parameter_handler.get_integer("Subdivisions X"));
@@ -42,14 +42,17 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
   //External mesh parameters
   readExternalMesh = parameter_handler.get_bool("Use external mesh");
   externalMeshFileName = parameter_handler.get("Name of file containing external mesh");
+  externalMeshParameter = parameter_handler.get_double("External mesh parameter");
 
   //output parameters
   writeOutput = parameter_handler.get_bool("Write Output");
   outputDirectory = parameter_handler.get("Output Directory");
   skipOutputSteps=parameter_handler.get_integer("Skip Output Steps");
+  writeQuadratureOutput = parameter_handler.get_bool("Write Quadrature Output");
+  skipQuadratureOutputSteps=parameter_handler.get_integer("Skip Quadrature Output Steps");
 
   if(skipOutputSteps<=0)
-      skipOutputSteps=1;
+  skipOutputSteps=1;
 
   delT=parameter_handler.get_double("Time increments");
   totalTime=parameter_handler.get_double("Total time");
@@ -57,6 +60,12 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
   BCfilename=parameter_handler.get("Boundary condition filename");
   BCheaderLines=parameter_handler.get_integer("BC file number of header lines");
   NumberofBCs=parameter_handler.get_integer("Number of boundary conditions");
+
+  useVelocityGrad=parameter_handler.get_bool("Use velocity gradient BC");
+
+  targetVelGrad.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Velocity gradient row 1"))));
+  targetVelGrad.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Velocity gradient row 2"))));
+  targetVelGrad.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Velocity gradient row 3"))));
 
   enableCyclicLoading=parameter_handler.get_bool("Enable cyclic loading");
   cyclicLoadingFace=parameter_handler.get_integer("Cyclic loading face");
@@ -79,48 +88,77 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
   adaptiveLoadIncreaseFactor=parameter_handler.get_double("Adaptive load increase Factor");
   succesiveIncForIncreasingTimeStep=parameter_handler.get_double("Succesive increment for increasing time step");
 
-  crystalStructure = parameter_handler.get("Crystal Structure");
+
+  additionalVoxelInfo=parameter_handler.get_integer("Additional Voxel info");
+  enableMultiphase = parameter_handler.get_bool("Enable Multiphase");
+  numberofPhases=parameter_handler.get_integer("Number of Phases");
+
+
+  enableUserMaterialModel = parameter_handler.get_bool("Enable User Material Model");
+
+  enableUserMaterialModel1 = parameter_handler.get_bool("Enable User Material Model 1");
+  numberofUserMatConstants1=parameter_handler.get_integer("Number of User Material Constants 1");
+  numberofUserMatStateVar1=parameter_handler.get_integer("Number of User Material State Variables 1");
+  UserMatConstants1=dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("User Material Constants 1")));
+  UserMatStateVar1=dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("User Material State Variables Initial Values 1")));
 
   //elasticStiffness.reinit(6,6);
-  elasticStiffness.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness row 1"))));
-  elasticStiffness.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness row 2"))));
-  elasticStiffness.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness row 3"))));
-  elasticStiffness.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness row 4"))));
-  elasticStiffness.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness row 5"))));
-  elasticStiffness.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness row 6"))));
+  elasticStiffness1.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness row 1"))));
+  elasticStiffness1.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness row 2"))));
+  elasticStiffness1.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness row 3"))));
+  elasticStiffness1.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness row 4"))));
+  elasticStiffness1.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness row 5"))));
+  elasticStiffness1.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness row 6"))));
 
-  numSlipSystems=parameter_handler.get_integer("Number of Slip Systems");
-  latentHardeningRatio=parameter_handler.get_double("Latent Hardening Ratio");
-  initialSlipResistance = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Slip Resistance")));
-  initialHardeningModulus = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Hardening Modulus")));
-  powerLawExponent = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Power Law Exponent")));
-  saturationStress = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Saturation Stress")));
-  slipDirectionsFile = parameter_handler.get("Slip Directions File");
-  slipNormalsFile = parameter_handler.get("Slip Normals File");
+  numSlipSystems1=parameter_handler.get_integer("Number of Slip Systems");
+  latentHardeningRatio1=parameter_handler.get_double("Latent Hardening Ratio");
+  initialSlipResistance1 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Slip Resistance")));
+  initialHardeningModulus1 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Hardening Modulus")));
+  powerLawExponent1 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Power Law Exponent")));
+  saturationStress1 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Saturation Stress")));
+  slipDirectionsFile1 = parameter_handler.get("Slip Directions File");
+  slipNormalsFile1 = parameter_handler.get("Slip Normals File");
+  enableKinematicHardening1 = parameter_handler.get_bool("Enable Kinematic Hardening");
 
-  enableTwinning = parameter_handler.get_bool("Twinning enabled");
-  if(enableTwinning){
-    numTwinSystems=parameter_handler.get_integer("Number of Twin Systems");
-    initialSlipResistanceTwin = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Slip Resistance Twin")));
-    initialHardeningModulusTwin = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Hardening Modulus Twin")));
-    powerLawExponentTwin = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Power Law Exponent Twin")));
-    saturationStressTwin = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Saturation Stress Twin")));
-    twinDirectionsFile = parameter_handler.get("Twin Directions File");
-    twinNormalsFile = parameter_handler.get("Twin Normals File");}
+  if(enableKinematicHardening1){
+    C_1_slip1 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("C_1 Slip Kinematic Hardening")));
+    C_2_slip1 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("C_2 Slip Kinematic Hardening")));
+  }
+
+
+  enableTwinning1 = parameter_handler.get_bool("Twinning enabled");
+  if(enableTwinning1){
+    numTwinSystems1=parameter_handler.get_integer("Number of Twin Systems");
+    initialSlipResistanceTwin1 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Slip Resistance Twin")));
+    initialHardeningModulusTwin1 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Hardening Modulus Twin")));
+    powerLawExponentTwin1 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Power Law Exponent Twin")));
+    saturationStressTwin1 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Saturation Stress Twin")));
+    twinDirectionsFile1 = parameter_handler.get("Twin Directions File");
+    twinNormalsFile1 = parameter_handler.get("Twin Normals File");
+    if(enableKinematicHardening1){
+      C_1_twin1 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("C_1 Twin Kinematic Hardening")));
+      C_2_twin1 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("C_2 Twin Kinematic Hardening")));
+    }
+
+
+  }
   else{
     pcout<<"Twinning is not enabled \n";
 
-    numTwinSystems=1;
-    initialSlipResistanceTwin.push_back(10e5);
-    initialHardeningModulusTwin.push_back(1);
-    powerLawExponentTwin.push_back(0);
-    saturationStressTwin.push_back(10e10);
+    numTwinSystems1=1;
+    initialSlipResistanceTwin1.push_back(10e5);
+    initialHardeningModulusTwin1.push_back(1);
+    powerLawExponentTwin1.push_back(0);
+    saturationStressTwin1.push_back(10e10);
+    C_1_twin1.push_back(0);
+    C_2_twin1.push_back(0);
+
   }
 
-  backstressFactor=parameter_handler.get_double("Backstress Factor");
-  twinThresholdFraction=parameter_handler.get_double("Twin Threshold Fraction");
-  twinSaturationFactor=parameter_handler.get_double("Twin Saturation Factor");
-  twinShear=parameter_handler.get_double("Characteristic Twin Shear");
+
+  twinThresholdFraction1=parameter_handler.get_double("Twin Threshold Fraction");
+  twinSaturationFactor1=parameter_handler.get_double("Twin Saturation Factor");
+  twinShear1=parameter_handler.get_double("Characteristic Twin Shear");
 
   modelStressTolerance=parameter_handler.get_double("Stress Tolerance");
   modelMaxSlipSearchIterations=parameter_handler.get_integer("Max Slip Search Iterations");
@@ -130,14 +168,211 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
   grainIDFile = parameter_handler.get("Grain ID file name");
   numPts.push_back(parameter_handler.get_double("Voxels in X direction"));
   if (dim > 1){
-       numPts.push_back(parameter_handler.get_double("Voxels in Y direction"));
-         if (dim > 2){
-             numPts.push_back(parameter_handler.get_double("Voxels in Z direction"));
-         }
+    numPts.push_back(parameter_handler.get_double("Voxels in Y direction"));
+    if (dim > 2){
+      numPts.push_back(parameter_handler.get_double("Voxels in Z direction"));
+    }
   }
 
   grainOrientationsFile = parameter_handler.get("Orientations file name");
   headerLinesGrainIDFile=parameter_handler.get_integer("Header Lines GrainID File");
+
+
+
+  if (enableMultiphase&&(numberofPhases>=2)){
+    enableUserMaterialModel2 = parameter_handler.get_bool("Enable User Material Model 2");
+    numberofUserMatConstants2=parameter_handler.get_integer("Number of User Material Constants 2");
+    numberofUserMatStateVar2=parameter_handler.get_integer("Number of User Material State Variables 2");
+    UserMatConstants2=dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("User Material Constants 2")));
+    UserMatStateVar2=dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("User Material State Variables Initial Values 2")));
+
+    //elasticStiffness.reinit(6,6);
+    elasticStiffness2.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness 2 row 1"))));
+    elasticStiffness2.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness 2 row 2"))));
+    elasticStiffness2.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness 2 row 3"))));
+    elasticStiffness2.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness 2 row 4"))));
+    elasticStiffness2.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness 2 row 5"))));
+    elasticStiffness2.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness 2 row 6"))));
+
+    numSlipSystems2=parameter_handler.get_integer("Number of Slip Systems 2");
+    latentHardeningRatio2=parameter_handler.get_double("Latent Hardening Ratio 2");
+    initialSlipResistance2 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Slip Resistance 2")));
+    initialHardeningModulus2 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Hardening Modulus 2")));
+    powerLawExponent2 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Power Law Exponent 2")));
+    saturationStress2 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Saturation Stress 2")));
+    slipDirectionsFile2 = parameter_handler.get("Slip Directions File 2");
+    slipNormalsFile2 = parameter_handler.get("Slip Normals File 2");
+    enableKinematicHardening2 = parameter_handler.get_bool("Enable Kinematic Hardening 2");
+
+    if(enableKinematicHardening2){
+      C_1_slip2 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("C_1 Slip Kinematic Hardening 2")));
+      C_2_slip2 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("C_2 Slip Kinematic Hardening 2")));
+    }
+
+
+    enableTwinning2 = parameter_handler.get_bool("Twinning enabled 2");
+    if(enableTwinning2){
+      numTwinSystems2=parameter_handler.get_integer("Number of Twin Systems 2");
+      initialSlipResistanceTwin2 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Slip Resistance Twin 2")));
+      initialHardeningModulusTwin2 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Hardening Modulus Twin 2")));
+      powerLawExponentTwin2 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Power Law Exponent Twin 2")));
+      saturationStressTwin2 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Saturation Stress Twin 2")));
+      twinDirectionsFile2 = parameter_handler.get("Twin Directions File 2");
+      twinNormalsFile2 = parameter_handler.get("Twin Normals File 2");
+      if(enableKinematicHardening2){
+        C_1_twin2 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("C_1 Twin Kinematic Hardening 2")));
+        C_2_twin2 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("C_2 Twin Kinematic Hardening 2")));
+      }
+
+
+    }
+    else{
+      pcout<<"Twinning is not enabled \n";
+
+      numTwinSystems2=1;
+      initialSlipResistanceTwin2.push_back(10e5);
+      initialHardeningModulusTwin2.push_back(1);
+      powerLawExponentTwin2.push_back(0);
+      saturationStressTwin2.push_back(10e10);
+      C_1_twin2.push_back(0);
+      C_2_twin2.push_back(0);
+
+    }
+
+    twinThresholdFraction2=parameter_handler.get_double("Twin Threshold Fraction 2");
+    twinSaturationFactor2=parameter_handler.get_double("Twin Saturation Factor 2");
+    twinShear2=parameter_handler.get_double("Characteristic Twin Shear 2");
+
+    if (numberofPhases>=3){
+      enableUserMaterialModel3 = parameter_handler.get_bool("Enable User Material Model 3");
+      numberofUserMatConstants3=parameter_handler.get_integer("Number of User Material Constants 3");
+      numberofUserMatStateVar3=parameter_handler.get_integer("Number of User Material State Variables 3");
+      UserMatConstants3=dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("User Material Constants 3")));
+      UserMatStateVar3=dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("User Material State Variables Initial Values 3")));
+      //elasticStiffness.reinit(6,6);
+      elasticStiffness3.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness 3 row 1"))));
+      elasticStiffness3.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness 3 row 2"))));
+      elasticStiffness3.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness 3 row 3"))));
+      elasticStiffness3.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness 3 row 4"))));
+      elasticStiffness3.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness 3 row 5"))));
+      elasticStiffness3.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness 3 row 6"))));
+
+      numSlipSystems3=parameter_handler.get_integer("Number of Slip Systems 3");
+      latentHardeningRatio3=parameter_handler.get_double("Latent Hardening Ratio 3");
+      initialSlipResistance3 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Slip Resistance 3")));
+      initialHardeningModulus3 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Hardening Modulus 3")));
+      powerLawExponent3 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Power Law Exponent 3")));
+      saturationStress3 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Saturation Stress 3")));
+      slipDirectionsFile3 = parameter_handler.get("Slip Directions File 3");
+      slipNormalsFile3 = parameter_handler.get("Slip Normals File 3");
+      enableKinematicHardening3 = parameter_handler.get_bool("Enable Kinematic Hardening 3");
+
+      if(enableKinematicHardening3){
+        C_1_slip3 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("C_1 Slip Kinematic Hardening 3")));
+        C_2_slip3 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("C_2 Slip Kinematic Hardening 3")));
+      }
+
+
+      enableTwinning3 = parameter_handler.get_bool("Twinning enabled 3");
+      if(enableTwinning3){
+        numTwinSystems3=parameter_handler.get_integer("Number of Twin Systems 3");
+        initialSlipResistanceTwin3 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Slip Resistance Twin 3")));
+        initialHardeningModulusTwin3 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Hardening Modulus Twin 3")));
+        powerLawExponentTwin3 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Power Law Exponent Twin 3")));
+        saturationStressTwin3 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Saturation Stress Twin 3")));
+        twinDirectionsFile3 = parameter_handler.get("Twin Directions File 3");
+        twinNormalsFile3 = parameter_handler.get("Twin Normals File 3");
+        if(enableKinematicHardening3){
+          C_1_twin3 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("C_1 Twin Kinematic Hardening 3")));
+          C_2_twin3 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("C_2 Twin Kinematic Hardening 3")));
+        }
+
+
+      }
+      else{
+        pcout<<"Twinning is not enabled \n";
+
+        numTwinSystems3=1;
+        initialSlipResistanceTwin3.push_back(10e5);
+        initialHardeningModulusTwin3.push_back(1);
+        powerLawExponentTwin3.push_back(0);
+        saturationStressTwin3.push_back(10e10);
+        C_1_twin3.push_back(0);
+        C_2_twin3.push_back(0);
+
+      }
+
+      twinThresholdFraction3=parameter_handler.get_double("Twin Threshold Fraction 3");
+      twinSaturationFactor3=parameter_handler.get_double("Twin Saturation Factor 3");
+      twinShear3=parameter_handler.get_double("Characteristic Twin Shear 3");
+
+      if (numberofPhases>=4){
+        enableUserMaterialModel4 = parameter_handler.get_bool("Enable User Material Model 4");
+        numberofUserMatConstants4=parameter_handler.get_integer("Number of User Material Constants 4");
+        numberofUserMatStateVar4=parameter_handler.get_integer("Number of User Material State Variables 4");
+        UserMatConstants4=dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("User Material Constants 4")));
+        UserMatStateVar4=dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("User Material State Variables Initial Values 4")));
+
+        //elasticStiffness.reinit(6,6);
+        elasticStiffness4.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness 4 row 1"))));
+        elasticStiffness4.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness 4 row 2"))));
+        elasticStiffness4.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness 4 row 3"))));
+        elasticStiffness4.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness 4 row 4"))));
+        elasticStiffness4.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness 4 row 5"))));
+        elasticStiffness4.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness 4 row 6"))));
+
+        numSlipSystems4=parameter_handler.get_integer("Number of Slip Systems 4");
+        latentHardeningRatio4=parameter_handler.get_double("Latent Hardening Ratio 4");
+        initialSlipResistance4 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Slip Resistance 4")));
+        initialHardeningModulus4 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Hardening Modulus 4")));
+        powerLawExponent4 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Power Law Exponent 4")));
+        saturationStress4 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Saturation Stress 4")));
+        slipDirectionsFile4 = parameter_handler.get("Slip Directions File 4");
+        slipNormalsFile4 = parameter_handler.get("Slip Normals File 4");
+        enableKinematicHardening4 = parameter_handler.get_bool("Enable Kinematic Hardening 4");
+
+        if(enableKinematicHardening4){
+          C_1_slip4 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("C_1 Slip Kinematic Hardening 4")));
+          C_2_slip4 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("C_2 Slip Kinematic Hardening 4")));
+        }
+
+
+        enableTwinning4 = parameter_handler.get_bool("Twinning enabled 4");
+        if(enableTwinning4){
+          numTwinSystems4=parameter_handler.get_integer("Number of Twin Systems 4");
+          initialSlipResistanceTwin4 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Slip Resistance Twin 4")));
+          initialHardeningModulusTwin4 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Hardening Modulus Twin 4")));
+          powerLawExponentTwin4 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Power Law Exponent Twin 4")));
+          saturationStressTwin4 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Saturation Stress Twin 4")));
+          twinDirectionsFile4 = parameter_handler.get("Twin Directions File 4");
+          twinNormalsFile4 = parameter_handler.get("Twin Normals File 4");
+          if(enableKinematicHardening4){
+            C_1_twin4 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("C_1 Twin Kinematic Hardening 4")));
+            C_2_twin4 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("C_2 Twin Kinematic Hardening 4")));
+          }
+
+
+        }
+        else{
+          pcout<<"Twinning is not enabled \n";
+
+          numTwinSystems4=1;
+          initialSlipResistanceTwin4.push_back(10e5);
+          initialHardeningModulusTwin4.push_back(1);
+          powerLawExponentTwin4.push_back(0);
+          saturationStressTwin4.push_back(10e10);
+          C_1_twin4.push_back(0);
+          C_2_twin4.push_back(0);
+
+        }
+
+        twinThresholdFraction4=parameter_handler.get_double("Twin Threshold Fraction 4");
+        twinSaturationFactor4=parameter_handler.get_double("Twin Saturation Factor 4");
+        twinShear4=parameter_handler.get_double("Characteristic Twin Shear 4");
+      }
+    }
+
+  }
 
 }
 
@@ -159,6 +394,7 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
 
   parameter_handler.declare_entry("Use external mesh","false",dealii::Patterns::Bool(),"Flag to indicate whether to use external mesh");
   parameter_handler.declare_entry("Name of file containing external mesh","",dealii::Patterns::Anything(),"Name of external mesh file");
+  parameter_handler.declare_entry("External mesh parameter","0",dealii::Patterns::Double(),"The external mesh parameter: The ratio of defiend region size to the Domain size");
 
   parameter_handler.declare_entry("Time increments","-1",dealii::Patterns::Double(),"delta T for every increment");
   parameter_handler.declare_entry("Total time","-1",dealii::Patterns::Double(),"Total simulation time");
@@ -166,6 +402,11 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Boundary condition filename","boundaryConditions.txt",dealii::Patterns::Anything(),"File name containing BC information");
   parameter_handler.declare_entry("BC file number of header lines","1",dealii::Patterns::Integer(),"BC file number of header lines");
   parameter_handler.declare_entry("Number of boundary conditions","1",dealii::Patterns::Integer(),"Number of boundary conditions");
+
+  parameter_handler.declare_entry("Use velocity gradient BC","false",dealii::Patterns::Bool(),"Flag to indicate whether to use velocity gradient tensor to apply BCs");
+  parameter_handler.declare_entry("Velocity gradient row 1","",dealii::Patterns::List(dealii::Patterns::Double()),"Velocity gradient tensor including the multiplication factor ");
+  parameter_handler.declare_entry("Velocity gradient row 2","",dealii::Patterns::List(dealii::Patterns::Double()),"Velocity gradient tensor including the multiplication factor ");
+  parameter_handler.declare_entry("Velocity gradient row 3","",dealii::Patterns::List(dealii::Patterns::Double()),"Velocity gradient tensor including the multiplication factor ");
 
   parameter_handler.declare_entry("Enable cyclic loading","false",dealii::Patterns::Bool(),"Flag to indicate if cyclic loading is enabled");
   parameter_handler.declare_entry("Cyclic loading face","1",dealii::Patterns::Integer(),"Face that is cyclically loaded");
@@ -175,6 +416,8 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Write Output","false",dealii::Patterns::Bool(),"Flag to write output vtu and pvtu files");
   parameter_handler.declare_entry("Output Directory",".",dealii::Patterns::Anything(),"Output Directory");
   parameter_handler.declare_entry("Skip Output Steps","-1",dealii::Patterns::Integer(),"Skip Output Steps");
+  parameter_handler.declare_entry("Write Quadrature Output","false",dealii::Patterns::Bool(),"Flag to write quadrature output");
+  parameter_handler.declare_entry("Skip Quadrature Output Steps","-1",dealii::Patterns::Integer(),"Skip Quadrature Output Steps");
   parameter_handler.declare_entry("Output Equivalent strain","false",dealii::Patterns::Bool(),"Output Equivalent strain");
   parameter_handler.declare_entry("Output Equivalent stress","false",dealii::Patterns::Bool(),"Output Equivalent stress");
   parameter_handler.declare_entry("Output Grain ID","false",dealii::Patterns::Bool(),"Output Grain ID");
@@ -191,7 +434,19 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Adaptive load increase Factor","-1",dealii::Patterns::Double(),"adaptive Load Increase Factor");
   parameter_handler.declare_entry("Succesive increment for increasing time step","-1",dealii::Patterns::Double(),"Succesive Inc For Increasing Time Step");
 
-  parameter_handler.declare_entry("Crystal Structure","",dealii::Patterns::Anything(),"Crystal structure of problem");
+
+
+  parameter_handler.declare_entry("Additional Voxel info","0",dealii::Patterns::Integer(),"Number of Additional Voxel info Besides three orientation components and Phase if multiphase is enabled");
+  parameter_handler.declare_entry("Enable Multiphase","false",dealii::Patterns::Bool(),"Flag to indicate if Multiphase is enabled");
+  parameter_handler.declare_entry("Number of Phases","1",dealii::Patterns::Integer(),"Number of phases in the sample");
+
+  parameter_handler.declare_entry("Enable User Material Model","false",dealii::Patterns::Bool(),"Flag to indicate if User Material Model is enabled");
+
+  parameter_handler.declare_entry("Enable User Material Model 1","false",dealii::Patterns::Bool(),"Flag to indicate if User Material Model is enabled Phase 1");
+  parameter_handler.declare_entry("Number of User Material Constants 1","0",dealii::Patterns::Integer(),"Number of User Material Constants in a Material model Phase 1");
+  parameter_handler.declare_entry("Number of User Material State Variables 1","0",dealii::Patterns::Integer(),"Number of User Material State Variables in a Material model Phase 1");
+  parameter_handler.declare_entry("User Material Constants 1","",dealii::Patterns::List(dealii::Patterns::Double()),"Material Constants in a Material model Phase 1");
+  parameter_handler.declare_entry("User Material State Variables Initial Values 1","",dealii::Patterns::List(dealii::Patterns::Double()),"Material State Variables in a Material model Phase 1");
 
   parameter_handler.declare_entry("Elastic Stiffness row 1","",dealii::Patterns::List(dealii::Patterns::Double()),"	Elastic Stiffness Matrix -Voigt Notation (MPa)");
   parameter_handler.declare_entry("Elastic Stiffness row 2","",dealii::Patterns::List(dealii::Patterns::Double()),"	Elastic Stiffness Matrix -Voigt Notation (MPa)");
@@ -208,6 +463,10 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Saturation Stress","",dealii::Patterns::List(dealii::Patterns::Double()),"Saturation stress");
   parameter_handler.declare_entry("Slip Directions File","",dealii::Patterns::Anything(),"Slip Directions File");
   parameter_handler.declare_entry("Slip Normals File","",dealii::Patterns::Anything(),"Slip Normals File");
+  parameter_handler.declare_entry("Enable Kinematic Hardening","false",dealii::Patterns::Bool(),"Flag to indicate if kinematic hardening is enabled");
+  parameter_handler.declare_entry("C_1 Slip Kinematic Hardening","",dealii::Patterns::List(dealii::Patterns::Double()),"C_1 Slip Kinematic Hardening parameters");
+  parameter_handler.declare_entry("C_2 Slip Kinematic Hardening","",dealii::Patterns::List(dealii::Patterns::Double()),"C_2 Slip Kinematic Hardening parameters");
+
 
   parameter_handler.declare_entry("Twinning enabled","false",dealii::Patterns::Bool(),"Flag to indicate if system twins");
   parameter_handler.declare_entry("Number of Twin Systems","-1",dealii::Patterns::Integer(),"Number of Twin Systems");
@@ -218,7 +477,9 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Twin Directions File","",dealii::Patterns::Anything(),"Twin Directions File");
   parameter_handler.declare_entry("Twin Normals File","",dealii::Patterns::Anything(),"Twin Normals File");
 
-  parameter_handler.declare_entry("Backstress Factor","-1",dealii::Patterns::Double(),"Ratio between backstress and CRSS during load reversal");
+  parameter_handler.declare_entry("C_1 Twin Kinematic Hardening","",dealii::Patterns::List(dealii::Patterns::Double()),"C_1 Twin Kinematic Hardening parameters");
+  parameter_handler.declare_entry("C_2 Twin Kinematic Hardening","",dealii::Patterns::List(dealii::Patterns::Double()),"C_2 Twin Kinematic Hardening parameters");
+
   parameter_handler.declare_entry("Twin Threshold Fraction","-1",dealii::Patterns::Double(),"Threshold fraction of characteristic twin shear (<1)");
   parameter_handler.declare_entry("Twin Saturation Factor","-1",dealii::Patterns::Double(),"Twin growth saturation factor  (<(1-twinThresholdFraction))");
   parameter_handler.declare_entry("Characteristic Twin Shear","-1",dealii::Patterns::Double(),"characteristic twin shear");
@@ -235,5 +496,145 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
 
   parameter_handler.declare_entry("Orientations file name","",dealii::Patterns::Anything(),"Grain orientations file name");
   parameter_handler.declare_entry("Header Lines GrainID File","0",dealii::Patterns::Integer(), "Number of header Lines in grain orientations file");
+
+
+
+
+  //if (enableMultiphase&&(numberofPhases>=2)){
+  parameter_handler.declare_entry("Enable User Material Model 2","false",dealii::Patterns::Bool(),"Flag to indicate if User Material Model is enabled Phase 2");
+  parameter_handler.declare_entry("Number of User Material Constants 2","0",dealii::Patterns::Integer(),"Number of User Material Constants in a Material model Phase 2");
+  parameter_handler.declare_entry("Number of User Material State Variables 2","0",dealii::Patterns::Integer(),"Number of User Material State Variables in a Material model Phase 2");
+  parameter_handler.declare_entry("User Material Constants 2","",dealii::Patterns::List(dealii::Patterns::Double()),"Material Constants in a Material model Phase 2");
+  parameter_handler.declare_entry("User Material State Variables Initial Values 2","",dealii::Patterns::List(dealii::Patterns::Double()),"Material State Variables in a Material model Phase 2");
+
+  parameter_handler.declare_entry("Elastic Stiffness 2 row 1","",dealii::Patterns::List(dealii::Patterns::Double()),"	Elastic Stiffness Phase 2 Matrix -Voigt Notation (MPa)");
+  parameter_handler.declare_entry("Elastic Stiffness 2 row 2","",dealii::Patterns::List(dealii::Patterns::Double()),"	Elastic Stiffness Phase 2 Matrix -Voigt Notation (MPa)");
+  parameter_handler.declare_entry("Elastic Stiffness 2 row 3","",dealii::Patterns::List(dealii::Patterns::Double()),"	Elastic Stiffness Phase 2 Matrix -Voigt Notation (MPa)");
+  parameter_handler.declare_entry("Elastic Stiffness 2 row 4","",dealii::Patterns::List(dealii::Patterns::Double()),"	Elastic Stiffness Phase 2 Matrix -Voigt Notation (MPa)");
+  parameter_handler.declare_entry("Elastic Stiffness 2 row 5","",dealii::Patterns::List(dealii::Patterns::Double()),"	Elastic Stiffness Phase 2 Matrix -Voigt Notation (MPa)");
+  parameter_handler.declare_entry("Elastic Stiffness 2 row 6","",dealii::Patterns::List(dealii::Patterns::Double()),"	Elastic Stiffness Phase 2 Matrix -Voigt Notation (MPa)");
+
+  parameter_handler.declare_entry("Number of Slip Systems 2","-1",dealii::Patterns::Integer(),"Number of Slip Systems Phase 2");
+  parameter_handler.declare_entry("Latent Hardening Ratio 2","-1",dealii::Patterns::Double(),"Latent Hardening Ratio Phase 2");
+  parameter_handler.declare_entry("Initial Slip Resistance 2","",dealii::Patterns::List(dealii::Patterns::Double()),"RSS of the slip sytems Phase 2");
+  parameter_handler.declare_entry("Initial Hardening Modulus 2","",dealii::Patterns::List(dealii::Patterns::Double()),"Heardening moduli of slip systems Phase 2");
+  parameter_handler.declare_entry("Power Law Exponent 2","",dealii::Patterns::List(dealii::Patterns::Double()),"Power law coefficient Phase 2");
+  parameter_handler.declare_entry("Saturation Stress 2","",dealii::Patterns::List(dealii::Patterns::Double()),"Saturation stress Phase 2");
+  parameter_handler.declare_entry("Slip Directions File 2","",dealii::Patterns::Anything(),"Slip Directions File Phase 2");
+  parameter_handler.declare_entry("Slip Normals File 2","",dealii::Patterns::Anything(),"Slip Normals File Phase 2");
+  parameter_handler.declare_entry("Enable Kinematic Hardening 2","false",dealii::Patterns::Bool(),"Flag to indicate if kinematic hardening is enabled Phase 2");
+  parameter_handler.declare_entry("C_1 Slip Kinematic Hardening 2","",dealii::Patterns::List(dealii::Patterns::Double()),"C_1 Slip Kinematic Hardening parameters Phase 2");
+  parameter_handler.declare_entry("C_2 Slip Kinematic Hardening 2","",dealii::Patterns::List(dealii::Patterns::Double()),"C_2 Slip Kinematic Hardening parameters Phase 2");
+
+
+  parameter_handler.declare_entry("Twinning enabled 2","false",dealii::Patterns::Bool(),"Flag to indicate if system twins Phase 2");
+  parameter_handler.declare_entry("Number of Twin Systems 2","-1",dealii::Patterns::Integer(),"Number of Twin Systems Phase 2");
+  parameter_handler.declare_entry("Initial Slip Resistance Twin 2","",dealii::Patterns::List(dealii::Patterns::Double()),"Initial CRSS of the twin sytems Phase 2");
+  parameter_handler.declare_entry("Initial Hardening Modulus Twin 2","",dealii::Patterns::List(dealii::Patterns::Double()),"Hardening moduli of twin systems Phase 2");
+  parameter_handler.declare_entry("Power Law Exponent Twin 2","",dealii::Patterns::List(dealii::Patterns::Double()),"Power law exponents of twin systems Phase 2");
+  parameter_handler.declare_entry("Saturation Stress Twin 2","",dealii::Patterns::List(dealii::Patterns::Double()),"Saturation stress of twin systems Phase 2");
+  parameter_handler.declare_entry("Twin Directions File 2","",dealii::Patterns::Anything(),"Twin Directions File Phase 2");
+  parameter_handler.declare_entry("Twin Normals File 2","",dealii::Patterns::Anything(),"Twin Normals File Phase 2");
+
+  parameter_handler.declare_entry("C_1 Twin Kinematic Hardening 2","",dealii::Patterns::List(dealii::Patterns::Double()),"C_1 Twin Kinematic Hardening parameters Phase 2");
+  parameter_handler.declare_entry("C_2 Twin Kinematic Hardening 2","",dealii::Patterns::List(dealii::Patterns::Double()),"C_2 Twin Kinematic Hardening parameters Phase 2");
+
+
+  parameter_handler.declare_entry("Twin Threshold Fraction 2","-1",dealii::Patterns::Double(),"Threshold fraction of characteristic twin shear (<1) Phase 2");
+  parameter_handler.declare_entry("Twin Saturation Factor 2","-1",dealii::Patterns::Double(),"Twin growth saturation factor  (<(1-twinThresholdFraction)) Phase 2");
+  parameter_handler.declare_entry("Characteristic Twin Shear 2","-1",dealii::Patterns::Double(),"characteristic twin shear Phase 2");
+
+  //  if (numberofPhases>=3){
+  parameter_handler.declare_entry("Enable User Material Model 3","false",dealii::Patterns::Bool(),"Flag to indicate if User Material Model is enabled Phase 3");
+  parameter_handler.declare_entry("Number of User Material Constants 3","0",dealii::Patterns::Integer(),"Number of User Material Constants in a Material model Phase 3");
+  parameter_handler.declare_entry("Number of User Material State Variables 3","0",dealii::Patterns::Integer(),"Number of User Material State Variables in a Material model Phase 3");
+  parameter_handler.declare_entry("User Material Constants 3","",dealii::Patterns::List(dealii::Patterns::Double()),"Material Constants in a Material model Phase 3");
+  parameter_handler.declare_entry("User Material State Variables Initial Values 3","",dealii::Patterns::List(dealii::Patterns::Double()),"Material State Variables in a Material model Phase 3");
+
+  parameter_handler.declare_entry("Elastic Stiffness 3 row 1","",dealii::Patterns::List(dealii::Patterns::Double()),"	Elastic Stiffness Phase 3 Matrix -Voigt Notation (MPa)");
+  parameter_handler.declare_entry("Elastic Stiffness 3 row 2","",dealii::Patterns::List(dealii::Patterns::Double()),"	Elastic Stiffness Phase 3 Matrix -Voigt Notation (MPa)");
+  parameter_handler.declare_entry("Elastic Stiffness 3 row 3","",dealii::Patterns::List(dealii::Patterns::Double()),"	Elastic Stiffness Phase 3 Matrix -Voigt Notation (MPa)");
+  parameter_handler.declare_entry("Elastic Stiffness 3 row 4","",dealii::Patterns::List(dealii::Patterns::Double()),"	Elastic Stiffness Phase 3 Matrix -Voigt Notation (MPa)");
+  parameter_handler.declare_entry("Elastic Stiffness 3 row 5","",dealii::Patterns::List(dealii::Patterns::Double()),"	Elastic Stiffness Phase 3 Matrix -Voigt Notation (MPa)");
+  parameter_handler.declare_entry("Elastic Stiffness 3 row 6","",dealii::Patterns::List(dealii::Patterns::Double()),"	Elastic Stiffness Phase 3 Matrix -Voigt Notation (MPa)");
+
+  parameter_handler.declare_entry("Number of Slip Systems 3","-1",dealii::Patterns::Integer(),"Number of Slip Systems Phase 3");
+  parameter_handler.declare_entry("Latent Hardening Ratio 3","-1",dealii::Patterns::Double(),"Latent Hardening Ratio Phase 3");
+  parameter_handler.declare_entry("Initial Slip Resistance 3","",dealii::Patterns::List(dealii::Patterns::Double()),"RSS of the slip sytems Phase 3");
+  parameter_handler.declare_entry("Initial Hardening Modulus 3","",dealii::Patterns::List(dealii::Patterns::Double()),"Heardening moduli of slip systems Phase 3");
+  parameter_handler.declare_entry("Power Law Exponent 3","",dealii::Patterns::List(dealii::Patterns::Double()),"Power law coefficient Phase 3");
+  parameter_handler.declare_entry("Saturation Stress 3","",dealii::Patterns::List(dealii::Patterns::Double()),"Saturation stress Phase 3");
+  parameter_handler.declare_entry("Slip Directions File 3","",dealii::Patterns::Anything(),"Slip Directions File Phase 3");
+  parameter_handler.declare_entry("Slip Normals File 3","",dealii::Patterns::Anything(),"Slip Normals File Phase 3");
+  parameter_handler.declare_entry("Enable Kinematic Hardening 3","false",dealii::Patterns::Bool(),"Flag to indicate if kinematic hardening is enabled Phase 3");
+  parameter_handler.declare_entry("C_1 Slip Kinematic Hardening 3","",dealii::Patterns::List(dealii::Patterns::Double()),"C_1 Slip Kinematic Hardening parameters Phase 3");
+  parameter_handler.declare_entry("C_2 Slip Kinematic Hardening 3","",dealii::Patterns::List(dealii::Patterns::Double()),"C_2 Slip Kinematic Hardening parameters Phase 3");
+
+
+  parameter_handler.declare_entry("Twinning enabled 3","false",dealii::Patterns::Bool(),"Flag to indicate if system twins Phase 3");
+  parameter_handler.declare_entry("Number of Twin Systems 3","-1",dealii::Patterns::Integer(),"Number of Twin Systems Phase 3");
+  parameter_handler.declare_entry("Initial Slip Resistance Twin 3","",dealii::Patterns::List(dealii::Patterns::Double()),"Initial CRSS of the twin sytems Phase 3");
+  parameter_handler.declare_entry("Initial Hardening Modulus Twin 3","",dealii::Patterns::List(dealii::Patterns::Double()),"Hardening moduli of twin systems Phase 3");
+  parameter_handler.declare_entry("Power Law Exponent Twin 3","",dealii::Patterns::List(dealii::Patterns::Double()),"Power law exponents of twin systems Phase 3");
+  parameter_handler.declare_entry("Saturation Stress Twin 3","",dealii::Patterns::List(dealii::Patterns::Double()),"Saturation stress of twin systems Phase 3");
+  parameter_handler.declare_entry("Twin Directions File 3","",dealii::Patterns::Anything(),"Twin Directions File Phase 3");
+  parameter_handler.declare_entry("Twin Normals File 3","",dealii::Patterns::Anything(),"Twin Normals File Phase 3");
+
+  parameter_handler.declare_entry("C_1 Twin Kinematic Hardening 3","",dealii::Patterns::List(dealii::Patterns::Double()),"C_1 Twin Kinematic Hardening parameters Phase 3");
+  parameter_handler.declare_entry("C_2 Twin Kinematic Hardening 3","",dealii::Patterns::List(dealii::Patterns::Double()),"C_2 Twin Kinematic Hardening parameters Phase 3");
+
+
+  parameter_handler.declare_entry("Twin Threshold Fraction 3","-1",dealii::Patterns::Double(),"Threshold fraction of characteristic twin shear (<1) Phase 3");
+  parameter_handler.declare_entry("Twin Saturation Factor 3","-1",dealii::Patterns::Double(),"Twin growth saturation factor  (<(1-twinThresholdFraction)) Phase 3");
+  parameter_handler.declare_entry("Characteristic Twin Shear 3","-1",dealii::Patterns::Double(),"characteristic twin shear Phase 3");
+
+  //  if (numberofPhases>=4){
+  parameter_handler.declare_entry("Enable User Material Model 4","false",dealii::Patterns::Bool(),"Flag to indicate if User Material Model is enabled Phase 4");
+  parameter_handler.declare_entry("Number of User Material Constants 4","0",dealii::Patterns::Integer(),"Number of User Material Constants in a Material model Phase 4");
+  parameter_handler.declare_entry("Number of User Material State Variables 4","0",dealii::Patterns::Integer(),"Number of User Material State Variables in a Material model Phase 4");
+  parameter_handler.declare_entry("User Material Constants 4","",dealii::Patterns::List(dealii::Patterns::Double()),"Material Constants in a Material model Phase 4");
+  parameter_handler.declare_entry("User Material State Variables Initial Values 4","",dealii::Patterns::List(dealii::Patterns::Double()),"Material State Variables in a Material model Phase 4");
+
+  parameter_handler.declare_entry("Elastic Stiffness 4 row 1","",dealii::Patterns::List(dealii::Patterns::Double()),"	Elastic Stiffness Phase 4 Matrix -Voigt Notation (MPa)");
+  parameter_handler.declare_entry("Elastic Stiffness 4 row 2","",dealii::Patterns::List(dealii::Patterns::Double()),"	Elastic Stiffness Phase 4 Matrix -Voigt Notation (MPa)");
+  parameter_handler.declare_entry("Elastic Stiffness 4 row 3","",dealii::Patterns::List(dealii::Patterns::Double()),"	Elastic Stiffness Phase 4 Matrix -Voigt Notation (MPa)");
+  parameter_handler.declare_entry("Elastic Stiffness 4 row 4","",dealii::Patterns::List(dealii::Patterns::Double()),"	Elastic Stiffness Phase 4 Matrix -Voigt Notation (MPa)");
+  parameter_handler.declare_entry("Elastic Stiffness 4 row 5","",dealii::Patterns::List(dealii::Patterns::Double()),"	Elastic Stiffness Phase 4 Matrix -Voigt Notation (MPa)");
+  parameter_handler.declare_entry("Elastic Stiffness 4 row 6","",dealii::Patterns::List(dealii::Patterns::Double()),"	Elastic Stiffness Phase 4 Matrix -Voigt Notation (MPa)");
+
+  parameter_handler.declare_entry("Number of Slip Systems 4","-1",dealii::Patterns::Integer(),"Number of Slip Systems Phase 4");
+  parameter_handler.declare_entry("Latent Hardening Ratio 4","-1",dealii::Patterns::Double(),"Latent Hardening Ratio Phase 4");
+  parameter_handler.declare_entry("Initial Slip Resistance 4","",dealii::Patterns::List(dealii::Patterns::Double()),"RSS of the slip sytems Phase 4");
+  parameter_handler.declare_entry("Initial Hardening Modulus 4","",dealii::Patterns::List(dealii::Patterns::Double()),"Heardening moduli of slip systems Phase 4");
+  parameter_handler.declare_entry("Power Law Exponent 4","",dealii::Patterns::List(dealii::Patterns::Double()),"Power law coefficient Phase 4");
+  parameter_handler.declare_entry("Saturation Stress 4","",dealii::Patterns::List(dealii::Patterns::Double()),"Saturation stress Phase 4");
+  parameter_handler.declare_entry("Slip Directions File 4","",dealii::Patterns::Anything(),"Slip Directions File Phase 4");
+  parameter_handler.declare_entry("Slip Normals File 4","",dealii::Patterns::Anything(),"Slip Normals File Phase 4");
+  parameter_handler.declare_entry("Enable Kinematic Hardening 4","false",dealii::Patterns::Bool(),"Flag to indicate if kinematic hardening is enabled Phase 4");
+  parameter_handler.declare_entry("C_1 Slip Kinematic Hardening 4","",dealii::Patterns::List(dealii::Patterns::Double()),"C_1 Slip Kinematic Hardening parameters Phase 4");
+  parameter_handler.declare_entry("C_2 Slip Kinematic Hardening 4","",dealii::Patterns::List(dealii::Patterns::Double()),"C_2 Slip Kinematic Hardening parameters Phase 4");
+
+
+  parameter_handler.declare_entry("Twinning enabled 4","false",dealii::Patterns::Bool(),"Flag to indicate if system twins Phase 4");
+  parameter_handler.declare_entry("Number of Twin Systems 4","-1",dealii::Patterns::Integer(),"Number of Twin Systems Phase 4");
+  parameter_handler.declare_entry("Initial Slip Resistance Twin 4","",dealii::Patterns::List(dealii::Patterns::Double()),"Initial CRSS of the twin sytems Phase 4");
+  parameter_handler.declare_entry("Initial Hardening Modulus Twin 4","",dealii::Patterns::List(dealii::Patterns::Double()),"Hardening moduli of twin systems Phase 4");
+  parameter_handler.declare_entry("Power Law Exponent Twin 4","",dealii::Patterns::List(dealii::Patterns::Double()),"Power law exponents of twin systems Phase 4");
+  parameter_handler.declare_entry("Saturation Stress Twin 4","",dealii::Patterns::List(dealii::Patterns::Double()),"Saturation stress of twin systems Phase 4");
+  parameter_handler.declare_entry("Twin Directions File 4","",dealii::Patterns::Anything(),"Twin Directions File Phase 4");
+  parameter_handler.declare_entry("Twin Normals File 4","",dealii::Patterns::Anything(),"Twin Normals File Phase 4");
+
+  parameter_handler.declare_entry("C_1 Twin Kinematic Hardening 4","",dealii::Patterns::List(dealii::Patterns::Double()),"C_1 Twin Kinematic Hardening parameters Phase 4");
+  parameter_handler.declare_entry("C_2 Twin Kinematic Hardening 4","",dealii::Patterns::List(dealii::Patterns::Double()),"C_2 Twin Kinematic Hardening parameters Phase 4");
+
+
+  parameter_handler.declare_entry("Twin Threshold Fraction 4","-1",dealii::Patterns::Double(),"Threshold fraction of characteristic twin shear (<1) Phase 4");
+  parameter_handler.declare_entry("Twin Saturation Factor 4","-1",dealii::Patterns::Double(),"Twin growth saturation factor  (<(1-twinThresholdFraction)) Phase 4");
+  parameter_handler.declare_entry("Characteristic Twin Shear 4","-1",dealii::Patterns::Double(),"characteristic twin shear Phase 4");
+
+  //    }
+
+  //  }
+  //  }
 
 }

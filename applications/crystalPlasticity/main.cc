@@ -37,7 +37,8 @@ int main (int argc, char **argv)
   					    userInputs.grainOrientationsFile,
   					    userInputs.numPts,
   					    userInputs.span);}
-      problem.orientations.loadOrientationVector(userInputs.grainOrientationsFile);
+      problem.orientations.loadOrientationVector(userInputs.grainOrientationsFile, userInputs.enableMultiphase, userInputs.additionalVoxelInfo);
+
       problem.run ();
     }
   catch (std::exception &exc)
