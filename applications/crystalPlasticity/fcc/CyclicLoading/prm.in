@@ -115,11 +115,6 @@ set Relative linear solver tolerance             = 1.0e-10
 # Maximum no. of non-linear iterations
 set Maximum non linear iterations                = 4
 
-# Non-linear solver tolerance
-set Absolute nonLinear solver tolerance          = 1.0e-5
-
-# Relative non-linear solver tolerance
-set Relative nonLinear solver tolerance          = 1.0e-3
 
 ####################################
 # Elasticity parameters
