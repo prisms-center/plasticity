@@ -92,11 +92,6 @@ set Relative linear solver tolerance             = 1.0e-10
 # Maximum no. of non-linear iterations
 set Maximum non linear iterations                = 4
 
-# Non-linear solver tolerance
-set Absolute nonLinear solver tolerance          = 1.0e-18
-
-# Relative non-linear solver tolerance
-set Relative nonLinear solver tolerance          = 1.0e-3
 
 ####################################
 # Elasticity parameters
@@ -153,14 +148,10 @@ set Slip Normals File                            = slipNormals.txt
 # Stress tolerance for the yield surface (MPa)
 set Stress Tolerance                             = 1.0e-6
 
-# L2-Norm of plastic slip strain-used for load-step adaptivity
-set Max Plastic Slip L2 Norm                     = 0.8
 
 # Maximum no. of active slip search iterations
 set Max Slip Search Iterations                   = 1
 
-# Maximum no. of iterations to achieve non-linear convergence
-set Max Solver Iterations                        = 1
 
 ####################################
 # Input microstructure
