@@ -36,77 +36,8 @@ void ellipticBVP<dim>::assemble(){
 	//Compute values for the current element
 	fe_values.reinit (cell);
 	cell->get_dof_indices (local_dof_indices);
-
-#if enableUserModel == 1
-	//fill component indices
-	std::vector<unsigned int> componentIndices(dofs_per_cell);
-	for (unsigned int d1=0; d1<dofs_per_cell; ++d1) {
-	  componentIndices[d1] = fe_values.get_fe().system_to_component_index(d1).first;
-	}
-	//quadrature loop
-	for (unsigned int q=0; q<num_quad_points; ++q){
-	  std::vector<double> quadResidual(dofs_per_cell, 0.0), quadJacobian(dofs_per_cell*dofs_per_cell, 0.0);
-
-	  //load history variables
-	  std::vector<double> history(numQuadHistoryVariables);
-	  for (unsigned int i=0; i<numQuadHistoryVariables; i++){
-	    history[i]= quadHistory(cellID, q, i);
-	  }
-
-	  //load shape function values and shape function gradient values
-	  std::vector<double> shapeValues(dofs_per_cell), shapeGrads(dofs_per_cell*dim);
-	  for (unsigned int d1=0; d1<dofs_per_cell; ++d1) {
-	    shapeValues[d1]=fe_values.shape_value(d1, q);
-	    for (unsigned int i=0; i<dim; ++i) {
-	      shapeGrads[d1*dim+i]=fe_values.shape_grad(d1, q)[i];
-	    }
-	  }
-
-	  //compute the deformation gradient at this quad point
-	  double gradU[dim*dim], F[dim*dim];
-	  for (unsigned int d1=0; d1<dim*dim; ++d1){
-	    gradU[d1]=0.0;
-	  }
-	  for (unsigned int d1=0; d1<dofs_per_cell; ++d1){
-	    unsigned int i = fe_values.get_fe().system_to_component_index(d1).first;
-	    for (unsigned int j=0; j<dim; ++j){
-	      double ULocal=solutionWithGhosts[local_dof_indices[d1]];
-	      gradU[i*dim+j]+=ULocal*fe_values.shape_grad(d1, q)[j];
-	    }
-	  }
-	   //F=1+gradU
-	  for (unsigned int i=0; i<dim; ++i){
-	    for (unsigned int j=0; j<dim; ++j){
-	      F[i*dim+j] = (i==j) + gradU[i*dim+j];
-	    }
-	  }
-
-	  //call the getQuadratureValues method supplied by the user in the userModel
-	  getQuadratureValues(cellID,
-			      dofs_per_cell,
-			      &componentIndices[0],
-			      &shapeValues[0],
-			      &shapeGrads[0],
-			      &F[0],
-			      &quadResidual[0],
-			      &quadJacobian[0],
-			      &history[0]);
-	  //update elemental residual and jacobian
-	  for (unsigned int d1=0; d1<dofs_per_cell; ++d1) {
-	    elementalResidual[d1]+=quadResidual[d1]*fe_values.JxW(q);
-	    for (unsigned int d2=0; d2<dofs_per_cell; ++d2) {
-	      elementalJacobian(d1,d2)+=quadJacobian[d1*dofs_per_cell+d2]*fe_values.JxW(q);
-	    }
-	  }
-	  //store history variables
-	  for (unsigned int i=0; i<numQuadHistoryVariables; i++){
-	   quadHistory(cellID, q, i)= history[i];
-	  }
-	}
-#else
 	//get elemental jacobian and residual
 	getElementalValues(fe_values, dofs_per_cell, num_quad_points, elementalJacobian, elementalResidual);
-#endif
 	//
 	constraints.distribute_local_to_global(elementalJacobian,
 					       elementalResidual,
