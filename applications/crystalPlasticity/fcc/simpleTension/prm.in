@@ -98,18 +98,9 @@ set Relative linear solver tolerance             = 1.0e-5
 # Maximum no. of non-linear iterations
 set Maximum non linear iterations                = 4
 
-# Non-linear solver tolerance
-set Absolute nonLinear solver tolerance          = 1.0e-5
-
-# Relative non-linear solver tolerance
-set Relative nonLinear solver tolerance          = 1.0e-3
-
 ####################################
 # Elasticity parameters
 ####################################
-# Crystal structure of problem
-set Crystal Structure                            = fcc
-
 #   Elastic Stiffness Matrix -Voigt Notation (MPa)
 set Elastic Stiffness row 1                      = 170.0e3, 124.0e3, 124.0e3, 0, 0, 0
 
@@ -155,8 +146,6 @@ set Slip Directions File                         = slipDirections.txt
 # Slip Normals File
 set Slip Normals File                            = slipNormals.txt
 
-# Ratio between backstress and CRSS during load reversal
-set Backstress Factor                            = 0.0
 
 ####################################
 # Constitutive model parameters
@@ -164,14 +153,9 @@ set Backstress Factor                            = 0.0
 # Stress tolerance for the yield surface (MPa)
 set Stress Tolerance                             = 1.0e-6
 
-# L2-Norm of plastic slip strain-used for load-step adaptivity
-set Max Plastic Slip L2 Norm                     = 0.8
-
 # Maximum no. of active slip search iterations
 set Max Slip Search Iterations                   = 1
 
-# Maximum no. of iterations to achieve non-linear convergence
-set Max Solver Iterations                        = 4
 
 ####################################
 # Input microstructure
