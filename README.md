@@ -43,6 +43,8 @@ PRISMS-Plasticity
 
 <B>Running an example simulation</B>
   + $ cd applications/crystalPlasticity/fcc/simpleTension <br>
+  Making results directory  <br>  
+  + $ mkdir results  <br>
   Execution (parallel runs): <br>
   + $ mpirun -np nprocs $PLAS_DIR/applications/crystalPlasticity/main prm.in<br>
   [here nprocs denotes the number of processors]
