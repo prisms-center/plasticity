@@ -113,9 +113,6 @@ set Maximum non linear iterations                = 4
 # Stress tolerance for the yield surface (MPa)
 set Stress Tolerance                             = 1.0e-9
 
-# L2-Norm of plastic slip strain-used for load-step adaptivity
-set Max Plastic Slip L2 Norm                     = 0.8
-
 # Maximum no. of active slip search iterations
 set Max Slip Search Iterations                   = 1
 
