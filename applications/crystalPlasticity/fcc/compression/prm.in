@@ -155,6 +155,9 @@ set Stress Tolerance                             = 1.0e-6
 # Maximum no. of active slip search iterations
 set Max Slip Search Iterations                   = 1
 
+# Maximum no. of iterations to achieve non-linear convergence
+set Max Solver Iterations                        = 1
+
 ####################################
 # Input microstructure
 ####################################
