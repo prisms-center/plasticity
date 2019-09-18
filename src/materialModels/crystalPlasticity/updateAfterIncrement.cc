@@ -41,7 +41,7 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 					F[i][i] += 1;
 				}
 				//Update strain, stress, and tangent for current time step/quadrature point
-				calculatePlasticity(cellID, q);
+				calculatePlasticity(cellID, q, 0);
 
 				FullMatrix<double> temp,temp3,temp4, C_tau(dim, dim), E_tau(dim, dim), b_tau(dim, dim);
 				Vector<double> temp2;

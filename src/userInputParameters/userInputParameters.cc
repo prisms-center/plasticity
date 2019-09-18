@@ -87,6 +87,8 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
   adaptiveLoadStepFactor=parameter_handler.get_double("Adaptive load step factor");
   adaptiveLoadIncreaseFactor=parameter_handler.get_double("Adaptive load increase Factor");
   succesiveIncForIncreasingTimeStep=parameter_handler.get_double("Succesive increment for increasing time step");
+  enableStiffnessFirstIter = parameter_handler.get_bool("Enable the efficient calculation of stiffness");
+
 
 
   additionalVoxelInfo=parameter_handler.get_integer("Additional Voxel info");
@@ -429,10 +431,12 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Absolute nonLinear solver tolerance","-1",dealii::Patterns::Double(),"Non-linear solver tolerance");
   parameter_handler.declare_entry("Relative nonLinear solver tolerance","-1",dealii::Patterns::Double(),"Relative non-linear solver tolerance");
   parameter_handler.declare_entry("Stop on convergence failure","false",dealii::Patterns::Bool(),"Flag to stop problem if convergence fails");
-  parameter_handler.declare_entry("Enable adaptive Time stepping","false",dealii::Patterns::Bool(),"lag to enable adaptive time steps");
+  parameter_handler.declare_entry("Enable adaptive Time stepping","false",dealii::Patterns::Bool(),"Flag to enable adaptive time steps");
   parameter_handler.declare_entry("Adaptive load step factor","-1",dealii::Patterns::Double(),"Load step factor");
   parameter_handler.declare_entry("Adaptive load increase Factor","-1",dealii::Patterns::Double(),"adaptive Load Increase Factor");
   parameter_handler.declare_entry("Succesive increment for increasing time step","-1",dealii::Patterns::Double(),"Succesive Inc For Increasing Time Step");
+  parameter_handler.declare_entry("Enable the efficient calculation of stiffness","false",dealii::Patterns::Bool(),"Flag to enable the calculation of stiffness matrix only for the first iteration of each increment");
+
 
 
 

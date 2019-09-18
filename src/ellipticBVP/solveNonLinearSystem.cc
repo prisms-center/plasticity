@@ -16,7 +16,12 @@ bool ellipticBVP<dim>::solveNonLinearSystem(){
 
     //Calling assemble
     computing_timer.enter_section("assembly");
-    assemble();
+    if ((currentIteration==0)||(!userInputs.enableStiffnessFirstIter)){
+      assemble();
+    }
+    else{
+      assemble2();
+    }
     computing_timer.exit_section("assembly");
 
     if (!resetIncrement){
@@ -26,26 +31,26 @@ bool ellipticBVP<dim>::solveNonLinearSystem(){
       relNorm=currentNorm/initialNorm;
       //print iteration information
       sprintf(buffer,
-	      "nonlinear iteration %3u [current residual: %8.2e, initial residual: %8.2e, relative residual: %8.2e]\n",
-	      currentIteration,
-	      currentNorm,
-	      initialNorm,
-	      relNorm);
-      pcout << buffer;
-      //if not converged, solveLinearSystem Ax=b
-      computing_timer.enter_section("solve");
-      solveLinearSystem(constraints, jacobian, residual, solution, solutionWithGhosts, solutionIncWithGhosts);
-      computing_timer.exit_section("solve");
-      currentIteration++;
+        "nonlinear iteration %3u [current residual: %8.2e, initial residual: %8.2e, relative residual: %8.2e]\n",
+        currentIteration,
+        currentNorm,
+        initialNorm,
+        relNorm);
+        pcout << buffer;
+        //if not converged, solveLinearSystem Ax=b
+        computing_timer.enter_section("solve");
+        solveLinearSystem(constraints, jacobian, residual, solution, solutionWithGhosts, solutionIncWithGhosts);
+        computing_timer.exit_section("solve");
+        currentIteration++;
+      }
+      //call updateAfterIteration, if any
+      updateAfterIteration();
     }
-    //call updateAfterIteration, if any
-    updateAfterIteration();
+
+    //check if maxNonLinearIterations reached
+
+    //update old solution to new converged solution
+    oldSolution=solution;
+    return true;
   }
-
-  //check if maxNonLinearIterations reached
-
-  //update old solution to new converged solution
-  oldSolution=solution;
-  return true;
-}
-#include "../../include/ellipticBVP_template_instantiations.h"
+  #include "../../include/ellipticBVP_template_instantiations.h"

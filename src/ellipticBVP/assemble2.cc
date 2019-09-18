@@ -3,20 +3,19 @@
 
 //FE assemble operation
 template <int dim>
-void ellipticBVP<dim>::assemble(){
+void ellipticBVP<dim>::assemble2(){
   //initialize global data structures to zero
   //The additional compress operations are only to flush out data and
   //switch to the correct write state. For  details look at the documentation
   //for PETScWrappers::MPI::Vector()
   residual.compress(VectorOperation::add); residual=0.0;
-  jacobian.compress(VectorOperation::add); jacobian=0.0;
+
 
   //local variables
   QGauss<dim>  quadrature(userInputs.quadOrder);
   FEValues<dim> fe_values (FE, quadrature, update_values | update_gradients | update_JxW_values);
   const unsigned int   dofs_per_cell   = FE.dofs_per_cell;
   const unsigned int   num_quad_points = quadrature.size();
-  FullMatrix<double>   elementalJacobian (dofs_per_cell, dofs_per_cell);
   Vector<double>       elementalResidual (dofs_per_cell);
   std::vector<types::global_dof_index> local_dof_indices (dofs_per_cell);
 
@@ -29,7 +28,6 @@ void ellipticBVP<dim>::assemble(){
     unsigned int cellID=0;
     for (; cell!=endc; ++cell) {
       if (cell->is_locally_owned()){
-        elementalJacobian = 0;
         elementalResidual = 0;
         cell->set_user_index(cellID);
 
@@ -37,12 +35,10 @@ void ellipticBVP<dim>::assemble(){
         fe_values.reinit (cell);
         cell->get_dof_indices (local_dof_indices);
         //get elemental jacobian and residual
-        getElementalValues(fe_values, dofs_per_cell, num_quad_points, elementalJacobian, elementalResidual);
+        getElementalValues2(fe_values, dofs_per_cell, num_quad_points, elementalResidual);
         //
-        constraints.distribute_local_to_global(elementalJacobian,
-          elementalResidual,
+        constraints.distribute_local_to_global(elementalResidual,
           local_dof_indices,
-          jacobian,
           residual);
 
           cellID++;
@@ -61,7 +57,6 @@ void ellipticBVP<dim>::assemble(){
 
     //MPI operation to sync data
     residual.compress(VectorOperation::add);
-    jacobian.compress(VectorOperation::add);
   }
 
   #include "../../include/ellipticBVP_template_instantiations.h"

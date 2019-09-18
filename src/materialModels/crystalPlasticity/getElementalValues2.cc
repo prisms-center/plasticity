@@ -2,10 +2,9 @@
 
 //implementation of the getElementalValues method
 template <int dim>
-void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
+void crystalPlasticity<dim>::getElementalValues2(FEValues<dim>& fe_values,
 	unsigned int dofs_per_cell,
 	unsigned int num_quad_points,
-	FullMatrix<double>& elementalJacobian,
 	Vector<double>&     elementalResidual)
 	{
 
@@ -29,9 +28,8 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 			}
 
 			//local data structures
-			FullMatrix<double> K_local(dofs_per_cell,dofs_per_cell);
 			Vector<double> Rlocal (dofs_per_cell);
-			K_local = 0.0; Rlocal = 0.0;
+			Rlocal = 0.0;
 
 
 			//loop over quadrature points
@@ -49,7 +47,7 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 				}
 
 				//Update strain, stress, and tangent for current time step/quadrature point
-				calculatePlasticity(cellID, q, 1);
+				calculatePlasticity(cellID, q, 0);
 
 				//this->pcout<<P[0][0]<<"\t"<<P[1][1]<<"\t"<<P[2][2]<<"\n";
 
@@ -62,21 +60,8 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 
 				}
 
-				//evaluate elemental stiffness matrix, K_{ij} = N_{i,k}*C_{mknl}*F_{im}*F{jn}*N_{j,l} + N_{i,k}*F_{kl}*N_{j,l}*del{ij} dV
-				for (unsigned int d1=0; d1<dofs_per_cell; ++d1) {
-					unsigned int i = fe_values.get_fe().system_to_component_index(d1).first;
-					for (unsigned int d2=0; d2<dofs_per_cell; ++d2) {
-						unsigned int j = fe_values.get_fe().system_to_component_index(d2).first;
-						for (unsigned int k = 0; k < dim; k++){
-							for (unsigned int l= 0; l< dim; l++){
-								K_local(d1,d2) +=  fe_values.shape_grad(d1, q)[k]*dP_dF[i][k][j][l]*fe_values.shape_grad(d2, q)[l]*fe_values.JxW(q);
-							}
-						}
-					}
-				}
 			}
 
-			elementalJacobian = K_local;
 			elementalResidual = Rlocal;
 
 		}

@@ -3,7 +3,8 @@
 
 template <int dim>
 void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
-  unsigned int quadPtID)
+  unsigned int quadPtID,
+  unsigned int StiffnessCalFlag)
   {
 
     multiphaseInit(cellID,quadPtID);
@@ -455,130 +456,133 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     FullMatrix<double>  ntemp1(dim*dim,dim*dim),ntemp2(dim*dim,dim*dim),ntemp3(dim*dim,dim*dim),ntemp4(dim*dim,dim*dim),ntemp5(dim*dim,dim*dim),ntemp6(dim*dim,dim*dim); // Temporary variables
     double mulfac;
 
-    // Contribution 1 - Most straightforward because no need to invoke constitutive model
-    FE_tau.mmult(temp,T_star_tau);
-    temp.mTmult(temp1,FE_tau);
-    temp1.mTmult(temp2,F_inv_tau);
-    left(ntemp1,temp2);
-    left(ntemp2,F_inv_tau);
-    trpose(ntemp3,ntemp2);
-    ntemp1.mmult(cnt4,ntemp3);
-    cnt4.equ(-1.0,cnt4);
+    if (StiffnessCalFlag==1){
 
-    // Compute dFedF
-    ntemp4=0.0;
-    for (unsigned int i = 0;i<n_Tslip_systems;i++){
-      for (unsigned int j = 0;j < dim;j++) {
-        for (unsigned int k = 0;k < dim;k++) {
-          temp[j][k]=SCHMID_TENSOR1[dim*i + j][k];
+      // Contribution 1 - Most straightforward because no need to invoke constitutive model
+      FE_tau.mmult(temp,T_star_tau);
+      temp.mTmult(temp1,FE_tau);
+      temp1.mTmult(temp2,F_inv_tau);
+      left(ntemp1,temp2);
+      left(ntemp2,F_inv_tau);
+      trpose(ntemp3,ntemp2);
+      ntemp1.mmult(cnt4,ntemp3);
+      cnt4.equ(-1.0,cnt4);
+
+      // Compute dFedF
+      ntemp4=0.0;
+      for (unsigned int i = 0;i<n_Tslip_systems;i++){
+        for (unsigned int j = 0;j < dim;j++) {
+          for (unsigned int k = 0;k < dim;k++) {
+            temp[j][k]=SCHMID_TENSOR1[dim*i + j][k];
+          }
         }
+
+
+        traceval(ntemp1,temp);
+
+        temp1=0.0;
+        temp1.add(0.5,temp);
+        temp1.Tadd(0.5,temp);
+
+        Dmat.vmult(vtmp1,vecform(temp1));
+        matform(temp1,vtmp1);
+        temp1.mTmult(temp2,FE_tau);
+        left(ntemp2,temp2);
+        ntemp1.mmult(ntemp3,ntemp2);
+
+
+        if(i<n_slip_systems){
+          sgnm = 1 ;
+        }
+        else{
+          if(sctmp1<=0)
+          sgnm=0;
+          else
+          sgnm=1 ;
+        }
+
+        mulfac = delgam_ref*1.0/strexp*1.0/s_alpha_tau(i)*pow(fabs(resolved_shear_tau(i)/s_alpha_tau(i)),1.0/strexp - 1.0)*sgnm;
+        ntemp4.add(mulfac,ntemp3);
       }
 
+      left(ntemp1,FE_tau_trial);
+      ntemp1.mmult(ntemp2,ntemp4);
+      temp1=IdentityMatrix(dim);
+      left(ntemp3,temp1);
+      ntemp2.add(1.0,ntemp3);
+      right(ntemp3,FP_inv_tau);
+      ntemp1.invert(ntemp2);
+      ntemp1.mmult(dFedF,ntemp3);
 
-      traceval(ntemp1,temp);
+
+      // Compute remaining contributions which depend solely on dFedF
+
+      // Contribution 1
+      T_star_tau.mTmult(temp1,FE_tau);
+      temp1.mmult(temp2,F_inv_tau);
+      right(ntemp1,temp2);
+      ntemp1.mmult(cnt1,dFedF);
+
+      // Contribution 2
+      temp=0.0;
+      temp.Tadd(1.0,FE_tau);
+      left(ntemp1,temp);
+      TM.mmult(ntemp2,ntemp1);
+      ntemp1.equ(0.5,ntemp2);
+
+      left(ntemp2,temp);
+      trpose(ntemp3,ntemp2);
+      TM.mmult(ntemp2,ntemp3);
+      ntemp2.equ(0.5,ntemp2);
+
+      ntemp3=0.0;
+      ntemp3.add(1.0,ntemp1,1.0,ntemp2);
+      ntemp3.mmult(ntemp4,dFedF);
+
+      left(ntemp1,FE_tau);
 
       temp1=0.0;
-      temp1.add(0.5,temp);
-      temp1.Tadd(0.5,temp);
+      temp1.Tadd(1.0,FE_tau);
+      temp1.mTmult(temp2,F_inv_tau);
+      right(ntemp2,temp2);
 
-      Dmat.vmult(vtmp1,vecform(temp1));
-      matform(temp1,vtmp1);
-      temp1.mTmult(temp2,FE_tau);
-      left(ntemp2,temp2);
-      ntemp1.mmult(ntemp3,ntemp2);
+      ntemp1.mmult(ntemp3,ntemp4);
+      ntemp3.mmult(cnt2,ntemp2);
 
+      // Contribution 3
+      FE_tau.mmult(temp1,T_star_tau);
+      left(ntemp1,temp1);
 
-      if(i<n_slip_systems){
-        sgnm = 1 ;
-      }
-      else{
-        if(sctmp1<=0)
-        sgnm=0;
-        else
-        sgnm=1 ;
-      }
-
-      mulfac = delgam_ref*1.0/strexp*1.0/s_alpha_tau(i)*pow(fabs(resolved_shear_tau(i)/s_alpha_tau(i)),1.0/strexp - 1.0)*sgnm;
-      ntemp4.add(mulfac,ntemp3);
-    }
-
-    left(ntemp1,FE_tau_trial);
-    ntemp1.mmult(ntemp2,ntemp4);
-    temp1=IdentityMatrix(dim);
-    left(ntemp3,temp1);
-    ntemp2.add(1.0,ntemp3);
-    right(ntemp3,FP_inv_tau);
-    ntemp1.invert(ntemp2);
-    ntemp1.mmult(dFedF,ntemp3);
+      left(ntemp2,F_inv_tau);
+      ntemp2.mmult(ntemp3,dFedF);
+      trpose(ntemp4,ntemp3);
+      ntemp1.mmult(cnt3,ntemp4);
 
 
-    // Compute remaining contributions which depend solely on dFedF
+      // Assemble contributions to PK1_Stiff
 
-    // Contribution 1
-    T_star_tau.mTmult(temp1,FE_tau);
-    temp1.mmult(temp2,F_inv_tau);
-    right(ntemp1,temp2);
-    ntemp1.mmult(cnt1,dFedF);
+      PK1_Stiff=0.0;
+      PK1_Stiff.add(1.0,cnt1);
+      PK1_Stiff.add(1.0,cnt2);
+      PK1_Stiff.add(1.0,cnt3);
+      PK1_Stiff.add(1.0,cnt4);
 
-    // Contribution 2
-    temp=0.0;
-    temp.Tadd(1.0,FE_tau);
-    left(ntemp1,temp);
-    TM.mmult(ntemp2,ntemp1);
-    ntemp1.equ(0.5,ntemp2);
-
-    left(ntemp2,temp);
-    trpose(ntemp3,ntemp2);
-    TM.mmult(ntemp2,ntemp3);
-    ntemp2.equ(0.5,ntemp2);
-
-    ntemp3=0.0;
-    ntemp3.add(1.0,ntemp1,1.0,ntemp2);
-    ntemp3.mmult(ntemp4,dFedF);
-
-    left(ntemp1,FE_tau);
-
-    temp1=0.0;
-    temp1.Tadd(1.0,FE_tau);
-    temp1.mTmult(temp2,F_inv_tau);
-    right(ntemp2,temp2);
-
-    ntemp1.mmult(ntemp3,ntemp4);
-    ntemp3.mmult(cnt2,ntemp2);
-
-    // Contribution 3
-    FE_tau.mmult(temp1,T_star_tau);
-    left(ntemp1,temp1);
-
-    left(ntemp2,F_inv_tau);
-    ntemp2.mmult(ntemp3,dFedF);
-    trpose(ntemp4,ntemp3);
-    ntemp1.mmult(cnt3,ntemp4);
+      ////////////////// End Computation ////////////////////////////////////////
 
 
-    // Assemble contributions to PK1_Stiff
-
-    PK1_Stiff=0.0;
-    PK1_Stiff.add(1.0,cnt1);
-    PK1_Stiff.add(1.0,cnt2);
-    PK1_Stiff.add(1.0,cnt3);
-    PK1_Stiff.add(1.0,cnt4);
-
-    ////////////////// End Computation ////////////////////////////////////////
-
-
-    dP_dF = 0.0;
-    FullMatrix<double> L(dim, dim);
-    L = IdentityMatrix(dim);
-    for (unsigned int m = 0;m<dim;m++) {
-      for (unsigned int n = 0;n<dim;n++) {
-        for (unsigned int o = 0;o<dim;o++) {
-          for (unsigned int p = 0;p<dim;p++) {
-            for (unsigned int i = 0;i<dim;i++) {
-              for (unsigned int j = 0;j<dim;j++) {
-                for (unsigned int k = 0;k<dim;k++) {
-                  for (unsigned int l = 0;l<dim;l++) {
-                    dP_dF[m][n][o][p] = dP_dF[m][n][o][p] + PK1_Stiff(dim*i + j, dim*k + l)*L(i, m)*L(j, n)*L(k, o)*L(l, p);
+      dP_dF = 0.0;
+      FullMatrix<double> L(dim, dim);
+      L = IdentityMatrix(dim);
+      for (unsigned int m = 0;m<dim;m++) {
+        for (unsigned int n = 0;n<dim;n++) {
+          for (unsigned int o = 0;o<dim;o++) {
+            for (unsigned int p = 0;p<dim;p++) {
+              for (unsigned int i = 0;i<dim;i++) {
+                for (unsigned int j = 0;j<dim;j++) {
+                  for (unsigned int k = 0;k<dim;k++) {
+                    for (unsigned int l = 0;l<dim;l++) {
+                      dP_dF[m][n][o][p] = dP_dF[m][n][o][p] + PK1_Stiff(dim*i + j, dim*k + l)*L(i, m)*L(j, n)*L(k, o)*L(l, p);
+                    }
                   }
                 }
               }
@@ -586,9 +590,8 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
           }
         }
       }
+
     }
-
-
 
     P.reinit(dim, dim);
     P = P_tau;
