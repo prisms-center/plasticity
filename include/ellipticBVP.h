@@ -53,6 +53,7 @@ protected:
   virtual void mesh();
   void init();
   void assemble();
+  void assemble2();
   #if ((DEAL_II_VERSION_MAJOR < 9)||(DEAL_II_VERSION_MINOR < 1))
   ConstraintMatrix   constraints;
   ConstraintMatrix   constraintsMassMatrix;
@@ -84,68 +85,73 @@ protected:
     unsigned int num_quad_points,
     FullMatrix<double>& elementalJacobian,
     Vector<double>&     elementalResidual) = 0;
-    //methods to allow for pre/post iteration updates
-    virtual void updateBeforeIteration();
-    virtual void updateAfterIteration();
-    virtual bool testConvergenceAfterIteration();
-    //methods to allow for pre/post increment updates
-    virtual void updateBeforeIncrement();
-    virtual void updateAfterIncrement();
 
-    //methods to apply dirichlet BC's and initial conditions
-    void applyDirichletBCs();
-    void applyInitialConditions();
-    void setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value);
-    std::map<types::global_dof_index, Point<dim> > supportPoints;
+    virtual void getElementalValues2(FEValues<dim>& fe_values,
+      unsigned int dofs_per_cell,
+      unsigned int num_quad_points,
+      Vector<double>&     elementalResidual) = 0;
+      //methods to allow for pre/post iteration updates
+      virtual void updateBeforeIteration();
+      virtual void updateAfterIteration();
+      virtual bool testConvergenceAfterIteration();
+      //methods to allow for pre/post increment updates
+      virtual void updateBeforeIncrement();
+      virtual void updateAfterIncrement();
 
-    //parallel data structures
-    vectorType solution, oldSolution, residual;
-    vectorType solutionWithGhosts, solutionIncWithGhosts;
-    matrixType jacobian;
+      //methods to apply dirichlet BC's and initial conditions
+      void applyDirichletBCs();
+      void applyInitialConditions();
+      void setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value);
+      std::map<types::global_dof_index, Point<dim> > supportPoints;
 
-    // Boundary condition variables
-    std::vector<std::vector<bool>> faceDOFConstrained;
-    std::vector<std::vector<double>> deluConstraint;
+      //parallel data structures
+      vectorType solution, oldSolution, residual;
+      vectorType solutionWithGhosts, solutionIncWithGhosts;
+      matrixType jacobian;
 
-    FullMatrix<double> Fprev=IdentityMatrix(dim);
-    FullMatrix<double> F,deltaF;
-    FullMatrix<double> targetVelGrad;
-    //misc variables
-    double delT,totalT,cycleTime;
-    unsigned int currentIteration, currentIncrement;
-    unsigned int totalIncrements;
-    bool resetIncrement;
-    double loadFactorSetByModel;
-    double totalLoadFactor;
+      // Boundary condition variables
+      std::vector<std::vector<bool>> faceDOFConstrained;
+      std::vector<std::vector<double>> deluConstraint;
 
-    //parallel message stream
-    ConditionalOStream  pcout;
+      FullMatrix<double> Fprev=IdentityMatrix(dim);
+      FullMatrix<double> F,deltaF;
+      FullMatrix<double> targetVelGrad;
+      //misc variables
+      double delT,totalT,cycleTime;
+      unsigned int currentIteration, currentIncrement;
+      unsigned int totalIncrements;
+      bool resetIncrement;
+      double loadFactorSetByModel;
+      double totalLoadFactor;
 
-    //compute-time logger
-    TimerOutput computing_timer;
+      //parallel message stream
+      ConditionalOStream  pcout;
 
-    //output variables
-    //solution name array
-    std::vector<std::string> nodal_solution_names;
-    std::vector<DataComponentInterpretation::DataComponentInterpretation> nodal_data_component_interpretation;
+      //compute-time logger
+      TimerOutput computing_timer;
 
-    //post processing
-    unsigned int numPostProcessedFields;
-    unsigned int numPostProcessedFieldsAtCellCenters;
-    //postprocessed scalar variable name array (only scalar variables supported currently, will be extended later to vectors and tensors, if required.)
-    std::vector<std::string> postprocessed_solution_names;
-    //postprocessing data structures
-    std::vector<vectorType*> postFields, postFieldsWithGhosts, postResidual;
-    matrixType massMatrix;
-    Table<4,double> postprocessValues;
-    Table<2,double> postprocessValuesAtCellCenters;
+      //output variables
+      //solution name array
+      std::vector<std::string> nodal_solution_names;
+      std::vector<DataComponentInterpretation::DataComponentInterpretation> nodal_data_component_interpretation;
 
-    //user model related variables and methods
-    #ifdef enableUserModel
-    unsigned int numQuadHistoryVariables;
-    Table<3, double> quadHistory;
-    virtual void initQuadHistory();
+      //post processing
+      unsigned int numPostProcessedFields;
+      unsigned int numPostProcessedFieldsAtCellCenters;
+      //postprocessed scalar variable name array (only scalar variables supported currently, will be extended later to vectors and tensors, if required.)
+      std::vector<std::string> postprocessed_solution_names;
+      //postprocessing data structures
+      std::vector<vectorType*> postFields, postFieldsWithGhosts, postResidual;
+      matrixType massMatrix;
+      Table<4,double> postprocessValues;
+      Table<2,double> postprocessValuesAtCellCenters;
+
+      //user model related variables and methods
+      #ifdef enableUserModel
+      unsigned int numQuadHistoryVariables;
+      Table<3, double> quadHistory;
+      virtual void initQuadHistory();
+      #endif
+    };
+
     #endif
-  };
-
-  #endif
