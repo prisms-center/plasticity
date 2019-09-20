@@ -1,6 +1,8 @@
 //initialization method for ellipticBVP class
 #include "../../include/ellipticBVP.h"
 #include <fstream>
+#include <sys/stat.h>
+ 
 //initialize all FE objects and data structures
 template <int dim>
 void ellipticBVP<dim>::init(){
@@ -98,6 +100,9 @@ void ellipticBVP<dim>::init(){
       }
     }
     Fprev=IdentityMatrix(dim);
+
+    const int dir_err = mkdir(userInputs.outputDirectory.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+    
     //apply initial conditions
     applyInitialConditions();
     solutionWithGhosts=solution;
