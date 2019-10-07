@@ -230,7 +230,10 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
         }
       }
 
-
+      for(unsigned int i=0;i<n_Tslip_systems;i++){
+          resolved_shear_tau(i)=resolved_shear_tau_trial(i);
+      }
+      
       if(n_PA==0)
       break;
 
