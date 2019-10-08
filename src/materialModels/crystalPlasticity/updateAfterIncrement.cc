@@ -118,7 +118,7 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 		}
 	}
 
-
+	reorient();
 
 	//Update the history variables when convergence is reached for the current increment
 	Fe_conv=Fe_iter;
@@ -135,7 +135,7 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 		stateVar_conv=stateVar_iter;
 	}
 
-	reorient();
+	
 
 
 
