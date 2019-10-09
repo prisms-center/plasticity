@@ -118,7 +118,14 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 		}
 	}
 
+	//In Case we have twinning
+	rotnew_conv=rotnew_iter;
+	
+	//reorient() updates the rotnew_conv.
 	reorient();
+	
+	//Updating rotnew_iter using rotnew_conv updated by reorient(); 
+	rotnew_iter=rotnew_conv;
 
 	//Update the history variables when convergence is reached for the current increment
 	Fe_conv=Fe_iter;
@@ -128,7 +135,6 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 	twinfraction_conv=twinfraction_iter;
 	slipfraction_conv=slipfraction_iter;
 	rot_conv=rot_iter;
-	rotnew_conv=rotnew_iter;
 	twin_conv=twin_iter;
 
 	if (this->userInputs.enableUserMaterialModel){
