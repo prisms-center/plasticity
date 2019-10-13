@@ -692,7 +692,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
               }
             }
-            if ((resolved_shear_tau_trial(PA(i)) - W_kh_tau(PA(i)))<0.0)
+            if ((resolved_shear_tau_trial(PA(i)) - W_kh_t(PA(i)))<0.0)
             A2[i][j] -= C_1[PA(i)]-C_2[PA(i)]*W_kh_tau(PA(i));
             else
             A2[i][j] += C_1[PA(i)] - C_2[PA(i)]*W_kh_tau(PA(i));
