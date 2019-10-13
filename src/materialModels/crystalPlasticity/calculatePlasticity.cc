@@ -301,7 +301,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
             }
           }
-          if ((resolved_shear_tau(i) - W_kh_tau(i))<0.0)
+          if ((resolved_shear_tau_trial(i) - W_kh_tau(i))<0.0)
           A[i][j] -= C_1[i]-C_2[i]*W_kh_tau(i);
           else
           A[i][j] += C_1[i] - C_2[i]*W_kh_tau(i);
@@ -368,7 +368,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
         matform(temp4, tempv1);
         for (unsigned int j = 0;j < dim;j++) {
           for (unsigned int k = 0;k < dim;k++) {
-            if ((resolved_shear_tau(i) - W_kh_tau(i))>0)
+            if ((resolved_shear_tau_trial(i) - W_kh_tau(i))>0)
             T_star_tau[j][k] = T_star_tau[j][k] - 0.5*x_beta(i)*temp4[j][k];
             else
             T_star_tau[j][k] = T_star_tau[j][k] + 0.5*x_beta(i)*temp4[j][k];
@@ -426,7 +426,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
       }
       for (unsigned int i = 0;i<n_Tslip_systems;i++) {
-        if ((resolved_shear_tau(i) - W_kh_tau(i))>0)
+        if ((resolved_shear_tau_trial(i) - W_kh_tau(i))>0)
         W_kh_tau(i) = W_kh_tau(i) +(C_1[i] - C_2[i]*W_kh_tau(i))*(x_beta(i));
         else
         W_kh_tau(i) = W_kh_tau(i) +(-C_1[i] - C_2[i]*W_kh_tau(i))*(x_beta(i));
