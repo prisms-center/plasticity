@@ -29,10 +29,8 @@ PRISMS-Plasticity
 
 
   2. Compile the library
-  + $ cmake CMakeLists.txt -DCMAKE_BUILD_TYPE=Debug <br>
-  For optimized mode:<br>
-  + $ cmake CMakeLists.txt -DCMAKE_BUILD_TYPE=Release <br>
-  + $ make -jN <br>
+  + $ cmake . <br>
+  + $ make -j N <br>
   + $ export PLAS_DIR=$PWD <br>
   Here N refers to number of processor cores available, this helps in quicker compilation. <br>
 
