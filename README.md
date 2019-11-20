@@ -37,7 +37,7 @@ PRISMS-Plasticity
   3. Compile plasticity applications
   + $ cd applications/crystalPlasticity <br>
   + $ cmake . <br>
-  + $ make <br>
+  + $ make release <br>
 
 <B>Running an example simulation</B>
   + $ cd applications/crystalPlasticity/fcc/simpleTension <br>
