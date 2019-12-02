@@ -93,7 +93,7 @@ void ellipticBVP<dim>::projection(){
   if (numPostProcessedFields==0) return;
 
   //check whether to project in current increment
-  if (currentIncrement%userInputs.skipOutputSteps!=0)
+  if ((currentIncrement+1)%userInputs.skipOutputSteps!=0)
     return;
 
   pcout << "projecting post processing fields\n";
