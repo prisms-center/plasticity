@@ -148,7 +148,7 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 	char buffer[200];
 
 	if (this->userInputs.writeQuadratureOutput) {
-		if (this->currentIncrement%this->userInputs.skipQuadratureOutputSteps == 0) {
+		if ((this->currentIncrement+1)%this->userInputs.skipQuadratureOutputSteps == 0) {
 			//copy rotnew to output
 			outputQuadrature.clear();
 			//loop over elements
