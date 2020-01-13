@@ -73,7 +73,7 @@ void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned 
     }
   }
 
-  if(!userInputs.useVelocityGrad){
+  if(userInputs.enableSimpleBCs){
     for (i=0;i<2*dim;i++){
       if(faceDOFConstrained[i][dof])
         switch (i+1){
@@ -110,6 +110,122 @@ void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned 
     }
   }
 
+  if(userInputs.enableTabularBCs){
+
+    for (i=0;i<2*dim;i++){
+      if(faceDOFConstrained[i][dof])
+        switch (i+1){
+          case 1:
+          if (node[0] <= externalMeshParameterBCs(0))
+              {//pcout<<i<<" "<<dof<<std::endl;
+                flag=true;
+
+                currentTime=delT*(currentIncrement+1);
+
+                if (currentIncrement==0){
+                  timeCounter=1;
+                }
+                if (currentTime>this->userInputs.tabularTimeInput[timeCounter]){
+                  timeCounter=timeCounter+1;
+                }
+
+                value=(-tabularDisplacements[3*i+dof][timeCounter-1]+tabularDisplacements[3*i+dof][timeCounter])/(this->userInputs.tabularTimeInput[timeCounter]-this->userInputs.tabularTimeInput[timeCounter-1])*delT ;
+
+                return;}
+          break;
+          case 2:
+          if (node[0] >= (userInputs.span[0]-externalMeshParameterBCs(0)))
+              {//pcout<<i<<" "<<dof<<std::endl;
+              flag=true;
+
+              currentTime=delT*(currentIncrement+1);
+
+              if (currentIncrement==0){
+                timeCounter=1;
+              }
+              if (currentTime>this->userInputs.tabularTimeInput[timeCounter]){
+                timeCounter=timeCounter+1;
+              }
+
+              value=(-tabularDisplacements[3*i+dof][timeCounter-1]+tabularDisplacements[3*i+dof][timeCounter])/(this->userInputs.tabularTimeInput[timeCounter]-this->userInputs.tabularTimeInput[timeCounter-1])*delT ;
+
+              return;}
+          break;
+          case 3:
+          if (node[1] <= externalMeshParameterBCs(1))
+              {//pcout<<i<<" "<<dof<<std::endl;
+              flag=true;
+
+              currentTime=delT*(currentIncrement+1);
+
+              if (currentIncrement==0){
+                timeCounter=1;
+              }
+              if (currentTime>this->userInputs.tabularTimeInput[timeCounter]){
+                timeCounter=timeCounter+1;
+              }
+
+              value=(-tabularDisplacements[3*i+dof][timeCounter-1]+tabularDisplacements[3*i+dof][timeCounter])/(this->userInputs.tabularTimeInput[timeCounter]-this->userInputs.tabularTimeInput[timeCounter-1])*delT ;
+
+              return;}
+          break;
+          case 4:
+          if (node[1] >= (userInputs.span[1]-externalMeshParameterBCs(1)))
+              {//pcout<<i<<" "<<dof<<std::endl;
+              flag=true;
+
+              currentTime=delT*(currentIncrement+1);
+
+              if (currentIncrement==0){
+                timeCounter=1;
+              }
+              if (currentTime>this->userInputs.tabularTimeInput[timeCounter]){
+                timeCounter=timeCounter+1;
+              }
+
+              value=(-tabularDisplacements[3*i+dof][timeCounter-1]+tabularDisplacements[3*i+dof][timeCounter])/(this->userInputs.tabularTimeInput[timeCounter]-this->userInputs.tabularTimeInput[timeCounter-1])*delT ;
+
+              return;}
+          break;
+          case 5:
+          if (node[2] <= externalMeshParameterBCs(2))
+              {//pcout<<i<<" "<<dof<<std::endl;
+              flag=true;
+
+              currentTime=delT*(currentIncrement+1);
+
+              if (currentIncrement==0){
+                timeCounter=1;
+              }
+              if (currentTime>this->userInputs.tabularTimeInput[timeCounter]){
+                timeCounter=timeCounter+1;
+              }
+
+              value=(-tabularDisplacements[3*i+dof][timeCounter-1]+tabularDisplacements[3*i+dof][timeCounter])/(this->userInputs.tabularTimeInput[timeCounter]-this->userInputs.tabularTimeInput[timeCounter-1])*delT ;
+
+              return;}
+          break;
+          case 6:
+          if (node[2] >= (userInputs.span[2]-externalMeshParameterBCs(2)))
+              {//pcout<<i<<" "<<dof<<std::endl;
+              flag=true;
+
+              currentTime=delT*(currentIncrement+1);
+
+              if (currentIncrement==0){
+                timeCounter=1;
+              }
+              if (currentTime>this->userInputs.tabularTimeInput[timeCounter]){
+                timeCounter=timeCounter+1;
+              }
+
+              value=(-tabularDisplacements[3*i+dof][timeCounter-1]+tabularDisplacements[3*i+dof][timeCounter])/(this->userInputs.tabularTimeInput[timeCounter]-this->userInputs.tabularTimeInput[timeCounter-1])*delT ;
+
+              return;}
+        }
+    }
+  }
+
   if(userInputs.useVelocityGrad){
     value = 0;
     for(i=0;i<dim;i++)
@@ -118,7 +234,180 @@ void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned 
     return;
   }
 
+  if(userInputs.enableDICpipeline){
+
+  //back boundary
+  if (node[0] <= externalMeshParameterBCs(0)){
+    double value_x, value_y;
+    bcFunction1(node[1],value_x,value_y, currentIncrement);
+    if (dof==0) {flag=true; value=value_x;}
+    if (dof==1) {flag=true; value=value_y;}
+  }
+
+
+  //front boundary
+  if (node[0] >= (userInputs.span[0]-externalMeshParameterBCs(0))){
+    double value_x, value_y;
+    bcFunction2(node[1],value_x,value_y, currentIncrement);
+    if (dof==0) {flag=true; value=value_x;}
+    if (dof==1) {flag=true; value=value_y;}
+  }
+
+
+  //left boundary
+  if (node[1] <= externalMeshParameterBCs(1)){
+    double value_x, value_y;
+    bcFunction3(node[0],value_x,value_y, currentIncrement);
+    if (dof==0) {flag=true; value=value_x;}
+    if (dof==1) {flag=true; value=value_y;}
+
+  }
+
+  //left boundary
+  if (node[1] >= (userInputs.span[1]-externalMeshParameterBCs(1))){
+    double value_x, value_y;
+    bcFunction4(node[0],value_x,value_y, currentIncrement);
+    if (dof==0) {flag=true; value=value_x;}
+    if (dof==1) {flag=true; value=value_y;}
+
+  }
+
+
+  //bottom boundary: u_z=0
+  if (node[2] <= externalMeshParameterBCs(2)){
+    if(node[0]<= externalMeshParameterBCs(0) && node[1] <= externalMeshParameterBCs(1)){
+      if (dof==2) {flag=true; value=0.0;}
+    }
+  }
+  }
+
 }
+
+
+template <int dim>
+void ellipticBVP<dim>::bcFunction1(double yval, double &value_x, double &value_y, double currentIncr){
+
+  unsigned int n_div=userInputs.Y_dic;
+  std::vector<double> coord(n_div);
+
+  for (unsigned int i=0; i<(n_div); i++){
+    coord[i]=fabs(yval-bc_new1[i][0]);
+  }
+
+  std::vector<double>::iterator result;
+  result = std::min_element(coord.begin(), coord.end());
+  int coord_pos;
+  coord_pos= std::distance(coord.begin(), result);
+
+  currentTime=delT*(currentIncrement+1);
+
+  if (currentIncrement==0){
+    timeCounter=1;
+  }
+  if (currentTime>this->userInputs.timeInputDIC[timeCounter]){
+    timeCounter=timeCounter+1;
+  }
+
+  value_x=(-bc_new1[coord_pos][1+(timeCounter-1)*2]+bc_new1[coord_pos][1+timeCounter*2])/(this->userInputs.timeInputDIC[timeCounter]-this->userInputs.timeInputDIC[timeCounter-1])*delT ;
+  value_y=(-bc_new1[coord_pos][2+(timeCounter-1)*2]+bc_new1[coord_pos][2+timeCounter*2])/(this->userInputs.timeInputDIC[timeCounter]-this->userInputs.timeInputDIC[timeCounter-1])*delT ;
+  //return value1 ; // displacement along X-Direction
+
+}
+
+template <int dim>
+void ellipticBVP<dim>::bcFunction2(double yval, double &value_x, double &value_y,double currentIncr){
+
+  unsigned int n_div=userInputs.Y_dic;
+  std::vector<double> coord(n_div);
+
+  for (unsigned int i=0; i<(n_div); i++){
+    coord[i]=fabs(yval-bc_new2[i][0]);
+  }
+
+  std::vector<double>::iterator result;
+  result = std::min_element(coord.begin(), coord.end());
+  int coord_pos;
+  coord_pos= std::distance(coord.begin(), result);
+
+  currentTime=delT*(currentIncrement+1);
+
+  if (currentIncrement==0){
+    timeCounter=1;
+  }
+  if (currentTime>this->userInputs.timeInputDIC[timeCounter]){
+    timeCounter=timeCounter+1;
+  }
+
+  value_x=(-bc_new2[coord_pos][1+(timeCounter-1)*2]+bc_new2[coord_pos][1+timeCounter*2])/(this->userInputs.timeInputDIC[timeCounter]-this->userInputs.timeInputDIC[timeCounter-1])*delT ;
+  value_y=(-bc_new2[coord_pos][2+(timeCounter-1)*2]+bc_new2[coord_pos][2+timeCounter*2])/(this->userInputs.timeInputDIC[timeCounter]-this->userInputs.timeInputDIC[timeCounter-1])*delT ;
+
+
+
+  //return value1 ; // displacement along X-Direction
+
+}
+
+template <int dim>
+void ellipticBVP<dim>::bcFunction3(double xval, double &value_x, double &value_y,double currentIncr){
+
+  unsigned int n_div=userInputs.X_dic;
+  std::vector<double> coord(n_div);
+
+  for (unsigned int i=0; i<(n_div); i++){
+    coord[i]=fabs(xval-bc_new3[i][0]);
+  }
+
+  std::vector<double>::iterator result;
+  result = std::min_element(coord.begin(), coord.end());
+  int coord_pos;
+  coord_pos= std::distance(coord.begin(), result);
+
+  currentTime=delT*(currentIncrement+1);
+
+  if (currentIncrement==0){
+    timeCounter=1;
+  }
+  if (currentTime>this->userInputs.timeInputDIC[timeCounter]){
+    timeCounter=timeCounter+1;
+  }
+
+  value_x=(-bc_new3[coord_pos][1+(timeCounter-1)*2]+bc_new3[coord_pos][1+timeCounter*2])/(this->userInputs.timeInputDIC[timeCounter]-this->userInputs.timeInputDIC[timeCounter-1])*delT ;
+  value_y=(-bc_new3[coord_pos][2+(timeCounter-1)*2]+bc_new3[coord_pos][2+timeCounter*2])/(this->userInputs.timeInputDIC[timeCounter]-this->userInputs.timeInputDIC[timeCounter-1])*delT ;
+
+
+}
+
+template <int dim>
+void ellipticBVP<dim>::bcFunction4(double xval, double &value_x, double &value_y,double currentIncr){
+
+  unsigned int n_div=userInputs.X_dic;
+  std::vector<double> coord(n_div);
+
+  for (unsigned int i=0; i<(n_div); i++){
+    coord[i]=fabs(xval-bc_new4[i][0]);
+  }
+
+  std::vector<double>::iterator result;
+  result = std::min_element(coord.begin(), coord.end());
+  int coord_pos;
+  coord_pos= std::distance(coord.begin(), result);
+  currentTime=delT*(currentIncrement+1);
+
+  if (currentIncrement==0){
+    timeCounter=1;
+  }
+  if (currentTime>this->userInputs.timeInputDIC[timeCounter]){
+    timeCounter=timeCounter+1;
+  }
+
+  value_x=(-bc_new4[coord_pos][1+(timeCounter-1)*2]+bc_new4[coord_pos][1+timeCounter*2])/(this->userInputs.timeInputDIC[timeCounter]-this->userInputs.timeInputDIC[timeCounter-1])*delT ;
+  value_y=(-bc_new4[coord_pos][2+(timeCounter-1)*2]+bc_new4[coord_pos][2+timeCounter*2])/(this->userInputs.timeInputDIC[timeCounter]-this->userInputs.timeInputDIC[timeCounter-1])*delT ;
+
+
+}
+
+
+
 
 //methods to apply dirichlet BC's
 template <int dim>

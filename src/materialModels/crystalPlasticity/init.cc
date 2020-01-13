@@ -250,7 +250,7 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
     slipfraction_iter.resize(num_local_cells,std::vector<std::vector<double> >(num_quad_points,slip_init));
     twinfraction_conv.resize(num_local_cells,std::vector<std::vector<double> >(num_quad_points,twin_init));
     slipfraction_conv.resize(num_local_cells,std::vector<std::vector<double> >(num_quad_points,slip_init));
-    twin_ouput.resize(num_local_cells,std::vector<unsigned int>(num_quad_points,0));
+    twin_ouput.resize(num_local_cells, std::vector<double>(num_quad_points,0.0));
     twin_conv.resize(num_local_cells,std::vector<unsigned int>(num_quad_points,0));
     twin_iter.resize(num_local_cells,std::vector<unsigned int>(num_quad_points,0));
 
@@ -757,7 +757,7 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
     slipfraction_iter.resize(num_local_cells,std::vector<std::vector<double> >(num_quad_points,slip_init1));
     twinfraction_conv.resize(num_local_cells,std::vector<std::vector<double> >(num_quad_points,twin_init1));
     slipfraction_conv.resize(num_local_cells,std::vector<std::vector<double> >(num_quad_points,slip_init1));
-    twin_ouput.resize(num_local_cells,std::vector<unsigned int>(num_quad_points,0));
+    twin_ouput.resize(num_local_cells, std::vector<double>(num_quad_points,0.0));
     twin_conv.resize(num_local_cells,std::vector<unsigned int>(num_quad_points,0));
     twin_iter.resize(num_local_cells,std::vector<unsigned int>(num_quad_points,0));
 

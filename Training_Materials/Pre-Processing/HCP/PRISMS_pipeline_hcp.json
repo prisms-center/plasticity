@@ -30,7 +30,7 @@
                     104.08554077148438,
                     110.08554077148438
                 ],
-                "BoundaryArea": 2.2420775429197073e-44,
+                "BoundaryArea": 3.0828566215145976e-44,
                 "Crystal Symmetry": 0,
                 "FeatureSize Distribution": {
                     "Average": 4,
@@ -116,8 +116,8 @@
                 },
                 "FeatureSize Vs Neighbors Distributions": {
                     "Average": [
-                        null,
-                        null,
+                        0,
+                        0,
                         0.6931471824645996,
                         1.3862943649291992,
                         1.7917594909667969,
@@ -479,7 +479,7 @@
         "Filter_Enabled": true,
         "Filter_Human_Label": "Attribute Array Calculator",
         "Filter_Name": "ArrayCalculator",
-        "InfixEquation": "rvec[0]*rvec[3]",
+        "InfixEquation": "-rvec[0]*rvec[3]",
         "SelectedAttributeMatrix": {
             "Attribute Matrix Name": "CellFeatureData",
             "Data Array Name": "",
@@ -497,7 +497,7 @@
         "Filter_Enabled": true,
         "Filter_Human_Label": "Attribute Array Calculator",
         "Filter_Name": "ArrayCalculator",
-        "InfixEquation": "rvec[1]*rvec[3]",
+        "InfixEquation": "-rvec[1]*rvec[3]",
         "SelectedAttributeMatrix": {
             "Attribute Matrix Name": "CellFeatureData",
             "Data Array Name": "",
@@ -515,7 +515,7 @@
         "Filter_Enabled": true,
         "Filter_Human_Label": "Attribute Array Calculator",
         "Filter_Name": "ArrayCalculator",
-        "InfixEquation": "rvec[2]*rvec[3]",
+        "InfixEquation": "-rvec[2]*rvec[3]",
         "SelectedAttributeMatrix": {
             "Attribute Matrix Name": "CellFeatureData",
             "Data Array Name": "",

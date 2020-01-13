@@ -11,7 +11,12 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 
 		//Initialized history variables and pfunction variables if unititialized
 		if(initCalled == false){
-			init(num_quad_points);
+			if(this->userInputs.enableAdvancedTwinModel){
+				init2(num_quad_points);
+			}
+		else{
+				init(num_quad_points);
+			}
 		}
 
 		unsigned int cellID = fe_values.get_cell()->user_index();

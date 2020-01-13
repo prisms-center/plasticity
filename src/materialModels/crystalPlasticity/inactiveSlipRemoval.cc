@@ -1,7 +1,7 @@
 #include "../../../include/crystalPlasticity.h"
 
 template <int dim>
-void crystalPlasticity<dim>::inactive_slip_removal(Vector<double> &active, Vector<double> &x_beta_old, Vector<double> &x_beta, unsigned int &n_PA, Vector<double> &PA, Vector<double> b,FullMatrix<double> A,FullMatrix<double> &A_PA){
+void crystalPlasticity<dim>::inactive_slip_removal(Vector<double> &active, Vector<double> &x_beta_old, Vector<double> &x_beta, unsigned int &n_PA, unsigned int &n_Tslip_systems_Region, Vector<double> &PA, Vector<double> b,FullMatrix<double> A,FullMatrix<double> &A_PA){
 
     Vector<double> inactive;
 
@@ -27,7 +27,7 @@ void crystalPlasticity<dim>::inactive_slip_removal(Vector<double> &active, Vecto
     Vector<double> tempv3;
     temp7.vmult(x_beta1,b_PA);
 
-    x_beta2=x_beta1; x_beta1.reinit(n_Tslip_systems);
+    x_beta2=x_beta1; x_beta1.reinit(n_Tslip_systems_Region);
     x_beta1=0;
     for(unsigned int i=0;i<n_PA;i++){
         x_beta1(PA(i))=x_beta2(i);
@@ -44,7 +44,7 @@ void crystalPlasticity<dim>::inactive_slip_removal(Vector<double> &active, Vecto
     while (flag1==0){
 
         iter=0;
-        for(unsigned int i=0;i<n_Tslip_systems;i++){
+        for(unsigned int i=0;i<n_Tslip_systems_Region;i++){
             if((x_beta_old(i)+x_beta1(i))<0){
                 iter++;
             }
@@ -54,7 +54,7 @@ void crystalPlasticity<dim>::inactive_slip_removal(Vector<double> &active, Vecto
 
             row.reinit(iter);
             iter=0;
-            for(unsigned int i=0;i<n_Tslip_systems;i++){
+            for(unsigned int i=0;i<n_Tslip_systems_Region;i++){
                 if((x_beta_old(i)+x_beta1(i))<0){
                     row(iter)=i;
                     iter++;
@@ -100,7 +100,7 @@ void crystalPlasticity<dim>::inactive_slip_removal(Vector<double> &active, Vecto
 
             x_beta1.reinit(n_PA-n_IA_new); temp7.vmult(x_beta1,b_PA);
             x_beta2.reinit(n_PA-n_IA_new); x_beta2=x_beta1;
-            x_beta1.reinit(n_Tslip_systems);x_beta1=0.0;
+            x_beta1.reinit(n_Tslip_systems_Region);x_beta1=0.0;
             n_PA=n_PA-n_IA_new;
 
             for(unsigned int i=0;i<n_PA;i++){
@@ -115,7 +115,7 @@ void crystalPlasticity<dim>::inactive_slip_removal(Vector<double> &active, Vecto
     }
 
     active.reinit(n_PA); active=PA;
-    x_beta.reinit(n_Tslip_systems); x_beta=x_beta1;
+    x_beta.reinit(n_Tslip_systems_Region); x_beta=x_beta1;
     x_beta_old.add(1.0,x_beta);
 
 

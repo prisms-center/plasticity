@@ -54,7 +54,7 @@ set Write Output                                 = true
 set Output Directory                             = results
 
 # Skip Output Steps
-set Skip Output Steps                            = 0
+set Skip Output Steps                            = 100
 
 # Output Equivalent strain
 set Output Equivalent strain                     = true

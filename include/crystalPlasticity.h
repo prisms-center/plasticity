@@ -23,6 +23,7 @@ public:
   *calculates the texture of the deformed polycrystal
   */
   void reorient();
+  void reorient2(Vector<double> &rnew, Vector<double> rold, FullMatrix<double> FE_tau, FullMatrix<double> FE_t);
   /**
   *Initiation of Multiphase in calculatePlasticity.cc
   */
@@ -61,7 +62,7 @@ public:
       x_beta-incremental shear strain delta_gamma
       PA-active slip systems
       */
-      void inactive_slip_removal(Vector<double> &active,Vector<double> &x_beta_old, Vector<double> &x_beta, unsigned int &n_PA,
+      void inactive_slip_removal(Vector<double> &active,Vector<double> &x_beta_old, Vector<double> &x_beta, unsigned int &n_PA, unsigned int &n_Tslip_systems_Region,
         Vector<double> &PA, Vector<double> b,FullMatrix<double> A,FullMatrix<double> &A_PA);
 
         /**
@@ -74,6 +75,8 @@ public:
       private:
 
         void init(unsigned int num_quad_points);
+
+        void init2(unsigned int num_quad_points);
 
         void setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value);
         /**
@@ -217,7 +220,7 @@ public:
               /**
               * Stores original crystal orientations as rodrigues vectors by element number and quadratureID
               */
-              std::vector<std::vector<  Vector<double> > >  rot_conv,rot_iter;
+              std::vector<std::vector<  Vector<double> > >  rot_conv,rot_iter,rot;
 
               /**
               * Stores deformed crystal orientations as rodrigues vectors by element number and quadratureID
@@ -271,8 +274,10 @@ public:
               std::vector<std::vector<  Vector<double> > >  stateVar_conv,stateVar_iter;
               Vector<double> UserMatConstants;
 
-              std::vector<std::vector<  std::vector<double> > >  twinfraction_iter, slipfraction_iter,twinfraction_conv, slipfraction_conv;
-              std::vector<std::vector<unsigned int> >  twin_ouput;
+              std::vector<std::vector<  std::vector<double> > >  twinfraction_iter, slipfraction_iter,twinfraction_conv, slipfraction_conv,TwinOutputfraction_iter,TwinOutputfraction_conv;
+              std::vector<std::vector<std::vector<unsigned int> > >	TwinFlag_conv, ActiveTwinSystems_conv, TwinFlag_iter, ActiveTwinSystems_iter;
+              std::vector<std::vector<unsigned int> > NumberOfTwinnedRegion_conv, TwinMaxFlag_iter, TwinMaxFlag_conv, NumberOfTwinnedRegion_iter;
+              std::vector<std::vector<double> >  twin_ouput, TotaltwinvfK;
               std::vector<std::vector<unsigned int> >  twin_iter, twin_conv;
 
               std::vector<unsigned int>  n_slip_systems_MultiPhase, n_twin_systems_MultiPhase, n_Tslip_systems_MultiPhase, n_UserMatStateVar_MultiPhase;

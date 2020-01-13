@@ -102,6 +102,14 @@ protected:
       void applyDirichletBCs();
       void applyInitialConditions();
       void setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value);
+
+      ///////These functions are for DIC BCs evaluation
+      void bcFunction1(double _yval, double &value_x, double &value_y, double _currentIncr);
+      void bcFunction2(double _yval, double &value_x, double &value_y, double _currentIncr);
+      void bcFunction3(double _yval, double &value_x, double &value_y, double _currentIncr);
+      void bcFunction4(double _yval, double &value_x, double &value_y, double _currentIncr);
+
+
       std::map<types::global_dof_index, Point<dim> > supportPoints;
 
       //parallel data structures
@@ -112,6 +120,12 @@ protected:
       // Boundary condition variables
       std::vector<std::vector<bool>> faceDOFConstrained;
       std::vector<std::vector<double>> deluConstraint;
+
+      FullMatrix<double> tabularDisplacements;
+      unsigned int timeCounter;
+      double currentTime;
+      /////DIC bc names
+      FullMatrix<double> bc_new1,bc_new2,bc_new3,bc_new4;
 
       FullMatrix<double> Fprev=IdentityMatrix(dim);
       FullMatrix<double> F,deltaF;

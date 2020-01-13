@@ -40,11 +40,27 @@ public:
   double delT; // Time increment
   double totalTime; // Total simulation time
 
+  bool enableSimpleBCs; // Specify whether to use Simple (Basic) BCs
   std::string BCfilename; // Boundary conditions file
   unsigned int BCheaderLines; // No. of header Lines in BC file
   unsigned int NumberofBCs; // No. of boundary conditions
   bool useVelocityGrad; // Specify whether to use velocity gradient for BC
   std::vector<std::vector<double>> targetVelGrad; // 	Velocity gradient required for L based boundary conditions
+
+  bool enableTabularBCs; // Specify whether to use Tabular BCs
+  std::string Tabular_BCfilename; // Tabular BCs file
+  unsigned int tabularBCs_InputStepNumber; //Number of Input data for Tabular BCs
+  unsigned int tabularNumberofBCs; //Number of Tabular BCs
+  std::vector<double> tabularTimeInput; //Table for Time intervals of Tabular BCs
+  std::vector<double> tabularDispInput; //Table for Displacements of Tabular BCs
+
+
+  bool enableDICpipeline; // Specify whether to use DIC pipeline
+  unsigned int DIC_InputStepNumber, X_dic, Y_dic, Z_dic; //Number of Input data for DIC experiment
+  std::vector<double> timeInputDIC; //Table for Time intervals of DIC experiment input
+  std::string DIC_BCfilename1,DIC_BCfilename2,DIC_BCfilename3,DIC_BCfilename4; // DIC Boundary conditions file
+
+
   bool enableCyclicLoading;
   unsigned int cyclicLoadingFace;
   unsigned int cyclicLoadingDOF;
@@ -65,7 +81,7 @@ public:
   double relLinearSolverTolerance; // Relative linear solver tolerance
   double absNonLinearTolerance; // Non-linear solver tolerance
   double relNonLinearTolerance; // Relative non-linear solver tolerance
-  bool stopOnConvergenceFailure; // Flag to stop problem if convergence fails  
+  bool stopOnConvergenceFailure; // Flag to stop problem if convergence fails
   bool enableStiffnessFirstIter; //Flag to enable the calculation of stiffness matrix only for the first iteration of each increment
 
   /*Adaptive time-stepping parameters*/
@@ -102,6 +118,7 @@ public:
   std::string slipNormalsFile1; // Slip Normals File
   bool enableKinematicHardening1;
   bool enableTwinning1;
+  bool enableAdvancedTwinModel; // Flag to indicate if Advanced Twinning Model enabled
   unsigned int numTwinSystems1;
   std::vector<double> initialSlipResistanceTwin1; //CRSS of the slip sytems
   std::vector<double> initialHardeningModulusTwin1; //Hardening moduli of slip systems
@@ -115,6 +132,7 @@ public:
   double twinThresholdFraction1; // threshold fraction of characteristic twin shear (<1)
   double twinSaturationFactor1; // twin growth saturation factor  (<(1-twinThresholdFraction))
   double twinShear1; // characteristic twin shear
+  double criteriaTwinVisual; //In the case of Advanced twin model, the integration point with Twin volumes larger than this Critical Value is considered twined during visualization
 
   // Crystal Plasticity Constitutive model tolerances (for advanced users)
   double modelStressTolerance; // Stress tolerance for the yield surface (MPa)

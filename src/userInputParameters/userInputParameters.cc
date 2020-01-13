@@ -57,6 +57,7 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
   delT=parameter_handler.get_double("Time increments");
   totalTime=parameter_handler.get_double("Total time");
 
+  enableSimpleBCs=parameter_handler.get_bool("Use Simple BCs");
   BCfilename=parameter_handler.get("Boundary condition filename");
   BCheaderLines=parameter_handler.get_integer("BC file number of header lines");
   NumberofBCs=parameter_handler.get_integer("Number of boundary conditions");
@@ -66,6 +67,24 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
   targetVelGrad.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Velocity gradient row 1"))));
   targetVelGrad.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Velocity gradient row 2"))));
   targetVelGrad.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Velocity gradient row 3"))));
+
+  enableTabularBCs=parameter_handler.get_bool("Use Tabular BCs");
+  Tabular_BCfilename=parameter_handler.get("Tabular Boundary condition filename");
+  tabularBCs_InputStepNumber=parameter_handler.get_integer("Number of time data for Tabular BCs");
+  tabularNumberofBCs=parameter_handler.get_integer("Number of tabular boundary conditions");
+  tabularTimeInput=dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Tabular Time Table")));
+
+
+  enableDICpipeline=parameter_handler.get_bool("Use DIC pipeline");
+  DIC_InputStepNumber=parameter_handler.get_integer("Number of Input data for DIC experiment");
+  timeInputDIC=dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("DIC Time Table")));
+  X_dic=parameter_handler.get_integer("Number of Points in DIC input in X direction");
+  Y_dic=parameter_handler.get_integer("Number of Points in DIC input in Y direction");
+  Z_dic=parameter_handler.get_integer("Number of Points in DIC input in Z direction");
+  DIC_BCfilename1=parameter_handler.get("DIC Boundary condition filename 1");
+  DIC_BCfilename2=parameter_handler.get("DIC Boundary condition filename 2");
+  DIC_BCfilename3=parameter_handler.get("DIC Boundary condition filename 3");
+  DIC_BCfilename4=parameter_handler.get("DIC Boundary condition filename 4");
 
   enableCyclicLoading=parameter_handler.get_bool("Enable cyclic loading");
   cyclicLoadingFace=parameter_handler.get_integer("Cyclic loading face");
@@ -129,6 +148,7 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
 
 
   enableTwinning1 = parameter_handler.get_bool("Twinning enabled");
+  enableAdvancedTwinModel = parameter_handler.get_bool("Advanced Twinning Model enabled");
   if(enableTwinning1){
     numTwinSystems1=parameter_handler.get_integer("Number of Twin Systems");
     initialSlipResistanceTwin1 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Slip Resistance Twin")));
@@ -161,6 +181,8 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
   twinThresholdFraction1=parameter_handler.get_double("Twin Threshold Fraction");
   twinSaturationFactor1=parameter_handler.get_double("Twin Saturation Factor");
   twinShear1=parameter_handler.get_double("Characteristic Twin Shear");
+  criteriaTwinVisual=parameter_handler.get_double("Critical Value for Twin Visualization");
+
 
   modelStressTolerance=parameter_handler.get_double("Stress Tolerance");
   modelMaxSlipSearchIterations=parameter_handler.get_integer("Max Slip Search Iterations");
@@ -401,6 +423,7 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Time increments","-1",dealii::Patterns::Double(),"delta T for every increment");
   parameter_handler.declare_entry("Total time","-1",dealii::Patterns::Double(),"Total simulation time");
 
+  parameter_handler.declare_entry("Use Simple BCs","true",dealii::Patterns::Bool(),"Flag to indicate whether to use Simple (Basic) BCs");
   parameter_handler.declare_entry("Boundary condition filename","boundaryConditions.txt",dealii::Patterns::Anything(),"File name containing BC information");
   parameter_handler.declare_entry("BC file number of header lines","1",dealii::Patterns::Integer(),"BC file number of header lines");
   parameter_handler.declare_entry("Number of boundary conditions","1",dealii::Patterns::Integer(),"Number of boundary conditions");
@@ -409,6 +432,24 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Velocity gradient row 1","",dealii::Patterns::List(dealii::Patterns::Double()),"Velocity gradient tensor including the multiplication factor ");
   parameter_handler.declare_entry("Velocity gradient row 2","",dealii::Patterns::List(dealii::Patterns::Double()),"Velocity gradient tensor including the multiplication factor ");
   parameter_handler.declare_entry("Velocity gradient row 3","",dealii::Patterns::List(dealii::Patterns::Double()),"Velocity gradient tensor including the multiplication factor ");
+
+  parameter_handler.declare_entry("Use Tabular BCs","false",dealii::Patterns::Bool(),"Flag to indicate whether to use Tabular BCs");
+  parameter_handler.declare_entry("Tabular Boundary condition filename","tabularBoundaryConditions.txt",dealii::Patterns::Anything(),"File name containing Tabular BC information");
+  parameter_handler.declare_entry("Number of time data for Tabular BCs","0",dealii::Patterns::Integer(),"Number of time data for Tabular BCs (it includes the initial BCs)");
+  parameter_handler.declare_entry("Number of tabular boundary conditions","1",dealii::Patterns::Integer(),"Number of tabular boundary conditions");
+  parameter_handler.declare_entry("Tabular Time Table","",dealii::Patterns::List(dealii::Patterns::Double()),"Table for Time intervals of Tabular BCs");
+
+  parameter_handler.declare_entry("Use DIC pipeline","false",dealii::Patterns::Bool(),"Flag to indicate whether to use DIC experiment pipeline");
+  parameter_handler.declare_entry("Number of Input data for DIC experiment","0",dealii::Patterns::Integer(),"Number of Input data for DIC experiment (it includes the initial BCs)");
+  parameter_handler.declare_entry("DIC Time Table","",dealii::Patterns::List(dealii::Patterns::Double()),"Table for Time intervals of DIC experiment input");
+  parameter_handler.declare_entry("Number of Points in DIC input in X direction","0",dealii::Patterns::Integer(),"Number of Points in DIC input in X direction");
+  parameter_handler.declare_entry("Number of Points in DIC input in Y direction","0",dealii::Patterns::Integer(),"Number of Points in DIC input in Y direction");
+  parameter_handler.declare_entry("Number of Points in DIC input in Z direction","0",dealii::Patterns::Integer(),"Number of Points in DIC input in Z direction");
+  parameter_handler.declare_entry("DIC Boundary condition filename 1","DICboundaryConditions1.txt",dealii::Patterns::Anything(),"DIC Boundary condition filename 1 (x == 0.0)");
+  parameter_handler.declare_entry("DIC Boundary condition filename 2","DICboundaryConditions2.txt",dealii::Patterns::Anything(),"DIC Boundary condition filename 2 (x == spanX)");
+  parameter_handler.declare_entry("DIC Boundary condition filename 3","DICboundaryConditions3.txt",dealii::Patterns::Anything(),"DIC Boundary condition filename 3 (y == 0.0)");
+  parameter_handler.declare_entry("DIC Boundary condition filename 4","DICboundaryConditions4.txt",dealii::Patterns::Anything(),"DIC Boundary condition filename 4 (y == spanY)");
+
 
   parameter_handler.declare_entry("Enable cyclic loading","false",dealii::Patterns::Bool(),"Flag to indicate if cyclic loading is enabled");
   parameter_handler.declare_entry("Cyclic loading face","1",dealii::Patterns::Integer(),"Face that is cyclically loaded");
@@ -473,6 +514,7 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
 
 
   parameter_handler.declare_entry("Twinning enabled","false",dealii::Patterns::Bool(),"Flag to indicate if system twins");
+  parameter_handler.declare_entry("Advanced Twinning Model enabled","false",dealii::Patterns::Bool(),"Flag to indicate if Advanced Twinning Model enabled");
   parameter_handler.declare_entry("Number of Twin Systems","-1",dealii::Patterns::Integer(),"Number of Twin Systems");
   parameter_handler.declare_entry("Initial Slip Resistance Twin","",dealii::Patterns::List(dealii::Patterns::Double()),"Initial CRSS of the twin sytems");
   parameter_handler.declare_entry("Initial Hardening Modulus Twin","",dealii::Patterns::List(dealii::Patterns::Double()),"Hardening moduli of twin systems");
@@ -487,6 +529,7 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Twin Threshold Fraction","-1",dealii::Patterns::Double(),"Threshold fraction of characteristic twin shear (<1)");
   parameter_handler.declare_entry("Twin Saturation Factor","-1",dealii::Patterns::Double(),"Twin growth saturation factor  (<(1-twinThresholdFraction))");
   parameter_handler.declare_entry("Characteristic Twin Shear","-1",dealii::Patterns::Double(),"characteristic twin shear");
+  parameter_handler.declare_entry("Critical Value for Twin Visualization","1",dealii::Patterns::Double(),"The integration point with Twin volumes larger than this Critical Value is considered twined during visualization");
 
   parameter_handler.declare_entry("Stress Tolerance","-1",dealii::Patterns::Double(),"Stress tolerance for the yield surface (MPa)");
   parameter_handler.declare_entry("Max Slip Search Iterations","-1",dealii::Patterns::Integer(),"Maximum no. of active slip search iterations");

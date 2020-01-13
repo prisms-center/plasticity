@@ -1,12 +1,14 @@
 //initialization method for ellipticBVP class
 #include "../../include/ellipticBVP.h"
 #include <fstream>
-#include <sys/stat.h>
- 
+
+
 //initialize all FE objects and data structures
 template <int dim>
 void ellipticBVP<dim>::init(){
   std::string line;
+  std::ifstream bcDataFile;
+  unsigned int id;
   double totalU;
   unsigned int faceID,dof;
 
@@ -68,7 +70,7 @@ void ellipticBVP<dim>::init(){
     jacobian.reinit (locally_owned_dofs, locally_owned_dofs, dsp, mpi_communicator);
 
     // Read boundary conditions
-    if(!userInputs.useVelocityGrad){
+    if(userInputs.enableSimpleBCs){
       std::ifstream BCfile(userInputs.BCfilename);
 
       //read data
@@ -90,7 +92,7 @@ void ellipticBVP<dim>::init(){
         }
       }
     }
-    else{
+    if(userInputs.useVelocityGrad){
       targetVelGrad.reinit(3,3); targetVelGrad=0.0;
 
       for(unsigned int i=0;i<3;i++){
@@ -99,10 +101,145 @@ void ellipticBVP<dim>::init(){
         }
       }
     }
+
+
+    if(userInputs.enableTabularBCs){
+      tabularDisplacements.reinit(2*dim*dim,userInputs.tabularBCs_InputStepNumber);
+      tabularDisplacements=0;
+      //open data file to boundary displacements
+      bcDataFile.open(userInputs.Tabular_BCfilename);
+      //read data
+      if (bcDataFile.is_open()){
+        //read data
+        while (getline (bcDataFile,line) && id<(userInputs.tabularNumberofBCs)){
+          std::stringstream ss(line);
+          ss>>faceID>>dof;
+          faceDOFConstrained[faceID-1][dof-1]=true;
+
+          for (unsigned int i=0; i<userInputs.tabularBCs_InputStepNumber; i++){
+            ss >> tabularDisplacements[3*(faceID-1)+(dof-1)][i];
+          }
+          //cout<<id<<'\t'<<bc_new[id][0]<<'\t'<<bc_new[id][1]<<'\t'<<bc_new[id][2]<<'\n';
+          id=id+1;
+        }
+      }
+      else{
+        pcout << "Unable to open Tabular_BCfilename \n";
+        exit(1);
+      }
+
+      bcDataFile.close();
+    }
+
+    if(userInputs.enableDICpipeline){
+      bc_new1.reinit(userInputs.Y_dic,1+2*userInputs.DIC_InputStepNumber);
+      bc_new2.reinit(userInputs.Y_dic,1+2*userInputs.DIC_InputStepNumber);
+      bc_new3.reinit(userInputs.X_dic,1+2*userInputs.DIC_InputStepNumber);
+      bc_new4.reinit(userInputs.X_dic,1+2*userInputs.DIC_InputStepNumber);
+      //open data file to boundary displacements
+      bcDataFile.open(userInputs.DIC_BCfilename1);
+      //read data
+      id=0;
+      if (bcDataFile.is_open()){
+        //read data
+        while (getline (bcDataFile,line) && id<(userInputs.Y_dic)){
+          std::stringstream ss(line);
+          ss >> bc_new1[id][0];
+          for (unsigned int i=0; i<userInputs.DIC_InputStepNumber; i++){
+            ss >> bc_new1[id][1+i*2];
+            ss >> bc_new1[id][2+i*2];
+          }
+          //cout<<id<<'\t'<<bc_new[id][0]<<'\t'<<bc_new[id][1]<<'\t'<<bc_new[id][2]<<'\n';
+          id=id+1;
+        }
+      }
+      else{
+        pcout << "Unable to open DIC_BCfilename1 \n";
+        exit(1);
+      }
+
+      bcDataFile.close();
+
+
+
+      //open data file to boundary displacements
+      bcDataFile.open(userInputs.DIC_BCfilename2);
+      //read data
+      id=0;
+      if (bcDataFile.is_open()){
+        //read data
+        while (getline (bcDataFile,line) && id<(userInputs.Y_dic)){
+          std::stringstream ss(line);
+          ss >> bc_new2[id][0];
+          for (unsigned int i=0; i<userInputs.DIC_InputStepNumber; i++){
+            ss >> bc_new2[id][1+i*2];
+            ss >> bc_new2[id][2+i*2];
+          }
+          //cout<<id<<'\t'<<bc_new[id][0]<<'\t'<<bc_new[id][1]<<'\t'<<bc_new[id][2]<<'\n';
+          id=id+1;
+        }
+      }
+      else{
+        pcout << "Unable to open DIC_BCfilename2 \n";
+        exit(1);
+      }
+
+      bcDataFile.close();
+
+
+      //open data file to boundary displacements
+      bcDataFile.open(userInputs.DIC_BCfilename3);
+      //read data
+      id=0;
+      if (bcDataFile.is_open()){
+        //read data
+        while (getline (bcDataFile,line) && id<(userInputs.X_dic)){
+          std::stringstream ss(line);
+          ss >> bc_new3[id][0];
+          for (unsigned int i=0; i<userInputs.DIC_InputStepNumber; i++){
+            ss >> bc_new3[id][1+i*2];
+            ss >> bc_new3[id][2+i*2];
+          }
+          //cout<<id<<'\t'<<bc_new[id][0]<<'\t'<<bc_new[id][1]<<'\t'<<bc_new[id][2]<<'\n';
+          id=id+1;
+        }
+      }
+      else{
+        pcout << "Unable to open DIC_BCfilename3 \n";
+        exit(1);
+      }
+
+      bcDataFile.close();
+
+
+      //open data file to boundary displacements
+      bcDataFile.open(userInputs.DIC_BCfilename4);
+      //read data
+      id=0;
+      if (bcDataFile.is_open()){
+        //read data
+        while (getline (bcDataFile,line) && id<(userInputs.X_dic)){
+          std::stringstream ss(line);
+          ss >> bc_new4[id][0];
+          for (unsigned int i=0; i<userInputs.DIC_InputStepNumber; i++){
+            ss >> bc_new4[id][1+i*2];
+            ss >> bc_new4[id][2+i*2];
+          }
+          //cout<<id<<'\t'<<bc_new[id][0]<<'\t'<<bc_new[id][1]<<'\t'<<bc_new[id][2]<<'\n';
+          id=id+1;
+        }
+      }
+      else{
+        pcout << "Unable to open DIC_BCfilename4 \n";
+        exit(1);
+      }
+
+      bcDataFile.close();
+
+    }
+
     Fprev=IdentityMatrix(dim);
 
-    const int dir_err = mkdir(userInputs.outputDirectory.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-    
     //apply initial conditions
     applyInitialConditions();
     solutionWithGhosts=solution;

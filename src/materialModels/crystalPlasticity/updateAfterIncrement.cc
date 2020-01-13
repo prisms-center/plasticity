@@ -96,16 +96,33 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 				eqvstrain = sqrt(2.0 / 3.0)*eqvstrain;
 
 				//fill in post processing field values
-				twin_ouput[cellID][q]=twin_iter[cellID][q];
+				if (!this->userInputs.enableAdvancedTwinModel){
+					twin_ouput[cellID][q]=twin_iter[cellID][q];
+				}
+				else{
+					if (TotaltwinvfK[cellID][q]>=this->userInputs.criteriaTwinVisual){
+						twin_ouput[cellID][q]=1;
+					}
+					else{
+						twin_ouput[cellID][q]=0;
+					}
+				}
 				this->postprocessValues(cellID, q, 0, 0) = vonmises;
 				this->postprocessValues(cellID, q, 1, 0) = eqvstrain;
 				this->postprocessValues(cellID, q, 2, 0) = twin_ouput[cellID][q];
 
-				local_F_e = local_F_e + twin_iter[cellID][q] * fe_values.JxW(q);
+				local_F_e = local_F_e + twin_ouput[cellID][q] * fe_values.JxW(q);
 
-				for(unsigned int i=0;i<this->userInputs.numTwinSystems1;i++){
-					local_F_r=local_F_r+twinfraction_iter[cellID][q][i]*fe_values.JxW(q);
+
+				if (!this->userInputs.enableAdvancedTwinModel){
+					for(unsigned int i=0;i<this->userInputs.numTwinSystems1;i++){
+						local_F_r=local_F_r+twinfraction_iter[cellID][q][i]*fe_values.JxW(q);
+					}
 				}
+				else{
+					local_F_r=local_F_r+ TotaltwinvfK[cellID][q]*fe_values.JxW(q);
+				}
+
 
 				for(unsigned int i=0;i<this->userInputs.numSlipSystems1;i++){
 					local_F_s=local_F_s+slipfraction_iter[cellID][q][i]*fe_values.JxW(q);
@@ -120,11 +137,13 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 
 	//In Case we have twinning
 	rotnew_conv=rotnew_iter;
-	
-	//reorient() updates the rotnew_conv.
-	reorient();
-	
-	//Updating rotnew_iter using rotnew_conv updated by reorient(); 
+
+	if (!this->userInputs.enableAdvancedTwinModel){
+		//reorient() updates the rotnew_conv.
+		reorient();
+	}
+
+	//Updating rotnew_iter using rotnew_conv updated by reorient();
 	rotnew_iter=rotnew_conv;
 
 	//Update the history variables when convergence is reached for the current increment
@@ -141,14 +160,22 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 		stateVar_conv=stateVar_iter;
 	}
 
-	
+	if (this->userInputs.enableAdvancedTwinModel){
+		TwinMaxFlag_conv = TwinMaxFlag_iter;
+		NumberOfTwinnedRegion_conv = NumberOfTwinnedRegion_iter;
+		ActiveTwinSystems_conv = ActiveTwinSystems_iter;
+		TwinFlag_conv = TwinFlag_iter;
+		TwinOutputfraction_conv=TwinOutputfraction_iter;
+	}
+
+
 
 
 
 	char buffer[200];
 
 	if (this->userInputs.writeQuadratureOutput) {
-		if (this->currentIncrement%this->userInputs.skipQuadratureOutputSteps == 0) {
+		if ((this->currentIncrement+1)%this->userInputs.skipQuadratureOutputSteps == 0) {
 			//copy rotnew to output
 			outputQuadrature.clear();
 			//loop over elements
@@ -164,7 +191,7 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 						temp.push_back(phase[cellID][q]);
 						temp.push_back(fe_values.JxW(q));
 
-						temp.push_back(twin_conv[cellID][q]);
+						temp.push_back(twin_ouput[cellID][q]);
 
 						temp.push_back(fe_values.get_quadrature_points()[q][0]);
 						temp.push_back(fe_values.get_quadrature_points()[q][1]);
