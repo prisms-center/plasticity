@@ -47,7 +47,7 @@ set Write Mesh To EPS                            = false
 # Solver output parameters
 ####################################
 # Flag to write output vtu and pvtu files
-set Write Output                                 = true
+set Write Output                                 = false
 
 # Output Directory
 # Need to create directory before using this. Will be corrected in future versions of the software
