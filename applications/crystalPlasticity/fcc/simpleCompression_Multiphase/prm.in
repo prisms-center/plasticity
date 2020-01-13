@@ -47,7 +47,7 @@ set Write Mesh To EPS                            = false
 # Solver output parameters
 ####################################
 # Flag to write output vtu and pvtu files
-set Write Output                                 = true
+set Write Output                                 = false
 
 # Output Directory
 # Need to create directory before using this. Will be corrected in future versions of the software
@@ -69,7 +69,7 @@ set Output Grain ID                              = true
 set Output Twin fractions                        = false
 
 # Flag to write quadrature output
-set Write Quadrature Output                                 = true
+set Write Quadrature Output                                 = false
 
 # Skip Quadrature Output Steps
 set Skip Quadrature Output Steps                            = 10
