@@ -47,14 +47,14 @@ set Write Mesh To EPS                            = false
 # Solver output parameters
 ####################################
 # Flag to write output vtu and pvtu files
-set Write Output                                 = true
+set Write Output                                 = false
 
 # Output Directory
 # Need to create directory before using this. Will be corrected in future versions of the software
 set Output Directory                             = results
 
 # Skip Output Steps
-set Skip Output Steps                            = 0
+set Skip Output Steps                            = 50
 
 # Output Equivalent strain
 set Output Equivalent strain                     = true
@@ -87,7 +87,7 @@ set Number of boundary conditions                = 4
 set Time increments                              = 0.01
 
 #Total simulation time
-set Total time                                   = 100
+set Total time                                   = 10
 
 # Maximum iterations for linear solver
 set Maximum linear solver iterations             = 50000
