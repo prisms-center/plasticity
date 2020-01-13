@@ -87,7 +87,7 @@ set Number of boundary conditions                = 4
 set Time increments                              = 0.01
 
 #Total simulation time
-set Total time                                   = 20
+set Total time                                   = 10
 
 # Maximum iterations for linear solver
 set Maximum linear solver iterations             = 50000
