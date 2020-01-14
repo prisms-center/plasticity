@@ -71,6 +71,8 @@ set Output Twin fractions                        = false
 ####################################
 # Boundary condition information
 ####################################
+#Flag to indicate whether to use Simple (Basic) BCs
+set Use Simple BCs                               = false
 
 set Use velocity gradient BC                     = true
 
