@@ -84,6 +84,9 @@ set Number of boundary conditions                = 4
 ####################################
 # Cyclic loading information
 ####################################
+#Flag to indicate whether to use Simple (Basic) BCs
+set Use Simple BCs                               = false
+
 #Flag to indicate if cyclic loading is enabled
 set Enable cyclic loading                        = true
 
