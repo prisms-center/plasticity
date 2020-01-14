@@ -35,7 +35,7 @@ testDirectories = ['/fcc/simpleTension/'
 for item in testDirectories:
 
     #runtimeOutputFile = applicationsDirectory+item+'testing.out'
-    #os.chdir(applicationsDirectory+item)
+    os.chdir(applicationsDirectory+item)
 
     #subprocess.call(['mpirun -np %d ../../main prm.in' %numprocs],stdout=open(runtimeOutputFile,'w'), stderr=subprocess.STDOUT,shell=True)
     subprocess.call('mpirun -np %d ../../main prm.in' %numprocs, shell=True)
