@@ -46,5 +46,6 @@ for item in testDirectories:
         print('%s worked successfully\n' %item)
     else:
         print('%s failed\n' %item)
+        break
 
     #os.chdir('..')
