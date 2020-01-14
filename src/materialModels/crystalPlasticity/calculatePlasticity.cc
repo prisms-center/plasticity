@@ -312,7 +312,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
 
       //Modified slip system search for adding corrective term
-      inactive_slip_removal(active,x_beta_old,x_beta,n_PA,PA,b,A,A_PA);
+      inactive_slip_removal(active,x_beta_old,x_beta,n_PA,n_Tslip_systems,PA,b,A,A_PA);
 
       temp.reinit(dim,dim);
       del_FP.reinit(dim,dim);

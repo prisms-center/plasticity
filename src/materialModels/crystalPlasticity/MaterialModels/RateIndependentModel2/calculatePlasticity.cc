@@ -233,7 +233,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
       for(unsigned int i=0;i<n_Tslip_systems;i++){
           resolved_shear_tau(i)=resolved_shear_tau_trial(i);
       }
-      
+
       if(n_PA==0)
       break;
 
@@ -324,7 +324,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
         //Modified slip system search for adding corrective term
         // [x_beta] = INACTIVE_SLIP_REMOVAL(A,b,PA,x_beta_old);
-        inactive_slip_removal(active,x_beta_old,x_beta,n_PA,PA,b,A,A_PA);
+        inactive_slip_removal(active,x_beta_old,x_beta,n_PA,n_Tslip_systems,PA,b,A,A_PA);
         temp.reinit(dim,dim);
         del_FP.reinit(dim,dim);
         del_FP=0.0;
