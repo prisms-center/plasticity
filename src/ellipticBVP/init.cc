@@ -70,7 +70,7 @@ void ellipticBVP<dim>::init(){
     jacobian.reinit (locally_owned_dofs, locally_owned_dofs, dsp, mpi_communicator);
 
     // Read boundary conditions
-    if(userInputs.enableSimpleBCs){
+    if((userInputs.enableSimpleBCs)||(userInputs.enableCyclicLoading)){
       std::ifstream BCfile(userInputs.BCfilename);
 
       //read data
