@@ -6,8 +6,13 @@
 //This calculatePlasticity.cc is based on the following rate-dependent crystal plasticity model: 
 //SR Kalidindi, Polycrystal plasticity: constitutive modeling and deformation processing,
 // PhD thesis, MIT, 1992.
-//To use this file, one should replace it with the following file and recompile PRISMS-Plasticity:
-//    plasticity/src/materialModels/crystalPlasticity/calculatePlasticity.cc
+//To use this file, one should copy this calculatePlasticity.cc into the following folder:
+//    plasticity/src/materialModels/crystalPlasticity/
+// (It should replace the original calculatePlasticity.cc inside that folder)
+//Next, they should copy the file userFunctions.cc into the following folder:
+//    plasticity/src/materialModels/crystalPlasticity/
+//
+//Finally, the PRISMS-Plasticity should be recompiled.
 //////////////////////////////////////////////////////////////////////////
 
 template <int dim>
