@@ -73,7 +73,7 @@ void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned 
     }
   }
 
-  if(userInputs.enableSimpleBCs){
+  if((userInputs.enableSimpleBCs)||(userInputs.enableCyclicLoading)){
     for (i=0;i<2*dim;i++){
       if(faceDOFConstrained[i][dof])
         switch (i+1){
