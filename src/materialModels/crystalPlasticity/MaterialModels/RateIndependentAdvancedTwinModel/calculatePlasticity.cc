@@ -934,12 +934,6 @@ temp3.mmult(PK1_Stiff, temp2);
 PK1_Stiff.equ(det_F_tau, PK1_Stiff);
 
 
-if (quadPtID==7){
-  unsigned int  i = 0;
-  i=6;
-}
-
-
 for (unsigned int k = 0;k < dim*dim;k++) {
   for (unsigned int l = 0;l < dim*dim;l++) {
     PK1_Stiff_Region[Region][k][l] = PK1_Stiff[k][l];
