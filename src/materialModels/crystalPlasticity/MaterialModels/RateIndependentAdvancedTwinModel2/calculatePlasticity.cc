@@ -1,6 +1,20 @@
 #include "../../../include/crystalPlasticity.h"
 
 
+//////////////////////////////////////////////////////////////////////////
+//calculatePlasticity.cc numerically integrates the constitive model. 
+//This calculatePlasticity.cc is the modified version of the following rate-independent crystal plasticity model: 
+//Mohammadreza Yaghoobi, John E. Allison, Veera Sundararaghavan, 
+//Multiscale modeling of twinning and detwinning behavior of HCP polycrystals,
+// International Journal of Plasticity, December 2019, 102653.
+//
+//To use this file, one should replace it with the following file and recompile PRISMS-Plasticity:
+//    plasticity/src/materialModels/crystalPlasticity/calculatePlasticity.cc
+//
+//This model include A multiscale scheme is presented to capture the twinning and detwinning mechanisms during 
+//cyclic loading of HCP polycrystals.
+//////////////////////////////////////////////////////////////////////////
+
 template <int dim>
 void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
   unsigned int quadPtID, unsigned int StiffnessCalFlag)
@@ -313,12 +327,15 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
           resolved_shear_tau_trial[j] = 0;
         }
       }
+     
+      /////////////The modification compared to the original model is applied to the following lines//////////////////
       for (unsigned int i = (n_twin_systems / 2);i < n_twin_systems;i++) {
         unsigned int j = i + n_slip_systemsWOtwin;
         if ((resolved_shear_tau_trial[j] > 0) || (ttwinvf[i - (n_twin_systems / 2)] <= 0)) {
           resolved_shear_tau_trial[j] = 0;
         }
       }
+      /////////////The modification compared to the original model is applied to the following lines//////////////////
     }
     else {
 
@@ -548,12 +565,16 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
           resolved_shear_tau_trial[j] = 0;
         }
       }
+      
+      /////////////The modification compared to the original model is applied to the following lines//////////////////
       for (unsigned int i = (n_twin_systems / 2);i < n_twin_systems;i++) {
         unsigned int j = i + n_slip_systemsWOtwin;
         if ((resolved_shear_tau_trial[j] > 0) || (ttwinvf[i - (n_twin_systems / 2)] <= 0)) {
           resolved_shear_tau_trial[j] = 0;
         }
       }
+      /////////////The modification compared to the original model is applied to the following lines//////////////////
+      
     }
     else {
 
