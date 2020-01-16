@@ -335,7 +335,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
           resolved_shear_tau_trial[j] = 0;
         }
       }
-      /////////////The modification compared to the original model is applied to the following lines//////////////////
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
     else {
 
@@ -573,7 +573,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
           resolved_shear_tau_trial[j] = 0;
         }
       }
-      /////////////The modification compared to the original model is applied to the following lines//////////////////
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       
     }
     else {
