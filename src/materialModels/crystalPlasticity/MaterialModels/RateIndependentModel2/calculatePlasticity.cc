@@ -7,8 +7,9 @@
 // J. Mech. Phys. Solids, 44 (1996), pp. 525-558.
 //This is a more stable but slower version of this model compared to the
 //calculatePlasticity.cc available in plasticity/src/materialModels/crystalPlasticity folder.
-//To use this file, one should replace it with the following file and recompile PRISMS-Plasticity:
-//    plasticity/src/materialModels/crystalPlasticity/calculatePlasticity.cc
+//To use this file, one should copy it into the following folder (replacing the original calculatePlasticity.cc inside the following folder with this new one):
+//    plasticity/src/materialModels/crystalPlasticity/
+// Finaly, one should recompile PRISMS-Plasticity.
 //////////////////////////////////////////////////////////////////////////
 
 template <int dim>
