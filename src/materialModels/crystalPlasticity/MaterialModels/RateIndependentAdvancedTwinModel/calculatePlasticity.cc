@@ -8,9 +8,9 @@
 //Multiscale modeling of twinning and detwinning behavior of HCP polycrystals,
 // International Journal of Plasticity, December 2019, 102653.
 //
-//To use this file, one should replace it with the following file and recompile PRISMS-Plasticity:
-//    plasticity/src/materialModels/crystalPlasticity/calculatePlasticity.cc
-//
+//To use this file, one should copy it into the following folder (replacing the original calculatePlasticity.cc inside the following folder with this new one):
+//    plasticity/src/materialModels/crystalPlasticity/
+// Finaly, one should recompile PRISMS-Plasticity.
 //This model include A multiscale scheme is presented to capture the twinning and detwinning mechanisms during 
 //cyclic loading of HCP polycrystals.
 //////////////////////////////////////////////////////////////////////////
