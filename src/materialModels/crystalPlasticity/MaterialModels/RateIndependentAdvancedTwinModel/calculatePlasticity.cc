@@ -1,6 +1,20 @@
 #include "../../../include/crystalPlasticity.h"
 
 
+//////////////////////////////////////////////////////////////////////////
+//calculatePlasticity.cc numerically integrates the constitive model. 
+//This calculatePlasticity.cc is based on the following rate-independent crystal plasticity model: 
+//Mohammadreza Yaghoobi, John E. Allison, Veera Sundararaghavan, 
+//Multiscale modeling of twinning and detwinning behavior of HCP polycrystals,
+// International Journal of Plasticity, December 2019, 102653.
+//
+//To use this file, one should replace it with the following file and recompile PRISMS-Plasticity:
+//    plasticity/src/materialModels/crystalPlasticity/calculatePlasticity.cc
+//
+//This model include A multiscale scheme is presented to capture the twinning and detwinning mechanisms during 
+//cyclic loading of HCP polycrystals.
+//////////////////////////////////////////////////////////////////////////
+
 template <int dim>
 void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
   unsigned int quadPtID, unsigned int StiffnessCalFlag)
