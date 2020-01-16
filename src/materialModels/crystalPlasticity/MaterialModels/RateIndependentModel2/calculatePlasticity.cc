@@ -1,5 +1,14 @@
 #include "../../../include/crystalPlasticity.h"
 
+//////////////////////////////////////////////////////////////////////////
+//calculatePlasticity.cc numerically integrates the constitive model. 
+//This calculatePlasticity.cc is based on the following crystal plasticity model: 
+//L. Anand, M. Kothari, A computational procedure for rate independent crystal plasticity,
+// J. Mech. Phys. Solids, 44 (1996), pp. 525-558.
+//This is a more stable but slower version of this model compared to the
+//calculatePlasticity.cc available in plasticity/src/materialModels/crystalPlasticity folder. 
+//////////////////////////////////////////////////////////////////////////
+
 template <int dim>
 void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
   unsigned int quadPtID, unsigned int StiffnessCalFlag)
