@@ -47,7 +47,7 @@ for item in testDirectories:
     new_vonmisesStress=np.sqrt(0.5*(np.power(new_stress_strain[:,6]-new_stress_strain[:,7],2)+np.power(new_stress_strain[:,7]-new_stress_strain[:,8],2)+np.power(new_stress_strain[:,8]-new_stress_strain[:,6],2)+6*(np.power(new_stress_strain[:,9],2)+np.power(new_stress_strain[:,10],2)+np.power(new_stress_strain[:,11],2))))
 
     if (item=='/hcp/compression/' or item=='/hcp/simpleTension/'):
-        CheckNumber=500
+        CheckNumber=350
     else:
         CheckNumber=1000
 
@@ -64,6 +64,7 @@ for item in testDirectories:
         print('%f Slip Relative Error\n' %CheckSlipError)
     else:
         print('%s failed\n' %item)
+        print('%s check its stress-strain curve\n' %item)
         print('%f Stress Relative Error\n' %CheckStressError)
         print('%f Strain Relative Error\n' %CheckStrainError)
         print('%f Twin Volume Relative Error\n' %CheckTwinError)
