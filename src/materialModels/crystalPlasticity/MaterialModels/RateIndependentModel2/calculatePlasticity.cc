@@ -6,7 +6,9 @@
 //L. Anand, M. Kothari, A computational procedure for rate independent crystal plasticity,
 // J. Mech. Phys. Solids, 44 (1996), pp. 525-558.
 //This is a more stable but slower version of this model compared to the
-//calculatePlasticity.cc available in plasticity/src/materialModels/crystalPlasticity folder. 
+//calculatePlasticity.cc available in plasticity/src/materialModels/crystalPlasticity folder.
+//To use this file, one should replace it with the following file and recompile PRISMS-Plasticity:
+//    plasticity/src/materialModels/crystalPlasticity/calculatePlasticity.cc
 //////////////////////////////////////////////////////////////////////////
 
 template <int dim>
