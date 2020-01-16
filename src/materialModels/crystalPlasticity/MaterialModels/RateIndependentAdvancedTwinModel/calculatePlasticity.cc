@@ -11,7 +11,7 @@
 //To use this file, one should copy it into the following folder (replacing the original calculatePlasticity.cc inside the following folder with this new one):
 //    plasticity/src/materialModels/crystalPlasticity/
 // Finaly, one should recompile PRISMS-Plasticity.
-//This model include A multiscale scheme is presented to capture the twinning and detwinning mechanisms during 
+//This model includes A multiscale scheme is presented to capture the twinning and detwinning mechanisms during 
 //cyclic loading of HCP polycrystals.
 //////////////////////////////////////////////////////////////////////////
 
