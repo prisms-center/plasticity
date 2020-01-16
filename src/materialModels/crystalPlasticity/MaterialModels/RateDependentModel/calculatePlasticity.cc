@@ -6,6 +6,8 @@
 //This calculatePlasticity.cc is based on the following rate-dependent crystal plasticity model: 
 //SR Kalidindi, Polycrystal plasticity: constitutive modeling and deformation processing,
 // PhD thesis, MIT, 1992.
+//To use this file, one should replace this file with the following file and recompile the code:
+//    plasticity/src/materialModels/crystalPlasticity/calculatePlasticity.cc
 //////////////////////////////////////////////////////////////////////////
 
 template <int dim>
