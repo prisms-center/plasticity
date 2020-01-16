@@ -12,7 +12,7 @@
 //    plasticity/src/materialModels/crystalPlasticity/
 // Finaly, one should recompile PRISMS-Plasticity.
 //
-//This model include A multiscale scheme is presented to capture the twinning and detwinning mechanisms during 
+//This model includes a multiscale scheme to capture the twinning and detwinning mechanisms during 
 //cyclic loading of HCP polycrystals.
 //////////////////////////////////////////////////////////////////////////
 
