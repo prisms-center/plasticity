@@ -206,7 +206,7 @@ set Twin Directions File                         = twinDirections.txt
 set Twin Normals File                            = twinNormals.txt
 
 # characteristic twin shear    (S)
-set Characteristic Twin Shear                    = 0.126
+set Characteristic Twin Shear                    = 0.129
 
 ####################################
 # Constitutive model parameters
