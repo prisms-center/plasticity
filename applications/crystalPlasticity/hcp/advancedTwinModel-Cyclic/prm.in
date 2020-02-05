@@ -121,13 +121,13 @@ set Maximum non linear iterations                = 4
 ####################################
 
 #   Elastic Stiffness Matrix -Voigt Notation (MPa)
-set Elastic Stiffness row 1                      = 59.3e3, 25.70e3, 21.40e3, 0, 0, 0
+set Elastic Stiffness row 1                      = 59.4e3, 25.610e3, 21.440e3, 0, 0, 0
 
 # 	Elastic Stiffness Matrix -Voigt Notation (MPa)
-set Elastic Stiffness row 2                      = 25.70e3, 59.3e3, 21.4e3, 0, 0, 0
+set Elastic Stiffness row 2                      = 25.610e3, 59.4e3, 21.44e3, 0, 0, 0
 
 # 	Elastic Stiffness Matrix -Voigt Notation (MPa)
-set Elastic Stiffness row 3                      = 21.40e3, 21.40e3, 61.5e3, 0, 0, 0
+set Elastic Stiffness row 3                      = 21.440e3, 21.440e3, 61.6e3, 0, 0, 0
 
 # 	Elastic Stiffness Matrix -Voigt Notation (MPa)
 set Elastic Stiffness row 4                      = 0, 0, 0, 16.4e3, 0, 0
@@ -136,7 +136,7 @@ set Elastic Stiffness row 4                      = 0, 0, 0, 16.4e3, 0, 0
 set Elastic Stiffness row 5                      = 0, 0, 0, 0, 16.4e3, 0
 
 # 	Elastic Stiffness Matrix -Voigt Notation (MPa)
-set Elastic Stiffness row 6                      = 0, 0, 0, 0, 0, 16.8e3
+set Elastic Stiffness row 6                      = 0, 0, 0, 0, 0, 16.895e3
 
 ####################################
 # Slip parameters
@@ -145,7 +145,7 @@ set Elastic Stiffness row 6                      = 0, 0, 0, 0, 0, 16.8e3
 set Number of Slip Systems                       = 18
 
 # Latent Hardening Ratio
-set Latent Hardening Ratio                       = 2
+set Latent Hardening Ratio                       = 1
 
 # RSS of the slip sytems
 set Initial Slip Resistance                      = 20,20,20,140 , 140, 140,8000, 8000,8000,8000,8000,8000, 240, 240.0, 240.0, 240.0, 240.0, 240.0
