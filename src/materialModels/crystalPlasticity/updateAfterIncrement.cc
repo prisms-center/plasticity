@@ -188,7 +188,11 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 					for (unsigned int q=0; q<num_quad_points; ++q){
 						std::vector<double> temp;
 						temp.push_back(cellOrientationMap[cellID]);
-						temp.push_back(phase[cellID][q]);
+						
+						if (!this->userInputs.enableAdvancedTwinModel){
+							temp.push_back(phase[cellID][q]);
+						}
+						
 						temp.push_back(fe_values.JxW(q));
 
 						temp.push_back(twin_ouput[cellID][q]);
@@ -279,19 +283,84 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 						temp.push_back(slipfraction_conv[cellID][q][45]);
 						temp.push_back(slipfraction_conv[cellID][q][46]);
 						temp.push_back(slipfraction_conv[cellID][q][47]);
+						temp.push_back(slipfraction_conv[cellID][q][48]);
+						temp.push_back(slipfraction_conv[cellID][q][49]);
+						temp.push_back(slipfraction_conv[cellID][q][50]);
+						temp.push_back(slipfraction_conv[cellID][q][51]);
+						temp.push_back(slipfraction_conv[cellID][q][52]);
+						temp.push_back(slipfraction_conv[cellID][q][53]);
+						temp.push_back(slipfraction_conv[cellID][q][54]);
+						temp.push_back(slipfraction_conv[cellID][q][55]);
+						temp.push_back(slipfraction_conv[cellID][q][56]);
+						temp.push_back(slipfraction_conv[cellID][q][57]);
+						temp.push_back(slipfraction_conv[cellID][q][58]);
+						temp.push_back(slipfraction_conv[cellID][q][59]);
+						temp.push_back(slipfraction_conv[cellID][q][60]);
+						temp.push_back(slipfraction_conv[cellID][q][61]);
+						temp.push_back(slipfraction_conv[cellID][q][62]);
+						temp.push_back(slipfraction_conv[cellID][q][63]);
+						temp.push_back(slipfraction_conv[cellID][q][64]);
+						temp.push_back(slipfraction_conv[cellID][q][65]);
+						temp.push_back(slipfraction_conv[cellID][q][66]);
+						temp.push_back(slipfraction_conv[cellID][q][67]);
+						temp.push_back(slipfraction_conv[cellID][q][68]);
+						temp.push_back(slipfraction_conv[cellID][q][69]);
+						temp.push_back(slipfraction_conv[cellID][q][70]);
+						temp.push_back(slipfraction_conv[cellID][q][71]);
+						temp.push_back(slipfraction_conv[cellID][q][72]);
+						temp.push_back(slipfraction_conv[cellID][q][73]);
+						temp.push_back(slipfraction_conv[cellID][q][74]);
+						temp.push_back(slipfraction_conv[cellID][q][75]);
+						temp.push_back(slipfraction_conv[cellID][q][76]);
+						temp.push_back(slipfraction_conv[cellID][q][77]);
+						temp.push_back(slipfraction_conv[cellID][q][78]);
+						temp.push_back(slipfraction_conv[cellID][q][79]);
+						temp.push_back(slipfraction_conv[cellID][q][80]);
+						temp.push_back(slipfraction_conv[cellID][q][81]);
+						temp.push_back(slipfraction_conv[cellID][q][82]);
+						temp.push_back(slipfraction_conv[cellID][q][83]);
 
-						temp.push_back(twinfraction_conv[cellID][q][0]);
-						temp.push_back(twinfraction_conv[cellID][q][1]);
-						temp.push_back(twinfraction_conv[cellID][q][2]);
-						temp.push_back(twinfraction_conv[cellID][q][3]);
-						temp.push_back(twinfraction_conv[cellID][q][4]);
-						temp.push_back(twinfraction_conv[cellID][q][5]);
-						temp.push_back(twinfraction_conv[cellID][q][6]);
-						temp.push_back(twinfraction_conv[cellID][q][7]);
-						temp.push_back(twinfraction_conv[cellID][q][8]);
-						temp.push_back(twinfraction_conv[cellID][q][9]);
-						temp.push_back(twinfraction_conv[cellID][q][10]);
-						temp.push_back(twinfraction_conv[cellID][q][11]);
+						if (!this->userInputs.enableAdvancedTwinModel){
+							temp.push_back(twinfraction_conv[cellID][q][0]);
+							temp.push_back(twinfraction_conv[cellID][q][1]);
+							temp.push_back(twinfraction_conv[cellID][q][2]);
+							temp.push_back(twinfraction_conv[cellID][q][3]);
+							temp.push_back(twinfraction_conv[cellID][q][4]);
+							temp.push_back(twinfraction_conv[cellID][q][5]);
+							temp.push_back(twinfraction_conv[cellID][q][6]);
+							temp.push_back(twinfraction_conv[cellID][q][7]);
+							temp.push_back(twinfraction_conv[cellID][q][8]);
+							temp.push_back(twinfraction_conv[cellID][q][9]);
+							temp.push_back(twinfraction_conv[cellID][q][10]);
+							temp.push_back(twinfraction_conv[cellID][q][11]);
+						}
+						else{
+							temp.push_back(TwinOutputfraction_conv[cellID][q][0]);
+							temp.push_back(TwinOutputfraction_conv[cellID][q][1]);
+							temp.push_back(TwinOutputfraction_conv[cellID][q][2]);
+							temp.push_back(TwinOutputfraction_conv[cellID][q][3]);
+							temp.push_back(TwinOutputfraction_conv[cellID][q][4]);
+							temp.push_back(TwinOutputfraction_conv[cellID][q][5]);
+							temp.push_back(TwinOutputfraction_conv[cellID][q][6]);
+							temp.push_back(TwinOutputfraction_conv[cellID][q][7]);
+							temp.push_back(TwinOutputfraction_conv[cellID][q][8]);
+							temp.push_back(TwinOutputfraction_conv[cellID][q][9]);
+							temp.push_back(TwinOutputfraction_conv[cellID][q][10]);
+							temp.push_back(TwinOutputfraction_conv[cellID][q][11]);
+							temp.push_back(TwinOutputfraction_conv[cellID][q][12]);
+							temp.push_back(TwinOutputfraction_conv[cellID][q][13]);
+							temp.push_back(TwinOutputfraction_conv[cellID][q][14]);
+							temp.push_back(TwinOutputfraction_conv[cellID][q][15]);
+							temp.push_back(TwinOutputfraction_conv[cellID][q][16]);
+							temp.push_back(TwinOutputfraction_conv[cellID][q][17]);
+							temp.push_back(TwinOutputfraction_conv[cellID][q][18]);
+							temp.push_back(TwinOutputfraction_conv[cellID][q][19]);
+							temp.push_back(TwinOutputfraction_conv[cellID][q][20]);
+							temp.push_back(TwinOutputfraction_conv[cellID][q][21]);
+							temp.push_back(TwinOutputfraction_conv[cellID][q][22]);
+							temp.push_back(TwinOutputfraction_conv[cellID][q][23]);
+
+						}
 
 						if (this->userInputs.enableUserMaterialModel){
 							temp.push_back(stateVar_conv[cellID][q][0]);
