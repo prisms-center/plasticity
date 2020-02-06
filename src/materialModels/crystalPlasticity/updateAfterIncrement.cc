@@ -320,21 +320,15 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 						temp.push_back(slipfraction_conv[cellID][q][82]);
 						temp.push_back(slipfraction_conv[cellID][q][83]);
 
-						if (!this->userInputs.enableAdvancedTwinModel){
-							temp.push_back(twinfraction_conv[cellID][q][0]);
-							temp.push_back(twinfraction_conv[cellID][q][1]);
-							temp.push_back(twinfraction_conv[cellID][q][2]);
-							temp.push_back(twinfraction_conv[cellID][q][3]);
-							temp.push_back(twinfraction_conv[cellID][q][4]);
-							temp.push_back(twinfraction_conv[cellID][q][5]);
-							temp.push_back(twinfraction_conv[cellID][q][6]);
-							temp.push_back(twinfraction_conv[cellID][q][7]);
-							temp.push_back(twinfraction_conv[cellID][q][8]);
-							temp.push_back(twinfraction_conv[cellID][q][9]);
-							temp.push_back(twinfraction_conv[cellID][q][10]);
-							temp.push_back(twinfraction_conv[cellID][q][11]);
-						}
-						else{
+
+						temp.push_back(twinfraction_conv[cellID][q][0]);
+						temp.push_back(twinfraction_conv[cellID][q][1]);
+						temp.push_back(twinfraction_conv[cellID][q][2]);
+						temp.push_back(twinfraction_conv[cellID][q][3]);
+						temp.push_back(twinfraction_conv[cellID][q][4]);
+						temp.push_back(twinfraction_conv[cellID][q][5]);
+						
+						if (this->userInputs.enableAdvancedTwinModel){
 							temp.push_back(TwinOutputfraction_conv[cellID][q][0]);
 							temp.push_back(TwinOutputfraction_conv[cellID][q][1]);
 							temp.push_back(TwinOutputfraction_conv[cellID][q][2]);
@@ -359,7 +353,6 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 							temp.push_back(TwinOutputfraction_conv[cellID][q][21]);
 							temp.push_back(TwinOutputfraction_conv[cellID][q][22]);
 							temp.push_back(TwinOutputfraction_conv[cellID][q][23]);
-
 						}
 
 						if (this->userInputs.enableUserMaterialModel){
