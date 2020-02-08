@@ -154,6 +154,7 @@ void crystalPlasticity<dim>::init2(unsigned int num_quad_points)
   }
 
   Vector<double> s0_init (n_slip_systems*((n_twin_systems / 2) + 1)),rot_init(dim*((n_twin_systems / 2) + 1)),rotnew_init(dim*((n_twin_systems / 2) + 1));
+  Vector<double> stateVar_init;
   std::vector<double> twin_init(n_twin_systems/2),TwinOutput_init(n_twin_systems*2),slip_init(n_slip_systemsWOtwin*((n_twin_systems / 2) + 1));
   std::vector<unsigned int> twin_init2(n_twin_systems / 2);
   for (unsigned int i=0;i<n_slip_systemsWOtwin;i++){
@@ -203,6 +204,29 @@ void crystalPlasticity<dim>::init2(unsigned int num_quad_points)
       }
     }
   }
+  
+  
+  if (this->userInputs.enableUserMaterialModel){
+    if (this->userInputs.enableUserMaterialModel1){
+      if (this->userInputs.numberofUserMatStateVar1==0){
+        n_UserMatStateVar_SinglePhase=1;
+        stateVar_init.reinit(n_UserMatStateVar_SinglePhase);
+        stateVar_init=0;
+      }
+      else{
+        n_UserMatStateVar_SinglePhase=this->userInputs.numberofUserMatStateVar1;
+        stateVar_init.reinit(n_UserMatStateVar_SinglePhase);
+        for (unsigned int i=0;i<n_UserMatStateVar_SinglePhase;i++){
+          stateVar_init(i)=this->userInputs.UserMatStateVar1[i];
+        }
+      }
+    }
+    else{
+      n_UserMatStateVar_SinglePhase=1;
+      stateVar_init.reinit(n_UserMatStateVar_SinglePhase);
+      stateVar_init=0;
+    }
+  }
 
 
   //Resize the vectors of history variables
@@ -233,6 +257,11 @@ void crystalPlasticity<dim>::init2(unsigned int num_quad_points)
   TwinFlag_iter.resize(num_local_cells, std::vector<std::vector<unsigned int> >(num_quad_points, twin_init2));
   ActiveTwinSystems_iter.resize(num_local_cells, std::vector<std::vector<unsigned int> >(num_quad_points, twin_init2));
   NumberOfTwinnedRegion_iter.resize(num_local_cells, std::vector<unsigned int>(num_quad_points, 0));
+  
+  if (this->userInputs.enableUserMaterialModel){
+      stateVar_conv.resize(num_local_cells,std::vector<Vector<double> >(num_quad_points,stateVar_init));
+      stateVar_iter.resize(num_local_cells,std::vector<Vector<double> >(num_quad_points,stateVar_init));
+  }
 
   double s0_twin=this->userInputs.initialSlipResistanceTwin1[n_twin_systems-1];
   for (unsigned int cell = 0; cell<num_local_cells; cell++) {
