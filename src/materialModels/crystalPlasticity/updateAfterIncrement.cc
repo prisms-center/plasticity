@@ -111,16 +111,17 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 				this->postprocessValues(cellID, q, 1, 0) = eqvstrain;
 				this->postprocessValues(cellID, q, 2, 0) = twin_ouput[cellID][q];
 
-				local_F_e = local_F_e + twin_ouput[cellID][q] * fe_values.JxW(q);
+				
 
-
+				for(unsigned int i=0;i<this->userInputs.numTwinSystems1;i++){
+					local_F_r=local_F_r+twinfraction_iter[cellID][q][i]*fe_values.JxW(q);
+				}
+				
 				if (!this->userInputs.enableAdvancedTwinModel){
-					for(unsigned int i=0;i<this->userInputs.numTwinSystems1;i++){
-						local_F_r=local_F_r+twinfraction_iter[cellID][q][i]*fe_values.JxW(q);
-					}
+					local_F_e = local_F_e + twin_ouput[cellID][q] * fe_values.JxW(q);
 				}
 				else{
-					local_F_r=local_F_r+ TotaltwinvfK[cellID][q]*fe_values.JxW(q);
+					local_F_e=local_F_e+ TotaltwinvfK[cellID][q]*fe_values.JxW(q);
 				}
 
 
