@@ -93,7 +93,7 @@ set Total time                                   = 1
 set Maximum linear solver iterations             = 50000
 
 # Relative linear solver tolerance
-set Relative linear solver tolerance             = 1.0e-5
+set Relative linear solver tolerance             = 1.0e-10
 
 # Maximum no. of non-linear iterations
 set Maximum non linear iterations                = 4
