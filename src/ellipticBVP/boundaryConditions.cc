@@ -22,8 +22,9 @@ void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned 
           else if(fmod((currentIncrement*delT),cycleTime)<3*userInputs.quarterCycleTime){
             flag=true; value=-deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
           else{flag=true; value=deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
-        break;
-      }
+	}      
+      	break;
+      
         case 2:
         if (node[0] >= (userInputs.span[0]-externalMeshParameterBCs(0)))
         {
