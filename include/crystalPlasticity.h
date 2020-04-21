@@ -155,9 +155,24 @@ public:
               void elasticmoduli(FullMatrix<double> &Ar, FullMatrix<double> R, FullMatrix<double> Av);
 
               /**
-              *calculates the matrix exponential of matrix A
+              *calculates the matrix exponential of 3x3 matrix A
               */
               FullMatrix<double> matrixExponential(FullMatrix<double> A);
+              
+	      /**
+	      *calculates the matrix exponential of 3x3 matrix A
+	      */                                                        
+	      FullMatrix<double> matrixExponential6(FullMatrix<double> A);
+
+              /** 
+	      *calculates the matrix exponential of 3x3 matrix A
+	      */ 
+              FullMatrix<double> matrixExponentialGateauxDerivative(FullMatrix<double> A, FullMatrix<double> B);
+
+	      /**
+	       * Implements line search to solve the optimization problem
+	       */
+	       void lnsrch(Vector<double> &statenew, unsigned int n, Vector<double> stateold, double Fold, Vector<double> gradFold, Vector<double> srchdir,double delgam_ref, double strexp, FullMatrix<double> SCHMID_TENSOR1, unsigned int n_slip_systems, unsigned int n_Tslip_systems, Vector<double> s_alpha_tau, FullMatrix<double> Dmat, FullMatrix<double> CE_tau_trial, Vector<double> W_kh_t1, Vector<double> W_kh_t2, double hb1, double hb2, double mb1, double mb2, double rb1, double rb2, double bb1, double bb2) ;
 
               /**
               * Global deformation gradient F
@@ -258,6 +273,11 @@ public:
               */
               std::vector< std::vector< FullMatrix<double> > > CauchyStress;
 
+              std::vector< std::vector< FullMatrix<double> > > TinterStress;
+
+	      std::vector< std::vector< FullMatrix<double> > > TinterStress_diff;
+
+
               /**
               * Stores slip resistance by element number and quadratureID at each iteration
               */
@@ -268,6 +288,7 @@ public:
               std::vector<std::vector<  Vector<double> > >  W_kh_conv, W_kh_iter;
               Vector<double> Wkh_tau;
 
+	      FullMatrix<double> T_inter ;
               /**
               * Stores state variables by element number and quadratureID
               */
