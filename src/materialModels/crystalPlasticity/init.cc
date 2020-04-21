@@ -17,8 +17,10 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
   local_stress=0.0;
   global_strain=0.0;
   global_stress=0.0;
-  FullMatrix<double> CauchyStress_init(dim,dim);
+  FullMatrix<double> CauchyStress_init(dim,dim), TinterStress_init(dim,dim), TinterStress_diff_init(dim,dim);
   CauchyStress_init=0;
+  TinterStress_init = 0 ;
+  TinterStress_diff_init = 0 ;
   unsigned int num_local_cells = this->triangulation.n_locally_owned_active_cells();
   F.reinit(dim, dim);
 
@@ -245,6 +247,8 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
     Fp_iter.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,IdentityMatrix(dim)));
     Fe_iter.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,IdentityMatrix(dim)));
     CauchyStress.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,CauchyStress_init));
+	 TinterStress.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,TinterStress_init));                
+	 TinterStress_diff.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,TinterStress_diff_init));  
     s_alpha_iter.resize(num_local_cells,std::vector<Vector<double> >(num_quad_points,s0_init));
     twinfraction_iter.resize(num_local_cells,std::vector<std::vector<double> >(num_quad_points,twin_init));
     slipfraction_iter.resize(num_local_cells,std::vector<std::vector<double> >(num_quad_points,slip_init));
@@ -749,6 +753,8 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
     Fp_iter.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,IdentityMatrix(dim)));
     Fe_iter.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,IdentityMatrix(dim)));
     CauchyStress.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,CauchyStress_init));
+	TinterStress.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,TinterStress_init)); 
+	TinterStress_diff.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,TinterStress_diff_init));
     s_alpha_conv.resize(num_local_cells,std::vector<Vector<double> >(num_quad_points,s0_init1));
     W_kh_conv.resize(num_local_cells, std::vector<Vector<double> >(num_quad_points, W_kh_init1));
     W_kh_iter.resize(num_local_cells, std::vector<Vector<double> >(num_quad_points, W_kh_init1));
