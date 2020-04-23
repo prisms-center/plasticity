@@ -22,9 +22,9 @@ void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned 
           else if(fmod((currentIncrement*delT),cycleTime)<3*userInputs.quarterCycleTime){
             flag=true; value=-deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
           else{flag=true; value=deluConstraint[userInputs.cyclicLoadingFace-1][dof];return;}
-	}      
+	}
       	break;
-      
+
         case 2:
         if (node[0] >= (userInputs.span[0]-externalMeshParameterBCs(0)))
         {
@@ -126,11 +126,11 @@ void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned 
                 if (currentIncrement==0){
                   timeCounter=1;
                 }
-                if (currentTime>this->userInputs.tabularTimeInput[timeCounter]){
+                if (currentTime>userInputs.tabularTimeInput[timeCounter]){
                   timeCounter=timeCounter+1;
                 }
 
-                value=(-tabularDisplacements[3*i+dof][timeCounter-1]+tabularDisplacements[3*i+dof][timeCounter])/(this->userInputs.tabularTimeInput[timeCounter]-this->userInputs.tabularTimeInput[timeCounter-1])*delT ;
+                value=(-tabularDisplacements[3*i+dof][timeCounter-1]+tabularDisplacements[3*i+dof][timeCounter])/(userInputs.tabularTimeInput[timeCounter]-userInputs.tabularTimeInput[timeCounter-1])*delT ;
 
                 return;}
           break;
@@ -144,11 +144,11 @@ void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned 
               if (currentIncrement==0){
                 timeCounter=1;
               }
-              if (currentTime>this->userInputs.tabularTimeInput[timeCounter]){
+              if (currentTime>userInputs.tabularTimeInput[timeCounter]){
                 timeCounter=timeCounter+1;
               }
 
-              value=(-tabularDisplacements[3*i+dof][timeCounter-1]+tabularDisplacements[3*i+dof][timeCounter])/(this->userInputs.tabularTimeInput[timeCounter]-this->userInputs.tabularTimeInput[timeCounter-1])*delT ;
+              value=(-tabularDisplacements[3*i+dof][timeCounter-1]+tabularDisplacements[3*i+dof][timeCounter])/(userInputs.tabularTimeInput[timeCounter]-userInputs.tabularTimeInput[timeCounter-1])*delT ;
 
               return;}
           break;
@@ -162,11 +162,11 @@ void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned 
               if (currentIncrement==0){
                 timeCounter=1;
               }
-              if (currentTime>this->userInputs.tabularTimeInput[timeCounter]){
+              if (currentTime>userInputs.tabularTimeInput[timeCounter]){
                 timeCounter=timeCounter+1;
               }
 
-              value=(-tabularDisplacements[3*i+dof][timeCounter-1]+tabularDisplacements[3*i+dof][timeCounter])/(this->userInputs.tabularTimeInput[timeCounter]-this->userInputs.tabularTimeInput[timeCounter-1])*delT ;
+              value=(-tabularDisplacements[3*i+dof][timeCounter-1]+tabularDisplacements[3*i+dof][timeCounter])/(userInputs.tabularTimeInput[timeCounter]-userInputs.tabularTimeInput[timeCounter-1])*delT ;
 
               return;}
           break;
@@ -180,11 +180,11 @@ void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned 
               if (currentIncrement==0){
                 timeCounter=1;
               }
-              if (currentTime>this->userInputs.tabularTimeInput[timeCounter]){
+              if (currentTime>userInputs.tabularTimeInput[timeCounter]){
                 timeCounter=timeCounter+1;
               }
 
-              value=(-tabularDisplacements[3*i+dof][timeCounter-1]+tabularDisplacements[3*i+dof][timeCounter])/(this->userInputs.tabularTimeInput[timeCounter]-this->userInputs.tabularTimeInput[timeCounter-1])*delT ;
+              value=(-tabularDisplacements[3*i+dof][timeCounter-1]+tabularDisplacements[3*i+dof][timeCounter])/(userInputs.tabularTimeInput[timeCounter]-userInputs.tabularTimeInput[timeCounter-1])*delT ;
 
               return;}
           break;
@@ -198,11 +198,11 @@ void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned 
               if (currentIncrement==0){
                 timeCounter=1;
               }
-              if (currentTime>this->userInputs.tabularTimeInput[timeCounter]){
+              if (currentTime>userInputs.tabularTimeInput[timeCounter]){
                 timeCounter=timeCounter+1;
               }
 
-              value=(-tabularDisplacements[3*i+dof][timeCounter-1]+tabularDisplacements[3*i+dof][timeCounter])/(this->userInputs.tabularTimeInput[timeCounter]-this->userInputs.tabularTimeInput[timeCounter-1])*delT ;
+              value=(-tabularDisplacements[3*i+dof][timeCounter-1]+tabularDisplacements[3*i+dof][timeCounter])/(userInputs.tabularTimeInput[timeCounter]-userInputs.tabularTimeInput[timeCounter-1])*delT ;
 
               return;}
           break;
@@ -216,11 +216,11 @@ void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned 
               if (currentIncrement==0){
                 timeCounter=1;
               }
-              if (currentTime>this->userInputs.tabularTimeInput[timeCounter]){
+              if (currentTime>userInputs.tabularTimeInput[timeCounter]){
                 timeCounter=timeCounter+1;
               }
 
-              value=(-tabularDisplacements[3*i+dof][timeCounter-1]+tabularDisplacements[3*i+dof][timeCounter])/(this->userInputs.tabularTimeInput[timeCounter]-this->userInputs.tabularTimeInput[timeCounter-1])*delT ;
+              value=(-tabularDisplacements[3*i+dof][timeCounter-1]+tabularDisplacements[3*i+dof][timeCounter])/(userInputs.tabularTimeInput[timeCounter]-userInputs.tabularTimeInput[timeCounter-1])*delT ;
 
               return;}
         }
@@ -305,12 +305,12 @@ void ellipticBVP<dim>::bcFunction1(double yval, double &value_x, double &value_y
   if (currentIncrement==0){
     timeCounter=1;
   }
-  if (currentTime>this->userInputs.timeInputDIC[timeCounter]){
+  if (currentTime>userInputs.timeInputDIC[timeCounter]){
     timeCounter=timeCounter+1;
   }
 
-  value_x=(-bc_new1[coord_pos][1+(timeCounter-1)*2]+bc_new1[coord_pos][1+timeCounter*2])/(this->userInputs.timeInputDIC[timeCounter]-this->userInputs.timeInputDIC[timeCounter-1])*delT ;
-  value_y=(-bc_new1[coord_pos][2+(timeCounter-1)*2]+bc_new1[coord_pos][2+timeCounter*2])/(this->userInputs.timeInputDIC[timeCounter]-this->userInputs.timeInputDIC[timeCounter-1])*delT ;
+  value_x=(-bc_new1[coord_pos][1+(timeCounter-1)*2]+bc_new1[coord_pos][1+timeCounter*2])/(userInputs.timeInputDIC[timeCounter]-userInputs.timeInputDIC[timeCounter-1])*delT ;
+  value_y=(-bc_new1[coord_pos][2+(timeCounter-1)*2]+bc_new1[coord_pos][2+timeCounter*2])/(userInputs.timeInputDIC[timeCounter]-userInputs.timeInputDIC[timeCounter-1])*delT ;
   //return value1 ; // displacement along X-Direction
 
 }
@@ -335,12 +335,12 @@ void ellipticBVP<dim>::bcFunction2(double yval, double &value_x, double &value_y
   if (currentIncrement==0){
     timeCounter=1;
   }
-  if (currentTime>this->userInputs.timeInputDIC[timeCounter]){
+  if (currentTime>userInputs.timeInputDIC[timeCounter]){
     timeCounter=timeCounter+1;
   }
 
-  value_x=(-bc_new2[coord_pos][1+(timeCounter-1)*2]+bc_new2[coord_pos][1+timeCounter*2])/(this->userInputs.timeInputDIC[timeCounter]-this->userInputs.timeInputDIC[timeCounter-1])*delT ;
-  value_y=(-bc_new2[coord_pos][2+(timeCounter-1)*2]+bc_new2[coord_pos][2+timeCounter*2])/(this->userInputs.timeInputDIC[timeCounter]-this->userInputs.timeInputDIC[timeCounter-1])*delT ;
+  value_x=(-bc_new2[coord_pos][1+(timeCounter-1)*2]+bc_new2[coord_pos][1+timeCounter*2])/(userInputs.timeInputDIC[timeCounter]-userInputs.timeInputDIC[timeCounter-1])*delT ;
+  value_y=(-bc_new2[coord_pos][2+(timeCounter-1)*2]+bc_new2[coord_pos][2+timeCounter*2])/(userInputs.timeInputDIC[timeCounter]-userInputs.timeInputDIC[timeCounter-1])*delT ;
 
 
 
@@ -368,12 +368,12 @@ void ellipticBVP<dim>::bcFunction3(double xval, double &value_x, double &value_y
   if (currentIncrement==0){
     timeCounter=1;
   }
-  if (currentTime>this->userInputs.timeInputDIC[timeCounter]){
+  if (currentTime>userInputs.timeInputDIC[timeCounter]){
     timeCounter=timeCounter+1;
   }
 
-  value_x=(-bc_new3[coord_pos][1+(timeCounter-1)*2]+bc_new3[coord_pos][1+timeCounter*2])/(this->userInputs.timeInputDIC[timeCounter]-this->userInputs.timeInputDIC[timeCounter-1])*delT ;
-  value_y=(-bc_new3[coord_pos][2+(timeCounter-1)*2]+bc_new3[coord_pos][2+timeCounter*2])/(this->userInputs.timeInputDIC[timeCounter]-this->userInputs.timeInputDIC[timeCounter-1])*delT ;
+  value_x=(-bc_new3[coord_pos][1+(timeCounter-1)*2]+bc_new3[coord_pos][1+timeCounter*2])/(userInputs.timeInputDIC[timeCounter]-userInputs.timeInputDIC[timeCounter-1])*delT ;
+  value_y=(-bc_new3[coord_pos][2+(timeCounter-1)*2]+bc_new3[coord_pos][2+timeCounter*2])/(userInputs.timeInputDIC[timeCounter]-userInputs.timeInputDIC[timeCounter-1])*delT ;
 
 
 }
@@ -397,63 +397,69 @@ void ellipticBVP<dim>::bcFunction4(double xval, double &value_x, double &value_y
   if (currentIncrement==0){
     timeCounter=1;
   }
-  if (currentTime>this->userInputs.timeInputDIC[timeCounter]){
+  if (currentTime>userInputs.timeInputDIC[timeCounter]){
     timeCounter=timeCounter+1;
   }
 
-  value_x=(-bc_new4[coord_pos][1+(timeCounter-1)*2]+bc_new4[coord_pos][1+timeCounter*2])/(this->userInputs.timeInputDIC[timeCounter]-this->userInputs.timeInputDIC[timeCounter-1])*delT ;
-  value_y=(-bc_new4[coord_pos][2+(timeCounter-1)*2]+bc_new4[coord_pos][2+timeCounter*2])/(this->userInputs.timeInputDIC[timeCounter]-this->userInputs.timeInputDIC[timeCounter-1])*delT ;
+  value_x=(-bc_new4[coord_pos][1+(timeCounter-1)*2]+bc_new4[coord_pos][1+timeCounter*2])/(userInputs.timeInputDIC[timeCounter]-userInputs.timeInputDIC[timeCounter-1])*delT ;
+  value_y=(-bc_new4[coord_pos][2+(timeCounter-1)*2]+bc_new4[coord_pos][2+timeCounter*2])/(userInputs.timeInputDIC[timeCounter]-userInputs.timeInputDIC[timeCounter-1])*delT ;
 
 
 }
 
 
 
-
 //methods to apply dirichlet BC's
 template <int dim>
 void ellipticBVP<dim>::applyDirichletBCs(){
-  constraints.clear();
 
-  const unsigned int   dofs_per_cell   = FE.dofs_per_cell;
-  std::vector<types::global_dof_index> local_dof_indices (dofs_per_cell);
-  FEValues<dim> fe_values (FE, QGauss<dim>(1), update_values);
-  FEFaceValues<dim> fe_face_values (FE, QGauss<dim-1>(1), update_values);
+  if(!userInputs.enablePeriodicBCs){
+    constraints.clear();
+    constraints.reinit (locally_relevant_dofs);
+    DoFTools::make_hanging_node_constraints (dofHandler, constraints);
+    const unsigned int   dofs_per_cell   = FE.dofs_per_cell;
+    std::vector<types::global_dof_index> local_dof_indices (dofs_per_cell);
+    FEValues<dim> fe_values (FE, QGauss<dim>(userInputs.quadOrder), update_values);
+    FEFaceValues<dim> fe_face_values (FE, QGauss<dim-1>(userInputs.quadOrder), update_values);
 
-  //parallel loop over all elements
-  typename DoFHandler<dim>::active_cell_iterator cell = dofHandler.begin_active(), endc = dofHandler.end();
-  for (; cell!=endc; ++cell) {
-    if (cell->is_locally_owned()){
-      cell->get_dof_indices (local_dof_indices);
-      fe_values.reinit (cell);
-      for (unsigned int faceID=0; faceID<2*dim; faceID++){
-	if (cell->face(faceID)->at_boundary()){
-	  fe_face_values.reinit (cell, faceID);
-	  for (unsigned int i=0; i<dofs_per_cell; ++i) {
-	    if (fe_face_values.shape_value(i, 0)!=0){
-	      const unsigned int dof = fe_values.get_fe().system_to_component_index(i).first;
-	      unsigned int globalDOF=local_dof_indices[i];
-	      bool flag=false;
-	      double value=0;
-	      Point<dim> node=supportPoints[globalDOF];
-	      setBoundaryValues(node, dof, flag, value);
-	      if (flag){
-		constraints.add_line (globalDOF);
-		if (currentIteration==0){
-		  value*=loadFactorSetByModel;
-		}
-		else{
-		  value=0.0;
-		}
-		constraints.set_inhomogeneity(globalDOF, value);
-	      }
-	    }
-	  }
-	}
+    //parallel loop over all elements
+    typename DoFHandler<dim>::active_cell_iterator cell = dofHandler.begin_active(), endc = dofHandler.end();
+    for (; cell!=endc; ++cell) {
+      if (cell->is_locally_owned()){
+        cell->get_dof_indices (local_dof_indices);
+        fe_values.reinit (cell);
+        for (unsigned int faceID=0; faceID<GeometryInfo<dim>::faces_per_cell; faceID++){
+          if (cell->face(faceID)->at_boundary()){
+            fe_face_values.reinit (cell, faceID);
+            for (unsigned int i=0; i<dofs_per_cell; ++i) {
+              if (fe_face_values.shape_value(i, 0)!=0){
+                const unsigned int dof = fe_values.get_fe().system_to_component_index(i).first;
+                unsigned int globalDOF=local_dof_indices[i];
+                bool flag=false;
+                double value=0;
+                node=supportPoints[globalDOF];
+                setBoundaryValues(node, dof, flag, value);
+                if (flag){
+                  constraints.add_line (globalDOF);
+                  if (currentIteration==0){
+                    value*=loadFactorSetByModel;
+                  }
+                  else{
+                    value=0.0;
+                  }
+                  constraints.set_inhomogeneity(globalDOF, value);
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
-  //
-  constraints.close();
+  else{
+    setPeriodicityConstraints();
+  }
+
+  constraints.close ();
 }
 #include "../../include/ellipticBVP_template_instantiations.h"

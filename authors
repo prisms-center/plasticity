@@ -3,12 +3,12 @@ This file lists people who contributed code/documentation to PRISMS Plasticity
 Code development
 ================
 Gregory Teichert (Continuum Plasticity)
-Sriram Ganesan   (Crystal Plasticity)
-Shiva Rudraraju  (EllipticBVP) 
-Brian Puchala    (utils/IntegrationTools)
+Mohammadreza Yaghoobi, Sriram Ganesan, Srihari Sundar, Aaditya Lakshmanan   (Crystal Plasticity)
+Shiva Rudraraju, Mohammadreza Yaghoobi, Sriram Ganesan, Srihari Sundar  (EllipticBVP) 
+Mohammadreza Yaghoobi, Aaditya Lakshmanan, Brian Puchala    (utils/IntegrationTools)
 
 Documentation
 ================
 Gregory Teichert (Continuum Plasticity)
-Sriram Ganesan   (Crystal Plasticity)
-Shiva Rudraraju  (EllipticBVP) 
+Mohammadreza Yaghoobi, Srihari Sundar, Aaditya Lakshmanan, Sriram Ganesan   (Crystal Plasticity)
+Mohammadreza Yaghoobi, Srihari Sundar, Aaditya Lakshmanan  (EllipticBVP) 

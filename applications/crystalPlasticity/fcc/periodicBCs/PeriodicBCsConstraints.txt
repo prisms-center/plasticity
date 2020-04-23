@@ -1,0 +1,110 @@
+# Vertices Constraints: Each line has two rows, one for DOFs and one for their corresponding coefficient.
+#set Vertices Periodic BCs row order:
+# 0=V000_1 1=V000_2 2=V000_3 3=V100_1 4=V100_2 5=V100_3 6=V010_1 7=V010_2 8=V010_3 9=V001_1 10=V001_2 11=V001_3
+# 12=V110_1 13=V110_2 14=V110_3 15=V101_1 16=V101_2 17=V101_3 18=V011_1 19=V011_2 20=V011_3 21=V111_1 22=V111_2 23=V111_3
+4 12 6 3 0
+4 1 -1 -1 1
+4 15 9 3 0
+4 1 -1 -1 1
+4 21 18 3 0
+4 1 -1 -1 1
+3 18 6 9 0
+3 1 -1 -1 0
+4 19 10 7 1
+4 1 -1 -1 1
+4 13 4 7 1
+4 1 -1 -1 1
+4 22 4 7 1
+4 1 4 -1 1
+3 16 10 4 0
+3 1 -1 -1 0
+4 17 5 11 2
+4 1 -1 -1 1
+4 20 8 11 2
+4 1 -1 -1 1
+4 23 14 11 2
+4 1 -1 -1 1
+3 14 5 8 0
+3 1 -1 -1 0
+# Edges Constraints: Each line has two rows, one for DOFs and one for their corresponding coefficient.
+#set Edges Periodic BCs row order:
+# 0=EX000_1 1=EX000_2 2=EX000_3 3=EX001_1 4=EX001_2 5=EX001_3 6=EX010_1 7=EX010_2 8=EX010_3 9=EX011_1 10=EX011_2 11=EX011_3
+# 12=EY000_1 13=EY000_2 14=EY000_3 15=EY001_1 16=EY001_2 17=EY001_3 18=EY100_1 19=EY100_2 20=EY100_3 21=EY101_1 22=EY101_2 23=EY101_3
+# 24=EZ000_1 25=EZ000_2 26=EZ000_3 27=EZ010_1 28=EZ010_2 29=EZ010_3 30=EZ100_1 31=EZ100_2 32=EZ100_3 33=EZ110_1 34=EZ110_2 35=EZ110_3
+3 9 18 9
+-1 1 -1 1
+0 6 6 0
+-1 1 -1 1
+9 0 0 18
+-1 1 -1 1
+21 18 15 3
+1 -1 -1 1
+15 12 9 0
+1 -1 -1 1
+12 18 0 3
+1 -1 -1 1
+30 33 3 12
+1 -1 -1 1
+27 24 6 0
+1 -1 -1 1
+24 30 0 3
+1 -1 -1 1
+4 10 19 10
+-1 1 -1 1
+1 7 7 1
+-1 1 -1 1
+10 1 1 19
+-1 1 -1 1
+22 19 16 4
+1 -1 -1 1
+16 13 10 1
+1 -1 -1 1
+13 19 1 4
+1 -1 -1 1
+31 34 4 13
+1 -1 -1 1
+28 25 7 1
+1 -1 -1 1
+25 31 1 4
+1 -1 -1 1
+5 11 20 11
+-1 1 -1 1
+2 8 8 2
+-1 1 -1 1
+11 2 2 20
+-1 1 -1 1
+23 20 17 5
+1 -1 -1 1
+17 14 11 2
+1 -1 -1 1
+14 20 2 5
+1 -1 -1 1
+32 35 5 14
+1 -1 -1 1
+29 26 8 2
+1 -1 -1 1
+26 32 2 5
+1 -1 -1 1
+# Faces Constraints: Each line has two rows, one for DOFs and one for their corresponding coefficient.
+#set Faces Periodic BCs row order:
+# 0=FXN_1 1=FXN_2 2=FXN_3 3=FXP_1 4=FXP_2 5=FXP_3 6=FYN_1 7=FYN_2 8=FYN_3 9=FYP_1 10=FYP_2 11=FYP_3
+# 12=FZN_1 13=FZN_2 14=FZN_3 15=FZP_1 16=FZP_2 17=FZP_3
+# Important note: The first column of all face constraint lines must always start with the positive faces, i.e., FXP,FYP, and FZP.
+3 0 3 0
+1 -1 -1 1
+9 6 6 0
+1 -1 -1 1
+15 12 9 0
+1 -1 -1 1
+4 1 4 1
+1 -1 -1 1
+10 7 7 1
+1 -1 -1 1
+16 13 10 1
+1 -1 -1 1
+5 2 5 2
+1 -1 -1 1
+11 8 8 2
+1 -1 -1 1
+17 14 11 2
+1 -1 -1 1

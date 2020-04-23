@@ -91,6 +91,18 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
   cyclicLoadingDOF=parameter_handler.get_integer("Cyclic loading direction");
   quarterCycleTime=parameter_handler.get_double("Quarter cycle time");
 
+  enablePeriodicBCs=parameter_handler.get_bool("Use Periodic BCs");
+  Periodic_BCfilename=parameter_handler.get("Periodic Boundary condition Constraint filename");
+  numberVerticesConstraint=parameter_handler.get_integer("Number of Vertices Constraints");
+  numberEdgesConstraint=parameter_handler.get_integer("Number of Edges Constraints");
+  numberFacesConstraint=parameter_handler.get_integer("Number of Faces Constraints");
+  periodicBCsInput.push_back(dealii::Utilities::string_to_int(dealii::Utilities::split_string_list(parameter_handler.get("Vertices Periodic BCs row 1"))));
+  periodicBCsInput2.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Vertices Periodic BCs row 2"))));
+  enableTabularPeriodicBCs=parameter_handler.get_bool("Use Tabular Periodic BCs");
+  periodicTabularTime=parameter_handler.get_double("periodic Tabular time");
+  tabularPeriodicTimeInput.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Tabular Periodic Time Table"))));
+  tabularPeriodicCoef.push_back(dealii::Utilities::string_to_int(dealii::Utilities::split_string_list(parameter_handler.get("Tabular Periodic Time Table Coefficient"))));
+
   output_Eqv_strain = parameter_handler.get_bool("Output Equivalent strain");
   output_Eqv_stress = parameter_handler.get_bool("Output Equivalent stress");
   output_Grain_ID = parameter_handler.get_bool("Output Grain ID");
@@ -455,6 +467,19 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Cyclic loading face","1",dealii::Patterns::Integer(),"Face that is cyclically loaded");
   parameter_handler.declare_entry("Cyclic loading direction","1",dealii::Patterns::Integer(),"Direction that is cyclically loaded");
   parameter_handler.declare_entry("Quarter cycle time","-1",dealii::Patterns::Double(),"Time for finishing quarter of a cyclic loading cycle. One cycle is time taken for starting from 0 displacement and ending at 0 displacement");
+
+  parameter_handler.declare_entry("Use Periodic BCs","false",dealii::Patterns::Bool(),"Flag to indicate whether to use periodic BCs");
+  parameter_handler.declare_entry("Periodic Boundary condition Constraint filename","PeriodicBCsConstraints.txt",dealii::Patterns::Anything(),"File name containing Periodic Boundary condition Constraint");
+  parameter_handler.declare_entry("Number of Vertices Constraints","0",dealii::Patterns::Integer(),"Number of Vertices Constraints");
+  parameter_handler.declare_entry("Number of Edges Constraints","0",dealii::Patterns::Integer(),"Number of Edges Constraints");
+  parameter_handler.declare_entry("Number of Faces Constraints","0",dealii::Patterns::Integer(),"Number of Faces Constraints");
+  parameter_handler.declare_entry("Vertices Periodic BCs row 1","",dealii::Patterns::List(dealii::Patterns::Integer()),"Vertices Periodic BCs row 1 ");
+  parameter_handler.declare_entry("Vertices Periodic BCs row 2","",dealii::Patterns::List(dealii::Patterns::Double()),"Vertices Periodic BCs row 2 ");
+  parameter_handler.declare_entry("Use Tabular Periodic BCs","false",dealii::Patterns::Bool(),"Flag to indicate whether to use Tabular Periodic BCs");
+  parameter_handler.declare_entry("periodic Tabular time","-1",dealii::Patterns::Double(),"Time for finishing the largest displacement defined in Vertices Periodic BCs row 2");
+  parameter_handler.declare_entry("Tabular Periodic Time Table","",dealii::Patterns::List(dealii::Patterns::Double()),"Table for Time intervals of Tabular Periodic BCs");
+  parameter_handler.declare_entry("Tabular Periodic Time Table Coefficient","",dealii::Patterns::List(dealii::Patterns::Integer()),"Table for Coefficient of Tabular Periodic BCs ");
+
 
   parameter_handler.declare_entry("Write Output","false",dealii::Patterns::Bool(),"Flag to write output vtu and pvtu files");
   parameter_handler.declare_entry("Output Directory",".",dealii::Patterns::Anything(),"Output Directory");
