@@ -4,12 +4,6 @@
 //FE assemble operation
 template <int dim>
 void ellipticBVP<dim>::assemble(){
-  //initialize global data structures to zero
-  //The additional compress operations are only to flush out data and
-  //switch to the correct write state. For  details look at the documentation
-  //for PETScWrappers::MPI::Vector()
-  residual.compress(VectorOperation::add); residual=0.0;
-  jacobian.compress(VectorOperation::add); jacobian=0.0;
 
   //local variables
   QGauss<dim>  quadrature(userInputs.quadOrder);
@@ -22,6 +16,24 @@ void ellipticBVP<dim>::assemble(){
 
   //apply Dirichlet BC's
   applyDirichletBCs();
+
+  if(userInputs.enablePeriodicBCs){
+    DynamicSparsityPattern dsp (locally_relevant_dofs_Mod);
+    DoFTools::make_sparsity_pattern (dofHandler, dsp, constraints, false);
+    SparsityTools::distribute_sparsity_pattern (dsp,
+      dofHandler.n_locally_owned_dofs_per_processor(),
+      mpi_communicator,
+      locally_relevant_dofs_Mod);
+      jacobian.reinit (locally_owned_dofs, locally_owned_dofs, dsp, mpi_communicator);
+    }
+  //initialize global data structures to zero
+  //The additional compress operations are only to flush out data and
+  //switch to the correct write state. For  details look at the documentation
+  //for PETScWrappers::MPI::Vector()
+  jacobian.compress(VectorOperation::add);
+  jacobian=0.0;
+  residual.compress(VectorOperation::add);
+  residual=0.0;
 
   try{
     //parallel loop over all elements

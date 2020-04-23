@@ -36,8 +36,35 @@ protected:
   MPI_Comm   mpi_communicator;
   IndexSet   locally_owned_dofs;
   IndexSet   locally_owned_dofs_Scalar;
-  IndexSet   locally_relevant_dofs;
+  IndexSet   locally_relevant_dofs,locally_relevant_dofs_Mod;
   IndexSet   locally_relevant_dofs_Scalar;
+  IndexSet   dof_FN,dof_FP;
+  IndexSet   dof_FXN,dof_FXP;
+  IndexSet   dof_FYN,dof_FYP;
+  IndexSet   dof_FZN,dof_FZP;
+  IndexSet   dof_Boundary_Layer2,vertices_DOFs,global_dof_Boundary_Layer2,Edges_DOFs_1,Edges_DOFs_2,Edges_DOFs_3;
+
+
+  unsigned int globalDOF_V000_1,globalDOF_V000_2,globalDOF_V000_3,globalDOF_V001_1,globalDOF_V001_2,globalDOF_V001_3,globalDOF_V010_1,globalDOF_V010_2,globalDOF_V010_3,globalDOF_V100_1,globalDOF_V100_2,globalDOF_V100_3;
+  unsigned int globalDOF_V011_1,globalDOF_V011_2,globalDOF_V011_3,globalDOF_V110_1,globalDOF_V110_2,globalDOF_V110_3,globalDOF_V101_1,globalDOF_V101_2,globalDOF_V101_3,globalDOF_V111_1,globalDOF_V111_2,globalDOF_V111_3;
+
+  unsigned int local_globalDOF_V000_1,local_globalDOF_V000_2,local_globalDOF_V000_3,local_globalDOF_V001_1,local_globalDOF_V001_2,local_globalDOF_V001_3,local_globalDOF_V010_1,local_globalDOF_V010_2,local_globalDOF_V010_3,local_globalDOF_V100_1,local_globalDOF_V100_2,local_globalDOF_V100_3;
+  unsigned int local_globalDOF_V011_1,local_globalDOF_V011_2,local_globalDOF_V011_3,local_globalDOF_V110_1,local_globalDOF_V110_2,local_globalDOF_V110_3,local_globalDOF_V101_1,local_globalDOF_V101_2,local_globalDOF_V101_3,local_globalDOF_V111_1,local_globalDOF_V111_2,local_globalDOF_V111_3;
+
+  unsigned int global_size_dof_Boundary_Layer2,global_size_dof_Edge;
+
+  std::vector<unsigned int> global_vector_dof_Boundary_Layer2;
+  std::vector<std::vector<unsigned int> >  vertices_Constraints_Matrix,edges_Constraints_Matrix,faces_Constraints_Matrix, global_Edges_DOFs_Vector_Array;
+  std::vector<std::vector<double>>  vertices_Constraints_Coef,edges_Constraints_Coef,faces_Constraints_Coef, global_Edges_DOFs_Coord_Vector_Array;
+  std::vector<std::vector<int>> periodicBCsInput; // 	Periodic BCs Input
+  std::vector<std::vector<double>> periodicBCsInput2,periodicBCsInput2_Orig; // 	Periodic BCs Input
+  std::vector<unsigned int> vertices_Constraint_Known, vertices_DOFs_vector;
+  std::vector<std::vector<unsigned int>> edges_DOFs;
+  std::vector<IndexSet> faces_dof_Index_vector;
+
+  unsigned int numberVerticesConstraint,numberEdgesConstraint,numberFacesConstraint,totalNumVerticesDOFs,totalNumEdgesDOFs,totalNumEachEdgesNodes,totalNumFacesDOFs;
+
+  Point<dim> vertexNode,node, cellCenter;
 
   //User input parameters object
   userInputParameters userInputs;
@@ -55,15 +82,23 @@ protected:
   void assemble();
   void assemble2();
   #if ((DEAL_II_VERSION_MAJOR < 9)||(DEAL_II_VERSION_MINOR < 1))
-  ConstraintMatrix   constraints;
+  ConstraintMatrix   constraints, constraints_PBCs_Inc0, constraints_PBCs_IncNot0, constraints_PBCs_Inc0Neg;
   ConstraintMatrix   constraintsMassMatrix;
   void solveLinearSystem(ConstraintMatrix& constraintmatrix, matrixType& A, vectorType& b, vectorType& x, vectorType& xGhosts, vectorType& dxGhosts);
   void solveLinearSystem2(ConstraintMatrix& constraintmatrix, matrixType& A, vectorType& b, vectorType& x, vectorType& xGhosts, vectorType& dxGhosts);
+  ///Periodic BCs Implementation
+  void setFaceConstraints(ConstraintMatrix& constraintmatrix);
+  void setEdgeConstraints(ConstraintMatrix& constraintmatrix);
+  void setNodeConstraints(ConstraintMatrix& constraintmatrix);
   #else
-  AffineConstraints<double>   constraints;
+  AffineConstraints<double>   constraints, constraints_PBCs_Inc0, constraints_PBCs_IncNot0, constraints_PBCs_Inc0Neg;
   AffineConstraints<double>   constraintsMassMatrix;
   void solveLinearSystem(AffineConstraints<double>& constraintmatrix, matrixType& A, vectorType& b, vectorType& x, vectorType& xGhosts, vectorType& dxGhosts);
   void solveLinearSystem2(AffineConstraints<double>& constraintmatrix, matrixType& A, vectorType& b, vectorType& x, vectorType& xGhosts, vectorType& dxGhosts);
+  ///Periodic BCs Implementation
+  void setNodeConstraints(AffineConstraints<double>& constraintmatrix);
+  void setEdgeConstraints(AffineConstraints<double>& constraintmatrix);
+  void setFaceConstraints(AffineConstraints<double>& constraintmatrix);
   #endif
 
 
@@ -103,6 +138,14 @@ protected:
       void applyInitialConditions();
       void setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value);
 
+      ///////These functions are for Periodic BCs Implementation
+      void setPeriodicity();
+      void setPeriodicityConstraintsInit();
+      void setPeriodicityConstraints();
+      void setPeriodicityConstraintsInc0();
+      void setPeriodicityConstraintsIncNot0();
+      void setPeriodicityConstraintsInc0Neg();
+      
       ///////These functions are for DIC BCs evaluation
       void bcFunction1(double _yval, double &value_x, double &value_y, double _currentIncr);
       void bcFunction2(double _yval, double &value_x, double &value_y, double _currentIncr);
@@ -133,7 +176,7 @@ protected:
       //misc variables
       double delT,totalT,cycleTime;
       unsigned int currentIteration, currentIncrement;
-      unsigned int totalIncrements;
+      unsigned int totalIncrements,periodicTotalIncrements;
       bool resetIncrement;
       double loadFactorSetByModel;
       double totalLoadFactor;

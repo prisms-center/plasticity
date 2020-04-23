@@ -66,6 +66,15 @@ public:
   unsigned int cyclicLoadingDOF;
   double quarterCycleTime;
 
+  bool enablePeriodicBCs,enableTabularPeriodicBCs; // Specify whether to use Periodic BCs or Tabular Periodic BCs
+  double periodicTabularTime;
+  std::string Periodic_BCfilename; // PEriodic BCs Constraints file
+  unsigned int numberVerticesConstraint; //Number of Vertices Constraints for Periodic BCs
+  unsigned int numberEdgesConstraint; //Number of Edges Constraints for Periodic BCs
+  unsigned int numberFacesConstraint; //Number of Faces Constraints for Periodic BCs
+  std::vector<std::vector<int>> periodicBCsInput,tabularPeriodicCoef; // 	Periodic BCs Input
+  std::vector<std::vector<double>> periodicBCsInput2,tabularPeriodicTimeInput; // 	Periodic BCs Input
+
   /*Solution output parameters*/
   bool writeOutput, writeQuadratureOutput; // flag to write output vtu and pvtu files
   std::string outputDirectory;

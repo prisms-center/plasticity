@@ -27,9 +27,10 @@ testDirectories = ['/fcc/simpleTension/'
                   ,'/fcc/FCC_RandomOrientationBlock/'
                   ,'/fcc/simpleCompression_Multiphase/'
                   ,'/fcc/simpleTension_ExternalMesh/'
+                  ,'/fcc/tabularSimpleCompression/'
                   ,'/hcp/compression/'
                   ,'/hcp/simpleTension/'
-                  ] 
+                  ]
 
 for item in testDirectories:
 
