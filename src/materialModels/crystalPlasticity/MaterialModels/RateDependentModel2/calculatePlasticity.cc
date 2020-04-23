@@ -769,6 +769,7 @@ while(locres2>locres_tol2 && itr2 < nitr2){
 
     double mulfac;
 
+    if(StiffnessCalFlag==1){
     // Contribution 1 - Most straightforward because no need to invoke constitutive model
     FE_tau.mmult(temp,T_star_tau);
     temp.mTmult(temp1,FE_tau);
@@ -1018,7 +1019,7 @@ while(locres2>locres_tol2 && itr2 < nitr2){
       }
     }
 
-
+   }// Stiffness cal flag end
 
     P.reinit(dim, dim);
     P = P_tau;
