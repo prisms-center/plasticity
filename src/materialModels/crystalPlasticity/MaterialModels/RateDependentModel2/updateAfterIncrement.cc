@@ -116,12 +116,12 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 				this->postprocessValues(cellID, q, 1, 0) = eqvstrain;
 				this->postprocessValues(cellID, q, 2, 0) = twin_ouput[cellID][q];
 
-
+				
 
 				for(unsigned int i=0;i<this->userInputs.numTwinSystems1;i++){
 					local_F_r=local_F_r+twinfraction_iter[cellID][q][i]*fe_values.JxW(q);
 				}
-
+				
 				if (!this->userInputs.enableAdvancedTwinModel){
 					local_F_e = local_F_e + twin_ouput[cellID][q] * fe_values.JxW(q);
 				}
@@ -194,11 +194,11 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 					for (unsigned int q=0; q<num_quad_points; ++q){
 						std::vector<double> temp;
 						temp.push_back(cellOrientationMap[cellID]);
-
+						
 						if (!this->userInputs.enableAdvancedTwinModel){
 							temp.push_back(phase[cellID][q]);
 						}
-
+						
 						temp.push_back(fe_values.JxW(q));
 
 						temp.push_back(twin_ouput[cellID][q]);
@@ -362,7 +362,7 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 						temp.push_back(twinfraction_conv[cellID][q][3]);
 						temp.push_back(twinfraction_conv[cellID][q][4]);
 						temp.push_back(twinfraction_conv[cellID][q][5]);
-
+						
 						if (this->userInputs.enableAdvancedTwinModel){
 							temp.push_back(TwinOutputfraction_conv[cellID][q][0]);
 							temp.push_back(TwinOutputfraction_conv[cellID][q][1]);
@@ -475,20 +475,23 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 	//check whether to write stress and strain data to file
 	//write stress and strain data to file
 	std::string dir(this->userInputs.outputDirectory);
-	if(Utilities::MPI::this_mpi_process(this->mpi_communicator)==0){
-		dir+="/";
-		std::ofstream outputFile;
-		dir += std::string("stressstrain.txt");
+	dir+="/";
 
-		if(this->currentIncrement==0){
-			outputFile.open(dir.c_str());
-			outputFile << "Exx"<<'\t'<<"Eyy"<<'\t'<<"Ezz"<<'\t'<<"Eyz"<<'\t'<<"Exz"<<'\t'<<"Exy"<<'\t'<<"Txx"<<'\t'<<"Tyy"<<'\t'<<"Tzz"<<'\t'<<"Tyz"<<'\t'<<"Txz"<<'\t'<<"Txy"<<'\t'<<"TwinRealVF"<<'\t'<<"TwinMade"<<'\t'<<"SlipTotal"<<'\n';
-			outputFile.close();
-		}
-		outputFile.open(dir.c_str(),std::fstream::app);
-		outputFile << global_strain[0][0]<<'\t'<<global_strain[1][1]<<'\t'<<global_strain[2][2]<<'\t'<<global_strain[1][2]<<'\t'<<global_strain[0][2]<<'\t'<<global_strain[0][1]<<'\t'<<global_stress[0][0]<<'\t'<<global_stress[1][1]<<'\t'<<global_stress[2][2]<<'\t'<<global_stress[1][2]<<'\t'<<global_stress[0][2]<<'\t'<<global_stress[0][1]<<'\t'<<F_r<<'\t'<<F_e<<'\t'<<F_s<<'\n';
+	std::ofstream outputFile;
+	if(this->currentIncrement==0){
+		dir += std::string("stressstrain.txt");
+		outputFile.open(dir.c_str());
+		outputFile << "Exx"<<'\t'<<"Eyy"<<'\t'<<"Ezz"<<'\t'<<"Eyz"<<'\t'<<"Exz"<<'\t'<<"Exy"<<'\t'<<"Txx"<<'\t'<<"Tyy"<<'\t'<<"Tzz"<<'\t'<<"Tyz"<<'\t'<<"Txz"<<'\t'<<"Txy"<<'\t'<<"TwinRealVF"<<'\t'<<"TwinMade"<<'\t'<<"SlipTotal"<<'\n';
 		outputFile.close();
 	}
+	else{
+		dir += std::string("stressstrain.txt");
+	}
+	outputFile.open(dir.c_str(),std::fstream::app);
+	if(Utilities::MPI::this_mpi_process(this->mpi_communicator)==0){
+		outputFile << global_strain[0][0]<<'\t'<<global_strain[1][1]<<'\t'<<global_strain[2][2]<<'\t'<<global_strain[1][2]<<'\t'<<global_strain[0][2]<<'\t'<<global_strain[0][1]<<'\t'<<global_stress[0][0]<<'\t'<<global_stress[1][1]<<'\t'<<global_stress[2][2]<<'\t'<<global_stress[1][2]<<'\t'<<global_stress[0][2]<<'\t'<<global_stress[0][1]<<'\t'<<F_r<<'\t'<<F_e<<'\t'<<F_s<<'\n';
+	}
+	outputFile.close();
 
 
 	//call base class project() function to project post processed fields
