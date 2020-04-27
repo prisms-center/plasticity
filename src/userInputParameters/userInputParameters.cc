@@ -143,6 +143,7 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
   elasticStiffness1.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness row 5"))));
   elasticStiffness1.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness row 6"))));
 
+  enableAdvRateDepModel = parameter_handler.get_bool("Advanced Rate Dependent Model enabled");
   numSlipSystems1=parameter_handler.get_integer("Number of Slip Systems");
   latentHardeningRatio1=parameter_handler.get_double("Latent Hardening Ratio");
   initialSlipResistance1 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Slip Resistance")));
@@ -525,6 +526,7 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Elastic Stiffness row 5","",dealii::Patterns::List(dealii::Patterns::Double()),"	Elastic Stiffness Matrix -Voigt Notation (MPa)");
   parameter_handler.declare_entry("Elastic Stiffness row 6","",dealii::Patterns::List(dealii::Patterns::Double()),"	Elastic Stiffness Matrix -Voigt Notation (MPa)");
 
+  parameter_handler.declare_entry("Advanced Rate Dependent Model enabled","false",dealii::Patterns::Bool(),"Flag to indicate if Advanced Rate Dependent Model enabled");
   parameter_handler.declare_entry("Number of Slip Systems","-1",dealii::Patterns::Integer(),"Number of Slip Systems");
   parameter_handler.declare_entry("Latent Hardening Ratio","-1",dealii::Patterns::Double(),"Latent Hardening Ratio");
   parameter_handler.declare_entry("Initial Slip Resistance","",dealii::Patterns::List(dealii::Patterns::Double()),"RSS of the slip sytems");

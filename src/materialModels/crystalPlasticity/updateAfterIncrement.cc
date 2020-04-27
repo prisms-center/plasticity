@@ -65,12 +65,16 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 				}
 
 				CauchyStress[cellID][q]=T;
-                for(unsigned int i=0; i<dim ; i++){
-					for(unsigned int j=0 ; j<dim ; j++){
-						TinterStress_diff[cellID][q][i][j] = T_inter[i][j] - TinterStress[cellID][q][i][j] ;     
-						TinterStress[cellID][q][i][j] = T_inter[i][j];           
-						}          
-				}        
+
+
+				if (this->userInputs.enableAdvRateDepModel){
+					for(unsigned int i=0; i<dim ; i++){
+						for(unsigned int j=0 ; j<dim ; j++){
+							TinterStress_diff[cellID][q][i][j] = T_inter[i][j] - TinterStress[cellID][q][i][j] ;
+							TinterStress[cellID][q][i][j] = T_inter[i][j];
+						}
+					}
+				}
 
 				local_strain.add(1.0, temp4);
 				local_stress.add(1.0, temp3);
@@ -240,35 +244,28 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 						temp.push_back(CauchyStress[cellID][q][1][2]);
 						temp.push_back(CauchyStress[cellID][q][2][0]);
 						temp.push_back(CauchyStress[cellID][q][2][1]);
-						
-						
-						temp.push_back(TinterStress[cellID][q][0][0]);
-						temp.push_back(TinterStress[cellID][q][1][1]);
-						temp.push_back(TinterStress[cellID][q][2][2]);
-						temp.push_back(TinterStress[cellID][q][0][1]);
-						temp.push_back(TinterStress[cellID][q][0][2]);
-						temp.push_back(TinterStress[cellID][q][1][0]);
-						temp.push_back(TinterStress[cellID][q][1][1]);
-						temp.push_back(TinterStress[cellID][q][2][0]);
-						temp.push_back(TinterStress[cellID][q][2][1]);
-						
-						
-						temp.push_back(TinterStress_diff[cellID][q][0][0]);
-						temp.push_back(TinterStress_diff[cellID][q][1][1]);
-						temp.push_back(TinterStress_diff[cellID][q][2][2]);
-						temp.push_back(TinterStress_diff[cellID][q][0][1]);
-						temp.push_back(TinterStress_diff[cellID][q][0][2]);
-						temp.push_back(TinterStress_diff[cellID][q][1][0]);
-						temp.push_back(TinterStress_diff[cellID][q][1][1]);
-						temp.push_back(TinterStress_diff[cellID][q][2][0]);
-						temp.push_back(TinterStress_diff[cellID][q][2][1]);
 
+						if (this->userInputs.enableAdvRateDepModel){
+							temp.push_back(TinterStress[cellID][q][0][0]);
+							temp.push_back(TinterStress[cellID][q][1][1]);
+							temp.push_back(TinterStress[cellID][q][2][2]);
+							temp.push_back(TinterStress[cellID][q][0][1]);
+							temp.push_back(TinterStress[cellID][q][0][2]);
+							temp.push_back(TinterStress[cellID][q][1][0]);
+							temp.push_back(TinterStress[cellID][q][1][1]);
+							temp.push_back(TinterStress[cellID][q][2][0]);
+							temp.push_back(TinterStress[cellID][q][2][1]);
 
-
-
-						
-						
-						
+							temp.push_back(TinterStress_diff[cellID][q][0][0]);
+							temp.push_back(TinterStress_diff[cellID][q][1][1]);
+							temp.push_back(TinterStress_diff[cellID][q][2][2]);
+							temp.push_back(TinterStress_diff[cellID][q][0][1]);
+							temp.push_back(TinterStress_diff[cellID][q][0][2]);
+							temp.push_back(TinterStress_diff[cellID][q][1][0]);
+							temp.push_back(TinterStress_diff[cellID][q][1][1]);
+							temp.push_back(TinterStress_diff[cellID][q][2][0]);
+							temp.push_back(TinterStress_diff[cellID][q][2][1]);
+						}
 
 						temp.push_back(slipfraction_conv[cellID][q][0]);
 						temp.push_back(slipfraction_conv[cellID][q][1]);

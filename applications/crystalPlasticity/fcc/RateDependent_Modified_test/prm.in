@@ -181,14 +181,8 @@ set Slip Directions File                         = slipDirections.txt
 # Slip Normals File
 set Slip Normals File                            = slipNormals.txt
 
-#Flag to indicate if kinematic hardening is enabled
-set Enable Kinematic Hardening                   = true
-
-# C_1 Slip Kinematic Hardening parameters
-set C_1 Slip Kinematic Hardening                 = 7.560e4, 7.56e4, 7.56e4,7.560e4, 7.56e4, 7.56e4,7.560e4, 7.56e4, 7.56e4,7.560e4, 7.56e4, 7.56e4
-
-# C_2 Slip Kinematic Hardening parameters
-set C_2 Slip Kinematic Hardening                 = 720.00, 720.00, 720.00,720.00, 720.00, 720.00,720.00, 720.00, 720.00,720.00, 720.00, 720.00
+#Flag to indicate if Advanced Rate Dependent Model (RateDependentModel2) is enabled
+set Advanced Rate Dependent Model enabled         =true
 
 ####################################
 # Constitutive model parameters

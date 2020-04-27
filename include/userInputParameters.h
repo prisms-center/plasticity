@@ -125,7 +125,7 @@ public:
   std::vector<double> C_2_slip1; // Kinematic hardening constants
   std::string slipDirectionsFile1; // Slip Directions File
   std::string slipNormalsFile1; // Slip Normals File
-  bool enableKinematicHardening1;
+  bool enableKinematicHardening1,enableAdvRateDepModel;
   bool enableTwinning1;
   bool enableAdvancedTwinModel; // Flag to indicate if Advanced Twinning Model enabled
   unsigned int numTwinSystems1;
