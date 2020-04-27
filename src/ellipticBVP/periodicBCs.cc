@@ -673,25 +673,27 @@ void ellipticBVP<dim>::setPeriodicityConstraintsInit(){
 
   unsigned int num_edges_node_processor,local_edge_dof;
   for (unsigned int i=1; i<n_processes; ++i) {
-    local_Edges_DOFs_Vector=Edges_DOFs_Vector_Array[i];
-    local_Edges_DOFs_Coord_Vector=Edges_DOFs_Coord_Vector_Array[i];
-    num_edges_node_processor=local_Edges_DOFs_Vector[0].size();
-    if (num_edges_node_processor>0){
-      for(unsigned int j = 0; j < num_edges_node_processor; j++){
-        local_edge_dof=local_Edges_DOFs_Vector[0][j];
-        if (std::count(global_Edges_DOFs_Vector[0].begin(), global_Edges_DOFs_Vector[0].end(), local_edge_dof)==0){
-          global_Edges_DOFs_Vector[0][total_num_edges_node_processor]=local_Edges_DOFs_Vector[0][j];
-          global_Edges_DOFs_Vector[1][total_num_edges_node_processor]=local_Edges_DOFs_Vector[1][j];
-          global_Edges_DOFs_Vector[2][total_num_edges_node_processor]=local_Edges_DOFs_Vector[2][j];
-          global_Edges_DOFs_Coord_Vector[0][total_num_edges_node_processor]=local_Edges_DOFs_Coord_Vector[0][j];
-          global_Edges_DOFs_Coord_Vector[1][total_num_edges_node_processor]=local_Edges_DOFs_Coord_Vector[1][j];
-          global_Edges_DOFs_Coord_Vector[2][total_num_edges_node_processor]=local_Edges_DOFs_Coord_Vector[2][j];
-          total_num_edges_node_processor=total_num_edges_node_processor+1;
+    if (!Edges_DOFs_Vector_Array[i].empty()){
+      local_Edges_DOFs_Vector=Edges_DOFs_Vector_Array[i];
+      local_Edges_DOFs_Coord_Vector=Edges_DOFs_Coord_Vector_Array[i];
+      num_edges_node_processor=local_Edges_DOFs_Vector[0].size();
+      if (num_edges_node_processor>0){
+        for(unsigned int j = 0; j < num_edges_node_processor; j++){
+          local_edge_dof=local_Edges_DOFs_Vector[0][j];
+          if (std::count(global_Edges_DOFs_Vector[0].begin(), global_Edges_DOFs_Vector[0].end(), local_edge_dof)==0){
+            global_Edges_DOFs_Vector[0][total_num_edges_node_processor]=local_Edges_DOFs_Vector[0][j];
+            global_Edges_DOFs_Vector[1][total_num_edges_node_processor]=local_Edges_DOFs_Vector[1][j];
+            global_Edges_DOFs_Vector[2][total_num_edges_node_processor]=local_Edges_DOFs_Vector[2][j];
+            global_Edges_DOFs_Coord_Vector[0][total_num_edges_node_processor]=local_Edges_DOFs_Coord_Vector[0][j];
+            global_Edges_DOFs_Coord_Vector[1][total_num_edges_node_processor]=local_Edges_DOFs_Coord_Vector[1][j];
+            global_Edges_DOFs_Coord_Vector[2][total_num_edges_node_processor]=local_Edges_DOFs_Coord_Vector[2][j];
+            total_num_edges_node_processor=total_num_edges_node_processor+1;
+          }
         }
       }
+      local_Edges_DOFs_Vector.clear();
+      local_Edges_DOFs_Coord_Vector.clear();
     }
-    local_Edges_DOFs_Vector.clear();
-    local_Edges_DOFs_Coord_Vector.clear();
   }
 
   size_dof_Edge_processor=global_Edges_DOFs_Vector[0].size();
