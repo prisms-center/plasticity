@@ -1249,7 +1249,8 @@ void ellipticBVP<dim>::setPeriodicityConstraints(){
   DoFTools::make_hanging_node_constraints (dofHandler, constraints);
   if (currentIteration==0){
     if(userInputs.enableTabularPeriodicBCs){
-      currentTime=delT*(currentIncrement+1);
+      //I added delT/1000 as some small value to make sure we have BCs applied correct.
+      currentTime=delT*(currentIncrement+1)-delT/1000;
       if (currentIncrement==0){
         timeCounter=1;
       }
