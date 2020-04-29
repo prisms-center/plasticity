@@ -170,7 +170,7 @@ FullMatrix<double> crystalPlasticity<dim>::matrixExponential(FullMatrix<double> 
 
     double count=1;
 
-    while(temp.frobenius_norm()>1e-15){
+    while(temp.frobenius_norm()>1e-10){
 
         temp.mmult(temp2,A);
         temp2.equ(1/count,temp2);
@@ -280,6 +280,41 @@ FullMatrix<double> crystalPlasticity<dim>::matrixExponentialGateauxDerivative(Fu
 
 	return matExpGatDer;
 }
+
+template <int dim>
+FullMatrix<double> crystalPlasticity<dim>::matrixExponentialGateauxDerivative2(FullMatrix<double> A, FullMatrix<double> B){
+	
+	FullMatrix<double> temp1(dim,dim),temp2(dim,dim),temp3(dim,dim),matExpGatDer(dim,dim), temp4(dim,dim),temp5(dim,dim);
+	double resdl = 1.0, count = 1.0, sctemp = 1.0 ;
+	temp1 = 0;
+	temp2.equ(1.0,B) ;
+	matExpGatDer.equ(1.0,temp1) ;
+	
+	
+	while(resdl > 1.0e-10){
+		sctemp = sctemp/count ;
+		matExpGatDer.add(sctemp,temp2) ;
+		temp3.equ(1.0,temp2) ;
+		temp1.mmult(temp4,A) ;
+		temp4.equ(-1.0,temp4) ;
+		temp4.add(1.0,temp2) ;
+		A.mmult(temp5,temp4) ;
+		temp2.mmult(temp4,A) ;
+		temp4.add(1.0,temp5) ;
+		temp2.equ(1.0,temp4) ;
+		temp1.equ(1.0,temp3) ;
+		
+		temp5.equ(sctemp/(count + 1.0),temp2) ;
+		resdl = temp5.frobenius_norm() ;
+		
+		count = count + 1.0 ;
+    }
+
+	return matExpGatDer ;
+	
+	
+}
+
 
 
 template <int dim>
