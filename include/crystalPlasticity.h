@@ -168,6 +168,12 @@ public:
 	      *calculates the matrix exponential of 3x3 matrix A
 	      */ 
               FullMatrix<double> matrixExponentialGateauxDerivative(FullMatrix<double> A, FullMatrix<double> B);
+             
+              /**
+	       *calculates the matrix exponential of 3x3 matrix A
+	       */
+	      FullMatrix<double> matrixExponentialGateauxDerivative2(FullMatrix<double> A, FullMatrix<double> B);
+
 
 	      /**
 	       * Implements line search to solve the optimization problem
