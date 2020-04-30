@@ -252,7 +252,7 @@ while(locres2>locres_tol2 && itr2 < nitr2){
     itr1 = 0 ;
 	
 	
-	
+    locres = 1.0 ;	
     // Loop until the residual is greater than tolerance or the  number of iterations crosses a certain specified maximum
     while(locres>locres_tol && itr1<nitr1){
 
