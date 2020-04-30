@@ -170,7 +170,7 @@ FullMatrix<double> crystalPlasticity<dim>::matrixExponential(FullMatrix<double> 
 
     double count=1;
 
-    while(temp.frobenius_norm()>1e-10){
+    while(temp.frobenius_norm()>1.0e-10){
 
         temp.mmult(temp2,A);
         temp2.equ(1/count,temp2);
@@ -241,7 +241,7 @@ FullMatrix<double> crystalPlasticity<dim>::matrixExponential6(FullMatrix<double>
 	temp=IdentityMatrix(2*dim); 
 	double count=1;
 
-	while(temp.frobenius_norm()>1e-15){
+	while(temp.frobenius_norm()>1e-10){
 		temp.mmult(temp2,A); 
 		temp2.equ(1/count,temp2);
 		temp.equ(1.0,temp2);
