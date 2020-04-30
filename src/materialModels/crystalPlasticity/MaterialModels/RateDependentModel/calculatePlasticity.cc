@@ -205,7 +205,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
       // Iterant 1
       itr1 = itr1+1 ;
       delgam_tau_iter.equ(1.0,delgam_tau);
-
+      dffstr = 1.0 ; 
       // Loop to check the difference in stress components in subsequent Newton-Raphson iterations
       while(dffstr>tol3 && itr2<nitr2){
         // Iterant 2
