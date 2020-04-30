@@ -260,6 +260,8 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 	
 	
     itr1 = 0 ;
+
+    locres = 1.0 ;
   
       // Loop until the residual is greater than tolerance or the  number of iterations crosses a certain specified maximum
       while(locres>locres_tol && itr1<nitr1){
