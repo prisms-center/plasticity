@@ -91,11 +91,11 @@ set Number of boundary conditions                = 4
 # Solver parameters
 ####################################
 #delta T for every increment
-set Time increments                      = 0.01
+set Time increments                      = 0.005
 
 
 #Total simulation time
-set Total time                                   = 15
+set Total time                                   = 5
 
 # Maximum iterations for linear solver
 set Maximum linear solver iterations             = 1000000
@@ -178,7 +178,7 @@ set Elastic Stiffness row 6                      = 0, 0, 0, 0, 0, 75.0e3
 set Number of Slip Systems                       = 12
 
 # Latent Hardening Ratio
-set Latent Hardening Ratio                       = 1.4
+set Latent Hardening Ratio filename                       = LatentHardeningRatio.txt
 
 # RSS of the slip sytems
 set Initial Slip Resistance                      = 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0
@@ -227,7 +227,7 @@ set Elastic Stiffness 2 row 6                      = 0, 0, 0, 0, 0, 16.8e3
 set Number of Slip Systems 2                       = 18
 
 # Latent Hardening Ratio Phase 2
-set Latent Hardening Ratio 2                       = 1
+set Latent Hardening Ratio filename 2                       = LatentHardeningRatio2.txt
 
 # RSS of the slip sytems Phase 2
 set Initial Slip Resistance 2                      = 45,45,45,105 , 105, 105,7000, 7000,7000,7000,7000,7000, 210, 210.0, 210.0, 210.0, 210.0, 210.0
@@ -313,7 +313,7 @@ set Elastic Stiffness 3 row 6                      = 0, 0, 0, 0, 0, 75.0e3
 set Number of Slip Systems 3                       = 12
 
 # Latent Hardening Ratio Phase 3
-set Latent Hardening Ratio 3                       = 1.4
+set Latent Hardening Ratio filename 3                       = LatentHardeningRatio3.txt
 
 # RSS of the slip sytems Phase 3
 set Initial Slip Resistance 3                      = 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0

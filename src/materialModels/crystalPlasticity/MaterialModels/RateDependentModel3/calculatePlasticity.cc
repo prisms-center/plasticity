@@ -8,15 +8,15 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
   {
 
     multiphaseInit(cellID,quadPtID);
-    
-    
+
+
     F_tau=F; // Deformation Gradient
     FullMatrix<double> FE_t(dim,dim),FP_t(dim,dim);  //Elastic and Plastic deformation gradient
     Vector<double> s_alpha_t(n_Tslip_systems),slipfraction_t(n_slip_systems),twinfraction_t(n_twin_systems); // Slip resistance
-    Vector<double> W_kh_t(n_Tslip_systems),W_kh_t1(n_Tslip_systems),W_kh_t2(n_Tslip_systems) ;
+    Vector<double> W_kh_t(n_Tslip_systems),W_kh_t1(n_Tslip_systems),W_kh_t2(n_Tslip_systems),signed_slip_t(n_Tslip_systems) ;
     Vector<double> rot1(dim);// Crystal orientation (Rodrigues representation)
     FullMatrix<double> Tinter_diff_guess(dim,dim) ;
-	
+
 
     // Tolerance
 
@@ -32,14 +32,14 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     unsigned int nitr1=UserMatConstants(4); // Maximum number of iterations for constitutive model convergence
 	unsigned int nitr2=UserMatConstants(5); // Maximum number of iterations for outer loop convergence
 
-   
+
     ///////////////////////////////Backstress evolution parameters
     double h_back1=UserMatConstants(6);double h_back2=UserMatConstants(7);
     double r_back1=UserMatConstants(8);double r_back2=UserMatConstants(9);
     double m_back1=UserMatConstants(10);double m_back2=UserMatConstants(11);
-    
+
 	double b_back1,b_back2;
-	
+
 	// To deal with the scenario when there is no backstress evolution
     if(fabs(r_back1)>1.0e-7)
 	    b_back1 = h_back1/r_back1 ;
@@ -50,21 +50,22 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 	    b_back2 = h_back2/r_back2 ;
     else
 	    b_back2 = 1 ;
-    
+
     double back_lim_1 = b_back1 ;
     double back_lim_2 = b_back2 ;
-	
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     FE_t=Fe_conv[cellID][quadPtID];
     FP_t=Fp_conv[cellID][quadPtID];
     rot1=rot_conv[cellID][quadPtID];
-    Tinter_diff_guess = TinterStress_diff[cellID][quadPtID] ; 
-	
+    Tinter_diff_guess = TinterStress_diff[cellID][quadPtID] ;
+
 
     for(unsigned int i=0 ; i<n_Tslip_systems ; i++){
       W_kh_t1(i) = stateVar_conv[cellID][quadPtID][i];
       W_kh_t2(i) = stateVar_conv[cellID][quadPtID][i+n_Tslip_systems];
+      signed_slip_t(i)=stateVar_conv[cellID][quadPtID][i+2*n_Tslip_systems];
       s_alpha_t(i)=s_alpha_conv[cellID][quadPtID][i];
     }
     for(unsigned int i=0 ; i<n_slip_systems ; i++)
@@ -119,13 +120,13 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
       }
     }
 
-   
+
 
     Vector<double> s_alpha_tau(n_Tslip_systems),slipfraction_tau(n_slip_systems),twinfraction_tau(n_twin_systems) ;
     Vector<double> W_kh_tau(n_Tslip_systems),W_kh_tau1(n_Tslip_systems),W_kh_tau2(n_Tslip_systems), W_kh_tau_it(n_Tslip_systems),W_kh_t1_it(n_Tslip_systems),W_kh_t2_it(n_Tslip_systems);
     Vector<double> h_beta(n_Tslip_systems),h0(n_Tslip_systems),a_pow(n_Tslip_systems),s_s(n_Tslip_systems);
     FullMatrix<double> h_alpha_beta_t(n_Tslip_systems,n_Tslip_systems);
-    Vector<double> resolved_shear_tau(n_Tslip_systems),normal_stress_tau(n_Tslip_systems);
+    Vector<double> resolved_shear_tau(n_Tslip_systems), normal_stress_tau(n_Tslip_systems),signed_slip_tau(n_Tslip_systems);
 
     FullMatrix<double> PK1_Stiff(dim*dim,dim*dim);
     FullMatrix<double> T_star_tau(dim,dim),T_star_tau_trial(dim,dim),mtemp(dim,dim);
@@ -207,8 +208,9 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     W_kh_tau_it = W_kh_tau ;
 
     slipfraction_tau = slipfraction_t ;
+    signed_slip_tau  = signed_slip_t;
     twinfraction_tau = twinfraction_t ;
-    
+
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////Start Nonlinear iteration for Slip increments////////////////////////////////////
@@ -220,7 +222,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     FullMatrix<double> btemp1(2*dim,2*dim),J_iter(2*dim+2*n_Tslip_systems,2*dim+2*n_Tslip_systems),J_iter_inv(2*dim+2*n_Tslip_systems,2*dim+2*n_Tslip_systems);                                   FullMatrix<double> T_star_iter(dim,dim),T_star_iterp(dim,dim);
     FullMatrix<double> CE_t(dim,dim);
     Vector<double> s_alpha_it(n_Tslip_systems),s_alpha_iterp(n_Tslip_systems),delgam_tau(n_Tslip_systems),delgam_tau_iter(n_Tslip_systems);
-	
+
     Vector<double> vtmp1(2*dim),vtmp2(2*dim),vtmp3(2*dim),vtmp4(n_Tslip_systems);
     Vector<double> nv1(2*dim),nv2(2*dim),T_star_iter_vec(2*dim);
     double locres = 1.0, locres2 = 1.0  ;
@@ -235,37 +237,37 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 	T_star_iter = 0 ;
 	matform(T_star_iter,vtmp1) ;
     T_star_iter.add(1.0,Tinter_diff_guess) ;
-    
-	
+
+
     s_alpha_it=s_alpha_t;
-	
+
     nv1 = vecform(T_star_iter) ;
-	
+
 	for(unsigned int j=0;j<2*dim;j++){
 		stateVar_it(j) = nv1(j) ;
 	}
-	
+
 	for(unsigned int j=0;j<n_Tslip_systems;j++){
 		stateVar_it(j+2*dim) = W_kh_tau1(j) ;
 	}
-	
+
 	for(unsigned int j=0;j<n_Tslip_systems;j++){
 		stateVar_it(j+2*dim+n_Tslip_systems) = W_kh_tau2(j) ;
 	}
-	
+
 	while(locres2>locres_tol2 && itr2 < nitr2){
-	
+
     itr2 = itr2 + 1  ;
-	
-	
-	
+
+
+
     itr1 = 0 ;
 
     locres = 1.0 ;
-  
+
       // Loop until the residual is greater than tolerance or the  number of iterations crosses a certain specified maximum
       while(locres>locres_tol && itr1<nitr1){
-        
+
         itr1 = itr1+1;
 
         // Residual for the non-linear algebraic equation
@@ -273,26 +275,26 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
         // Jacobian for the Newton-Raphson iteration
         J_iter=IdentityMatrix(2*dim+2*n_Tslip_systems);
-		locres_vec = 0.0 ; 
-		
+		locres_vec = 0.0 ;
+
 		for (unsigned int j = 0;j < 2*dim;j++) {
 			nv1(j) = stateVar_it(j) ;
 		}
-		matform(T_star_iter,nv1) ; 	
-	
-		
+		matform(T_star_iter,nv1) ;
+
+
 		for (unsigned int j = 0;j < n_Tslip_systems;j++) {
 			W_kh_t1_it(j) = stateVar_it(j+2*dim) ;
 		}
-		
+
 		for (unsigned int j = 0;j < n_Tslip_systems;j++) {
 			W_kh_t2_it(j) = stateVar_it(j+2*dim+n_Tslip_systems) ;
 		}
-		
+
 		W_kh_tau_it = 0.0 ;
 		W_kh_tau_it.add(1.0,W_kh_t1_it,1.0,W_kh_t2_it) ;
-		
-		
+
+
         // Loop over slip systems
         for (unsigned int i = 0;i<n_Tslip_systems;i++){
 
@@ -319,7 +321,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
             else
             sgnm=1 ;
           }
-		  
+
           delgam_tau(i) = delgam_ref*pow(fabs((sctmp1 - W_kh_tau_it(i))/s_alpha_it(i)),1.0/strexp)*sgnm ;
 
           temp2 = 0.0 ;
@@ -353,25 +355,25 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
           }
           sctmp2=delgam_ref/(strexp*s_alpha_it(i))*pow(fabs((sctmp1-W_kh_tau_it(i))/s_alpha_it(i)),(1.0/strexp - 1.0))*sgnm;
 
-          
+
           btemp1.equ(sctmp2,btemp1);
 
           // Modification to the Jacobian of the Newton-Raphson iteration
-		  
+
 		  // Components 1:6
 		  for (unsigned int j = 0;j < 2*dim;j++) {
             for (unsigned int k = 0;k < 2*dim;k++) {
           J_iter[j][k] = J_iter[j][k] + btemp1(j,k);
 			}
 		  }
-		  
+
 		  vtmp1.equ(-1.0*sctmp2,nv1) ;
 		  for (unsigned int j = 0;j < 2*dim;j++) {
 	          J_iter[j][i+2*dim] = J_iter[j][i+2*dim] + vtmp1(j);
 		  J_iter[j][i+2*dim+n_Tslip_systems] = J_iter[j][i+2*dim+n_Tslip_systems] + vtmp1(j);
 		  }
-		  
-		  // Components rest 
+
+		  // Components rest
 		  if(i<n_slip_systems){ // For slip systems due to symmetry of slip
             if((sctmp1-W_kh_tau_it(i))<0)
             sgnm=-1;
@@ -385,70 +387,70 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
             else
             sgnm=1 ;
           }
-		  
+
 		  // Backstress component 1
-	
+
             if(W_kh_t1_it(i)<0)
             sgnm2=-1;
             else
             sgnm2=1 ;
-    
-		  
+
+
 		  sctmp3 = r_back1*pow(fabs(W_kh_t1_it(i)/b_back1),m_back1)*W_kh_t1_it(i)*sgnm*sctmp2 ;
 		  sctmp3 = sctmp3 - h_back1*sctmp2 ;
-		 
-		   
+
+
 		  for (unsigned int j = 0;j < 2*dim;j++) {
-			  J_iter(i+2*dim,j) = sctmp3*nv2(j) ; 
+			  J_iter(i+2*dim,j) = sctmp3*nv2(j) ;
 		  }
-		  
+
 		  J_iter(i+2*dim,i+2*dim) = J_iter(i+2*dim,i+2*dim) - sctmp3 ;
 		  J_iter(i+2*dim,i+2*dim+n_Tslip_systems) = J_iter(i+2*dim,i+2*dim+n_Tslip_systems) - sctmp3 ;
-		  
- 		  
+
+
 		  J_iter(i+2*dim,i+2*dim) = J_iter(i+2*dim,i+2*dim) + abs(delgam_tau(i))*r_back1*pow(fabs(W_kh_t1_it(i)/b_back1),m_back1) ;
 		  J_iter(i+2*dim,i+2*dim) = J_iter(i+2*dim,i+2*dim) + abs(delgam_tau(i))*W_kh_t1_it(i)*r_back1*m_back1/b_back1*pow(fabs(W_kh_t1_it(i)/b_back1),m_back1-1.0)*sgnm2 ;
-		  locres_vec(i+2*dim) = W_kh_t1_it(i) - W_kh_t1(i) - h_back1*delgam_tau(i) + r_back1*pow(fabs(W_kh_t1_it(i)/b_back1),m_back1)*W_kh_t1_it(i)*fabs(delgam_tau(i)) ;  
-		 
-			  
-		  
+		  locres_vec(i+2*dim) = W_kh_t1_it(i) - W_kh_t1(i) - h_back1*delgam_tau(i) + r_back1*pow(fabs(W_kh_t1_it(i)/b_back1),m_back1)*W_kh_t1_it(i)*fabs(delgam_tau(i)) ;
+
+
+
 		  // Backstress component 2
-		  
-		  
-		  
+
+
+
 		  sctmp4 = r_back2*pow(fabs(W_kh_t2_it(i)/b_back2),m_back2)*W_kh_t2_it(i)*sgnm*sctmp2 ;
-		  sctmp4 = sctmp4 - h_back2*sctmp2 ;	  
-		
-  
-	
+		  sctmp4 = sctmp4 - h_back2*sctmp2 ;
+
+
+
             if(W_kh_t2_it(i)<0)
             sgnm2=-1;
             else
             sgnm2=1 ;
-    		  	  
-		  
+
+
 		  for (unsigned int j = 0;j < 2*dim;j++) {
-			  J_iter(i+2*dim+n_Tslip_systems,j) = sctmp4*nv2(j) ; 
+			  J_iter(i+2*dim+n_Tslip_systems,j) = sctmp4*nv2(j) ;
 		  }
-		  
-		  
+
+
 		  J_iter(i+2*dim+n_Tslip_systems,i+2*dim+n_Tslip_systems) = J_iter(i+2*dim+n_Tslip_systems,i+2*dim+n_Tslip_systems) - sctmp4 ;
 		  J_iter(i+2*dim+n_Tslip_systems,i+2*dim) = J_iter(i+2*dim+n_Tslip_systems,i+2*dim) - sctmp4 ;
-		  
-		  
+
+
 		  J_iter(i+2*dim+n_Tslip_systems,i+2*dim+n_Tslip_systems) = J_iter(i+2*dim+n_Tslip_systems,i+2*dim+n_Tslip_systems) + abs(delgam_tau(i))*r_back2*pow(fabs(W_kh_t2_it(i)/b_back2),m_back2) ;
 		  J_iter(i+2*dim+n_Tslip_systems,i+2*dim+n_Tslip_systems) = J_iter(i+2*dim+n_Tslip_systems,i+2*dim+n_Tslip_systems) + abs(delgam_tau(i))*W_kh_t2_it(i)*r_back2*m_back2/b_back2*pow(fabs(W_kh_t2_it(i)/b_back2),m_back2-1.0)*sgnm2 ;
-		  locres_vec(i+2*dim+n_Tslip_systems) = W_kh_t2_it(i) - W_kh_t2(i) - h_back2*delgam_tau(i) + r_back2*pow(fabs(W_kh_t2_it(i)/b_back2),m_back2)*W_kh_t2_it(i)*fabs(delgam_tau(i)) ; 	  
-		 
-  
+		  locres_vec(i+2*dim+n_Tslip_systems) = W_kh_t2_it(i) - W_kh_t2(i) - h_back2*delgam_tau(i) + r_back2*pow(fabs(W_kh_t2_it(i)/b_back2),m_back2)*W_kh_t2_it(i)*fabs(delgam_tau(i)) ;
+
+
         }
         // Final modification to the residual outside the loop
         G_iter.add(1.0,vecform(T_star_iter),-1.0,vecform(T_star_tau_trial));
-		
+
 		 for (unsigned int j = 0;j < 2*dim;j++) {
-			  locres_vec(j) = G_iter(j) ; 
+			  locres_vec(j) = G_iter(j) ;
 		  }
-		
+
 
         // Invert Jacobian
         J_iter_inv.invert(J_iter);
@@ -456,19 +458,19 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 		stateVar_diff.equ(-1.0,stateVar_diff) ;
 		stateVar_temp = 0.0 ;
 		stateVar_temp.add(1.0,stateVar_it,1.0,stateVar_diff);
-		
+
 		for (unsigned int j = 0;j < n_Tslip_systems;j++) {
 
             if(stateVar_temp(2*dim+j)<0)
             sgnm2=-1;
             else
             sgnm2=1 ;
-	
+
 	if(fabs(stateVar_temp(2*dim+j)) >= back_lim_1)
 			  stateVar_temp(2*dim+j) = back_lim_1*sgnm2 ;
  	  }
-		  
-		  
+
+
 		 for (unsigned int j = 0;j < n_Tslip_systems;j++) {
 
             if(stateVar_temp(2*dim+j+n_Tslip_systems)<0)
@@ -478,24 +480,24 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
 	    if(fabs(stateVar_temp(2*dim+j+n_Tslip_systems)) >= back_lim_2)
 		  stateVar_temp(2*dim+j+n_Tslip_systems) = back_lim_2*sgnm2 ;
-		  
-			  
+
+
 		  }
-		
+
 		stateVar_diff = 0.0 ;
 		stateVar_diff.add(1.0,stateVar_temp,-1.0,stateVar_it);
-		
+
 		locres = stateVar_diff.l2_norm() ;
 		stateVar_it.equ(1.0,stateVar_temp) ;
-	
+
         } // inner while
-	
+
 	for(unsigned int j=0;j<2*dim;j++){
       T_star_iter_vec(j) = stateVar_it(j) ;
     }
-    
+
 	matform(T_star_iter,T_star_iter_vec) ;
-	
+
 
 
 
@@ -503,10 +505,10 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
       W_kh_tau1(j) = stateVar_it(j+2*dim)  ;
       W_kh_tau2(j) = stateVar_it(j+2*dim+n_Tslip_systems) ;
       W_kh_tau(j) = W_kh_tau1(j) + W_kh_tau2(j) ;
-    
+
     }
-    
-	
+
+
 	// Single slip hardening rate
       for(unsigned int i=0;i<n_slip_systems;i++){
         h_beta(i)=initialHardeningModulus[i]*pow((1-s_alpha_it(i)/saturationStress[i]),powerLawExponent[i]);
@@ -543,7 +545,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
             temp[j][k]=SCHMID_TENSOR1[dim*i + j][k];
           }
         }
-		
+
         T_star_iter.mTmult(temp1,temp);
         sctmp1=temp1.trace();
         resolved_shear_tau(i)=sctmp1;
@@ -569,8 +571,8 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
         for (unsigned int j = 0;j<n_Tslip_systems;j++){
           s_alpha_iterp(j)=s_alpha_iterp(j)+h_alpha_beta_t[j][i]*fabs(delgam_tau(i));
         }
-       
-      }	
+
+      }
         // Check if the slip system resistances exceed their corresponding saturation stress. If yes, set them equal to the saturation stress
 
         for(unsigned int i=0;i<n_slip_systems;i++){
@@ -588,9 +590,9 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
       vtmp4.add(1.0,s_alpha_iterp,-1.0,s_alpha_it);
       locres2=vtmp4.l2_norm();
       s_alpha_it=s_alpha_iterp;
-	
-	
-	
+
+
+
     } // outer while
     ////////////////////////////////////End Nonlinear iteration for Slip increments////////////////////////////////////
 
@@ -598,10 +600,10 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     for(unsigned int j=0 ; j<2*dim ; j++)
 	nv1(j) = stateVar_it(j) ;
 
-    matform(T_star_iter,nv1) ;   	 		
+    matform(T_star_iter,nv1) ;
 
-	
-    for(unsigned int j=0 ; j<n_Tslip_systems ; j++){	
+
+    for(unsigned int j=0 ; j<n_Tslip_systems ; j++){
 	W_kh_tau1(j) = stateVar_it(2*dim+j) ;
     W_kh_tau2(j) = stateVar_it(2*dim+j+n_Tslip_systems) ;
 	W_kh_tau(j) = W_kh_tau1(j) + W_kh_tau2(j) ;
@@ -616,10 +618,10 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
           temp[j][k]=SCHMID_TENSOR1[dim*i + j][k];
         }
       }
-		
+
 	T_star_iter.mTmult(temp2,temp);
         resolved_shear_tau(i)=temp2.trace();
-		
+
       if(i<n_slip_systems){ // For slip systems due to symmetry of slip
         if((resolved_shear_tau(i) - W_kh_tau(i))<0)
         sgnm=-1;
@@ -641,6 +643,9 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     for(unsigned int i=0 ; i<n_slip_systems ; i++)
     slipfraction_tau(i) = slipfraction_t(i) + fabs(delgam_tau(i)) ;
 
+    for(unsigned int i=0 ; i<n_Tslip_systems ; i++)
+    signed_slip_tau(i) = signed_slip_t(i) + delgam_tau(i) ;
+
     for(unsigned int i=0 ; i<n_twin_systems ; i++)
     twinfraction_tau(i) = twinfraction_t(i) + fabs(delgam_tau(i+n_slip_systems)) ;
 
@@ -657,7 +662,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     temp.reinit(dim, dim);
     det_FE_tau = FE_tau.determinant();
     T_star_tau.equ(1.0,T_star_iter);
-    FE_tau.mmult(temp, T_star_tau); 
+    FE_tau.mmult(temp, T_star_tau);
     temp.equ(1.0 / det_FE_tau, temp);
     temp.mTmult(T_tau, FE_tau);
 
@@ -666,7 +671,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     F_inv_tau.equ(1.0,temp);
     T_tau.mTmult(P_tau, temp);
     P_tau.equ(det_F_tau, P_tau);
-	
+
 	for (unsigned int i = 0;i<n_Tslip_systems;i++){
       temp7=0.0;
       temp8=0.0;
@@ -693,7 +698,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     double modifier1_num, modifier1_den, modifier2_num, modifier2_den, modifier;
 
     double mulfac;
-	
+
     // Contribution 1 - Most straightforward because no need to invoke constitutive model
       FE_tau.mmult(temp,T_star_tau);
       temp.mTmult(temp1,FE_tau);
@@ -873,7 +878,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
         }
       }
 
-    
+
 
     P.reinit(dim, dim);
     P = P_tau;
@@ -881,7 +886,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
     T_inter.reinit(dim,dim) ;
 	T_inter = T_star_tau ;
-     
+
     sres_tau.reinit(n_Tslip_systems);
     sres_tau = s_alpha_tau;
 
@@ -894,8 +899,8 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     for(unsigned int i=0 ; i<n_Tslip_systems ; i++){
       stateVar_iter[cellID][quadPtID][i]=W_kh_tau1(i);
       stateVar_iter[cellID][quadPtID][i+n_Tslip_systems]=W_kh_tau2(i);
-      stateVar_iter[cellID][quadPtID][i+2*n_Tslip_systems]=normal_stress_tau(i);
-
+      stateVar_iter[cellID][quadPtID][i+2*n_Tslip_systems]=signed_slip_tau(i);
+      stateVar_iter[cellID][quadPtID][i+3*n_Tslip_systems]=normal_stress_tau(i);
     }
 
     for(unsigned int i=0 ; i<n_twin_systems ; i++)

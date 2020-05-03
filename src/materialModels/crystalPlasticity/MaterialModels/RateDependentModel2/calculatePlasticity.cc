@@ -13,7 +13,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     F_tau=F; // Deformation Gradient
     FullMatrix<double> FE_t(dim,dim),FP_t(dim,dim);  //Elastic and Plastic deformation gradient
     Vector<double> s_alpha_t(n_Tslip_systems),slipfraction_t(n_slip_systems),twinfraction_t(n_twin_systems); // Slip resistance
-    Vector<double> W_kh_t(n_Tslip_systems),W_kh_t1(n_Tslip_systems),W_kh_t2(n_Tslip_systems) ;
+    Vector<double> W_kh_t(n_Tslip_systems),W_kh_t1(n_Tslip_systems),W_kh_t2(n_Tslip_systems),signed_slip_t(n_Tslip_systems) ;
     Vector<double> rot1(dim);// Crystal orientation (Rodrigues representation)
     FullMatrix<double> Tinter_diff_guess(dim,dim) ;
 
@@ -34,7 +34,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     double r_back1=UserMatConstants(8);double r_back2=UserMatConstants(9);
     double m_back1=UserMatConstants(10);double m_back2=UserMatConstants(11);
     double b_back1,b_back2;
-	
+
 	// To deal with the scenario when there is no backstress evolution
     if(fabs(r_back1)>1.0e-7)
 	    b_back1 = h_back1/r_back1 ;
@@ -45,7 +45,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 	    b_back2 = h_back2/r_back2 ;
     else
 	    b_back2 = 1 ;
-    
+
     double back_lim_1 = b_back1 ;
     double back_lim_2 = b_back2 ;
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -53,11 +53,12 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     FE_t=Fe_conv[cellID][quadPtID];
     FP_t=Fp_conv[cellID][quadPtID];
     rot1=rot_conv[cellID][quadPtID];
-    Tinter_diff_guess = TinterStress_diff[cellID][quadPtID] ; 
+    Tinter_diff_guess = TinterStress_diff[cellID][quadPtID] ;
 
     for(unsigned int i=0 ; i<n_Tslip_systems ; i++){
       W_kh_t1(i) = stateVar_conv[cellID][quadPtID][i];
       W_kh_t2(i) = stateVar_conv[cellID][quadPtID][i+n_Tslip_systems];
+      signed_slip_t(i)=stateVar_conv[cellID][quadPtID][i+2*n_Tslip_systems];
       s_alpha_t(i)=s_alpha_conv[cellID][quadPtID][i];
     }
     for(unsigned int i=0 ; i<n_slip_systems ; i++)
@@ -119,7 +120,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 	Vector<double> W_kh_tau_it(n_Tslip_systems),W_kh_t1_it(n_Tslip_systems),W_kh_t2_it(n_Tslip_systems);
     Vector<double> h_beta(n_Tslip_systems),h0(n_Tslip_systems),a_pow(n_Tslip_systems),s_s(n_Tslip_systems);
     FullMatrix<double> h_alpha_beta_t(n_Tslip_systems,n_Tslip_systems);
-    Vector<double> resolved_shear_tau(n_Tslip_systems), normal_stress_tau(n_Tslip_systems);
+    Vector<double> resolved_shear_tau(n_Tslip_systems), normal_stress_tau(n_Tslip_systems),signed_slip_tau(n_Tslip_systems);
 
     FullMatrix<double> PK1_Stiff(dim*dim,dim*dim);
     FullMatrix<double> T_star_tau(dim,dim),T_star_tau_trial(dim,dim),mtemp(dim,dim);
@@ -135,18 +136,18 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     FE_tau_trial.Tmmult(CE_tau_trial,FE_tau_trial);
 
     temp=IdentityMatrix(dim);
-	
+
 	Ee_tau_trial = 0 ;
 	Ee_tau_trial.add(0.5,CE_tau_trial,-0.5,temp) ;
-	
-    
+
+
     // Calculate the trial stress T_star_tau_trial
 
     Dmat.vmult(vtemp, vecform(Ee_tau_trial));
     matform(T_star_tau_trial,vtemp);
    // trny_in = 1 ;
     // trny_op = (trny_in > 0) ? 1 : ((trny_in<0) ? -1 : 0) ;
-       
+
     // Loop over slip systems to construct relevant matrices - Includes both slip and twin(considered as pseudo-slip) systems
     for (unsigned int i = 0;i<n_Tslip_systems;i++) {
 
@@ -187,6 +188,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     W_kh_tau_it = W_kh_tau ;
 
     slipfraction_tau = slipfraction_t ;
+    signed_slip_tau  = signed_slip_t;
     twinfraction_tau = twinfraction_t ;
 
 
@@ -199,12 +201,12 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     Vector<double> G_iter(2*dim),locres_vec(2*dim+2*n_Tslip_systems),stateVar_it(2*dim+2*n_Tslip_systems),stateVar_temp(2*dim+2*n_Tslip_systems),stateVar_diff(2*dim+2*n_Tslip_systems),T_star_iter_vec(2*dim);
 	Vector<double> gradFold(2*dim+2*n_Tslip_systems) ;
     FullMatrix<double> btemp1(2*dim,2*dim),J_iter(2*dim+2*n_Tslip_systems,2*dim+2*n_Tslip_systems),J_iter_inv(2*dim+2*n_Tslip_systems,2*dim+2*n_Tslip_systems),LP_acc(dim,dim),LP_acc2(dim,dim) ;
-	FullMatrix<double> J_iter_cp(2*dim+2*n_Tslip_systems,2*dim+2*n_Tslip_systems);                         
+	FullMatrix<double> J_iter_cp(2*dim+2*n_Tslip_systems,2*dim+2*n_Tslip_systems);
 	FullMatrix<double> T_star_iter(dim,dim),T_star_iterp(dim,dim);
     FullMatrix<double> CE_t(dim,dim);
     Vector<double> s_alpha_it(n_Tslip_systems),s_alpha_iterp(n_Tslip_systems),delgam_tau(n_Tslip_systems),delgam_tau_iter(n_Tslip_systems);
 
-    Vector<double> vtmp1(2*dim),vtmp2(2*dim),vtmp3(2*dim); 
+    Vector<double> vtmp1(2*dim),vtmp2(2*dim),vtmp3(2*dim);
 	Vector<double> vtmp4(n_Tslip_systems);
     Vector<double> nv1(2*dim),nv2(2*dim);
     double locres = 1.0, locres2 = 1.0  ;
@@ -219,16 +221,16 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 	T_star_iter = 0 ;
 	matform(T_star_iter,vtmp1) ;
 
-          
+
        if(this->userInputs.enableAdvRateDepModel)
 	  T_star_iter.add(1.0,Tinter_diff_guess) ;
-    
+
 	s_alpha_it=s_alpha_t;
-	
-       
+
+
 	nv1 = vecform(T_star_iter) ;
 
-    
+
     for(unsigned int j=0;j<2*dim;j++){
       stateVar_it(j) = nv1(j) ;
     }
@@ -240,19 +242,19 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     for(unsigned int j=0;j<n_Tslip_systems;j++){
       stateVar_it(j+2*dim+n_Tslip_systems) = W_kh_tau2(j) ;
     }
-	
-	
-	
+
+
+
 while(locres2>locres_tol2 && itr2 < nitr2){
-	
+
     itr2 = itr2 + 1  ;
-	
-	
-	
+
+
+
     itr1 = 0 ;
-	
-	
-    locres = 1.0 ;	
+
+
+    locres = 1.0 ;
     // Loop until the residual is greater than tolerance or the  number of iterations crosses a certain specified maximum
     while(locres>locres_tol && itr1<nitr1){
 
@@ -281,7 +283,7 @@ while(locres2>locres_tol2 && itr2 < nitr2){
 
       W_kh_tau_it = 0.0 ;
       W_kh_tau_it.add(1.0,W_kh_t1_it,1.0,W_kh_t2_it) ;
-	  
+
       LP_acc = 0 ;
       for(unsigned int i=0 ; i<n_Tslip_systems;i++){
 	    for (unsigned int j = 0;j < dim;j++) {
@@ -289,10 +291,10 @@ while(locres2>locres_tol2 && itr2 < nitr2){
             temp[j][k]=SCHMID_TENSOR1[dim*i + j][k];
             }
         }
-		
+
         T_star_iter.mTmult(temp2,temp);
         sctmp1=temp2.trace();
-        resolved_shear_tau(i) = sctmp1 ; 
+        resolved_shear_tau(i) = sctmp1 ;
 	if(i<n_slip_systems){ // For slip systems due to symmetry of slip
           if((sctmp1-W_kh_tau_it(i))<0)
           sgnm=-1;
@@ -308,31 +310,31 @@ while(locres2>locres_tol2 && itr2 < nitr2){
         }
 
         delgam_tau(i) = delgam_ref*pow(fabs((sctmp1 - W_kh_tau_it(i))/s_alpha_it(i)),1.0/strexp)*sgnm ;
-        LP_acc.add(delgam_tau(i),temp) ; 	  
-		
+        LP_acc.add(delgam_tau(i),temp) ;
+
 	  }
-	  
+
 	  LP_acc2.equ(1.0,LP_acc) ;
 	  LP_acc.equ(-1.0,LP_acc) ;
 	  temp1.equ(1.0,matrixExponential(LP_acc)) ;
 	  LP_acc.equ(1.0,temp1) ;
 
-        
+
       // Loop over slip systems
       for (unsigned int i = 0;i<n_Tslip_systems;i++){
 
         for (unsigned int j = 0;j < dim;j++) {
           for (unsigned int k = 0;k < dim;k++) {
             temp[j][k]=SCHMID_TENSOR1[dim*i + j][k];
-            
+
           }
         }
 
         temp2 = 0.0 ;
         temp2.add(1.0,temp) ;
         temp2.Tadd(1.0,temp) ;
-		
-		
+
+
         CE_tau_trial.mmult(temp5,LP_acc) ;
         temp1 = 0;
         temp1.Tadd(1.0,LP_acc2) ;
@@ -344,25 +346,25 @@ while(locres2>locres_tol2 && itr2 < nitr2){
 		temp4 = 0 ;
 		temp4.add(0.5,temp3) ;
 		temp4.Tadd(0.5,temp3) ;
-	    Dmat.vmult(vtmp1,vecform(temp4)) ;	
-		
-		
+	    Dmat.vmult(vtmp1,vecform(temp4)) ;
+
+
         nv1.equ(1.0,vtmp1) ;
-		
-		
-			
-		
+
+
+
+
         nv2 = vecform(temp2);
         nv2(0) = nv2(0)/2.0 ;
         nv2(1) = nv2(1)/2.0 ;
         nv2(2) = nv2(2)/2.0 ;
-                
+
         /* for (unsigned int j = 0;j < 2*dim;j++) {
           for (unsigned int k = 0;k < 2*dim;k++) {
             btemp1[j][k]=nv1(j)*nv2(k);
           }
         } */
-		
+
 	    btemp1.outer_product(nv1,nv2) ;
 
         if(i<n_slip_systems){
@@ -378,8 +380,8 @@ while(locres2>locres_tol2 && itr2 < nitr2){
 
 
         btemp1.equ(sctmp2,btemp1);
-		
-		
+
+
 
         // Modification to the Jacobian of the Newton-Raphson iteration
 
@@ -389,12 +391,12 @@ while(locres2>locres_tol2 && itr2 < nitr2){
             J_iter[j][k] = J_iter[j][k] + btemp1(j,k);
           }
         }
-         
-			 
-		  
-		  
+
+
+
+
         vtmp1.equ(-1.0*sctmp2,nv1) ;
-		
+
         for (unsigned int j = 0;j < 2*dim;j++) {
           J_iter[j][i+2*dim] = J_iter[j][i+2*dim] + vtmp1(j);
           J_iter[j][i+2*dim+n_Tslip_systems] = J_iter[j][i+2*dim+n_Tslip_systems] + vtmp1(j);
@@ -481,19 +483,19 @@ while(locres2>locres_tol2 && itr2 < nitr2){
 	   Dmat.vmult(vtmp2,vecform(temp3)) ;
 	   G_iter = 0 ;
 	   G_iter.add(1.0,vtmp1,-1.0,vtmp2) ;
-	   
-	   
+
+
 
       for (unsigned int j = 0;j < 2*dim;j++) {
         locres_vec(j) = G_iter(j) ;
       }
 
-        
-    
+
+
       // Invert Jacobian
       J_iter_inv.invert(J_iter);
 
-   
+
 
       J_iter_inv.vmult(stateVar_diff,locres_vec);
       stateVar_diff.equ(-1.0,stateVar_diff) ;
@@ -503,10 +505,10 @@ while(locres2>locres_tol2 && itr2 < nitr2){
 	  J_iter_cp.add(0.5,J_iter) ;
 	  J_iter_cp.Tadd(0.5,J_iter) ;
 	  J_iter_cp.vmult(gradFold,locres_vec) ;
-	  
-	  // Implement cubic line search 
-	  lnsrch(stateVar_temp,2*dim+2*n_Tslip_systems,stateVar_it, Fold,gradFold,stateVar_diff,delgam_ref,strexp,SCHMID_TENSOR1,n_slip_systems,n_Tslip_systems,s_alpha_it,Dmat, CE_tau_trial,W_kh_t1, W_kh_t2, h_back1, h_back2,m_back1,m_back2,r_back1, r_back2,b_back1, b_back2) ; 	
- 
+
+	  // Implement cubic line search
+	  lnsrch(stateVar_temp,2*dim+2*n_Tslip_systems,stateVar_it, Fold,gradFold,stateVar_diff,delgam_ref,strexp,SCHMID_TENSOR1,n_slip_systems,n_Tslip_systems,s_alpha_it,Dmat, CE_tau_trial,W_kh_t1, W_kh_t2, h_back1, h_back2,m_back1,m_back2,r_back1, r_back2,b_back1, b_back2) ;
+
 
       for (unsigned int j = 0;j < n_Tslip_systems;j++) {
 
@@ -539,14 +541,14 @@ while(locres2>locres_tol2 && itr2 < nitr2){
       locres = stateVar_diff.l2_norm() ;
       stateVar_it.equ(1.0,stateVar_temp) ;
 
-    } // inner while 
-    	
+    } // inner while
+
 	for(unsigned int j=0;j<2*dim;j++){
       T_star_iter_vec(j) = stateVar_it(j) ;
     }
-    
+
 	matform(T_star_iter,T_star_iter_vec) ;
-	
+
 
 
 
@@ -554,10 +556,10 @@ while(locres2>locres_tol2 && itr2 < nitr2){
       W_kh_tau1(j) = stateVar_it(j+2*dim)  ;
       W_kh_tau2(j) = stateVar_it(j+2*dim+n_Tslip_systems) ;
       W_kh_tau(j) = W_kh_tau1(j) + W_kh_tau2(j) ;
-    
+
     }
-    
-	
+
+
 	// Single slip hardening rate
       for(unsigned int i=0;i<n_slip_systems;i++){
         h_beta(i)=initialHardeningModulus[i]*pow((1-s_alpha_it(i)/saturationStress[i]),powerLawExponent[i]);
@@ -594,7 +596,7 @@ while(locres2>locres_tol2 && itr2 < nitr2){
             temp[j][k]=SCHMID_TENSOR1[dim*i + j][k];
           }
         }
-		
+
         T_star_iter.mTmult(temp1,temp);
         sctmp1=temp1.trace();
         resolved_shear_tau(i)=sctmp1;
@@ -620,8 +622,8 @@ while(locres2>locres_tol2 && itr2 < nitr2){
         for (unsigned int j = 0;j<n_Tslip_systems;j++){
           s_alpha_iterp(j)=s_alpha_iterp(j)+h_alpha_beta_t[j][i]*fabs(delgam_tau(i));
         }
-       
-      }	
+
+      }
         // Check if the slip system resistances exceed their corresponding saturation stress. If yes, set them equal to the saturation stress
 
         for(unsigned int i=0;i<n_slip_systems;i++){
@@ -639,10 +641,10 @@ while(locres2>locres_tol2 && itr2 < nitr2){
       vtmp4.add(1.0,s_alpha_iterp,-1.0,s_alpha_it);
       locres2=vtmp4.l2_norm();
       s_alpha_it=s_alpha_iterp;
-	
+
     } // Outer while
     ////////////////////////////////////End Nonlinear iteration for Slip increments////////////////////////////////////
-   
+
 
     s_alpha_tau=s_alpha_it;
     for(unsigned int j=0 ; j<2*dim ; j++)
@@ -691,6 +693,9 @@ while(locres2>locres_tol2 && itr2 < nitr2){
 
     for(unsigned int i=0 ; i<n_slip_systems ; i++)
     slipfraction_tau(i) = slipfraction_t(i) + fabs(delgam_tau(i)) ;
+
+    for(unsigned int i=0 ; i<n_Tslip_systems ; i++)
+    signed_slip_tau(i) = signed_slip_t(i) + delgam_tau(i) ;
 
     for(unsigned int i=0 ; i<n_twin_systems ; i++)
     twinfraction_tau(i) = twinfraction_t(i) + fabs(delgam_tau(i+n_slip_systems)) ;
@@ -745,7 +750,7 @@ while(locres2>locres_tol2 && itr2 < nitr2){
 	FullMatrix<double> Smat(n_Tslip_systems,n_Tslip_systems) ;
 	FullMatrix<double> Qmat2(n_Tslip_systems,dim*dim),dgamdFe(n_Tslip_systems,dim*dim) ;
 	Vector<double> nvec1(dim*dim),nvec2(dim*dim) ;
-	
+
     double modifier1_num, modifier1_den, modifier2_num, modifier2_den, modifier;
 
     double mulfac;
@@ -762,40 +767,40 @@ while(locres2>locres_tol2 && itr2 < nitr2){
     cnt4.equ(-1.0,cnt4);
 
 
-    // Part from isotropic hardening 
+    // Part from isotropic hardening
     Pmat = IdentityMatrix(n_Tslip_systems)  ;
-	
+
     for(unsigned int j= 0 ; j< n_slip_systems ; j++) {
 		sctmp1 = powerLawExponent[j]*initialHardeningModulus[j]/saturationStress[j]*pow((1-s_alpha_tau(j)/saturationStress[j]),powerLawExponent[j]-1)*fabs(delgam_tau(j)) ;
 		for(unsigned int i= 0 ; i<n_Tslip_systems ; i++){
-             Pmat[i][j] =  Pmat[i][j] + sctmp1*q[i][j] 	;		
+             Pmat[i][j] =  Pmat[i][j] + sctmp1*q[i][j] 	;
 		}
 	 }
-	 
-	 
+
+
 	for(unsigned int j= 0 ; j< n_twin_systems ; j++) {
 		sctmp1 = powerLawExponentTwin[j]*initialHardeningModulusTwin[j]/saturationStressTwin[j]*pow((1-s_alpha_tau(j+n_slip_systems)/saturationStressTwin[j]),powerLawExponentTwin[j]-1)*fabs(delgam_tau(j+n_slip_systems)) ;
 		for(unsigned int i= 0 ; i<n_Tslip_systems ; i++){
-             Pmat[i][j+n_slip_systems] = Pmat[i][j+n_slip_systems] + sctmp1*q[i][j+n_slip_systems] 	;		
+             Pmat[i][j+n_slip_systems] = Pmat[i][j+n_slip_systems] + sctmp1*q[i][j+n_slip_systems] 	;
 		}
-	 } 
-	 
-	 
+	 }
+
+
 	 Qmat = 0  ;
-	
+
     for(unsigned int j= 0 ; j< n_slip_systems ; j++) {
 		if(delgam_tau(j) <=0)
 			sgnm = -1 ;
 		else
 			sgnm = 1 ;
-		
+
 		sctmp1 = initialHardeningModulus[j]*pow((1-s_alpha_tau(j)/saturationStress[j]),powerLawExponent[j])*sgnm ;
 		for(unsigned int i= 0 ; i<n_Tslip_systems ; i++){
-			Qmat[i][j] =  Qmat[i][j] + sctmp1*q[i][j]	;		
+			Qmat[i][j] =  Qmat[i][j] + sctmp1*q[i][j]	;
 		}
 	 }
-	 
-	 
+
+
 	for(unsigned int j= 0 ; j< n_twin_systems ; j++) {
 		if(delgam_tau(j+n_slip_systems) <=0)
 			sgnm = 0 ;
@@ -803,43 +808,43 @@ while(locres2>locres_tol2 && itr2 < nitr2){
 			sgnm = 1 ;
 		sctmp1 = initialHardeningModulusTwin[j]*pow((1-s_alpha_tau(j+n_slip_systems)/saturationStressTwin[j]),powerLawExponentTwin[j])*sgnm ;
 		for(unsigned int i= 0 ; i<n_Tslip_systems ; i++){
-			Qmat[i][j+n_slip_systems] =  Qmat[i][j+n_slip_systems] + sctmp1*q[i][j+n_slip_systems]	;		
+			Qmat[i][j+n_slip_systems] =  Qmat[i][j+n_slip_systems] + sctmp1*q[i][j+n_slip_systems]	;
 		}
-	 } 
-	 
-	 
+	 }
+
+
 	 Pmat_inv.invert(Pmat) ;
 	 Pmat_inv.mmult(Pmat,Qmat) ;
-	 
-	 
+
+
 	 for(unsigned int j= 0 ; j< n_Tslip_systems ; j++) {
 		sctmp1 = delgam_tau(j)/strexp/s_alpha_tau(j) ;
 		for(unsigned int i= 0 ; i<n_Tslip_systems ; i++){
-             Pmat[i][j] = Pmat[i][j]*sctmp1 ;		
+             Pmat[i][j] = Pmat[i][j]*sctmp1 ;
 		}
 	 }
-	 
-	 
+
+
 	 Qmat2 = 0 ;
-	 
+
 	 for(unsigned int i=0 ; i<n_Tslip_systems ; i++){
 		 for (unsigned int j = 0;j < dim;j++) {
             for (unsigned int k = 0;k < dim;k++) {
               temp[j][k]=SCHMID_TENSOR1[dim*i + j][k];
             }
          }
-		 
+
 		temp2.equ(1.0,temp) ;
         temp2.symmetrize() ;
 		vtmp1 = vecform(temp2) ;
-		
-		
+
+
 		Dmat.vmult(vtmp2,vtmp1) ;
 		matform(temp2,vtmp2) ;
 		FE_tau.mmult(temp3,temp2) ;
 		temp2 = 0 ;
 		temp2.Tadd(1.0,temp3) ;
-		
+
 		if(i<n_slip_systems){
           sgnm = 1 ;
         }
@@ -849,21 +854,21 @@ while(locres2>locres_tol2 && itr2 < nitr2){
           else
           sgnm=1 ;
         }
-		
+
         sctmp2=delgam_ref/(strexp*s_alpha_tau(i))*pow(fabs((resolved_shear_tau(i)-W_kh_tau(i))/s_alpha_tau(i)),(1.0/strexp - 1.0))*sgnm;
-		
+
 		for (unsigned int j = 0;j < dim;j++) {
             for (unsigned int k = 0;k < dim;k++) {
               Qmat2[i][3*j+k] = sctmp2*temp2[k][j] ;
             }
          }
       }
-	  
-	  // Part from backstress 
+
+	  // Part from backstress
 	  Rmat = 0 ;
-	  
+
 	  for(unsigned int i=0 ; i< n_Tslip_systems ; i++){
-		  
+
 		if(i<n_slip_systems){
           sgnm = 1 ;
         }
@@ -874,7 +879,7 @@ while(locres2>locres_tol2 && itr2 < nitr2){
           sgnm=1 ;
         }
 		sctmp2 = delgam_ref/(strexp*s_alpha_tau(i))*pow(fabs((resolved_shear_tau(i)-W_kh_tau(i))/s_alpha_tau(i)),(1.0/strexp - 1.0))*sgnm;
-		  
+
 		if(i<n_slip_systems){ // For slip systems due to symmetry of slip
           if(delgam_tau(i)<0)
             sgnm=-1;
@@ -889,47 +894,47 @@ while(locres2>locres_tol2 && itr2 < nitr2){
             sgnm=1 ;
         }
 
-		  
-		  
+
+
 		  modifier1_num = h_back1  - r_back1*pow(fabs(W_kh_tau1(i))/b_back1,m_back1)*W_kh_tau1(i)*sgnm;
 		  modifier2_num = h_back2  - r_back2*pow(fabs(W_kh_tau2(i))/b_back2,m_back2)*W_kh_tau2(i)*sgnm;
-		  
+
 		  modifier1_den = 1 + (m_back1+1)*r_back1*pow(fabs(W_kh_tau1(i))/b_back1,m_back1)*fabs(delgam_tau(i)) ;
 		  modifier2_den = 1 + (m_back2+1)*r_back2*pow(fabs(W_kh_tau2(i))/b_back2,m_back2)*fabs(delgam_tau(i)) ;
-		  
+
 		  sctmp1 = modifier1_num/modifier1_den + modifier2_num/modifier2_den ;
-		  
+
 		  modifier = 1 + sctmp1*sctmp2 ;
-	     Rmat[i][i]	= modifier ;  
-		  
+	     Rmat[i][i]	= modifier ;
+
 	  }
-	 
+
 	 Smat = 0 ;
      Smat.add(1.0,Pmat,1.0,Rmat) ;
 	 Pmat.invert(Smat) ;
 	 Pmat.mmult(dgamdFe,Qmat2) ;
-	 
+
 	 dFpdFe = 0 ;
-	 
+
 	 for(unsigned int i=0 ; i<n_Tslip_systems ; i++){
 		 for (unsigned int j = 0;j < dim;j++) {
             for (unsigned int k = 0;k < dim;k++) {
               temp[j][k]=SCHMID_TENSOR1[dim*i + j][k];
             }
          }
-		 
+
 		 temp2.equ(1.0,matrixExponentialGateauxDerivative2(LP_acc,temp)) ;
 		 temp2.mmult(temp3,FP_t) ;
 		 vecform9(nvec1,temp3) ;
-		 
+
 		 for(unsigned int j=0 ; j<dim*dim ; j++){
-		 nvec2(j) = dgamdFe[i][j] ; 	 
+		 nvec2(j) = dgamdFe[i][j] ;
 		 }
-		 
+
 		 ntemp1.outer_product(nvec1,nvec2) ;
 	 	 dFpdFe.add(1.0,ntemp1) ;
-         
-	 		 
+
+
 	 }
 	 left(ntemp1,FE_tau) ;
 	 ntemp1.mmult(ntemp2,dFpdFe) ;
@@ -937,7 +942,7 @@ while(locres2>locres_tol2 && itr2 < nitr2){
 	 ntemp3 = 0 ;
 	 ntemp3.add(1.0,ntemp1,1.0,ntemp2) ;
 	 dFedF.invert(ntemp3) ;
-   
+
 
     // Compute remaining contributions which depend solely on dFedF
 
@@ -1020,10 +1025,10 @@ while(locres2>locres_tol2 && itr2 < nitr2){
     P.reinit(dim, dim);
     P = P_tau;
     T = T_tau;
-   
+
     T_inter.reinit(dim,dim) ;
 	T_inter = T_star_tau ;
-	
+
     sres_tau.reinit(n_Tslip_systems);
     sres_tau = s_alpha_tau;
 
@@ -1036,7 +1041,8 @@ while(locres2>locres_tol2 && itr2 < nitr2){
     for(unsigned int i=0 ; i<n_Tslip_systems ; i++){
       stateVar_iter[cellID][quadPtID][i]=W_kh_tau1(i);
       stateVar_iter[cellID][quadPtID][i+n_Tslip_systems]=W_kh_tau2(i);
-      stateVar_iter[cellID][quadPtID][i+2*n_Tslip_systems]=normal_stress_tau(i);
+      stateVar_iter[cellID][quadPtID][i+2*n_Tslip_systems]=signed_slip_tau(i);
+      stateVar_iter[cellID][quadPtID][i+3*n_Tslip_systems]=normal_stress_tau(i);
     }
 
     for(unsigned int i=0 ; i<n_twin_systems ; i++)

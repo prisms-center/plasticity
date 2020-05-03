@@ -145,7 +145,9 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
 
   enableAdvRateDepModel = parameter_handler.get_bool("Advanced Rate Dependent Model enabled");
   numSlipSystems1=parameter_handler.get_integer("Number of Slip Systems");
-  latentHardeningRatio1=parameter_handler.get_double("Latent Hardening Ratio");
+
+  latentHardeningRatioFileName1=parameter_handler.get("Latent Hardening Ratio filename");
+
   initialSlipResistance1 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Slip Resistance")));
   initialHardeningModulus1 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Hardening Modulus")));
   powerLawExponent1 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Power Law Exponent")));
@@ -232,7 +234,9 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
     elasticStiffness2.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness 2 row 6"))));
 
     numSlipSystems2=parameter_handler.get_integer("Number of Slip Systems 2");
-    latentHardeningRatio2=parameter_handler.get_double("Latent Hardening Ratio 2");
+
+    latentHardeningRatioFileName2=parameter_handler.get("Latent Hardening Ratio filename 2");
+
     initialSlipResistance2 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Slip Resistance 2")));
     initialHardeningModulus2 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Hardening Modulus 2")));
     powerLawExponent2 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Power Law Exponent 2")));
@@ -295,7 +299,9 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
       elasticStiffness3.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness 3 row 6"))));
 
       numSlipSystems3=parameter_handler.get_integer("Number of Slip Systems 3");
-      latentHardeningRatio3=parameter_handler.get_double("Latent Hardening Ratio 3");
+
+      latentHardeningRatioFileName3=parameter_handler.get("Latent Hardening Ratio filename 3");
+
       initialSlipResistance3 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Slip Resistance 3")));
       initialHardeningModulus3 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Hardening Modulus 3")));
       powerLawExponent3 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Power Law Exponent 3")));
@@ -359,7 +365,9 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
         elasticStiffness4.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Elastic Stiffness 4 row 6"))));
 
         numSlipSystems4=parameter_handler.get_integer("Number of Slip Systems 4");
-        latentHardeningRatio4=parameter_handler.get_double("Latent Hardening Ratio 4");
+
+        latentHardeningRatioFileName4=parameter_handler.get("Latent Hardening Ratio filename 4");
+
         initialSlipResistance4 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Slip Resistance 4")));
         initialHardeningModulus4 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Hardening Modulus 4")));
         powerLawExponent4 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Power Law Exponent 4")));
@@ -528,7 +536,9 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
 
   parameter_handler.declare_entry("Advanced Rate Dependent Model enabled","false",dealii::Patterns::Bool(),"Flag to indicate if Advanced Rate Dependent Model enabled");
   parameter_handler.declare_entry("Number of Slip Systems","-1",dealii::Patterns::Integer(),"Number of Slip Systems");
-  parameter_handler.declare_entry("Latent Hardening Ratio","-1",dealii::Patterns::Double(),"Latent Hardening Ratio");
+
+  parameter_handler.declare_entry("Latent Hardening Ratio filename","LatentHardeningRatio.txt",dealii::Patterns::Anything(),"Latent Hardening Ratio filename");
+
   parameter_handler.declare_entry("Initial Slip Resistance","",dealii::Patterns::List(dealii::Patterns::Double()),"RSS of the slip sytems");
   parameter_handler.declare_entry("Initial Hardening Modulus","",dealii::Patterns::List(dealii::Patterns::Double()),"Heardening moduli of slip systems");
   parameter_handler.declare_entry("Power Law Exponent","",dealii::Patterns::List(dealii::Patterns::Double()),"Power law coefficient");
@@ -589,7 +599,9 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Elastic Stiffness 2 row 6","",dealii::Patterns::List(dealii::Patterns::Double()),"	Elastic Stiffness Phase 2 Matrix -Voigt Notation (MPa)");
 
   parameter_handler.declare_entry("Number of Slip Systems 2","-1",dealii::Patterns::Integer(),"Number of Slip Systems Phase 2");
-  parameter_handler.declare_entry("Latent Hardening Ratio 2","-1",dealii::Patterns::Double(),"Latent Hardening Ratio Phase 2");
+
+  parameter_handler.declare_entry("Latent Hardening Ratio filename 2","LatentHardeningRatio2.txt",dealii::Patterns::Anything(),"Latent Hardening Ratio filename 2");
+
   parameter_handler.declare_entry("Initial Slip Resistance 2","",dealii::Patterns::List(dealii::Patterns::Double()),"RSS of the slip sytems Phase 2");
   parameter_handler.declare_entry("Initial Hardening Modulus 2","",dealii::Patterns::List(dealii::Patterns::Double()),"Heardening moduli of slip systems Phase 2");
   parameter_handler.declare_entry("Power Law Exponent 2","",dealii::Patterns::List(dealii::Patterns::Double()),"Power law coefficient Phase 2");
@@ -633,7 +645,7 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Elastic Stiffness 3 row 6","",dealii::Patterns::List(dealii::Patterns::Double()),"	Elastic Stiffness Phase 3 Matrix -Voigt Notation (MPa)");
 
   parameter_handler.declare_entry("Number of Slip Systems 3","-1",dealii::Patterns::Integer(),"Number of Slip Systems Phase 3");
-  parameter_handler.declare_entry("Latent Hardening Ratio 3","-1",dealii::Patterns::Double(),"Latent Hardening Ratio Phase 3");
+  parameter_handler.declare_entry("Latent Hardening Ratio filename 3","LatentHardeningRatio3.txt",dealii::Patterns::Anything(),"Latent Hardening Ratio filename 3");
   parameter_handler.declare_entry("Initial Slip Resistance 3","",dealii::Patterns::List(dealii::Patterns::Double()),"RSS of the slip sytems Phase 3");
   parameter_handler.declare_entry("Initial Hardening Modulus 3","",dealii::Patterns::List(dealii::Patterns::Double()),"Heardening moduli of slip systems Phase 3");
   parameter_handler.declare_entry("Power Law Exponent 3","",dealii::Patterns::List(dealii::Patterns::Double()),"Power law coefficient Phase 3");
@@ -677,7 +689,7 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Elastic Stiffness 4 row 6","",dealii::Patterns::List(dealii::Patterns::Double()),"	Elastic Stiffness Phase 4 Matrix -Voigt Notation (MPa)");
 
   parameter_handler.declare_entry("Number of Slip Systems 4","-1",dealii::Patterns::Integer(),"Number of Slip Systems Phase 4");
-  parameter_handler.declare_entry("Latent Hardening Ratio 4","-1",dealii::Patterns::Double(),"Latent Hardening Ratio Phase 4");
+  parameter_handler.declare_entry("Latent Hardening Ratio filename 4","LatentHardeningRatio4.txt",dealii::Patterns::Anything(),"Latent Hardening Ratio filename 4");
   parameter_handler.declare_entry("Initial Slip Resistance 4","",dealii::Patterns::List(dealii::Patterns::Double()),"RSS of the slip sytems Phase 4");
   parameter_handler.declare_entry("Initial Hardening Modulus 4","",dealii::Patterns::List(dealii::Patterns::Double()),"Heardening moduli of slip systems Phase 4");
   parameter_handler.declare_entry("Power Law Exponent 4","",dealii::Patterns::List(dealii::Patterns::Double()),"Power law coefficient Phase 4");

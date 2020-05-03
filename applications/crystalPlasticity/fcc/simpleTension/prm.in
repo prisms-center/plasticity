@@ -84,10 +84,10 @@ set Number of boundary conditions                = 4
 # Solver parameters
 ####################################
 #delta T for every increment
-set Time increments                              = 0.01
+set Time increments                              = 0.005
 
 #Total simulation time
-set Total time                                   = 10
+set Total time                                   = 5
 
 # Maximum iterations for linear solver
 set Maximum linear solver iterations             = 50000
@@ -126,7 +126,7 @@ set Elastic Stiffness row 6                      = 0, 0, 0, 0, 0, 75.0e3
 set Number of Slip Systems                       = 12
 
 # Latent Hardening Ratio
-set Latent Hardening Ratio                       = 1.4
+set Latent Hardening Ratio filename                       = LatentHardeningRatio.txt
 
 # RSS of the slip sytems
 set Initial Slip Resistance                      = 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0
@@ -151,7 +151,7 @@ set Slip Normals File                            = slipNormals.txt
 # Constitutive model parameters
 ####################################
 # Stress tolerance for the yield surface (MPa)
-set Stress Tolerance                             = 1.0e-6
+set Stress Tolerance                             = 1.0e-9
 
 # Maximum no. of active slip search iterations
 set Max Slip Search Iterations                   = 1

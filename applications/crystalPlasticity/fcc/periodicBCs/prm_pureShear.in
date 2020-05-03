@@ -99,7 +99,7 @@ set Vertices Periodic BCs row 2 = 0,0,0, 0.05,0,0, 0,0,0, 0,0,-0.05, 0.05,0,0, 0
 # Solver parameters
 ####################################
 #delta T for every increment
-set Time increments                              = 0.01
+set Time increments                              = 0.005
 
 #Total simulation time
 set Total time                                   = 5
@@ -142,7 +142,7 @@ set Elastic Stiffness row 6                      = 0, 0, 0, 0, 0, 28.30e3
 set Number of Slip Systems                       = 12
 
 # Latent Hardening Ratio
-set Latent Hardening Ratio                       = 1.4
+set Latent Hardening Ratio filename                       = LatentHardeningRatio.txt
 
 # RSS of the slip sytems
 set Initial Slip Resistance                      = 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0

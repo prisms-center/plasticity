@@ -2,9 +2,9 @@
 
 
 //////////////////////////////////////////////////////////////////////////
-//calculatePlasticity.cc numerically integrates the constitive model. 
-//This calculatePlasticity.cc is the modified version of the following rate-independent crystal plasticity model: 
-//Mohammadreza Yaghoobi, John E. Allison, Veera Sundararaghavan, 
+//calculatePlasticity.cc numerically integrates the constitive model.
+//This calculatePlasticity.cc is the modified version of the following rate-independent crystal plasticity model:
+//Mohammadreza Yaghoobi, John E. Allison, Veera Sundararaghavan,
 //Multiscale modeling of twinning and detwinning behavior of HCP polycrystals,
 // International Journal of Plasticity, December 2019, 102653.
 //
@@ -12,7 +12,7 @@
 //    plasticity/src/materialModels/crystalPlasticity/
 // Finaly, one should recompile PRISMS-Plasticity.
 //
-//This model includes a multiscale scheme to capture the twinning and detwinning mechanisms during 
+//This model includes a multiscale scheme to capture the twinning and detwinning mechanisms during
 //cyclic loading of HCP polycrystals.
 //////////////////////////////////////////////////////////////////////////
 
@@ -79,17 +79,10 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
         N_alpha = n_alpha;
         alpha = 0;
         n_slip_systems = n_Tslip_systems;
+
         q.reinit(n_slip_systems,n_slip_systems);
-        for(unsigned int i=0;i<n_slip_systems;i++){
-          for(unsigned int j=0;j<n_slip_systems;j++){
-            q[i][j] = this->userInputs.latentHardeningRatio1;
-          }
-        }
+        q=q_phase1;
 
-
-        for(unsigned int i=0;i<n_slip_systems;i++){
-          q[i][i] = 1.0;
-        }
         initialHardeningMTwin.reinit(n_twin_systems); powerLawExpTwin.reinit(n_twin_systems); saturationStressVTwin.reinit(n_twin_systems);
         for (unsigned int i = 0;i < n_slip_systemsWOtwin;i++) {
           initialHardeningM[i] = this->userInputs.initialHardeningModulus1[i];
@@ -119,16 +112,15 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
           N_alpha[n_slip_systemsWOtwin + 1][i] = n_alpha[n_slip_systemsWOtwin + alpha-1][i];
         }
         n_slip_systems = n_slip_systemsWOtwin + 2;
+
         q.reinit(n_slip_systems,n_slip_systems);
+        //Here, we assumed that twinning and detwinning all have equal latent hardening ratios.
         for(unsigned int i=0;i<n_slip_systems;i++){
           for(unsigned int j=0;j<n_slip_systems;j++){
-            q[i][j] = this->userInputs.latentHardeningRatio1;
+            q[i][j] = q_phase1[i][j];
           }
         }
 
-        for(unsigned int i=0;i<n_slip_systems;i++){
-          q[i][i] = 1.0;
-        }
         initialHardeningMTwin.reinit(n_twin_systems); powerLawExpTwin.reinit(n_twin_systems); saturationStressVTwin.reinit(n_twin_systems);
         for (unsigned int i = 0;i < n_slip_systemsWOtwin;i++) {
           initialHardeningM[i] = this->userInputs.initialHardeningModulus1[i];
@@ -328,7 +320,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
           resolved_shear_tau_trial[j] = 0;
         }
       }
-     
+
       /////////////The modification compared to the original model is applied to the following lines//////////////////
       for (unsigned int i = (n_twin_systems / 2);i < n_twin_systems;i++) {
         unsigned int j = i + n_slip_systemsWOtwin;
@@ -566,7 +558,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
           resolved_shear_tau_trial[j] = 0;
         }
       }
-      
+
       /////////////The modification compared to the original model is applied to the following lines//////////////////
       for (unsigned int i = (n_twin_systems / 2);i < n_twin_systems;i++) {
         unsigned int j = i + n_slip_systemsWOtwin;
@@ -575,7 +567,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
         }
       }
       ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      
+
     }
     else {
 

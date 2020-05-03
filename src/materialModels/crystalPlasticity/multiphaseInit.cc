@@ -32,15 +32,7 @@ void crystalPlasticity<dim>::multiphaseInit(unsigned int cellID,
     }
 
     q.reinit(n_Tslip_systems,n_Tslip_systems);
-    for(unsigned int i=0;i<n_Tslip_systems;i++){
-      for(unsigned int j=0;j<n_Tslip_systems;j++){
-        q[i][j] = this->userInputs.latentHardeningRatio1;
-      }
-    }
-
-    for(unsigned int i=0;i<n_Tslip_systems;i++){
-      q[i][i] = 1.0;
-    }
+    q=q_phase1;
 
 
     twinShear=this->userInputs.twinShear1;
@@ -118,15 +110,7 @@ void crystalPlasticity<dim>::multiphaseInit(unsigned int cellID,
       }
 
       q.reinit(n_Tslip_systems,n_Tslip_systems);
-      for(unsigned int i=0;i<n_Tslip_systems;i++){
-        for(unsigned int j=0;j<n_Tslip_systems;j++){
-          q[i][j] = this->userInputs.latentHardeningRatio1;
-        }
-      }
-
-      for(unsigned int i=0;i<n_Tslip_systems;i++){
-        q[i][i] = 1.0;
-      }
+      q=q_phase1;
 
 
       twinShear=this->userInputs.twinShear1;
@@ -198,15 +182,7 @@ void crystalPlasticity<dim>::multiphaseInit(unsigned int cellID,
       }
 
       q.reinit(n_Tslip_systems,n_Tslip_systems);
-      for(unsigned int i=0;i<n_Tslip_systems;i++){
-        for(unsigned int j=0;j<n_Tslip_systems;j++){
-          q[i][j] = this->userInputs.latentHardeningRatio2;
-        }
-      }
-
-      for(unsigned int i=0;i<n_Tslip_systems;i++){
-        q[i][i] = 1.0;
-      }
+      q=q_phase2;
 
 
       twinShear=this->userInputs.twinShear2;
@@ -279,15 +255,7 @@ void crystalPlasticity<dim>::multiphaseInit(unsigned int cellID,
       }
 
       q.reinit(n_Tslip_systems,n_Tslip_systems);
-      for(unsigned int i=0;i<n_Tslip_systems;i++){
-        for(unsigned int j=0;j<n_Tslip_systems;j++){
-          q[i][j] = this->userInputs.latentHardeningRatio3;
-        }
-      }
-
-      for(unsigned int i=0;i<n_Tslip_systems;i++){
-        q[i][i] = 1.0;
-      }
+      q=q_phase3;
 
 
       twinShear=this->userInputs.twinShear3;
@@ -360,15 +328,7 @@ void crystalPlasticity<dim>::multiphaseInit(unsigned int cellID,
       }
 
       q.reinit(n_Tslip_systems,n_Tslip_systems);
-      for(unsigned int i=0;i<n_Tslip_systems;i++){
-        for(unsigned int j=0;j<n_Tslip_systems;j++){
-          q[i][j] = this->userInputs.latentHardeningRatio4;
-        }
-      }
-
-      for(unsigned int i=0;i<n_Tslip_systems;i++){
-        q[i][i] = 1.0;
-      }
+      q=q_phase4;
 
 
       twinShear=this->userInputs.twinShear4;

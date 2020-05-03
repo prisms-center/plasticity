@@ -39,12 +39,32 @@ void crystalPlasticity<dim>::init2(unsigned int num_quad_points)
 
   n_alpha.reinit(n_slip_systems,3);
   m_alpha.reinit(n_slip_systems,3);
+
   std::string line;
+  q_phase1.reinit(n_slip_systems,n_slip_systems);
+  q_phase1=0;
+  //open data file to read latent hardening ratios
+  std::ifstream latentHardeningratioFile(this->userInputs.latentHardeningRatioFileName1);
+  //read data
+  unsigned int id=0;
+  if (latentHardeningratioFile.is_open()){
+    while (getline (latentHardeningratioFile,line) && id<n_slip_systems){
+      std::stringstream ss(line);
+      for (unsigned int i=0; i<n_slip_systems; i++){
+        ss >> q_phase1[id][i];
+      }
+      id=id+1;
+    }
+  }
+  else{
+    std::cout << "Unable to open latent hardening ratio file \n";
+    exit(1);
+  }
 
   //open data file to read slip normals
   std::ifstream slipNormalsDataFile(this->userInputs.slipNormalsFile1);
   //read data
-  unsigned int id=0;
+  id=0;
   if (slipNormalsDataFile.is_open()){
     while (getline (slipNormalsDataFile,line) && id<n_slip_systemsWOtwin){
       std::stringstream ss(line);
@@ -204,8 +224,8 @@ void crystalPlasticity<dim>::init2(unsigned int num_quad_points)
       }
     }
   }
-  
-  
+
+
   if (this->userInputs.enableUserMaterialModel){
     if (this->userInputs.enableUserMaterialModel1){
       if (this->userInputs.numberofUserMatStateVar1==0){
@@ -257,7 +277,7 @@ void crystalPlasticity<dim>::init2(unsigned int num_quad_points)
   TwinFlag_iter.resize(num_local_cells, std::vector<std::vector<unsigned int> >(num_quad_points, twin_init2));
   ActiveTwinSystems_iter.resize(num_local_cells, std::vector<std::vector<unsigned int> >(num_quad_points, twin_init2));
   NumberOfTwinnedRegion_iter.resize(num_local_cells, std::vector<unsigned int>(num_quad_points, 0));
-  
+
   if (this->userInputs.enableUserMaterialModel){
       stateVar_conv.resize(num_local_cells,std::vector<Vector<double> >(num_quad_points,stateVar_init));
       stateVar_iter.resize(num_local_cells,std::vector<Vector<double> >(num_quad_points,stateVar_init));

@@ -158,17 +158,17 @@ public:
               *calculates the matrix exponential of 3x3 matrix A
               */
               FullMatrix<double> matrixExponential(FullMatrix<double> A);
-              
+
 	      /**
 	      *calculates the matrix exponential of 3x3 matrix A
-	      */                                                        
+	      */
 	      FullMatrix<double> matrixExponential6(FullMatrix<double> A);
 
-              /** 
+              /**
 	      *calculates the matrix exponential of 3x3 matrix A
-	      */ 
+	      */
               FullMatrix<double> matrixExponentialGateauxDerivative(FullMatrix<double> A, FullMatrix<double> B);
-             
+
               /**
 	       *calculates the matrix exponential of 3x3 matrix A
 	       */
@@ -307,11 +307,11 @@ public:
               std::vector<std::vector<double> >  twin_ouput, TotaltwinvfK;
               std::vector<std::vector<unsigned int> >  twin_iter, twin_conv;
 
-              std::vector<unsigned int>  n_slip_systems_MultiPhase, n_twin_systems_MultiPhase, n_Tslip_systems_MultiPhase, n_UserMatStateVar_MultiPhase;
+              std::vector<unsigned int>  n_slip_systems_MultiPhase, n_twin_systems_MultiPhase, n_Tslip_systems_MultiPhase,n_Tslip_systems_Real_MultiPhase, n_UserMatStateVar_MultiPhase;
               std::vector<std::vector<unsigned int>> phase;
 
               unsigned int n_slip_systems,n_Tslip_systems,n_twin_systems,n_slip_systems_SinglePhase,n_Tslip_systems_SinglePhase,n_twin_systems_SinglePhase, phaseMaterial, numberofPhases, n_UserMatStateVar, n_UserMatStateVar_SinglePhase; //No. of slip systems
-              FullMatrix<double> m_alpha,n_alpha,m_alpha_SinglePhase,n_alpha_SinglePhase,m_alpha_MultiPhase,n_alpha_MultiPhase,q,sres,Dmat,Dmat_SinglePhase,Dmat_MultiPhase, eulerAngles2;
+              FullMatrix<double> m_alpha,n_alpha,m_alpha_SinglePhase,n_alpha_SinglePhase,m_alpha_MultiPhase,n_alpha_MultiPhase,q,q_phase1,q_phase2,q_phase3,q_phase4,sres,Dmat,Dmat_SinglePhase,Dmat_MultiPhase, eulerAngles2;
 
               double twinShear;
               Vector<double> initialHardeningModulus, saturationStress, powerLawExponent, initialHardeningModulusTwin, saturationStressTwin, powerLawExponentTwin;

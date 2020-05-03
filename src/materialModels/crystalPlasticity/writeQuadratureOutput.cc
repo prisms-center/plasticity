@@ -11,13 +11,14 @@ void crystalPlasticity<dim>::writeQuadratureOutput(std::string _outputDirectory,
 	if (_outputDirectory.back() != '/') dir += "/";
 
 	std::string fileName("QuadratureOutputs");
+	std::string fileExtension(".csv");
 	fileName += std::to_string(dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD));
-	std::ofstream file((dir + fileName + std::to_string(_currentIncrement) ).c_str());
+	std::ofstream file((dir + fileName + std::to_string(_currentIncrement)+fileExtension).c_str());
 	char buffer[200];
 	if (file.is_open()) {
 		for (std::vector<std::vector<double> >::iterator it = outputQuadrature.begin(); it != outputQuadrature.end(); ++it) {
 			for (std::vector<double>::iterator it2 = it->begin(); it2 != it->end(); ++it2) {
-				sprintf(buffer, "%8.5e ", *it2);
+				sprintf(buffer, "%8.5e ,", *it2);
 				file << buffer;
 			}
 			file << std::endl;
@@ -34,14 +35,14 @@ void crystalPlasticity<dim>::writeQuadratureOutput(std::string _outputDirectory,
 	MPI_Barrier(MPI_COMM_WORLD);
 	if (dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD) == 0) {
 		std::string fileName2("QuadratureOutputs");
-		std::ofstream file2((dir + fileName2 + std::to_string(_currentIncrement) ).c_str());
+		std::ofstream file2((dir + fileName2 + std::to_string(_currentIncrement)+fileExtension).c_str());
 		for (unsigned int proc = 0; proc<dealii::Utilities::MPI::n_mpi_processes(MPI_COMM_WORLD); proc++) {
 			std::string fileName3("QuadratureOutputs");
 			fileName3 += std::to_string(proc);
-			std::ofstream file3((dir  + fileName3 + std::to_string(_currentIncrement)).c_str(), std::ofstream::in);
+			std::ofstream file3((dir  + fileName3 + std::to_string(_currentIncrement)+fileExtension).c_str(), std::ofstream::in);
 			file2 << file3.rdbuf();
 			//delete file from processor proc
-			remove((dir + fileName3 + std::to_string(_currentIncrement) ).c_str());
+			remove((dir + fileName3 + std::to_string(_currentIncrement)+fileExtension).c_str());
 		}
 		file2.close();
 	}

@@ -104,7 +104,7 @@ public:
 
   bool enableUserMaterialModel; //Flag to indicate if User material Model is enabled
 
-    bool enableUserMaterialModel1; //Flag to indicate if User material Model is enabled for Phase 1
+  bool enableUserMaterialModel1; //Flag to indicate if User material Model is enabled for Phase 1
   unsigned int numberofUserMatConstants1; // Number of User Material Constants
   unsigned int numberofUserMatStateVar1; // Number of User Material State Variables
   std::vector<double> UserMatConstants1; // 	Elastic Stiffness Matrix -Voigt Notation (MPa)
@@ -116,7 +116,7 @@ public:
 
   //Crystal Plasticity parameters
   unsigned int numSlipSystems1;
-  double latentHardeningRatio1; //q1
+  std::string latentHardeningRatioFileName1; //q1
   std::vector<double> initialSlipResistance1; //CRSS of the slip sytems
   std::vector<double> initialHardeningModulus1; //Hardening moduli of slip systems
   std::vector<double> powerLawExponent1; // Power law coefficient
@@ -166,7 +166,7 @@ public:
 
   //Crystal Plasticity parameters
   unsigned int numSlipSystems2;
-  double latentHardeningRatio2; //q1
+  std::string latentHardeningRatioFileName2; //q2
   std::vector<double> initialSlipResistance2; //CRSS of the slip sytems
   std::vector<double> initialHardeningModulus2; //Hardening moduli of slip systems
   std::vector<double> powerLawExponent2; // Power law coefficient
@@ -201,7 +201,7 @@ public:
 
   //Crystal Plasticity parameters
   unsigned int numSlipSystems3;
-  double latentHardeningRatio3; //q1
+  std::string latentHardeningRatioFileName3; //q3
   std::vector<double> initialSlipResistance3; //CRSS of the slip sytems
   std::vector<double> initialHardeningModulus3; //Hardening moduli of slip systems
   std::vector<double> powerLawExponent3; // Power law coefficient
@@ -236,7 +236,7 @@ public:
 
   //Crystal Plasticity parameters
   unsigned int numSlipSystems4;
-  double latentHardeningRatio4; //q1
+  std::string latentHardeningRatioFileName4; //q4
   std::vector<double> initialSlipResistance4; //CRSS of the slip sytems
   std::vector<double> initialHardeningModulus4; //Hardening moduli of slip systems
   std::vector<double> powerLawExponent4; // Power law coefficient

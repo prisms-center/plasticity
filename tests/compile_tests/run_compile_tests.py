@@ -47,10 +47,10 @@ for item in testDirectories:
     new_vonmisesStrain=np.sqrt(0.5*(np.power(new_stress_strain[:,0]-new_stress_strain[:,1],2)+np.power(new_stress_strain[:,1]-new_stress_strain[:,2],2)+np.power(new_stress_strain[:,2]-new_stress_strain[:,0],2)+6*(np.power(new_stress_strain[:,3],2)+np.power(new_stress_strain[:,4],2)+np.power(new_stress_strain[:,5],2))))
     new_vonmisesStress=np.sqrt(0.5*(np.power(new_stress_strain[:,6]-new_stress_strain[:,7],2)+np.power(new_stress_strain[:,7]-new_stress_strain[:,8],2)+np.power(new_stress_strain[:,8]-new_stress_strain[:,6],2)+6*(np.power(new_stress_strain[:,9],2)+np.power(new_stress_strain[:,10],2)+np.power(new_stress_strain[:,11],2))))
 
-    if (item=='/hcp/compression/' or item=='/hcp/simpleTension/'):
-        CheckNumber=350
+    if (item=='/hcp/compression/' or item=='/hcp/simpleTension/' or item=='/fcc/simpleTension_ExternalMesh/'):
+        CheckNumber=599
     else:
-        CheckNumber=1000
+        CheckNumber=999
 
     CheckStrainError=np.max(np.nan_to_num(np.abs((old_vonmisesStrain[0:CheckNumber]-new_vonmisesStrain[0:CheckNumber])/old_vonmisesStrain[0:CheckNumber])))
     CheckStressError=np.max(np.nan_to_num(np.abs((old_vonmisesStress[0:CheckNumber]-new_vonmisesStress[0:CheckNumber])/old_vonmisesStress[0:CheckNumber])))

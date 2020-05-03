@@ -24,27 +24,55 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
   unsigned int num_local_cells = this->triangulation.n_locally_owned_active_cells();
   F.reinit(dim, dim);
 
+
+  unsigned int n_Tslip_systems_Real_SinglePhase,n_Tslip_systems_Real;
   n_slip_systems_SinglePhase=this->userInputs.numSlipSystems1;
   n_Tslip_systems_SinglePhase=n_slip_systems_SinglePhase;
   if(this->userInputs.enableTwinning1){
     n_Tslip_systems_SinglePhase+=this->userInputs.numTwinSystems1;
     n_twin_systems_SinglePhase=this->userInputs.numTwinSystems1;
+    n_Tslip_systems_Real_SinglePhase=n_Tslip_systems_SinglePhase;
+
   }
   else{
     n_Tslip_systems_SinglePhase+=1;
     n_twin_systems_SinglePhase=1;
+    n_Tslip_systems_Real_SinglePhase=n_Tslip_systems_SinglePhase-1;
   }
 
 
   n_alpha_SinglePhase.reinit(n_Tslip_systems_SinglePhase,3);
   m_alpha_SinglePhase.reinit(n_Tslip_systems_SinglePhase,3);
 
+
+
   std::string line;
+
+  q_phase1.reinit(n_Tslip_systems_SinglePhase,n_Tslip_systems_SinglePhase);
+  q_phase1=0;
+  //open data file to read latent hardening ratios
+  std::ifstream latentHardeningratioFile(this->userInputs.latentHardeningRatioFileName1);
+  //read data
+  unsigned int id=0;
+  if (latentHardeningratioFile.is_open()){
+    while (getline (latentHardeningratioFile,line) && id<n_Tslip_systems_Real_SinglePhase){
+      std::stringstream ss(line);
+      for (unsigned int i=0; i<n_Tslip_systems_Real_SinglePhase; i++){
+        ss >> q_phase1[id][i];
+      }
+      id=id+1;
+    }
+  }
+  else{
+    std::cout << "Unable to open latent hardening ratio file \n";
+    exit(1);
+  }
+
 
   //open data file to read slip normals
   std::ifstream slipNormalsDataFile(this->userInputs.slipNormalsFile1);
   //read data
-  unsigned int id=0;
+  id=0;
   if (slipNormalsDataFile.is_open()){
     while (getline (slipNormalsDataFile,line) && id<n_slip_systems_SinglePhase){
       std::stringstream ss(line);
@@ -247,8 +275,8 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
     Fp_iter.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,IdentityMatrix(dim)));
     Fe_iter.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,IdentityMatrix(dim)));
     CauchyStress.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,CauchyStress_init));
-	 TinterStress.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,TinterStress_init));                
-	 TinterStress_diff.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,TinterStress_diff_init));  
+	 TinterStress.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,TinterStress_init));
+	 TinterStress_diff.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,TinterStress_diff_init));
     s_alpha_iter.resize(num_local_cells,std::vector<Vector<double> >(num_quad_points,s0_init));
     twinfraction_iter.resize(num_local_cells,std::vector<std::vector<double> >(num_quad_points,twin_init));
     slipfraction_iter.resize(num_local_cells,std::vector<std::vector<double> >(num_quad_points,slip_init));
@@ -270,12 +298,14 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
     n_slip_systems_MultiPhase.resize(this->userInputs.numberofPhases);
     n_twin_systems_MultiPhase.resize(this->userInputs.numberofPhases);
     n_Tslip_systems_MultiPhase.resize(this->userInputs.numberofPhases);
+    n_Tslip_systems_Real_MultiPhase.resize(this->userInputs.numberofPhases);
 
 
 
     n_slip_systems_MultiPhase[0]=n_slip_systems_SinglePhase;
     n_twin_systems_MultiPhase[0]=n_twin_systems_SinglePhase;
     n_Tslip_systems_MultiPhase[0]=n_Tslip_systems_SinglePhase;
+    n_Tslip_systems_Real_MultiPhase[0]=n_Tslip_systems_Real_SinglePhase;
 
     n_UserMatStateVar_MultiPhase.resize(this->userInputs.numberofPhases);
     n_UserMatStateVar_MultiPhase[0]=n_UserMatStateVar_SinglePhase;
@@ -287,14 +317,17 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
       if(this->userInputs.enableTwinning2){
         n_Tslip_systems+=this->userInputs.numTwinSystems2;
         n_twin_systems=this->userInputs.numTwinSystems2;
+        n_Tslip_systems_Real=n_Tslip_systems;
       }
       else{
         n_Tslip_systems+=1;
         n_twin_systems=1;
+        n_Tslip_systems_Real=n_Tslip_systems-1;
       }
       n_slip_systems_MultiPhase[1]=n_slip_systems;
       n_twin_systems_MultiPhase[1]=n_twin_systems;
       n_Tslip_systems_MultiPhase[1]=n_Tslip_systems;
+      n_Tslip_systems_Real_MultiPhase[1]=n_Tslip_systems_Real;
 
       if (this->userInputs.enableUserMaterialModel2){
         if (this->userInputs.numberofUserMatStateVar2==0){
@@ -315,14 +348,17 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
         if(this->userInputs.enableTwinning3){
           n_Tslip_systems+=this->userInputs.numTwinSystems3;
           n_twin_systems=this->userInputs.numTwinSystems3;
+          n_Tslip_systems_Real=n_Tslip_systems;
         }
         else{
           n_Tslip_systems+=1;
           n_twin_systems=1;
+          n_Tslip_systems_Real=n_Tslip_systems-1;
         }
         n_slip_systems_MultiPhase[2]=n_slip_systems;
         n_twin_systems_MultiPhase[2]=n_twin_systems;
         n_Tslip_systems_MultiPhase[2]=n_Tslip_systems;
+        n_Tslip_systems_Real_MultiPhase[2]=n_Tslip_systems_Real;
 
         if (this->userInputs.enableUserMaterialModel3){
           if (this->userInputs.numberofUserMatStateVar3==0){
@@ -343,14 +379,17 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
           if(this->userInputs.enableTwinning4){
             n_Tslip_systems+=this->userInputs.numTwinSystems4;
             n_twin_systems=this->userInputs.numTwinSystems4;
+            n_Tslip_systems_Real=n_Tslip_systems;
           }
           else{
             n_Tslip_systems+=1;
             n_twin_systems=1;
+            n_Tslip_systems_Real=n_Tslip_systems-1;
           }
           n_slip_systems_MultiPhase[3]=n_slip_systems;
           n_twin_systems_MultiPhase[3]=n_twin_systems;
           n_Tslip_systems_MultiPhase[3]=n_Tslip_systems;
+          n_Tslip_systems_Real_MultiPhase[3]=n_Tslip_systems_Real;
 
           if (this->userInputs.enableUserMaterialModel4){
             if (this->userInputs.numberofUserMatStateVar4==0){
@@ -405,11 +444,31 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
 
     if (numberofPhases>=2){
 
+      q_phase2.reinit(n_Tslip_systems_MultiPhase[1],n_Tslip_systems_MultiPhase[1]);
+      q_phase2=0;
+      //open data file to read latent hardening ratios
+      std::ifstream latentHardeningratioFile2(this->userInputs.latentHardeningRatioFileName2);
+      //read data
+      id=0;
+      if (latentHardeningratioFile2.is_open()){
+        while (getline (latentHardeningratioFile2,line) && id<n_Tslip_systems_Real_MultiPhase[1]){
+          std::stringstream ss(line);
+          for (unsigned int i=0; i<n_Tslip_systems_Real_MultiPhase[1]; i++){
+            ss >> q_phase2[id][i];
+          }
+          id=id+1;
+        }
+      }
+      else{
+        std::cout << "Unable to open latent hardening ratio file 2 \n";
+        exit(1);
+      }
+
 
       //open data file to read slip normals
       std::ifstream slipNormalsDataFile2(this->userInputs.slipNormalsFile2);
       //read data
-      unsigned int id=n_Tslip_systems_MultiPhase[0];
+      id=n_Tslip_systems_MultiPhase[0];
       if (slipNormalsDataFile2.is_open()){
         while (getline (slipNormalsDataFile2,line) && id<n_Tslip_systems_MultiPhase[0]+n_slip_systems_MultiPhase[1]){
           std::stringstream ss(line);
@@ -491,11 +550,31 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
 
       if (numberofPhases>=3){
 
+        q_phase3.reinit(n_Tslip_systems_MultiPhase[2],n_Tslip_systems_MultiPhase[2]);
+        q_phase3=0;
+        //open data file to read latent hardening ratios
+        std::ifstream latentHardeningratioFile3(this->userInputs.latentHardeningRatioFileName3);
+        //read data
+        id=0;
+        if (latentHardeningratioFile3.is_open()){
+          while (getline (latentHardeningratioFile3,line) && id<n_Tslip_systems_Real_MultiPhase[2]){
+            std::stringstream ss(line);
+            for (unsigned int i=0; i<n_Tslip_systems_Real_MultiPhase[2]; i++){
+              ss >> q_phase3[id][i];
+            }
+            id=id+1;
+          }
+        }
+        else{
+          std::cout << "Unable to open latent hardening ratio file 3 \n";
+          exit(1);
+        }
+
 
         //open data file to read slip normals
         std::ifstream slipNormalsDataFile3(this->userInputs.slipNormalsFile3);
         //read data
-        unsigned int id=n_Tslip_systems_MultiPhase[0]+n_Tslip_systems_MultiPhase[1];
+        id=n_Tslip_systems_MultiPhase[0]+n_Tslip_systems_MultiPhase[1];
         if (slipNormalsDataFile3.is_open()){
           while (getline (slipNormalsDataFile3,line) && id<n_Tslip_systems_MultiPhase[0]+n_Tslip_systems_MultiPhase[1]+n_slip_systems_MultiPhase[2]){
             std::stringstream ss(line);
@@ -577,11 +656,31 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
 
         if (numberofPhases>=4){
 
+          q_phase4.reinit(n_Tslip_systems_MultiPhase[3],n_Tslip_systems_MultiPhase[3]);
+          q_phase4=0;
+          //open data file to read latent hardening ratios
+          std::ifstream latentHardeningratioFile4(this->userInputs.latentHardeningRatioFileName4);
+          //read data
+          id=0;
+          if (latentHardeningratioFile4.is_open()){
+            while (getline (latentHardeningratioFile4,line) && id<n_Tslip_systems_Real_MultiPhase[3]){
+              std::stringstream ss(line);
+              for (unsigned int i=0; i<n_Tslip_systems_Real_MultiPhase[3]; i++){
+                ss >> q_phase4[id][i];
+              }
+              id=id+1;
+            }
+          }
+          else{
+            std::cout << "Unable to open latent hardening ratio file 4\n";
+            exit(1);
+          }
+
 
           //open data file to read slip normals
           std::ifstream slipNormalsDataFile4(this->userInputs.slipNormalsFile4);
           //read data
-          unsigned int id=n_Tslip_systems_MultiPhase[2]+n_Tslip_systems_MultiPhase[1]+n_Tslip_systems_MultiPhase[0];
+          id=n_Tslip_systems_MultiPhase[2]+n_Tslip_systems_MultiPhase[1]+n_Tslip_systems_MultiPhase[0];
           if (slipNormalsDataFile4.is_open()){
             while (getline (slipNormalsDataFile4,line) && id<n_Tslip_systems_MultiPhase[2]+n_Tslip_systems_MultiPhase[1]+n_Tslip_systems_MultiPhase[0]+n_slip_systems_MultiPhase[3]){
               std::stringstream ss(line);
@@ -753,7 +852,7 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
     Fp_iter.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,IdentityMatrix(dim)));
     Fe_iter.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,IdentityMatrix(dim)));
     CauchyStress.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,CauchyStress_init));
-	TinterStress.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,TinterStress_init)); 
+	TinterStress.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,TinterStress_init));
 	TinterStress_diff.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,TinterStress_diff_init));
     s_alpha_conv.resize(num_local_cells,std::vector<Vector<double> >(num_quad_points,s0_init1));
     W_kh_conv.resize(num_local_cells, std::vector<Vector<double> >(num_quad_points, W_kh_init1));
