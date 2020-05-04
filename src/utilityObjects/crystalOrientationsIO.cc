@@ -107,25 +107,74 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
       }
     }
 
-    //return materialID closest to given (x,y,z)
-    template <int dim>
-    unsigned int crystalOrientationsIO<dim>::getMaterialID(double _coords[]){
-      if (inputVoxelData.size()==0){
-        pcout << "inputVoxelData not initialized\n";
-        exit(1);
-      }
-
-      //find nearest point
-      //iterator to nearest x slice
-      std::map<double,std::map<double, std::map<double, unsigned int> > >::iterator itx=inputVoxelData.lower_bound(_coords[0]);
-      if(itx == inputVoxelData.end()) --itx;
-      //iterator to nearest y slice
-      std::map<double, std::map<double, unsigned int> >::iterator ity=itx->second.lower_bound(_coords[1]);
-      if(ity == itx->second.end()) --ity;
-      //iterator to nearest z slice
-      std::map<double, unsigned int>::iterator itz=ity->second.lower_bound(_coords[2]);
-      if(itz == ity->second.end()) --itz;
-      return itz->second;
+//return materialID closest to given (x,y,z)
+template <int dim>
+unsigned int crystalOrientationsIO<dim>::getMaterialID(double _coords[]){
+  if (inputVoxelData.size()==0){
+     pcout << "inputVoxelData not initialized\n";
+     exit(1);
+  }
+  
+  double dist_to_lower,dist_to_upper;
+  //find nearest point
+  //iterator to nearest x slice
+  std::map<double,std::map<double, std::map<double, unsigned int> > >::iterator itx;
+  std::map<double,std::map<double, std::map<double, unsigned int> > >::iterator itx_upper=inputVoxelData.lower_bound(_coords[0]);
+  std::map<double,std::map<double, std::map<double, unsigned int> > >::iterator itx_lower = itx_upper; itx_lower--;
+  if (itx_upper == inputVoxelData.end()) {
+    itx=itx_lower;
+  }
+  else{
+    dist_to_lower = std::abs(itx_lower->first - _coords[0]);
+    dist_to_upper = std::abs(itx_upper->first - _coords[0]);
+    if (dist_to_upper >= dist_to_lower) {
+      itx=itx_lower;
     }
+    else {
+      itx=itx_upper;
+    }
+  }
+  if(itx == inputVoxelData.end()) --itx;
+
+  //iterator to nearest y slice
+  std::map<double, std::map<double, unsigned int> >::iterator ity;
+  std::map<double, std::map<double, unsigned int> >::iterator ity_upper=itx->second.lower_bound(_coords[1]);
+  std::map<double, std::map<double, unsigned int> >::iterator ity_lower=ity_upper; ity_lower--;
+
+  if (ity_upper == itx->second.end()) {
+    ity=ity_lower;
+  }
+  else{
+    dist_to_lower = std::abs(ity_lower->first - _coords[1]);
+    dist_to_upper = std::abs(ity_upper->first - _coords[1]);
+    if (dist_to_upper >= dist_to_lower) {
+      ity=ity_lower;
+    }
+    else {
+      ity=ity_upper;
+    }
+  }
+
+  if(ity == itx->second.end()) --ity;
+  //iterator to nearest z slice
+  std::map<double, unsigned int>::iterator itz;
+  std::map<double, unsigned int>::iterator itz_upper=ity->second.lower_bound(_coords[2]);
+  std::map<double, unsigned int>::iterator itz_lower=itz_upper; itz_lower--;
+  if (itz_upper == ity->second.end()) {
+    itz=itz_lower;
+  }
+  else{
+    dist_to_lower = std::abs(itz_lower->first - _coords[2]);
+    dist_to_upper = std::abs(itz_upper->first - _coords[2]);
+    if (dist_to_upper >= dist_to_lower) {
+      itz=itz_lower;
+    }
+    else {
+      itz=itz_upper;
+    }
+  }
+  if(itz == ity->second.end()) --itz;
+  return itz->second;
+}
 
     #include "../../include/crystalOrientationsIO_template_instantiations.h"
