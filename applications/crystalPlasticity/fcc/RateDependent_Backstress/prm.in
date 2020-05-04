@@ -125,7 +125,7 @@ set Enable User Material Model                   = true
 set Enable User Material Model 1                  = true
 
 # Set different guess stress for stress
-set Advanced Rate Dependent Model enabled         = true
+set Advanced Rate Dependent Model enabled         = false
 
 # Number of User Material Constants in a Material model Phase 1
 set Number of User Material Constants 1              = 12
@@ -185,7 +185,7 @@ set Slip Directions File                         = slipDirections.txt
 set Slip Normals File                            = slipNormals.txt
 
 #Flag to indicate if Advanced Rate Dependent Model (RateDependentModel2) is enabled
-set Advanced Rate Dependent Model enabled         =true
+set Advanced Rate Dependent Model enabled         = false
 
 ####################################
 # Constitutive model parameters
