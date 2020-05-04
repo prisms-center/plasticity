@@ -105,6 +105,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     FullMatrix<double> T_star_tau(dim,dim),T_star_tau_trial(dim,dim),mtemp(dim,dim);
     Vector<double> vtemp(6),tempv1(6);
     double det_FE_tau, det_F_tau, det_FP_tau;
+    double m1_norm, n1_norm ;
 
 
     FP_inv_t = 0.0; FP_inv_t.invert(FP_t);
@@ -136,7 +137,12 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
       for (unsigned int j = 0;j<dim;j++) {
         m1(j) = m_alpha[i][j];
         n1(j) = n_alpha[i][j];
+	
       }
+     // m1_norm = m1.l2_norm() ;
+     // n1_norm = n1.l2_norm() ;
+     // m1.equ(1.0/m1_norm,m1) ;
+     // n1.equ(1.0/n1_norm,n1) ;
 
       temp = 0.0;
       temp2 = 0.0;
