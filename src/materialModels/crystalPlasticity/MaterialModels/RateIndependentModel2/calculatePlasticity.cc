@@ -1,15 +1,12 @@
 #include "../../../include/crystalPlasticity.h"
 
 //////////////////////////////////////////////////////////////////////////
-//calculatePlasticity.cc numerically integrates the constitive model. 
-//This calculatePlasticity.cc is based on the following crystal plasticity model: 
+//calculatePlasticity.cc numerically integrates the constitive model.
+//This calculatePlasticity.cc is based on the following crystal plasticity model:
 //L. Anand, M. Kothari, A computational procedure for rate independent crystal plasticity,
 // J. Mech. Phys. Solids, 44 (1996), pp. 525-558.
 //This is a more stable but slower version of this model compared to the
-//calculatePlasticity.cc available in plasticity/src/materialModels/crystalPlasticity folder.
-//To use this file, one should copy it into the following folder (replacing the original calculatePlasticity.cc inside the following folder with this new one):
-//    plasticity/src/materialModels/crystalPlasticity/
-// Finaly, one should recompile PRISMS-Plasticity.
+//calculatePlasticity.cc available in plasticity/src/materialModels/crystalPlasticity/MaterialModels/RateIndependentModel folder.
 //////////////////////////////////////////////////////////////////////////
 
 template <int dim>
@@ -150,8 +147,8 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     delFp_delF=0.0;
     dels_delF=0.0;
 
-    int iter1=1;
-    int flag2=0;
+    unsigned int iter1=1;
+    unsigned int flag2=0;
 
     while (iter1) {
 
@@ -313,7 +310,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
       x_beta_old=0.0;
 
-      int count1=0;
+      unsigned int count1=0;
 
       Vector<double> b_PA(n_PA);
 
@@ -608,7 +605,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
 
         double tol2=1.0;
-        int count3=0;
+        unsigned int count3=0;
         temp1.reinit(dim,dim);
         temp2.reinit(dim,dim);
         temp1=0.0;
