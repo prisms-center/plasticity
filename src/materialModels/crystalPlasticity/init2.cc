@@ -22,7 +22,7 @@ void crystalPlasticity<dim>::init2(unsigned int num_quad_points)
   CauchyStress_init=0;
 
   unsigned int n_twin_systems = 0;
-
+  double m_norm , n_norm ;
   unsigned int num_local_cells = this->triangulation.n_locally_owned_active_cells();
   F.reinit(dim, dim);
 
@@ -71,6 +71,15 @@ void crystalPlasticity<dim>::init2(unsigned int num_quad_points)
       ss >> n_alpha[id][0];
       ss >> n_alpha[id][1];
       ss >> n_alpha[id][2];
+      n_norm = 0 ;
+      n_norm = n_norm + n_alpha[id][0]*n_alpha[id][0] ;
+      n_norm = n_norm + n_alpha[id][1]*n_alpha[id][1] ;
+      n_norm = n_norm + n_alpha[id][2]*n_alpha[id][2] ;
+      n_norm = sqrt(n_norm) ;
+      n_alpha[id][0] = n_alpha[id][0]/n_norm ;
+      n_alpha[id][1] = n_alpha[id][1]/n_norm ;
+      n_alpha[id][2] = n_alpha[id][2]/n_norm ;
+
       id=id+1;
     }
   }
@@ -89,6 +98,15 @@ void crystalPlasticity<dim>::init2(unsigned int num_quad_points)
       ss >> m_alpha[id][0];
       ss >> m_alpha[id][1];
       ss >> m_alpha[id][2];
+      m_norm = 0 ;
+      m_norm = m_norm + m_alpha[id][0]*m_alpha[id][0] ;
+      m_norm = m_norm + m_alpha[id][1]*m_alpha[id][1] ;
+      m_norm = m_norm + m_alpha[id][2]*m_alpha[id][2] ;
+      m_norm = sqrt(m_norm) ;
+      m_alpha[id][0] = m_alpha[id][0]/m_norm ;
+      m_alpha[id][1] = m_alpha[id][1]/m_norm ;
+      m_alpha[id][2] = m_alpha[id][2]/m_norm ;
+
       id=id+1;
     }
   }
@@ -108,6 +126,15 @@ void crystalPlasticity<dim>::init2(unsigned int num_quad_points)
         ss >> n_alpha[id][0];
         ss >> n_alpha[id][1];
         ss >> n_alpha[id][2];
+         n_norm = 0 ;
+         n_norm = n_norm + n_alpha[id][0]*n_alpha[id][0] ;
+         n_norm = n_norm + n_alpha[id][1]*n_alpha[id][1] ;
+         n_norm = n_norm + n_alpha[id][2]*n_alpha[id][2] ;
+         n_norm = sqrt(n_norm) ;
+         n_alpha[id][0] = n_alpha[id][0]/n_norm ;
+         n_alpha[id][1] = n_alpha[id][1]/n_norm ;
+         n_alpha[id][2] = n_alpha[id][2]/n_norm ;
+
         id=id+1;
       }
       for(unsigned int i=n_slip_systemsWOtwin;i<this->userInputs.numTwinSystems1+n_slip_systemsWOtwin;i++){
@@ -132,6 +159,15 @@ void crystalPlasticity<dim>::init2(unsigned int num_quad_points)
         ss >> m_alpha[id][0];
         ss >> m_alpha[id][1];
         ss >> m_alpha[id][2];
+        m_norm = 0 ;
+        m_norm = m_norm + m_alpha[id][0]*m_alpha[id][0] ;
+        m_norm = m_norm + m_alpha[id][1]*m_alpha[id][1] ;
+        m_norm = m_norm + m_alpha[id][2]*m_alpha[id][2] ;
+        m_norm = sqrt(m_norm) ;
+        m_alpha[id][0] = m_alpha[id][0]/m_norm ;
+        m_alpha[id][1] = m_alpha[id][1]/m_norm ;
+        m_alpha[id][2] = m_alpha[id][2]/m_norm ;
+
         id=id+1;
       }
       for(unsigned int i=n_slip_systemsWOtwin;i<this->userInputs.numTwinSystems1+n_slip_systemsWOtwin;i++){

@@ -24,7 +24,7 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
   unsigned int num_local_cells = this->triangulation.n_locally_owned_active_cells();
   F.reinit(dim, dim);
 
-
+  double m_norm , n_norm ;
   unsigned int n_Tslip_systems_Real_SinglePhase,n_Tslip_systems_Real;
   n_slip_systems_SinglePhase=this->userInputs.numSlipSystems1;
   n_Tslip_systems_SinglePhase=n_slip_systems_SinglePhase;
@@ -79,6 +79,15 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
       ss >> n_alpha_SinglePhase[id][0];
       ss >> n_alpha_SinglePhase[id][1];
       ss >> n_alpha_SinglePhase[id][2];
+      n_norm = 0 ;
+      n_norm = n_norm + n_alpha_SinglePhase[id][0]*n_alpha_SinglePhase[id][0] ;
+      n_norm = n_norm + n_alpha_SinglePhase[id][1]*n_alpha_SinglePhase[id][1] ;
+      n_norm = n_norm + n_alpha_SinglePhase[id][2]*n_alpha_SinglePhase[id][2] ;
+      n_norm = sqrt(n_norm) ;
+      n_alpha_SinglePhase[id][0] = n_alpha_SinglePhase[id][0]/n_norm ;
+      n_alpha_SinglePhase[id][1] = n_alpha_SinglePhase[id][1]/n_norm ;
+      n_alpha_SinglePhase[id][2] = n_alpha_SinglePhase[id][2]/n_norm ;
+
       id=id+1;
     }
   }
@@ -97,6 +106,14 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
       ss >> m_alpha_SinglePhase[id][0];
       ss >> m_alpha_SinglePhase[id][1];
       ss >> m_alpha_SinglePhase[id][2];
+      m_norm = 0 ;
+      m_norm = m_norm + m_alpha_SinglePhase[id][0]*m_alpha_SinglePhase[id][0] ;
+      m_norm = m_norm + m_alpha_SinglePhase[id][1]*m_alpha_SinglePhase[id][1] ;
+      m_norm = m_norm + m_alpha_SinglePhase[id][2]*m_alpha_SinglePhase[id][2] ;
+      m_norm = sqrt(m_norm) ;
+      m_alpha_SinglePhase[id][0] = m_alpha_SinglePhase[id][0]/m_norm ;
+      m_alpha_SinglePhase[id][1] = m_alpha_SinglePhase[id][1]/m_norm ;
+      m_alpha_SinglePhase[id][2] = m_alpha_SinglePhase[id][2]/m_norm ;
       id=id+1;
     }
   }
@@ -116,6 +133,15 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
       ss >> n_alpha_SinglePhase[id][0];
       ss >> n_alpha_SinglePhase[id][1];
       ss >> n_alpha_SinglePhase[id][2];
+      n_norm = 0 ;
+      n_norm = n_norm + n_alpha_SinglePhase[id][0]*n_alpha_SinglePhase[id][0] ;
+      n_norm = n_norm + n_alpha_SinglePhase[id][1]*n_alpha_SinglePhase[id][1] ;
+      n_norm = n_norm + n_alpha_SinglePhase[id][2]*n_alpha_SinglePhase[id][2] ;
+      n_norm = sqrt(n_norm) ;
+      n_alpha_SinglePhase[id][0] = n_alpha_SinglePhase[id][0]/n_norm ;
+      n_alpha_SinglePhase[id][1] = n_alpha_SinglePhase[id][1]/n_norm ;
+      n_alpha_SinglePhase[id][2] = n_alpha_SinglePhase[id][2]/n_norm ;
+
       id=id+1;
     }
     else{
@@ -134,6 +160,14 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
       ss >> m_alpha_SinglePhase[id][0];
       ss >> m_alpha_SinglePhase[id][1];
       ss >> m_alpha_SinglePhase[id][2];
+      m_norm = 0 ;
+      m_norm = m_norm + m_alpha_SinglePhase[id][0]*m_alpha_SinglePhase[id][0] ;
+      m_norm = m_norm + m_alpha_SinglePhase[id][1]*m_alpha_SinglePhase[id][1] ;
+      m_norm = m_norm + m_alpha_SinglePhase[id][2]*m_alpha_SinglePhase[id][2] ;
+      m_norm = sqrt(m_norm) ;
+      m_alpha_SinglePhase[id][0] = m_alpha_SinglePhase[id][0]/m_norm ;
+      m_alpha_SinglePhase[id][1] = m_alpha_SinglePhase[id][1]/m_norm ;
+      m_alpha_SinglePhase[id][2] = m_alpha_SinglePhase[id][2]/m_norm ;
       id=id+1;
     }
     else{
@@ -436,10 +470,20 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
     m_alpha_MultiPhase.reinit(n_Tslip_systems_Total,3);
 
     for(unsigned int i=0;i<n_Tslip_systems_MultiPhase[0];i++){
+      m_norm = 0 ; n_norm = 0 ;
       for(unsigned int j=0;j<dim;j++){
-        m_alpha_MultiPhase[i][j]=m_alpha_SinglePhase[i][j];
+        m_alpha_MultiPhase[i][j]=m_alpha_SinglePhase[i][j];   
         n_alpha_MultiPhase[i][j]=n_alpha_SinglePhase[i][j];
+        m_norm += m_alpha_MultiPhase[i][j]*m_alpha_MultiPhase[i][j] ;
+        n_norm += n_norm + n_alpha_MultiPhase[i][j]*n_alpha_MultiPhase[i][j] ;
       }
+     m_norm = sqrt(m_norm) ; n_norm = sqrt(n_norm) ;
+
+      for(unsigned int j=0;j<dim;j++){
+        m_alpha_MultiPhase[i][j]=m_alpha_MultiPhase[i][j]/m_norm;
+        n_alpha_MultiPhase[i][j]=n_alpha_MultiPhase[i][j]/n_norm;
+      }
+
     }
 
     if (numberofPhases>=2){
@@ -475,6 +519,14 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
           ss >> n_alpha_MultiPhase[id][0];
           ss >> n_alpha_MultiPhase[id][1];
           ss >> n_alpha_MultiPhase[id][2];
+          n_norm = 0 ;
+          n_norm = n_norm + n_alpha_MultiPhase[id][0]*n_alpha_MultiPhase[id][0] ;
+          n_norm = n_norm + n_alpha_MultiPhase[id][1]*n_alpha_MultiPhase[id][1] ;
+          n_norm = n_norm + n_alpha_MultiPhase[id][2]*n_alpha_MultiPhase[id][2] ; 
+          n_norm = sqrt(n_norm) ;
+          n_alpha_MultiPhase[id][0] = n_alpha_MultiPhase[id][0]/n_norm ;
+          n_alpha_MultiPhase[id][1] = n_alpha_MultiPhase[id][1]/n_norm ;
+          n_alpha_MultiPhase[id][2] = n_alpha_MultiPhase[id][2]/n_norm ;
           id=id+1;
         }
       }
@@ -493,6 +545,14 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
           ss >> m_alpha_MultiPhase[id][0];
           ss >> m_alpha_MultiPhase[id][1];
           ss >> m_alpha_MultiPhase[id][2];
+          m_norm = 0 ;
+          m_norm = m_norm + m_alpha_MultiPhase[id][0]*m_alpha_MultiPhase[id][0] ;
+          m_norm = m_norm + m_alpha_MultiPhase[id][1]*m_alpha_MultiPhase[id][1] ;
+          m_norm = m_norm + m_alpha_MultiPhase[id][2]*m_alpha_MultiPhase[id][2] ;
+          m_norm = sqrt(m_norm) ;
+          m_alpha_MultiPhase[id][0] = m_alpha_MultiPhase[id][0]/m_norm ;
+          m_alpha_MultiPhase[id][1] = m_alpha_MultiPhase[id][1]/m_norm ;
+          m_alpha_MultiPhase[id][2] = m_alpha_MultiPhase[id][2]/m_norm ;
           id=id+1;
         }
       }
@@ -512,6 +572,14 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
           ss >> n_alpha_MultiPhase[id][0];
           ss >> n_alpha_MultiPhase[id][1];
           ss >> n_alpha_MultiPhase[id][2];
+          n_norm = 0 ;
+          n_norm = n_norm + n_alpha_MultiPhase[id][0]*n_alpha_MultiPhase[id][0] ;
+          n_norm = n_norm + n_alpha_MultiPhase[id][1]*n_alpha_MultiPhase[id][1] ;
+          n_norm = n_norm + n_alpha_MultiPhase[id][2]*n_alpha_MultiPhase[id][2] ;
+          n_norm = sqrt(n_norm) ;
+          n_alpha_MultiPhase[id][0] = n_alpha_MultiPhase[id][0]/n_norm ;
+          n_alpha_MultiPhase[id][1] = n_alpha_MultiPhase[id][1]/n_norm ;
+          n_alpha_MultiPhase[id][2] = n_alpha_MultiPhase[id][2]/n_norm ;
           id=id+1;
         }
         else{
@@ -530,6 +598,15 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
           ss >> m_alpha_MultiPhase[id][0];
           ss >> m_alpha_MultiPhase[id][1];
           ss >> m_alpha_MultiPhase[id][2];
+          m_norm = 0 ;
+          m_norm = m_norm + m_alpha_MultiPhase[id][0]*m_alpha_MultiPhase[id][0] ;
+          m_norm = m_norm + m_alpha_MultiPhase[id][1]*m_alpha_MultiPhase[id][1] ;
+          m_norm = m_norm + m_alpha_MultiPhase[id][2]*m_alpha_MultiPhase[id][2] ;
+          m_norm = sqrt(m_norm) ;
+          m_alpha_MultiPhase[id][0] = m_alpha_MultiPhase[id][0]/m_norm ;
+          m_alpha_MultiPhase[id][1] = m_alpha_MultiPhase[id][1]/m_norm ;
+          m_alpha_MultiPhase[id][2] = m_alpha_MultiPhase[id][2]/m_norm ;
+
           id=id+1;
         }
         else{
@@ -581,6 +658,14 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
             ss >> n_alpha_MultiPhase[id][0];
             ss >> n_alpha_MultiPhase[id][1];
             ss >> n_alpha_MultiPhase[id][2];
+            n_norm = 0 ;
+            n_norm = n_norm + n_alpha_MultiPhase[id][0]*n_alpha_MultiPhase[id][0] ;
+            n_norm = n_norm + n_alpha_MultiPhase[id][1]*n_alpha_MultiPhase[id][1] ;
+            n_norm = n_norm + n_alpha_MultiPhase[id][2]*n_alpha_MultiPhase[id][2] ;
+            n_norm = sqrt(n_norm) ;
+            n_alpha_MultiPhase[id][0] = n_alpha_MultiPhase[id][0]/n_norm ;
+            n_alpha_MultiPhase[id][1] = n_alpha_MultiPhase[id][1]/n_norm ;
+            n_alpha_MultiPhase[id][2] = n_alpha_MultiPhase[id][2]/n_norm ;
             id=id+1;
           }
         }
@@ -599,6 +684,15 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
             ss >> m_alpha_MultiPhase[id][0];
             ss >> m_alpha_MultiPhase[id][1];
             ss >> m_alpha_MultiPhase[id][2];
+            m_norm = 0 ;
+            m_norm = m_norm + m_alpha_MultiPhase[id][0]*m_alpha_MultiPhase[id][0] ;
+            m_norm = m_norm + m_alpha_MultiPhase[id][1]*m_alpha_MultiPhase[id][1] ;
+            m_norm = m_norm + m_alpha_MultiPhase[id][2]*m_alpha_MultiPhase[id][2] ;
+            m_norm = sqrt(m_norm) ;
+            m_alpha_MultiPhase[id][0] = m_alpha_MultiPhase[id][0]/m_norm ;
+            m_alpha_MultiPhase[id][1] = m_alpha_MultiPhase[id][1]/m_norm ;
+            m_alpha_MultiPhase[id][2] = m_alpha_MultiPhase[id][2]/m_norm ;
+
             id=id+1;
           }
         }
@@ -618,6 +712,14 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
             ss >> n_alpha_MultiPhase[id][0];
             ss >> n_alpha_MultiPhase[id][1];
             ss >> n_alpha_MultiPhase[id][2];
+            n_norm = 0 ;
+            n_norm = n_norm + n_alpha_MultiPhase[id][0]*n_alpha_MultiPhase[id][0] ;
+            n_norm = n_norm + n_alpha_MultiPhase[id][1]*n_alpha_MultiPhase[id][1] ;
+            n_norm = n_norm + n_alpha_MultiPhase[id][2]*n_alpha_MultiPhase[id][2] ;
+            n_norm = sqrt(n_norm) ;
+            n_alpha_MultiPhase[id][0] = n_alpha_MultiPhase[id][0]/n_norm ;
+            n_alpha_MultiPhase[id][1] = n_alpha_MultiPhase[id][1]/n_norm ;
+            n_alpha_MultiPhase[id][2] = n_alpha_MultiPhase[id][2]/n_norm ;
             id=id+1;
           }
           else{
@@ -636,6 +738,15 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
             ss >> m_alpha_MultiPhase[id][0];
             ss >> m_alpha_MultiPhase[id][1];
             ss >> m_alpha_MultiPhase[id][2];
+            m_norm = 0 ;
+            m_norm = m_norm + m_alpha_MultiPhase[id][0]*m_alpha_MultiPhase[id][0] ;
+            m_norm = m_norm + m_alpha_MultiPhase[id][1]*m_alpha_MultiPhase[id][1] ;
+            m_norm = m_norm + m_alpha_MultiPhase[id][2]*m_alpha_MultiPhase[id][2] ;
+            m_norm = sqrt(m_norm) ;
+            m_alpha_MultiPhase[id][0] = m_alpha_MultiPhase[id][0]/m_norm ;
+            m_alpha_MultiPhase[id][1] = m_alpha_MultiPhase[id][1]/m_norm ;
+            m_alpha_MultiPhase[id][2] = m_alpha_MultiPhase[id][2]/m_norm ;
+
             id=id+1;
           }
           else{
@@ -687,6 +798,14 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
               ss >> n_alpha_MultiPhase[id][0];
               ss >> n_alpha_MultiPhase[id][1];
               ss >> n_alpha_MultiPhase[id][2];
+              n_norm = 0 ;
+              n_norm = n_norm + n_alpha_MultiPhase[id][0]*n_alpha_MultiPhase[id][0] ;
+              n_norm = n_norm + n_alpha_MultiPhase[id][1]*n_alpha_MultiPhase[id][1] ;
+              n_norm = n_norm + n_alpha_MultiPhase[id][2]*n_alpha_MultiPhase[id][2] ;
+              n_norm = sqrt(n_norm) ;
+              n_alpha_MultiPhase[id][0] = n_alpha_MultiPhase[id][0]/n_norm ;
+              n_alpha_MultiPhase[id][1] = n_alpha_MultiPhase[id][1]/n_norm ;
+              n_alpha_MultiPhase[id][2] = n_alpha_MultiPhase[id][2]/n_norm ;
               id=id+1;
             }
           }
@@ -705,6 +824,15 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
               ss >> m_alpha_MultiPhase[id][0];
               ss >> m_alpha_MultiPhase[id][1];
               ss >> m_alpha_MultiPhase[id][2];
+              m_norm = 0 ;
+              m_norm = m_norm + m_alpha_MultiPhase[id][0]*m_alpha_MultiPhase[id][0] ;
+              m_norm = m_norm + m_alpha_MultiPhase[id][1]*m_alpha_MultiPhase[id][1] ;
+              m_norm = m_norm + m_alpha_MultiPhase[id][2]*m_alpha_MultiPhase[id][2] ;
+              m_norm = sqrt(m_norm) ;
+              m_alpha_MultiPhase[id][0] = m_alpha_MultiPhase[id][0]/m_norm ;
+              m_alpha_MultiPhase[id][1] = m_alpha_MultiPhase[id][1]/m_norm ;
+              m_alpha_MultiPhase[id][2] = m_alpha_MultiPhase[id][2]/m_norm ;
+
               id=id+1;
             }
           }
@@ -724,6 +852,14 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
               ss >> n_alpha_MultiPhase[id][0];
               ss >> n_alpha_MultiPhase[id][1];
               ss >> n_alpha_MultiPhase[id][2];
+              n_norm = 0 ;
+              n_norm = n_norm + n_alpha_MultiPhase[id][0]*n_alpha_MultiPhase[id][0] ;
+              n_norm = n_norm + n_alpha_MultiPhase[id][1]*n_alpha_MultiPhase[id][1] ;
+              n_norm = n_norm + n_alpha_MultiPhase[id][2]*n_alpha_MultiPhase[id][2] ;
+              n_norm = sqrt(n_norm) ;
+              n_alpha_MultiPhase[id][0] = n_alpha_MultiPhase[id][0]/n_norm ;
+              n_alpha_MultiPhase[id][1] = n_alpha_MultiPhase[id][1]/n_norm ;
+              n_alpha_MultiPhase[id][2] = n_alpha_MultiPhase[id][2]/n_norm ;
               id=id+1;
             }
             else{
@@ -742,6 +878,15 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
               ss >> m_alpha_MultiPhase[id][0];
               ss >> m_alpha_MultiPhase[id][1];
               ss >> m_alpha_MultiPhase[id][2];
+              m_norm = 0 ;
+              m_norm = m_norm + m_alpha_MultiPhase[id][0]*m_alpha_MultiPhase[id][0] ;
+              m_norm = m_norm + m_alpha_MultiPhase[id][1]*m_alpha_MultiPhase[id][1] ;
+              m_norm = m_norm + m_alpha_MultiPhase[id][2]*m_alpha_MultiPhase[id][2] ;
+              m_norm = sqrt(m_norm) ;
+              m_alpha_MultiPhase[id][0] = m_alpha_MultiPhase[id][0]/m_norm ;
+              m_alpha_MultiPhase[id][1] = m_alpha_MultiPhase[id][1]/m_norm ;
+              m_alpha_MultiPhase[id][2] = m_alpha_MultiPhase[id][2]/m_norm ;
+
               id=id+1;
             }
             else{
