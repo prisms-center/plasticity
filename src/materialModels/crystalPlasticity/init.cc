@@ -475,7 +475,7 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
         m_alpha_MultiPhase[i][j]=m_alpha_SinglePhase[i][j];   
         n_alpha_MultiPhase[i][j]=n_alpha_SinglePhase[i][j];
         m_norm += m_alpha_MultiPhase[i][j]*m_alpha_MultiPhase[i][j] ;
-        n_norm += n_norm + n_alpha_MultiPhase[i][j]*n_alpha_MultiPhase[i][j] ;
+        n_norm += n_alpha_MultiPhase[i][j]*n_alpha_MultiPhase[i][j] ;
       }
      m_norm = sqrt(m_norm) ; n_norm = sqrt(n_norm) ;
 
