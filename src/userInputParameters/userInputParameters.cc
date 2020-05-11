@@ -164,6 +164,7 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
 
   enableTwinning1 = parameter_handler.get_bool("Twinning enabled");
   enableAdvancedTwinModel = parameter_handler.get_bool("Advanced Twinning Model enabled");
+  enableOneTwinSys_Reorien = parameter_handler.get_bool("One twin system Reorientation enabled");
   if(enableTwinning1){
     numTwinSystems1=parameter_handler.get_integer("Number of Twin Systems");
     initialSlipResistanceTwin1 = dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Initial Slip Resistance Twin")));
@@ -552,6 +553,8 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
 
   parameter_handler.declare_entry("Twinning enabled","false",dealii::Patterns::Bool(),"Flag to indicate if system twins");
   parameter_handler.declare_entry("Advanced Twinning Model enabled","false",dealii::Patterns::Bool(),"Flag to indicate if Advanced Twinning Model enabled");
+  parameter_handler.declare_entry("One twin system Reorientation enabled","false",dealii::Patterns::Bool(),"Flag to indicate One twin system Reorientation is allowed");
+
   parameter_handler.declare_entry("Number of Twin Systems","-1",dealii::Patterns::Integer(),"Number of Twin Systems");
   parameter_handler.declare_entry("Initial Slip Resistance Twin","",dealii::Patterns::List(dealii::Patterns::Double()),"Initial CRSS of the twin sytems");
   parameter_handler.declare_entry("Initial Hardening Modulus Twin","",dealii::Patterns::List(dealii::Patterns::Double()),"Hardening moduli of twin systems");

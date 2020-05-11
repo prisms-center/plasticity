@@ -128,6 +128,7 @@ public:
   bool enableKinematicHardening1,enableAdvRateDepModel;
   bool enableTwinning1;
   bool enableAdvancedTwinModel; // Flag to indicate if Advanced Twinning Model enabled
+  bool enableOneTwinSys_Reorien; // Flag to indicate if one twin system reorientation is allowed
   unsigned int numTwinSystems1;
   std::vector<double> initialSlipResistanceTwin1; //CRSS of the slip sytems
   std::vector<double> initialHardeningModulusTwin1; //Hardening moduli of slip systems
