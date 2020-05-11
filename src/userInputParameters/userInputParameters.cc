@@ -184,10 +184,10 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
     pcout<<"Twinning is not enabled \n";
 
     numTwinSystems1=1;
-    initialSlipResistanceTwin1.push_back(10e5);
+    initialSlipResistanceTwin1.push_back(10e14);
     initialHardeningModulusTwin1.push_back(1);
     powerLawExponentTwin1.push_back(0);
-    saturationStressTwin1.push_back(10e10);
+    saturationStressTwin1.push_back(10e15);
     C_1_twin1.push_back(0);
     C_2_twin1.push_back(0);
 
@@ -272,10 +272,10 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
       pcout<<"Twinning is not enabled \n";
 
       numTwinSystems2=1;
-      initialSlipResistanceTwin2.push_back(10e5);
+      initialSlipResistanceTwin2.push_back(10e14);
       initialHardeningModulusTwin2.push_back(1);
       powerLawExponentTwin2.push_back(0);
-      saturationStressTwin2.push_back(10e10);
+      saturationStressTwin2.push_back(10e15);
       C_1_twin2.push_back(0);
       C_2_twin2.push_back(0);
 
@@ -337,10 +337,10 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
         pcout<<"Twinning is not enabled \n";
 
         numTwinSystems3=1;
-        initialSlipResistanceTwin3.push_back(10e5);
+        initialSlipResistanceTwin3.push_back(10e14);
         initialHardeningModulusTwin3.push_back(1);
         powerLawExponentTwin3.push_back(0);
-        saturationStressTwin3.push_back(10e10);
+        saturationStressTwin3.push_back(10e15);
         C_1_twin3.push_back(0);
         C_2_twin3.push_back(0);
 
@@ -403,10 +403,10 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
           pcout<<"Twinning is not enabled \n";
 
           numTwinSystems4=1;
-          initialSlipResistanceTwin4.push_back(10e5);
+          initialSlipResistanceTwin4.push_back(10e14);
           initialHardeningModulusTwin4.push_back(1);
           powerLawExponentTwin4.push_back(0);
-          saturationStressTwin4.push_back(10e10);
+          saturationStressTwin4.push_back(10e15);
           C_1_twin4.push_back(0);
           C_2_twin4.push_back(0);
 
