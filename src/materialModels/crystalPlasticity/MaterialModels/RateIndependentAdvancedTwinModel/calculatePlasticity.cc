@@ -744,7 +744,7 @@ for (unsigned int i = 0;i < (n_twin_systems / 2);i++) {
     unsigned int pos1 = std::distance(myPA.begin(), result1);
     for (unsigned int j = 0;j < dim;j++) {
       for (unsigned int k = 0;k < dim;k++) {
-        dgammadEmat1[Region][i][k][j] = dgammadEtrial[pos1][dim*j + k];
+        dgammadEmat1[Region][i][k][j] = dgammadF[pos1][dim*j + k];
       }
     }
   }
@@ -754,7 +754,7 @@ for (unsigned int i = 0;i < (n_twin_systems / 2);i++) {
     unsigned int pos2 = std::distance(myPA.begin(), result2);
     for (unsigned int j = 0;j < dim;j++) {
       for (unsigned int k = 0;k < dim;k++) {
-        dgammadEmat1[Region][i][k][j] = -dgammadEtrial[pos2][dim*j + k];
+        dgammadEmat1[Region][i][k][j] = -dgammadF[pos2][dim*j + k];
       }
     }
   }
@@ -1045,7 +1045,7 @@ for (unsigned int ii = 0;ii < NumberOfTwinnedRegionK;ii++) {
   temp3.reinit(dim, dim);
   for (unsigned int i = 0;i < dim;i++) {
     for (unsigned int j = 0;j < dim;j++) {
-      temp3[i][j] = T_star_tau_Region[ii + 1][i][j];
+      temp3[i][j] = P_tau[ii + 1][i][j];
     }
   }
   temp2.reinit(dim*dim, dim*dim); tracev(temp2, temp1, temp3);
@@ -1059,7 +1059,7 @@ temp1.reinit(dim*dim, dim*dim); right(temp1, UntwinnedRegionsTwinvfDiff);
 temp3.reinit(dim, dim);
 for (unsigned int i = 0;i < dim;i++) {
   for (unsigned int j = 0;j < dim;j++) {
-    temp3[i][j] = T_star_tau_Region[0][i][j];
+    temp3[i][j] = P_tau[0][i][j];
   }
 }
 temp2.reinit(dim*dim, dim*dim); tracev(temp2, temp1, temp3);
