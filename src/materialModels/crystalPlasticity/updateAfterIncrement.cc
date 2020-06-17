@@ -184,8 +184,26 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 
 	char buffer[200];
 
+	//////////////////////TabularOutput Start///////////////
+	std::vector<unsigned int> tabularTimeInputIncInt;
+	std::vector<double> tabularTimeInputInc;
+if (this->userInputs.tabularOutput){
+
+	tabularTimeInputInc=this->userInputs.tabularTimeOutput;
+	for(unsigned int i=0;i<this->userInputs.tabularTimeOutput.size();i++){
+	  tabularTimeInputInc[i]=tabularTimeInputInc[i]/this->delT;
+	}
+
+	tabularTimeInputIncInt.resize(this->userInputs.tabularTimeOutput.size(),0);
+	///Converting to an integer always rounds down, even if the fraction part is 0.99999999.
+	//Hence, I add 0.1 to make sure we always get the correct integer.
+	for(unsigned int i=0;i<this->userInputs.tabularTimeOutput.size();i++){
+	  tabularTimeInputIncInt[i]=int(tabularTimeInputInc[i]+0.1);
+	}
+}
+	//////////////////////TabularOutput Finish///////////////
 	if (this->userInputs.writeQuadratureOutput) {
-		if ((this->currentIncrement+1)%this->userInputs.skipQuadratureOutputSteps == 0) {
+		if (((!this->userInputs.tabularOutput)&&((this->currentIncrement+1)%this->userInputs.skipQuadratureOutputSteps == 0))||((this->userInputs.tabularOutput)&& (std::count(tabularTimeInputIncInt.begin(), tabularTimeInputIncInt.end(), (this->currentIncrement+1))==1))){
 			//copy rotnew to output
 			outputQuadrature.clear();
 			//loop over elements

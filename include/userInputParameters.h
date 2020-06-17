@@ -76,7 +76,10 @@ public:
   std::vector<std::vector<double>> periodicBCsInput2,tabularPeriodicTimeInput; // 	Periodic BCs Input
 
   /*Solution output parameters*/
-  bool writeOutput, writeQuadratureOutput; // flag to write output vtu and pvtu files
+  bool writeOutput; // flag to write output vtu and pvtu files
+  bool writeQuadratureOutput; // flag to write quadrature points output
+  bool tabularOutput; // flag to write outputs based on a time table
+  std::vector<double> tabularTimeOutput; // 	Periodic BCs Input
   std::string outputDirectory;
   unsigned int skipOutputSteps, skipQuadratureOutputSteps;
   bool output_Eqv_strain;

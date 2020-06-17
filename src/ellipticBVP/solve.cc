@@ -76,8 +76,26 @@ void ellipticBVP<dim>::solve(){
       //output results to file
       computing_timer.enter_section("postprocess");
 
-      if ((currentIncrement+1)%userInputs.skipOutputSteps==0)
+      //////////////////////TabularOutput Start///////////////
+      std::vector<unsigned int> tabularTimeInputIncInt;
+    	std::vector<double> tabularTimeInputInc;
+    if (userInputs.tabularOutput){
+
+    	tabularTimeInputInc=userInputs.tabularTimeOutput;
+    	for(unsigned int i=0;i<userInputs.tabularTimeOutput.size();i++){
+    	  tabularTimeInputInc[i]=tabularTimeInputInc[i]/delT;
+    	}
+    	tabularTimeInputIncInt.resize(userInputs.tabularTimeOutput.size(),0);
+    	///Converting to an integer always rounds down, even if the fraction part is 0.99999999.
+    	//Hence, I add 0.1 to make sure we always get the correct integer.
+    	for(unsigned int i=0;i<userInputs.tabularTimeOutput.size();i++){
+    	  tabularTimeInputIncInt[i]=int(tabularTimeInputInc[i]+0.1);
+    	}
+    }
+    	//////////////////////TabularOutput Finish///////////////
+      if (((!userInputs.tabularOutput)&&((currentIncrement+1)%userInputs.skipOutputSteps==0))||((userInputs.tabularOutput)&& (std::count(tabularTimeInputIncInt.begin(), tabularTimeInputIncInt.end(), (currentIncrement+1))==1))){
         if (userInputs.writeOutput) output();
+      }
       computing_timer.exit_section("postprocess");
       }
     else{

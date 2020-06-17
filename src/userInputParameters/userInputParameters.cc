@@ -47,6 +47,10 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
   //output parameters
   writeOutput = parameter_handler.get_bool("Write Output");
   outputDirectory = parameter_handler.get("Output Directory");
+
+  tabularOutput = parameter_handler.get_bool("Tabular Output");
+  tabularTimeOutput=dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Tabular Time Output Table")));
+
   skipOutputSteps=parameter_handler.get_integer("Skip Output Steps");
   writeQuadratureOutput = parameter_handler.get_bool("Write Quadrature Output");
   skipQuadratureOutputSteps=parameter_handler.get_integer("Skip Quadrature Output Steps");
@@ -493,6 +497,10 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
 
   parameter_handler.declare_entry("Write Output","false",dealii::Patterns::Bool(),"Flag to write output vtu and pvtu files");
   parameter_handler.declare_entry("Output Directory",".",dealii::Patterns::Anything(),"Output Directory");
+
+  parameter_handler.declare_entry("Tabular Output","false",dealii::Patterns::Bool(),"Flag to use Tabular Output"); 
+  parameter_handler.declare_entry("Tabular Time Output Table","",dealii::Patterns::List(dealii::Patterns::Double()),"Table for Time Outputs");
+
   parameter_handler.declare_entry("Skip Output Steps","-1",dealii::Patterns::Integer(),"Skip Output Steps");
   parameter_handler.declare_entry("Write Quadrature Output","false",dealii::Patterns::Bool(),"Flag to write quadrature output");
   parameter_handler.declare_entry("Skip Quadrature Output Steps","-1",dealii::Patterns::Integer(),"Skip Quadrature Output Steps");

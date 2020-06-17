@@ -92,9 +92,27 @@ void ellipticBVP<dim>::projection(){
   //return if no post processing fields
   if (numPostProcessedFields==0) return;
 
+  //////////////////////TabularOutput Start///////////////
+  std::vector<unsigned int> tabularTimeInputIncInt;
+	std::vector<double> tabularTimeInputInc;
+if (userInputs.tabularOutput){
+
+  tabularTimeInputInc=userInputs.tabularTimeOutput;
+  for(unsigned int i=0;i<userInputs.tabularTimeOutput.size();i++){
+    tabularTimeInputInc[i]=tabularTimeInputInc[i]/delT;
+  }
+  tabularTimeInputIncInt.resize(userInputs.tabularTimeOutput.size(),0);
+  ///Converting to an integer always rounds down, even if the fraction part is 0.99999999.
+  //Hence, I add 0.1 to make sure we always get the correct integer.
+  for(unsigned int i=0;i<userInputs.tabularTimeOutput.size();i++){
+    tabularTimeInputIncInt[i]=int(tabularTimeInputInc[i]+0.1);
+  }
+}
+  //////////////////////TabularOutput Finish///////////////
   //check whether to project in current increment
-  if ((currentIncrement+1)%userInputs.skipOutputSteps!=0)
+  if (((!userInputs.tabularOutput)&&((currentIncrement+1)%userInputs.skipOutputSteps!=0))||((userInputs.tabularOutput)&& (std::count(tabularTimeInputIncInt.begin(), tabularTimeInputIncInt.end(), (currentIncrement+1))==0))){
     return;
+  }
 
   pcout << "projecting post processing fields\n";
 
