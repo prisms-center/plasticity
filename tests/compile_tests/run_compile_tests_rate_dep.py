@@ -26,7 +26,7 @@ for item in testDirectories:
     runtimeOutputFile = rootDirectory+item+'testing.out'
     os.chdir(applicationsDirectory+item)
 
-    subprocess.call(['mpirun -np %d ../../main prm.in' %numprocs],stdout=open(runtimeOutputFile,'w'), stderr=subprocess.STDOUT,shell=True)
+    subprocess.call(['mpirun -np %d ../../main prm.prm' %numprocs],stdout=open(runtimeOutputFile,'w'), stderr=subprocess.STDOUT,shell=True)
 
     old_stress_strain = np.loadtxt(rootDirectory+item+'correct_stressstrain.txt',skiprows=1)
     new_stress_strain = np.loadtxt(applicationsDirectory+item+'results/stressstrain.txt',skiprows=1)
