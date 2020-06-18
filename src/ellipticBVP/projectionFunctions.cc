@@ -90,7 +90,10 @@ template <int dim>
 void ellipticBVP<dim>::projection(){
 
   //return if no post processing fields
+  if (!userInputs.writeOutput) return;
   if (numPostProcessedFields==0) return;
+  
+ 
 
   //////////////////////TabularOutput Start///////////////
   std::vector<unsigned int> tabularTimeInputIncInt;
