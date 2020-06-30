@@ -6,6 +6,7 @@ template <int dim>
 void ellipticBVP<dim>::initProjection(){
   //return if no post processing fields
   if (numPostProcessedFields==0) return;
+  if (!userInputs.writeOutput) return;
 
   //create and initialize post processing field vectors
   for (unsigned int field=0; field<numPostProcessedFields; field++){
