@@ -116,9 +116,11 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 						twin_ouput[cellID][q]=0;
 					}
 				}
-				this->postprocessValues(cellID, q, 0, 0) = vonmises;
-				this->postprocessValues(cellID, q, 1, 0) = eqvstrain;
-				this->postprocessValues(cellID, q, 2, 0) = twin_ouput[cellID][q];
+				if (this->userInputs.writeOutput){
+					this->postprocessValues(cellID, q, 0, 0) = vonmises;
+					this->postprocessValues(cellID, q, 1, 0) = eqvstrain;
+					this->postprocessValues(cellID, q, 2, 0) = twin_ouput[cellID][q];
+				}
 
 
 
