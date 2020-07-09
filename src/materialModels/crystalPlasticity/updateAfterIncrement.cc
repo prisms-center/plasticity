@@ -141,7 +141,9 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 				}
 
 			}
-			this->postprocessValuesAtCellCenters(cellID,0)=cellOrientationMap[cellID];
+			if (this->userInputs.writeOutput){
+				this->postprocessValuesAtCellCenters(cellID,0)=cellOrientationMap[cellID];
+			}
 
 			cellID++;
 		}
