@@ -38,12 +38,13 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
     double delgam_ref = UserMatConstants(0); // Reference slip increment
     double strexp=UserMatConstants(1); // Strain rate sensitivity exponent ; the higher the less sensitive
-    double sliptol = UserMatConstants(2);
-    double tol2=UserMatConstants(3); // Slip system resistance tolerance for constitutive model loop
-    double tol3=UserMatConstants(4); // Stress tensor tolerance
+    
+	
+    double tol2=UserMatConstants(2); // Slip system resistance tolerance for constitutive model loop
+    double tol3=UserMatConstants(3); // Stress tensor tolerance
     // double corrfac=UserMatConstants(5) ; // Tolerance factor
-    double tolstr=UserMatConstants(5); // Initial CRSS used in constitutive model to accept correction
-    unsigned int nitr1=UserMatConstants(6),nitr2=UserMatConstants(7); // Maximum number of iterations for the Newton-Raphson scheme for the outer and inner loop
+    double tolstr=UserMatConstants(4); // Initial CRSS used in constitutive model to accept correction
+    unsigned int nitr1=UserMatConstants(5),nitr2=UserMatConstants(6); // Maximum number of iterations for the Newton-Raphson scheme for the outer and inner loop
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     FE_t=Fe_conv[cellID][quadPtID];
@@ -202,7 +203,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
 
     // Loop to check for the difference in CRSS in subsequent Newton-Raphson iterations
-    while(dffhrdn>tol2 && dffslip>sliptol && itr1<nitr1){
+    while(dffhrdn>tol2 && itr1<nitr1){
       // Iterant 1
       itr1 = itr1+1 ;
       delgam_tau_iter.equ(1.0,delgam_tau);
