@@ -33,7 +33,8 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     Vector<double> s_alpha_t(n_Tslip_systems),slipfraction_t(n_slip_systems),twinfraction_t(n_twin_systems); // Slip resistance
     Vector<double> W_kh_t(n_Tslip_systems),W_kh_t1(n_Tslip_systems),W_kh_t2(n_Tslip_systems),signed_slip_t(n_Tslip_systems) ;
     Vector<double> rot1(dim);// Crystal orientation (Rodrigues representation)
-    FullMatrix<double> Tinter_diff_guess(dim,dim) ;
+    FullMatrix<double> Tinter_diff_guess(dim,dim), Ep_t (dim,dim);
+    double Ep_eff_cum_t;
 
     // Tolerance
 
@@ -80,6 +81,17 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
       signed_slip_t(i)=stateVar_conv[cellID][quadPtID][i+2*n_Tslip_systems];
       s_alpha_t(i)=s_alpha_conv[cellID][quadPtID][i];
     }
+
+    unsigned int ii=0;
+    for(unsigned int i=0 ; i<dim ; i++){
+      for(unsigned int j=0 ; j<dim ; j++){
+        Ep_t[i][j]=stateVar_conv[cellID][quadPtID][ii+4*n_Tslip_systems];
+        ii=ii+1;
+      }
+    }
+
+    Ep_eff_cum_t=stateVar_conv[cellID][quadPtID][4*n_Tslip_systems+dim*dim];
+
     for(unsigned int i=0 ; i<n_slip_systems ; i++)
     slipfraction_t(i) = slipfraction_conv[cellID][quadPtID][i] ;
 
@@ -137,10 +149,12 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
     Vector<double> s_alpha_tau(n_Tslip_systems),slipfraction_tau(n_slip_systems),twinfraction_tau(n_twin_systems) ;
     Vector<double> W_kh_tau(n_Tslip_systems),W_kh_tau1(n_Tslip_systems),W_kh_tau2(n_Tslip_systems); // Converged backstresses
-	Vector<double> W_kh_tau_it(n_Tslip_systems),W_kh_tau1_it(n_Tslip_systems),W_kh_tau2_it(n_Tslip_systems); // Iterative backstresses
+	  Vector<double> W_kh_tau_it(n_Tslip_systems),W_kh_tau1_it(n_Tslip_systems),W_kh_tau2_it(n_Tslip_systems); // Iterative backstresses
     Vector<double> h_beta(n_Tslip_systems),h0(n_Tslip_systems),a_pow(n_Tslip_systems),s_s(n_Tslip_systems); // Isotropic hardening parameters
-    FullMatrix<double> h_alpha_beta_t(n_Tslip_systems,n_Tslip_systems);
+    FullMatrix<double> h_alpha_beta_t(n_Tslip_systems,n_Tslip_systems),Ep_tau(dim,dim),del_Ep_tau(dim,dim);
     Vector<double> resolved_shear_tau(n_Tslip_systems), normal_stress_tau(n_Tslip_systems),signed_slip_tau(n_Tslip_systems);
+    double Ep_eff_cum_tau,del_Ep_eff_cum_tau;
+    del_Ep_tau=0;
 
     FullMatrix<double> PK1_Stiff(dim*dim,dim*dim); // Tangent modulus
     FullMatrix<double> T_star_tau(dim,dim),mtemp(dim,dim);
@@ -202,6 +216,8 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
     slipfraction_tau = slipfraction_t ;
     signed_slip_tau  = signed_slip_t;
+    Ep_tau=Ep_t;
+    Ep_eff_cum_tau=Ep_eff_cum_t;
     twinfraction_tau = twinfraction_t ;
 
 
@@ -699,10 +715,27 @@ while(locres2>locres_tol2 && itr2 < nitr2){
     for(unsigned int i=0 ; i<n_Tslip_systems ; i++)
     signed_slip_tau(i) = signed_slip_t(i) + delgam_tau(i) ;
 
+    for (unsigned int i = 0;i<n_Tslip_systems;i++){
+      temp7=0.0;
+      for (unsigned int j = 0;j < dim;j++) {
+        for (unsigned int k = 0;k < dim;k++) {
+          temp7[j][k]=SCHMID_TENSOR1[dim*i + j][k];
+          del_Ep_tau[j][k]=del_Ep_tau[j][k]+ delgam_tau(i)*0.5*(temp7[j][k]+temp7[k][j]);
+        }
+      }
+    }
+
+    for (unsigned int j = 0;j < dim;j++) {
+      for (unsigned int k = 0;k < dim;k++) {
+        Ep_tau[j][k]=Ep_t[j][k]+del_Ep_tau[j][k];
+
+      }
+    }
+    del_Ep_eff_cum_tau=sqrt(2.0/3.0)*del_Ep_tau.frobenius_norm();
+    Ep_eff_cum_tau=Ep_eff_cum_t+del_Ep_eff_cum_tau;
+
     for(unsigned int i=0 ; i<n_twin_systems ; i++)
     twinfraction_tau(i) = twinfraction_t(i) + fabs(delgam_tau(i+n_slip_systems)) ;
-
-
 
     temp.equ(1.0,matrixExponential(LP_acc)) ;
     temp.mmult(FP_tau,FP_t);
@@ -1046,6 +1079,16 @@ while(locres2>locres_tol2 && itr2 < nitr2){
       stateVar_iter[cellID][quadPtID][i+2*n_Tslip_systems]=signed_slip_tau(i);
       stateVar_iter[cellID][quadPtID][i+3*n_Tslip_systems]=normal_stress_tau(i);
     }
+    ii=0;
+    for(unsigned int i=0 ; i<dim ; i++){
+      for(unsigned int j=0 ; j<dim ; j++){
+        stateVar_iter[cellID][quadPtID][ii+4*n_Tslip_systems]=Ep_tau[i][j];
+        ii=ii+1;
+      }
+    }
+    stateVar_iter[cellID][quadPtID][dim*dim+4*n_Tslip_systems]=Ep_eff_cum_tau;
+
+
 
     for(unsigned int i=0 ; i<n_twin_systems ; i++)
     twinfraction_iter[cellID][quadPtID][i]=twinfraction_tau(i);
