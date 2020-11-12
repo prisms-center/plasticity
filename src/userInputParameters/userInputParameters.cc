@@ -57,6 +57,9 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
 
   if(skipOutputSteps<=0)
   skipOutputSteps=1;
+  
+  if(skipQuadratureOutputSteps<=0)
+  skipQuadratureOutputSteps=1;
 
   delT=parameter_handler.get_double("Time increments");
   totalTime=parameter_handler.get_double("Total time");
