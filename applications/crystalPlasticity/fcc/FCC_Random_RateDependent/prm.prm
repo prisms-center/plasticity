@@ -131,13 +131,13 @@ set Advanced Rate Dependent Model enabled  = false
 set Number of User Material Constants 1              = 12
 
 # Number of User Material State Variables in a Material model Phase 1
-set Number of User Material State Variables 1        = 52
+set Number of User Material State Variables 1        = 62
 
 # Material Constants in a Material model Phase 1
 set User Material Constants 1             = 1.0e-3, 0.04 , 1.0e-6 , 1.0e-6 ,  100 , 100,  0, 0, 0, 0 , 200.0, 200.0
 
 # Material State Variables in a Material model Phase 1
-set User Material State Variables Initial Values 1        = 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+set User Material State Variables Initial Values 1        = 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
 
 #   Elastic Stiffness Matrix -Voigt Notation (MPa)
 set Elastic Stiffness row 1                      = 170.0e3, 124.0e3, 124.0e3, 0, 0, 0
