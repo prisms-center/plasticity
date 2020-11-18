@@ -214,7 +214,7 @@ set Voxels in Z direction                        = 10
 # Grain ID file name
 set Grain ID file name                           = GrainId.txt
 
-# Number of header Lines in grain orientations file
+# Number of header Lines in grain ID file
 set Header Lines GrainID File                    = 1
 
 # Grain orientations file name
