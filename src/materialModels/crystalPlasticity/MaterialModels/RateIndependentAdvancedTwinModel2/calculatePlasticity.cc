@@ -1223,8 +1223,8 @@ for (unsigned int i = 0;i < NumberOfNonTwinnedRegionK;i++) {
       for (unsigned int k = 0;k < n_slip_systemsWOtwin;k++) {
         s_alpha_iter[cellID][quadPtID][n_Tslip_systems*alpha+k] = s_alpha_iter[cellID][quadPtID][k];
       }
-      s_alpha_iter[cellID][quadPtID][alpha*n_Tslip_systems +n_slip_systemsWOtwin]= this->userInputs.initialSlipResistanceTwin1[n_twin_systems - 1];
-      s_alpha_iter[cellID][quadPtID][alpha*n_Tslip_systems +n_slip_systemsWOtwin+1]= this->userInputs.initialSlipResistanceTwin1[n_twin_systems - 1];
+      s_alpha_iter[cellID][quadPtID][alpha*n_Tslip_systems +n_slip_systemsWOtwin]= this->userInputs.initialSlipResistanceTwin1[n_twin_systems_Size * 2 - 1];
+      s_alpha_iter[cellID][quadPtID][alpha*n_Tslip_systems +n_slip_systemsWOtwin+1]= this->userInputs.initialSlipResistanceTwin1[n_twin_systems_Size * 2 - 1];
       for (unsigned int k = 0;k < dim;k++) {
         rotnew_iter[cellID][quadPtID][alpha*dim + k] = rot[cellID][quadPtID][alpha*dim + k];
       }
