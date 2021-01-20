@@ -458,8 +458,10 @@ while(locres2>locres_tol2 && itr2 < nitr2){
         J_iter(i+2*dim,i+2*dim+n_Tslip_systems) = J_iter(i+2*dim,i+2*dim+n_Tslip_systems) - sctmp3 ;
 
 
-        J_iter(i+2*dim,i+2*dim) = J_iter(i+2*dim,i+2*dim) + abs(delgam_tau(i))*r_back1*pow(fabs(W_kh_tau1_it(i)/b_back1),m_back1) ;
-        J_iter(i+2*dim,i+2*dim) = J_iter(i+2*dim,i+2*dim) + abs(delgam_tau(i))*W_kh_tau1_it(i)*r_back1*m_back1/b_back1*pow(fabs(W_kh_tau1_it(i)/b_back1),m_back1-1.0)*sgnm2 ;
+        J_iter(i+2*dim,i+2*dim) = J_iter(i+2*dim,i+2*dim) + abs(delgam_tau(i))*r_back1*pow(fabs(W_kh_tau1_it(i)/b_back1),m_back1) ;   
+	if (fabs(m_back1)>1e-10) {
+              J_iter(i+2*dim,i+2*dim) = J_iter(i+2*dim,i+2*dim) + abs(delgam_tau(i))*W_kh_tau1_it(i)*r_back1*m_back1/b_back1*pow(fabs(W_kh_tau1_it(i)/b_back1),m_back1-1.0)*sgnm2 ;
+	}	      
         locres_vec(i+2*dim) = W_kh_tau1_it(i) - W_kh_t1(i) - h_back1*delgam_tau(i) + r_back1*pow(fabs(W_kh_tau1_it(i)/b_back1),m_back1)*W_kh_tau1_it(i)*fabs(delgam_tau(i)) ;
 
 
@@ -487,7 +489,9 @@ while(locres2>locres_tol2 && itr2 < nitr2){
 
 
         J_iter(i+2*dim+n_Tslip_systems,i+2*dim+n_Tslip_systems) = J_iter(i+2*dim+n_Tslip_systems,i+2*dim+n_Tslip_systems) + abs(delgam_tau(i))*r_back2*pow(fabs(W_kh_tau2_it(i)/b_back2),m_back2) ;
-        J_iter(i+2*dim+n_Tslip_systems,i+2*dim+n_Tslip_systems) = J_iter(i+2*dim+n_Tslip_systems,i+2*dim+n_Tslip_systems) + abs(delgam_tau(i))*W_kh_tau2_it(i)*r_back2*m_back2/b_back2*pow(fabs(W_kh_tau2_it(i)/b_back2),m_back2-1.0)*sgnm2 ;
+        if (fabs(m_back2)>1e-10) {
+	      J_iter(i+2*dim+n_Tslip_systems,i+2*dim+n_Tslip_systems) = J_iter(i+2*dim+n_Tslip_systems,i+2*dim+n_Tslip_systems) + abs(delgam_tau(i))*W_kh_tau2_it(i)*r_back2*m_back2/b_back2*pow(fabs(W_kh_tau2_it(i)/b_back2),m_back2-1.0)*sgnm2 ;
+	}
         locres_vec(i+2*dim+n_Tslip_systems) = W_kh_tau2_it(i) - W_kh_t2(i) - h_back2*delgam_tau(i) + r_back2*pow(fabs(W_kh_tau2_it(i)/b_back2),m_back2)*W_kh_tau2_it(i)*fabs(delgam_tau(i)) ;
 
 
