@@ -57,7 +57,7 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
 
   if(skipOutputSteps<=0)
   skipOutputSteps=1;
-  
+
   if(skipQuadratureOutputSteps<=0)
   skipQuadratureOutputSteps=1;
 
@@ -114,6 +114,31 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
   output_Eqv_stress = parameter_handler.get_bool("Output Equivalent stress");
   output_Grain_ID = parameter_handler.get_bool("Output Grain ID");
   output_Twin = parameter_handler.get_bool("Output Twin fractions");
+  
+  output_Var1 = parameter_handler.get_bool("Output Variable 1");
+  output_Var2 = parameter_handler.get_bool("Output Variable 2");
+  output_Var3 = parameter_handler.get_bool("Output Variable 3");
+  output_Var4 = parameter_handler.get_bool("Output Variable 4");
+  output_Var5 = parameter_handler.get_bool("Output Variable 5");
+  output_Var6 = parameter_handler.get_bool("Output Variable 6");
+  output_Var7 = parameter_handler.get_bool("Output Variable 7");
+  output_Var8 = parameter_handler.get_bool("Output Variable 8");
+  output_Var9 = parameter_handler.get_bool("Output Variable 9");
+  output_Var10 = parameter_handler.get_bool("Output Variable 10");
+  output_Var11 = parameter_handler.get_bool("Output Variable 11");
+  output_Var12 = parameter_handler.get_bool("Output Variable 12");
+  output_Var13 = parameter_handler.get_bool("Output Variable 13");
+  output_Var14 = parameter_handler.get_bool("Output Variable 14");
+  output_Var15 = parameter_handler.get_bool("Output Variable 15");
+  output_Var16 = parameter_handler.get_bool("Output Variable 16");
+  output_Var17 = parameter_handler.get_bool("Output Variable 17");
+  output_Var18 = parameter_handler.get_bool("Output Variable 18");
+  output_Var19 = parameter_handler.get_bool("Output Variable 19");
+  output_Var20 = parameter_handler.get_bool("Output Variable 20");
+  output_Var21 = parameter_handler.get_bool("Output Variable 21");
+  output_Var22 = parameter_handler.get_bool("Output Variable 22");
+  output_Var23 = parameter_handler.get_bool("Output Variable 23");
+  output_Var24 = parameter_handler.get_bool("Output Variable 24");
 
   maxLinearSolverIterations=parameter_handler.get_integer("Maximum linear solver iterations");
   maxNonLinearIterations=parameter_handler.get_integer("Maximum non linear iterations");
@@ -501,7 +526,7 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Write Output","false",dealii::Patterns::Bool(),"Flag to write output vtu and pvtu files");
   parameter_handler.declare_entry("Output Directory",".",dealii::Patterns::Anything(),"Output Directory");
 
-  parameter_handler.declare_entry("Tabular Output","false",dealii::Patterns::Bool(),"Flag to use Tabular Output"); 
+  parameter_handler.declare_entry("Tabular Output","false",dealii::Patterns::Bool(),"Flag to use Tabular Output");
   parameter_handler.declare_entry("Tabular Time Output Table","",dealii::Patterns::List(dealii::Patterns::Double()),"Table for Time Outputs");
 
   parameter_handler.declare_entry("Skip Output Steps","-1",dealii::Patterns::Integer(),"Skip Output Steps");
@@ -511,6 +536,31 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Output Equivalent stress","false",dealii::Patterns::Bool(),"Output Equivalent stress");
   parameter_handler.declare_entry("Output Grain ID","false",dealii::Patterns::Bool(),"Output Grain ID");
   parameter_handler.declare_entry("Output Twin fractions","false",dealii::Patterns::Bool(),"Output Twin fractions");
+
+  parameter_handler.declare_entry("Output Variable 1","false",dealii::Patterns::Bool(),"Output Variable 1");
+  parameter_handler.declare_entry("Output Variable 2","false",dealii::Patterns::Bool(),"Output Variable 2");
+  parameter_handler.declare_entry("Output Variable 3","false",dealii::Patterns::Bool(),"Output Variable 3");
+  parameter_handler.declare_entry("Output Variable 4","false",dealii::Patterns::Bool(),"Output Variable 4");
+  parameter_handler.declare_entry("Output Variable 5","false",dealii::Patterns::Bool(),"Output Variable 5");
+  parameter_handler.declare_entry("Output Variable 6","false",dealii::Patterns::Bool(),"Output Variable 6");
+  parameter_handler.declare_entry("Output Variable 7","false",dealii::Patterns::Bool(),"Output Variable 7");
+  parameter_handler.declare_entry("Output Variable 8","false",dealii::Patterns::Bool(),"Output Variable 8");
+  parameter_handler.declare_entry("Output Variable 9","false",dealii::Patterns::Bool(),"Output Variable 9");
+  parameter_handler.declare_entry("Output Variable 10","false",dealii::Patterns::Bool(),"Output Variable 10");
+  parameter_handler.declare_entry("Output Variable 11","false",dealii::Patterns::Bool(),"Output Variable 11");
+  parameter_handler.declare_entry("Output Variable 12","false",dealii::Patterns::Bool(),"Output Variable 12");
+  parameter_handler.declare_entry("Output Variable 13","false",dealii::Patterns::Bool(),"Output Variable 13");
+  parameter_handler.declare_entry("Output Variable 14","false",dealii::Patterns::Bool(),"Output Variable 14");
+  parameter_handler.declare_entry("Output Variable 15","false",dealii::Patterns::Bool(),"Output Variable 15");
+  parameter_handler.declare_entry("Output Variable 16","false",dealii::Patterns::Bool(),"Output Variable 16");
+  parameter_handler.declare_entry("Output Variable 17","false",dealii::Patterns::Bool(),"Output Variable 17");
+  parameter_handler.declare_entry("Output Variable 18","false",dealii::Patterns::Bool(),"Output Variable 18");
+  parameter_handler.declare_entry("Output Variable 19","false",dealii::Patterns::Bool(),"Output Variable 19");
+  parameter_handler.declare_entry("Output Variable 20","false",dealii::Patterns::Bool(),"Output Variable 20");
+  parameter_handler.declare_entry("Output Variable 21","false",dealii::Patterns::Bool(),"Output Variable 21");
+  parameter_handler.declare_entry("Output Variable 22","false",dealii::Patterns::Bool(),"Output Variable 22");
+  parameter_handler.declare_entry("Output Variable 23","false",dealii::Patterns::Bool(),"Output Variable 23");
+  parameter_handler.declare_entry("Output Variable 24","false",dealii::Patterns::Bool(),"Output Variable 24");
 
   parameter_handler.declare_entry("Maximum linear solver iterations","-1",dealii::Patterns::Integer(), "Maximum iterations for linear solver");
   parameter_handler.declare_entry("Maximum non linear iterations","-1",dealii::Patterns::Integer(),"Maximum no. of non-linear iterations");

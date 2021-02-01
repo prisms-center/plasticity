@@ -120,6 +120,32 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 					this->postprocessValues(cellID, q, 0, 0) = vonmises;
 					this->postprocessValues(cellID, q, 1, 0) = eqvstrain;
 					this->postprocessValues(cellID, q, 2, 0) = twin_ouput[cellID][q];
+
+////////User Defined Variables for visualization outputs (output_Var1 to output_Var24)////////
+					this->postprocessValues(cellID, q, 3, 0) = 0;
+					this->postprocessValues(cellID, q, 4, 0) = 0;
+					this->postprocessValues(cellID, q, 5, 0) = 0;
+					this->postprocessValues(cellID, q, 6, 0) = 0;
+					this->postprocessValues(cellID, q, 7, 0) = 0;
+					this->postprocessValues(cellID, q, 8, 0) = 0;
+					this->postprocessValues(cellID, q, 9, 0) = 0;
+					this->postprocessValues(cellID, q, 10, 0) = 0;
+					this->postprocessValues(cellID, q, 11, 0) = 0;
+					this->postprocessValues(cellID, q, 12, 0) = 0;
+					this->postprocessValues(cellID, q, 13, 0) = 0;
+					this->postprocessValues(cellID, q, 14, 0) = 0;
+					this->postprocessValues(cellID, q, 15, 0) = 0;
+					this->postprocessValues(cellID, q, 16, 0) = 0;
+					this->postprocessValues(cellID, q, 17, 0) = 0;
+					this->postprocessValues(cellID, q, 18, 0) = 0;
+					this->postprocessValues(cellID, q, 19, 0) = 0;
+					this->postprocessValues(cellID, q, 20, 0) = 0;
+					this->postprocessValues(cellID, q, 21, 0) = 0;
+					this->postprocessValues(cellID, q, 22, 0) = 0;
+					this->postprocessValues(cellID, q, 23, 0) = 0;
+					this->postprocessValues(cellID, q, 24, 0) = 0;
+					this->postprocessValues(cellID, q, 25, 0) = 0;
+					this->postprocessValues(cellID, q, 26, 0) = 0;
 				}
 
 

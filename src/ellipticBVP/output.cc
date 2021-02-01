@@ -24,6 +24,59 @@ void ellipticBVP<dim>::output(){
     if (postprocessed_solution_names[field].compare(std::string("Eqv_stress"))==0) continue;
   if(!userInputs.output_Twin)
     if (postprocessed_solution_names[field].compare(std::string("Twin"))==0) continue;
+
+  if(!userInputs.output_Var1)
+    if (postprocessed_solution_names[field].compare(std::string("output_Var1"))==0) continue;
+  if(!userInputs.output_Var2)
+    if (postprocessed_solution_names[field].compare(std::string("output_Var2"))==0) continue;
+  if(!userInputs.output_Var3)
+    if (postprocessed_solution_names[field].compare(std::string("output_Var3"))==0) continue;
+  if(!userInputs.output_Var4)
+    if (postprocessed_solution_names[field].compare(std::string("output_Var4"))==0) continue;
+  if(!userInputs.output_Var5)
+    if (postprocessed_solution_names[field].compare(std::string("output_Var5"))==0) continue;
+  if(!userInputs.output_Var6)
+    if (postprocessed_solution_names[field].compare(std::string("output_Var6"))==0) continue;
+  if(!userInputs.output_Var7)
+    if (postprocessed_solution_names[field].compare(std::string("output_Var7"))==0) continue;
+  if(!userInputs.output_Var8)
+    if (postprocessed_solution_names[field].compare(std::string("output_Var8"))==0) continue;
+  if(!userInputs.output_Var9)
+    if (postprocessed_solution_names[field].compare(std::string("output_Var9"))==0) continue;
+  if(!userInputs.output_Var10)
+    if (postprocessed_solution_names[field].compare(std::string("output_Var10"))==0) continue;
+  if(!userInputs.output_Var11)
+    if (postprocessed_solution_names[field].compare(std::string("output_Var11"))==0) continue;
+  if(!userInputs.output_Var12)
+    if (postprocessed_solution_names[field].compare(std::string("output_Var12"))==0) continue;
+  if(!userInputs.output_Var13)
+    if (postprocessed_solution_names[field].compare(std::string("output_Var13"))==0) continue;
+  if(!userInputs.output_Var14)
+    if (postprocessed_solution_names[field].compare(std::string("output_Var14"))==0) continue;
+  if(!userInputs.output_Var15)
+    if (postprocessed_solution_names[field].compare(std::string("output_Var15"))==0) continue;
+  if(!userInputs.output_Var16)
+    if (postprocessed_solution_names[field].compare(std::string("output_Var16"))==0) continue;
+  if(!userInputs.output_Var17)
+    if (postprocessed_solution_names[field].compare(std::string("output_Var17"))==0) continue;
+  if(!userInputs.output_Var18)
+    if (postprocessed_solution_names[field].compare(std::string("output_Var18"))==0) continue;
+  if(!userInputs.output_Var19)
+    if (postprocessed_solution_names[field].compare(std::string("output_Var19"))==0) continue;
+  if(!userInputs.output_Var20)
+    if (postprocessed_solution_names[field].compare(std::string("output_Var20"))==0) continue;
+  if(!userInputs.output_Var21)
+    if (postprocessed_solution_names[field].compare(std::string("output_Var21"))==0) continue;
+  if(!userInputs.output_Var22)
+    if (postprocessed_solution_names[field].compare(std::string("output_Var22"))==0) continue;
+  if(!userInputs.output_Var23)
+    if (postprocessed_solution_names[field].compare(std::string("output_Var23"))==0) continue;
+  if(!userInputs.output_Var24)
+    if (postprocessed_solution_names[field].compare(std::string("output_Var24"))==0) continue;
+
+
+
+
   //if(!userInputs.output_alpha)
     //if (postprocessed_solution_names[field].compare(std::string("alpha"))==0) continue;
   //if(!userInputs.output_tau_vm)
