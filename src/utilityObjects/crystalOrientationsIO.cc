@@ -114,15 +114,20 @@ unsigned int crystalOrientationsIO<dim>::getMaterialID(double _coords[]){
      pcout << "inputVoxelData not initialized\n";
      exit(1);
   }
-  
+
   double dist_to_lower,dist_to_upper;
   //find nearest point
   //iterator to nearest x slice
   std::map<double,std::map<double, std::map<double, unsigned int> > >::iterator itx;
   std::map<double,std::map<double, std::map<double, unsigned int> > >::iterator itx_upper=inputVoxelData.lower_bound(_coords[0]);
   std::map<double,std::map<double, std::map<double, unsigned int> > >::iterator itx_lower = itx_upper; itx_lower--;
+  std::map<double,std::map<double, std::map<double, unsigned int> > >::iterator itx_begin=inputVoxelData.begin();
+
   if (itx_upper == inputVoxelData.end()) {
     itx=itx_lower;
+  }
+  else if (itx_upper==itx_begin) {
+    itx=itx_upper;
   }
   else{
     dist_to_lower = std::abs(itx_lower->first - _coords[0]);
@@ -140,9 +145,13 @@ unsigned int crystalOrientationsIO<dim>::getMaterialID(double _coords[]){
   std::map<double, std::map<double, unsigned int> >::iterator ity;
   std::map<double, std::map<double, unsigned int> >::iterator ity_upper=itx->second.lower_bound(_coords[1]);
   std::map<double, std::map<double, unsigned int> >::iterator ity_lower=ity_upper; ity_lower--;
+  std::map<double, std::map<double, unsigned int> >::iterator ity_begin=itx->second.begin();
 
   if (ity_upper == itx->second.end()) {
     ity=ity_lower;
+  }
+  else if (ity_upper==ity_begin) {
+    ity=ity_upper;
   }
   else{
     dist_to_lower = std::abs(ity_lower->first - _coords[1]);
@@ -160,8 +169,12 @@ unsigned int crystalOrientationsIO<dim>::getMaterialID(double _coords[]){
   std::map<double, unsigned int>::iterator itz;
   std::map<double, unsigned int>::iterator itz_upper=ity->second.lower_bound(_coords[2]);
   std::map<double, unsigned int>::iterator itz_lower=itz_upper; itz_lower--;
+  std::map<double, unsigned int>::iterator itz_begin=ity->second.begin();
   if (itz_upper == ity->second.end()) {
     itz=itz_lower;
+  }
+  else if (itz_upper==itz_begin) {
+    itz=itz_upper;
   }
   else{
     dist_to_lower = std::abs(itz_lower->first - _coords[2]);
