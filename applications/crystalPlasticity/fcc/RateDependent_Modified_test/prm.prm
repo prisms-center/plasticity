@@ -134,7 +134,7 @@ set Number of User Material Constants 1              = 12
 set Number of User Material State Variables 1        = 62
 
 # Material Constants in a Material model Phase 1
-set User Material Constants 1             = 1.0e-3, 0.02 , 1.0e-6 , 1.0e-6 ,  100 , 100,  0, 0, 0, 0 , 200.0, 200.0
+set User Material Constants 1             = 1.0e-3, 0.02 , 1.0e-6 , 1.0e-6 ,  10000 , 10000,  0, 0, 0, 0 , 200.0, 200.0
 
 # Material State Variables in a Material model Phase 1
 set User Material State Variables Initial Values 1        = 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0

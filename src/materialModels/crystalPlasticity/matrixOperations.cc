@@ -233,24 +233,24 @@ void crystalPlasticity<dim>::elasticmoduli(FullMatrix<double> &Ar, FullMatrix<do
 
 }
 
-template <int dim>                  
+template <int dim>
 FullMatrix<double> crystalPlasticity<dim>::matrixExponential6(FullMatrix<double> A) {
 
 	FullMatrix<double> matExp(2*dim,2*dim),temp(2*dim,2*dim),temp2(2*dim,2*dim);
 	matExp=IdentityMatrix(2*dim);
-	temp=IdentityMatrix(2*dim); 
+	temp=IdentityMatrix(2*dim);
 	double count=1;
 
 	while(temp.frobenius_norm()>1e-10){
-		temp.mmult(temp2,A); 
+		temp.mmult(temp2,A);
 		temp2.equ(1/count,temp2);
 		temp.equ(1.0,temp2);
-		matExp.add(1.0,temp); 
-		count=count+1.0; 
+		matExp.add(1.0,temp);
+		count=count+1.0;
 	}
 
 	return matExp;
-} 
+}
 
 
 
@@ -264,12 +264,12 @@ FullMatrix<double> crystalPlasticity<dim>::matrixExponentialGateauxDerivative(Fu
 		for(unsigned int j=0 ; j<3 ; j++){
 			C[i][j] = A[i][j] ;
 			C[i+3][j+3] = A[i][j] ;
-			C[i][j+3] = B[i][j] ;	
+			C[i][j+3] = B[i][j] ;
 		}
 	}
 
 	matExp.equ(1.0,matrixExponential6(C)) ;
-      
+
 	for(unsigned int i=0 ; i<3 ; i++){
 		for(unsigned int j=3 ; j<6 ; j++ ){
 			matExpGatDer[i][j-3] = matExp[i][j] ;
@@ -283,14 +283,14 @@ FullMatrix<double> crystalPlasticity<dim>::matrixExponentialGateauxDerivative(Fu
 
 template <int dim>
 FullMatrix<double> crystalPlasticity<dim>::matrixExponentialGateauxDerivative2(FullMatrix<double> A, FullMatrix<double> B){
-	
+
 	FullMatrix<double> temp1(dim,dim),temp2(dim,dim),temp3(dim,dim),matExpGatDer(dim,dim), temp4(dim,dim),temp5(dim,dim);
 	double resdl = 1.0, count = 1.0, sctemp = 1.0 ;
 	temp1 = 0;
 	temp2.equ(1.0,B) ;
 	matExpGatDer.equ(1.0,temp1) ;
-	
-	
+
+
 	while(resdl > 1.0e-10){
 		sctemp = sctemp/count ;
 		matExpGatDer.add(sctemp,temp2) ;
@@ -303,34 +303,35 @@ FullMatrix<double> crystalPlasticity<dim>::matrixExponentialGateauxDerivative2(F
 		temp4.add(1.0,temp5) ;
 		temp2.equ(1.0,temp4) ;
 		temp1.equ(1.0,temp3) ;
-		
+
 		temp5.equ(sctemp/(count + 1.0),temp2) ;
 		resdl = temp5.frobenius_norm() ;
-		
+
 		count = count + 1.0 ;
     }
 
 	return matExpGatDer ;
-	
-	
+
+
 }
 
 
 
 template <int dim>
-void crystalPlasticity<dim>::lnsrch(Vector<double> &statenew, unsigned int n, Vector<double> stateold, double Fold, Vector<double> gradFold, Vector<double> srchdir,double delgam_ref, double strexp, FullMatrix<double> SCHMID_TENSOR1, unsigned int n_slip_systems, unsigned int n_Tslip_systems, Vector<double> s_alpha_tau, FullMatrix<double> Dmat, FullMatrix<double> CE_tau_trial, Vector<double> W_kh_t1, Vector<double> W_kh_t2, double hb1, double hb2, double mb1, double mb2, double rb1, double rb2, double bb1, double bb2) 
+void crystalPlasticity<dim>::lnsrch(Vector<double> &statenew, unsigned int n, Vector<double> stateold, double Fold, Vector<double> gradFold, Vector<double> srchdir,double delgam_ref, double strexp, FullMatrix<double> SCHMID_TENSOR1, unsigned int n_slip_systems, unsigned int n_Tslip_systems, Vector<double> s_alpha_tau, FullMatrix<double> Dmat, FullMatrix<double> CE_tau_trial, Vector<double> W_kh_t1, Vector<double> W_kh_t2, double hb1, double hb2, double mb1, double mb2, double rb1, double rb2, double bb1, double bb2)
 {
 
-double stpmax,tolx,alf ;
-unsigned int chck,errnum,itr1; 
+double stpmax,tolx,alf,TestNan ;
+unsigned int chck,errnum,itr1;
 
 double magsrch,slope,tst,temp,lam_min,lam;
 
+TestNan=0;
 tolx = 1.0e-15 ;
 alf = 1.0e-4 ;
 chck = 0 ;
 
-magsrch = srchdir.l2_norm(); 
+magsrch = srchdir.l2_norm();
 
 stpmax = magsrch ;
 
@@ -342,7 +343,7 @@ slope = 0.0 ;
 for(unsigned int i=0 ; i<n ; i++){
 	slope = slope + srchdir(i)*gradFold(i) ;
 }
-	
+
 errnum = 0 ;
 
 if(slope > 0.0)
@@ -355,7 +356,7 @@ for(unsigned int i=0 ; i<n ; i++){
 		tst = temp ;
 }
 
-	
+
 lam_min = tolx/tst ;
 lam = 1.0 ;
 itr1 = 0 ;
@@ -378,9 +379,9 @@ while(itr1 < 300)
 	for(unsigned int i=0 ; i<n_Tslip_systems ; i++){
 		W_kh_tau1(i) = statenew(i+2*dim) ;
 		W_kh_tau2(i) = statenew(i+2*dim+n_Tslip_systems) ;
-        W_kh_tau(i) = W_kh_tau1(i) + W_kh_tau2(i)  ;	
+        W_kh_tau(i) = W_kh_tau1(i) + W_kh_tau2(i)  ;
 	}
-		
+
 	matform(Tstar,Tstar_vec) ;
 	LP_acc = 0 ;
     delgam = 0 ;
@@ -389,13 +390,13 @@ while(itr1 < 300)
 		for (unsigned int j = 0;j < dim;j++) {
      		     for (unsigned int k = 0;k < dim;k++) {
    		         temp1[j][k]=SCHMID_TENSOR1[dim*i + j][k];
-            
+
         	  	}
        		 }
-		
+
 	Tstar.mTmult(temp2,temp1);
-    sctmp1=temp2.trace();	
-		
+    sctmp1=temp2.trace();
+
 	if(i<n_slip_systems){ // For slip systems due to symmetry of slip
           if((sctmp1-W_kh_tau(i))<0)
           sgnm=-1;
@@ -410,19 +411,19 @@ while(itr1 < 300)
           sgnm=1 ;
         }
 
-        delgam(i) = delgam_ref*pow(fabs((sctmp1 - W_kh_tau(i))/s_alpha_tau(i)),1.0/strexp)*sgnm ;	
-		
+        delgam(i) = delgam_ref*pow(fabs((sctmp1 - W_kh_tau(i))/s_alpha_tau(i)),1.0/strexp)*sgnm ;
+
 		LP_acc.add(delgam(i),temp1) ;
-        
+
 		resval(i+2*dim) = W_kh_tau1(i) - W_kh_t1(i) - hb1*delgam(i) + rb1*pow(fabs(W_kh_tau1(i)/bb1),mb1)*W_kh_tau1(i)*fabs(delgam(i)) ;
         resval(i+2*dim+n_Tslip_systems) = W_kh_tau2(i) - W_kh_t2(i) - hb2*delgam(i) + rb2*pow(fabs(W_kh_tau2(i)/bb2),mb2)*W_kh_tau2(i)*fabs(delgam(i)) ;
-		
+
 	}
 	LP_acc.equ(-1.0,LP_acc) ;
 	LP_acc2.equ(1.0,matrixExponential(LP_acc)) ;
 	LP_acc.equ(1.0,LP_acc2) ;
 
-	
+
 
 	vtmp1 = vecform(Tstar) ;
 	CE_tau_trial.mmult(temp1,LP_acc) ;
@@ -433,78 +434,89 @@ while(itr1 < 300)
 	   Dmat.vmult(vtmp2,vecform(temp3)) ;
 	   vtmp3 = 0 ;
 	   vtmp3.add(1.0,vtmp1,-1.0,vtmp2) ;
-	   
+
 	   for(unsigned int i=0; i<2*dim ; i++){
 		   resval(i) = vtmp3(i) ;
-		   
+
 	   }
-	   
-		
-	loc_res_mag = resval.l2_norm() ;
-       
-	loc_res_mag = 0.5*loc_res_mag*loc_res_mag ;
-   		
+
+
+     //loc_res_mag = resval.l2_norm() ;
+
+    	//loc_res_mag = 0.5*loc_res_mag*loc_res_mag ;
+     loc_res_mag=0;
+     for(unsigned int i=0; i<2*dim+2*n_Tslip_systems ; i++){
+       loc_res_mag = loc_res_mag+0.5*resval(i)*resval(i) ;
+     }
+     if (TestNan==1){
+       break ;
+     }
+     if ((std::isnan(loc_res_mag))||(std::isinf(loc_res_mag))){
+       lam=0.001*lam;
+       TestNan=1;
+     }
+     else{
 	// Lots of conditional statements involved here
 	if(lam < lam_min){
 		statenew.equ(1.0,stateold) ;
 		chck = 1 ;
 		break ;
-	
+
 	}
 	else if((loc_res_mag - Fold - alf*lam*slope)<=0)
 	{
 		break ;
 	}
 	else{
-	
+
 	if(fabs(lam - 1.0) < 1.0e-10)
 	{
 		tmplam = -1.0*slope/(2.0*(loc_res_mag - Fold - slope )) ;
-		
-		
+
+
 	}
 	else{
 		rhs1 = loc_res_mag - Fold - lam*slope ;
 		rhs2 = f2 - Fold - lam2*slope ;
 		acf = (rhs1/(lam*lam) - rhs2/(lam2*lam2))/(lam - lam2)  ;
 		bcf = (-lam2*rhs1/(lam*lam) + lam*rhs2/(lam2*lam2))/(lam - lam2) ;
-		
+
 		if(fabs(acf)<1.0e-10){
 			tmplam = -1.0*slope/(2.0*bcf) ;
-		
+
 		}
-			
+
 		else{
 			disc = bcf*bcf - 3.0*acf*slope ;
-			
+
 			if(disc<0)
 				tmplam = 0.5*lam ;
 			else if(bcf<=0)
 			tmplam = (-bcf + sqrt(disc))/(3.0*acf) ;
-			else 
+			else
 				tmplam = -slope/(bcf  + sqrt(disc)) ;
-				
-			
+
+
 		}
 
 		if(tmplam>0.5*lam)
 			tmplam = 0.5*lam ;
 	}
-	
-	
-	
-	}	
-		
-	
+
+
+
+	}
+
+
 	lam2 = lam ;
 	f2 = loc_res_mag ;
 	lam = std::max(tmplam,0.1*lam) ;
-
+}
 	itr1 = itr1 + 1 ;
 
-	
-	
-} //end while 
+
+
+} //end while
 
 
 } // end  function
