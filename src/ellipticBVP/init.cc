@@ -213,6 +213,29 @@ void ellipticBVP<dim>::init(){
         }
       }
     }
+
+
+    if(userInputs.enableNodalDisplacementBCs){
+      std::ifstream BCfileNodal(userInputs.nodalDisplacement_BCfilename);
+      nodalDisplacement.resize(userInputs.numberOfNodalBCs,std::vector<double>(3,0));
+      dofNodalDisplacement.resize(userInputs.numberOfNodalBCs);
+      deluNodalDisplacement.resize(userInputs.numberOfNodalBCs);
+
+      //read data
+      if (BCfileNodal.is_open()){
+        pcout << "Reading Nodal boundary conditions\n";
+        for (unsigned int i=0; i<userInputs.numberOfNodalBCs; i++){
+          std::getline (BCfileNodal,line);
+          std::stringstream ss(line);
+          ss>>nodalDisplacement[i][0]>>nodalDisplacement[i][1]>>nodalDisplacement[i][2]>>dofNodalDisplacement[i];
+          ss>>totalU;
+          deluNodalDisplacement[i]=totalU/totalIncrements;
+        }
+      }
+    }
+
+
+
     if(userInputs.useVelocityGrad){
       targetVelGrad.reinit(3,3); targetVelGrad=0.0;
 

@@ -53,9 +53,10 @@ protected:
 
   unsigned int global_size_dof_Boundary_Layer2,global_size_dof_Edge;
 
-  std::vector<unsigned int> global_vector_dof_Boundary_Layer2;
+  std::vector<unsigned int> global_vector_dof_Boundary_Layer2,dofNodalDisplacement;
+  std::vector<double> deluNodalDisplacement;
   std::vector<std::vector<unsigned int> >  vertices_Constraints_Matrix,edges_Constraints_Matrix,faces_Constraints_Matrix, global_Edges_DOFs_Vector_Array;
-  std::vector<std::vector<double>>  vertices_Constraints_Coef,edges_Constraints_Coef,faces_Constraints_Coef, global_Edges_DOFs_Coord_Vector_Array;
+  std::vector<std::vector<double>>  vertices_Constraints_Coef,edges_Constraints_Coef,faces_Constraints_Coef, global_Edges_DOFs_Coord_Vector_Array,nodalDisplacement;
   std::vector<std::vector<int>> periodicBCsInput; // 	Periodic BCs Input
   std::vector<std::vector<double>> periodicBCsInput2,periodicBCsInput2_Orig; // 	Periodic BCs Input
   std::vector<unsigned int> vertices_Constraint_Known, vertices_DOFs_vector;
@@ -145,7 +146,7 @@ protected:
       void setPeriodicityConstraintsInc0();
       void setPeriodicityConstraintsIncNot0();
       void setPeriodicityConstraintsInc0Neg();
-      
+
       ///////These functions are for DIC BCs evaluation
       void bcFunction1(double _yval, double &value_x, double &value_y, double _currentIncr);
       void bcFunction2(double _yval, double &value_x, double &value_y, double _currentIncr);

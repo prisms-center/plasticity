@@ -98,6 +98,11 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
   cyclicLoadingDOF=parameter_handler.get_integer("Cyclic loading direction");
   quarterCycleTime=parameter_handler.get_double("Quarter cycle time");
 
+  enableNodalDisplacementBCs=parameter_handler.get_bool("Enable Nodal Displacement BCs");
+  numberOfNodalBCs=parameter_handler.get_integer("Number of Nodal Displacement BCs");
+  nodalDisplacementBCsTolerance = parameter_handler.get_double("Tolerance for Nodal Displacement BCs");
+  nodalDisplacement_BCfilename=parameter_handler.get("Nodal Displacement BCs filename");
+
   enablePeriodicBCs=parameter_handler.get_bool("Use Periodic BCs");
   Periodic_BCfilename=parameter_handler.get("Periodic Boundary condition Constraint filename");
   numberVerticesConstraint=parameter_handler.get_integer("Number of Vertices Constraints");
@@ -114,7 +119,7 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
   output_Eqv_stress = parameter_handler.get_bool("Output Equivalent stress");
   output_Grain_ID = parameter_handler.get_bool("Output Grain ID");
   output_Twin = parameter_handler.get_bool("Output Twin fractions");
-  
+
   output_Var1 = parameter_handler.get_bool("Output Variable 1");
   output_Var2 = parameter_handler.get_bool("Output Variable 2");
   output_Var3 = parameter_handler.get_bool("Output Variable 3");
@@ -509,6 +514,11 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Cyclic loading face","1",dealii::Patterns::Integer(),"Face that is cyclically loaded");
   parameter_handler.declare_entry("Cyclic loading direction","1",dealii::Patterns::Integer(),"Direction that is cyclically loaded");
   parameter_handler.declare_entry("Quarter cycle time","-1",dealii::Patterns::Double(),"Time for finishing quarter of a cyclic loading cycle. One cycle is time taken for starting from 0 displacement and ending at 0 displacement");
+
+  parameter_handler.declare_entry("Enable Nodal Displacement BCs","false",dealii::Patterns::Bool(),"Flag to indicate if Nodal Displacement BCs is enabled");
+  parameter_handler.declare_entry("Number of Nodal Displacement BCs","1",dealii::Patterns::Integer(),"Number of Nodal Displacement BCs");
+  parameter_handler.declare_entry("Tolerance for Nodal Displacement BCs","0",dealii::Patterns::Double(),"Tolerance for Nodal Displacement BCs: The ratio of defiend tolerance size to the Domain size");
+  parameter_handler.declare_entry("Nodal Displacement BCs filename","NodalDisplacementBCs.txt",dealii::Patterns::Anything(),"File name containing Nodal Displacement BCs");
 
   parameter_handler.declare_entry("Use Periodic BCs","false",dealii::Patterns::Bool(),"Flag to indicate whether to use periodic BCs");
   parameter_handler.declare_entry("Periodic Boundary condition Constraint filename","PeriodicBCsConstraints.txt",dealii::Patterns::Anything(),"File name containing Periodic Boundary condition Constraint");

@@ -66,6 +66,11 @@ public:
   unsigned int cyclicLoadingDOF;
   double quarterCycleTime;
 
+  bool enableNodalDisplacementBCs;
+  unsigned int numberOfNodalBCs;
+  double nodalDisplacementBCsTolerance;
+  std::string nodalDisplacement_BCfilename;
+
   bool enablePeriodicBCs,enableTabularPeriodicBCs; // Specify whether to use Periodic BCs or Tabular Periodic BCs
   double periodicTabularTime;
   std::string Periodic_BCfilename; // PEriodic BCs Constraints file

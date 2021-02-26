@@ -6,9 +6,10 @@ template <int dim>
 void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value){
   unsigned int i ;
 
-  Vector<double> externalMeshParameterBCs(dim);
+  Vector<double> externalMeshParameterBCs(dim),nodalDisplacementBCsToleranceVector(dim);
   for (unsigned int i=0; i<dim; ++i) {
     externalMeshParameterBCs(i)=userInputs.externalMeshParameter*userInputs.span[i];
+    nodalDisplacementBCsToleranceVector(i)=userInputs.nodalDisplacementBCsTolerance*userInputs.span[i];
   }
 
   if(userInputs.enableCyclicLoading){
@@ -108,6 +109,16 @@ void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned 
               {//pcout<<i<<" "<<dof<<std::endl;
                 flag=true; value=deluConstraint[i][dof];return;}
         }
+    }
+  }
+
+  if(userInputs.enableNodalDisplacementBCs){
+    for (i=0;i<userInputs.numberOfNodalBCs;i++){
+      if ((fabs(node[0]-nodalDisplacement[i][0])<= nodalDisplacementBCsToleranceVector(0))&&(fabs(node[1]-nodalDisplacement[i][1])<= nodalDisplacementBCsToleranceVector(1))&&(fabs(node[2]-nodalDisplacement[i][2])<= nodalDisplacementBCsToleranceVector(2))){
+        if (dof==dofNodalDisplacement[i]){
+          flag=true; value=deluNodalDisplacement[i];return;
+        }
+      }
     }
   }
 
