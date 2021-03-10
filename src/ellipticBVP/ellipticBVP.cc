@@ -11,6 +11,10 @@ ellipticBVP<dim>::ellipticBVP (userInputParameters _userInputs):
 		 typename Triangulation<dim>::MeshSmoothing
 		 (Triangulation<dim>::smoothing_on_refinement |
 		  Triangulation<dim>::smoothing_on_coarsening)),
+  triangulation2 (mpi_communicator,
+		 typename Triangulation<dim>::MeshSmoothing
+		 (Triangulation<dim>::smoothing_on_refinement |
+		  Triangulation<dim>::smoothing_on_coarsening)),
   FE (FE_Q<dim>(_userInputs.feOrder), dim),
   FE_Scalar (FE_Q<dim>(_userInputs.feOrder), 1),
   dofHandler (triangulation),

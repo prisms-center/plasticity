@@ -5,6 +5,7 @@
 //dealii headers
 #include "dealIIheaders.h"
 #include "userInputParameters.h"
+#include "crystalOrientationsIO.h"
 
 using namespace dealii;
 
@@ -29,6 +30,7 @@ public:
   ellipticBVP(userInputParameters _userInputs);
   ~ellipticBVP();
   void run   ();
+  crystalOrientationsIO<dim> orientations_Mesh;
 
 protected:
 
@@ -71,11 +73,12 @@ protected:
   userInputParameters userInputs;
 
   //FE data structres
-  parallel::distributed::Triangulation<dim> triangulation;
+  parallel::distributed::Triangulation<dim> triangulation,triangulation2;
   FESystem<dim>      FE;
   FESystem<dim>      FE_Scalar;
   DoFHandler<dim>    dofHandler;
   DoFHandler<dim>    dofHandler_Scalar;
+  std::vector<unsigned int> cellOrientationMap_Mesh;
 
   //methods
   virtual void mesh();

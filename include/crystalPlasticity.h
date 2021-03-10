@@ -4,7 +4,6 @@
 
 //dealii headers
 #include "ellipticBVP.h"
-#include "crystalOrientationsIO.h"
 
 typedef struct {
   FullMatrix<double> m_alpha,n_alpha, eulerAngles2;

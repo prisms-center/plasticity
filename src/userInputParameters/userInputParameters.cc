@@ -253,6 +253,8 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
 
   grainOrientationsFile = parameter_handler.get("Orientations file name");
   headerLinesGrainIDFile=parameter_handler.get_integer("Header Lines GrainID File");
+  enableElementDeletion=parameter_handler.get_bool("Use Element Deletion");
+  deletionGrainID=parameter_handler.get_integer("GrainID of Deleted Elements");
 
 
 
@@ -655,7 +657,8 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Orientations file name","",dealii::Patterns::Anything(),"Grain orientations file name");
   parameter_handler.declare_entry("Header Lines GrainID File","0",dealii::Patterns::Integer(), "Number of header Lines in grain orientations file");
 
-
+  parameter_handler.declare_entry("Use Element Deletion","false",dealii::Patterns::Bool(),"Flag to indicate if element deletion is enabled");
+  parameter_handler.declare_entry("GrainID of Deleted Elements","-1",dealii::Patterns::Integer(),"The grainID for which the element are deleted");
 
 
   //if (enableMultiphase&&(numberofPhases>=2)){

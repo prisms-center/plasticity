@@ -169,6 +169,9 @@ public:
   std::string grainOrientationsFile; // Grain orientations file
   unsigned int headerLinesGrainIDFile; // No. of header Lines in grain orientations file
 
+  bool enableElementDeletion; //Flag to indicate if element deletion is enabled
+  unsigned int deletionGrainID; //The grainID for which the element are deleted
+
   bool enableUserMaterialModel2; //Flag to indicate if User material Model is enabled
   unsigned int numberofUserMatConstants2; // Number of User Material Constants
   unsigned int numberofUserMatStateVar2; // Number of User Material State Variables
