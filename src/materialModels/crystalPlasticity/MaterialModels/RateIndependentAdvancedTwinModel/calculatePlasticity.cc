@@ -3,7 +3,7 @@
 
 //////////////////////////////////////////////////////////////////////////
 //calculatePlasticity.cc numerically integrates the constitive model.
-//This calculatePlasticity.cc is based on the following rate-independent crystal plasticity model:
+//This calculatePlasticity.cc is the modified version of the following rate-independent crystal plasticity model:
 //Mohammadreza Yaghoobi, John E. Allison, Veera Sundararaghavan,
 //Multiscale modeling of twinning and detwinning behavior of HCP polycrystals,
 // International Journal of Plasticity, December 2019, 102653.
@@ -11,6 +11,7 @@
 //To use this file, one should copy it into the following folder (replacing the original calculatePlasticity.cc inside the following folder with this new one):
 //    plasticity/src/materialModels/crystalPlasticity/
 // Finaly, one should recompile PRISMS-Plasticity.
+//
 //This model includes a multiscale scheme to capture the twinning and detwinning mechanisms during
 //cyclic loading of HCP polycrystals.
 //////////////////////////////////////////////////////////////////////////
@@ -240,6 +241,15 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
       FP_tau = FP_t;
       Fpn_inv = 0.0; Fpn_inv.invert(FP_t);
       s_alpha_tau = s_alpha_t;
+
+      if (this->userInputs.enableOneTwinSys_Reorien){
+        for (unsigned int i = 0;i < n_twin_systems;i++) {//
+          if (s_alpha_tau(n_slip_systemsWOtwin + i) > 10000*saturationStressVTwin[i]) {
+            saturationStressVTwin[i]=s_alpha_tau(n_slip_systemsWOtwin + i)*10;
+          }
+        }
+      }
+
       FE_tau_trial = 0.0;
       F_trial = 0.0;
       F_tau.mmult(FE_tau_trial, Fpn_inv);F_trial = FE_tau_trial;
@@ -319,12 +329,15 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
           resolved_shear_tau_trial[j] = 0;
         }
       }
+
+      /////////////The modification compared to the original model is applied to the following lines//////////////////
       for (unsigned int i = (n_twin_systems / 2);i < n_twin_systems;i++) {
         unsigned int j = i + n_slip_systemsWOtwin;
-        if ((resolved_shear_tau_trial[j] > 0) || (tTwinFlag[i - (n_twin_systems / 2)] == 0)) {
+        if ((resolved_shear_tau_trial[j] > 0) || (ttwinvf[i - (n_twin_systems / 2)] <= 0)) {
           resolved_shear_tau_trial[j] = 0;
         }
       }
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
     else {
 
@@ -466,10 +479,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
       //Modified slip system search for adding corrective term
       inactive_slip_removal(active, x_beta_old, x_beta, n_PA, n_slip_systems, PA, b, A, A_PA);
-      if (quadPtID==0){
 
-        quadPtID=0;
-      }
       temp.reinit(dim, dim);
       del_FP.reinit(dim, dim);
       del_FP = 0.0;
@@ -554,12 +564,16 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
           resolved_shear_tau_trial[j] = 0;
         }
       }
+
+      /////////////The modification compared to the original model is applied to the following lines//////////////////
       for (unsigned int i = (n_twin_systems / 2);i < n_twin_systems;i++) {
         unsigned int j = i + n_slip_systemsWOtwin;
-        if ((resolved_shear_tau_trial[j] > 0) || (tTwinFlag[i - (n_twin_systems / 2)] == 0)) {
+        if ((resolved_shear_tau_trial[j] > 0) || (ttwinvf[i - (n_twin_systems / 2)] <= 0)) {
           resolved_shear_tau_trial[j] = 0;
         }
       }
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     }
     else {
 
@@ -586,11 +600,10 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
       s_alpha_tau(i) = s_alpha_tau(i) + h1;
     }
 
-
     for (unsigned int i = 0;i < n_slip_systemsWOtwin;i++) {//
 
-      if (s_alpha_tau(i) > (this->userInputs.saturationStress1[i])) {
-        s_alpha_tau(i) = this->userInputs.saturationStress1[i];
+      if (s_alpha_tau(i) > saturationStressV[i]) {
+        s_alpha_tau(i) = saturationStressV[i];
 
       }//
 
@@ -598,8 +611,8 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
     for (unsigned int i = 0;i < n_twin_systems;i++) {//
 
-      if (s_alpha_tau(n_slip_systemsWOtwin + i) > (this->userInputs.saturationStressTwin1[i])) {
-        s_alpha_tau(n_slip_systemsWOtwin + i) = this->userInputs.saturationStressTwin1[i];
+      if (s_alpha_tau(n_slip_systemsWOtwin + i) > saturationStressVTwin[i]) {
+        s_alpha_tau(n_slip_systemsWOtwin + i) = saturationStressVTwin[i];
 
         //abort();
       }
@@ -1173,52 +1186,64 @@ for (unsigned int i = 0;i < NumberOfTwinnedRegionK;i++) {
   }
 }
 NumberOfTwinnedRegionK = numberOfTwinnedRegion;
+
 for (unsigned int i = 0;i < NumberOfNonTwinnedRegionK;i++) {
-  unsigned int alpha = DeactiveTwinSystems[i];
-  if (ttwinvf[alpha - 1] >= this->userInputs.twinThresholdFraction1) {
-    if (NumberOfTwinnedRegionK > 0) {
-      NumberOfTwinnedRegionK = NumberOfTwinnedRegionK + 1;
-      if (NumberOfTwinnedRegionK>1){
-        NumberOfTwinnedRegionK=NumberOfTwinnedRegionK;
+  if ((!this->userInputs.enableOneTwinSys_Reorien)||(NumberOfTwinnedRegionK==0)){
+    unsigned int alpha = DeactiveTwinSystems[i];
+    if (ttwinvf[alpha - 1] >= this->userInputs.twinThresholdFraction1) {
+      if (NumberOfTwinnedRegionK > 0) {
+        NumberOfTwinnedRegionK = NumberOfTwinnedRegionK + 1;
+        if (NumberOfTwinnedRegionK>1){
+          NumberOfTwinnedRegionK=NumberOfTwinnedRegionK;
+        }
+        ActiveTwinSystemsR.resize(NumberOfTwinnedRegionK);
+        for (unsigned int j = 0;j < NumberOfTwinnedRegionK - 1;j++) {
+          ActiveTwinSystemsR[j] = tActiveTwinSystems[j];
+        }
+        ActiveTwinSystemsR[NumberOfTwinnedRegionK - 1] = alpha;
       }
-      ActiveTwinSystemsR.resize(NumberOfTwinnedRegionK);
-      for (unsigned int j = 0;j < NumberOfTwinnedRegionK - 1;j++) {
-        ActiveTwinSystemsR[j] = tActiveTwinSystems[j];
+      else {
+        NumberOfTwinnedRegionK = NumberOfTwinnedRegionK + 1;
+        ActiveTwinSystemsR.resize(NumberOfTwinnedRegionK);
+        ActiveTwinSystemsR[NumberOfTwinnedRegionK - 1] = alpha;
       }
-      ActiveTwinSystemsR[NumberOfTwinnedRegionK - 1] = alpha;
-    }
-    else {
-      NumberOfTwinnedRegionK = NumberOfTwinnedRegionK + 1;
-      ActiveTwinSystemsR.resize(NumberOfTwinnedRegionK);
-      ActiveTwinSystemsR[NumberOfTwinnedRegionK - 1] = alpha;
-    }
 
-    tActiveTwinSystems.resize(NumberOfTwinnedRegionK);
-    tActiveTwinSystems = ActiveTwinSystemsR;
+      tActiveTwinSystems.resize(NumberOfTwinnedRegionK);
+      tActiveTwinSystems = ActiveTwinSystemsR;
 
-    //unsigned int alpha2 = alpha*dim;
-    for (unsigned int k = 0;k < dim;k++) {
-      for (unsigned int l = 0;l < dim;l++) {
-        Fe_iter[cellID][quadPtID][k][l + alpha*dim] = Fe_iter[cellID][quadPtID][k][l];
-        Fp_iter[cellID][quadPtID][k][l + alpha*dim] = Fp_iter[cellID][quadPtID][k][l];
+      //unsigned int alpha2 = alpha*dim;
+      for (unsigned int k = 0;k < dim;k++) {
+        for (unsigned int l = 0;l < dim;l++) {
+          Fe_iter[cellID][quadPtID][k][l + alpha*dim] = Fe_iter[cellID][quadPtID][k][l];
+          Fp_iter[cellID][quadPtID][k][l + alpha*dim] = Fp_iter[cellID][quadPtID][k][l];
+        }
       }
-    }
 
 
-    for (unsigned int k = 0;k < n_slip_systemsWOtwin;k++) {
-      s_alpha_iter[cellID][quadPtID][n_Tslip_systems*alpha+k] = s_alpha_iter[cellID][quadPtID][k];
-    }
-    s_alpha_iter[cellID][quadPtID][alpha*n_Tslip_systems +n_slip_systemsWOtwin]= this->userInputs.initialSlipResistanceTwin1[n_twin_systems - 1];
-    s_alpha_iter[cellID][quadPtID][alpha*n_Tslip_systems +n_slip_systemsWOtwin+1]= this->userInputs.initialSlipResistanceTwin1[n_twin_systems - 1];
-    for (unsigned int k = 0;k < dim;k++) {
-      rotnew_iter[cellID][quadPtID][alpha*dim + k] = rot[cellID][quadPtID][alpha*dim + k];
-    }
-    for (unsigned int k = 0;k < n_slip_systemsWOtwin;k++) {
-      slipfraction_iter[cellID][quadPtID][alpha*n_slip_systemsWOtwin + k] = 0;
-    }
+      for (unsigned int k = 0;k < n_slip_systemsWOtwin;k++) {
+        s_alpha_iter[cellID][quadPtID][n_Tslip_systems*alpha+k] = s_alpha_iter[cellID][quadPtID][k];
+      }
+      s_alpha_iter[cellID][quadPtID][alpha*n_Tslip_systems +n_slip_systemsWOtwin]= this->userInputs.initialSlipResistanceTwin1[n_twin_systems_Size * 2 - 1];
+      s_alpha_iter[cellID][quadPtID][alpha*n_Tslip_systems +n_slip_systemsWOtwin+1]= this->userInputs.initialSlipResistanceTwin1[n_twin_systems_Size * 2 - 1];
+      for (unsigned int k = 0;k < dim;k++) {
+        rotnew_iter[cellID][quadPtID][alpha*dim + k] = rot[cellID][quadPtID][alpha*dim + k];
+      }
+      for (unsigned int k = 0;k < n_slip_systemsWOtwin;k++) {
+        slipfraction_iter[cellID][quadPtID][alpha*n_slip_systemsWOtwin + k] = 0;
+      }
 
-    TwinFlag_iter[cellID][quadPtID][alpha - 1] = 1;
+      TwinFlag_iter[cellID][quadPtID][alpha - 1] = 1;
 
+
+      if (this->userInputs.enableOneTwinSys_Reorien){
+        for (unsigned int kk = 0;kk < n_twin_systems_Size;kk++) {
+          if (kk!=(alpha - 1)){
+            s_alpha_iter[cellID][quadPtID][kk+n_slip_systemsWOtwin] = s_alpha_iter[cellID][quadPtID][kk+n_slip_systemsWOtwin]*1000000000;
+          }
+        }
+      }
+
+    }
   }
 }
 
