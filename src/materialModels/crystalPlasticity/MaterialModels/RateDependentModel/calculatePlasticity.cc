@@ -34,7 +34,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     Vector<double> rot1(dim);// Crystal orientation (Rodrigues representation)
     FullMatrix<double> Tinter_diff_guess(dim,dim), Ep_t (dim,dim);
     double Ep_eff_cum_t;
-    double tol1, delgam_ref,strexp,locres_tol,locres_tol2,h_back1,h_back2,r_back1,r_back2,m_back1,m_back2,back_lim_1,back_lim_2;
+    double tol1, delgam_ref,strexp,locres_tol,locres_tol2,h_back1,h_back2,r_back1,r_back2,m_back1,m_back2,back_lim_1,back_lim_2,b_back1,b_back2;
     unsigned int nitr1,nitr2;
     unsigned int ii;
     FullMatrix<double> rotmat(dim,dim); // Rotation matrix of the crystal orientation
