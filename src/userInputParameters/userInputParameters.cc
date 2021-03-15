@@ -62,6 +62,7 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
   skipQuadratureOutputSteps=1;
 
   delT=parameter_handler.get_double("Time increments");
+  criticalDeltaFCriteria=parameter_handler.get_double("critical DeltaF Criteria");
   totalTime=parameter_handler.get_double("Total time");
 
   enableSimpleBCs=parameter_handler.get_bool("Use Simple BCs");
@@ -482,6 +483,7 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("External mesh parameter","0",dealii::Patterns::Double(),"The external mesh parameter: The ratio of defiend region size to the Domain size");
 
   parameter_handler.declare_entry("Time increments","-1",dealii::Patterns::Double(),"delta T for every increment");
+  parameter_handler.declare_entry("critical DeltaF Criteria","10000",dealii::Patterns::Double(),"critical DeltaF Criteria");
   parameter_handler.declare_entry("Total time","-1",dealii::Patterns::Double(),"Total simulation time");
 
   parameter_handler.declare_entry("Use Simple BCs","true",dealii::Patterns::Bool(),"Flag to indicate whether to use Simple (Basic) BCs");

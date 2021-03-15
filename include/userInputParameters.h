@@ -38,6 +38,7 @@ public:
   std::string externalMeshFileName;
   double externalMeshParameter;
   double delT; // Time increment
+  double criticalDeltaFCriteria;  //Critical DeltaF Criteria
   double totalTime; // Total simulation time
 
   bool enableSimpleBCs; // Specify whether to use Simple (Basic) BCs
