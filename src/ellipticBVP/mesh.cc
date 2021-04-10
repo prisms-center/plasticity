@@ -31,13 +31,7 @@ void ellipticBVP<dim>::mesh(){
 
     GridGenerator::subdivided_hyper_rectangle (triangulation2, userInputs.subdivisions, Point<dim>(), Point<dim>(userInputs.span[0],userInputs.span[1],userInputs.span[2]), true);
 
-  //In the case of Periodic BCs, it connects the periodic faces to each other,
-  //and add those dofs as ghost cells of the other face.
-    if(userInputs.enablePeriodicBCs){
-      // Set which (if any) faces of the triangulation are periodic
-      setPeriodicity();
-    }
-    //////In the case of element deletion, this section will be active
+   //////In the case of element deletion, this section will be active
     if(userInputs.enableElementDeletion){
       unsigned int gID;
       orientations_Mesh.loadOrientations(userInputs.grainIDFile,
@@ -95,7 +89,13 @@ void ellipticBVP<dim>::mesh(){
       triangulation.copy_triangulation(triangulation2);
     }
 
-
+  //In the case of Periodic BCs, it connects the periodic faces to each other,
+  //and add those dofs as ghost cells of the other face.
+    if(userInputs.enablePeriodicBCs){
+      // Set which (if any) faces of the triangulation are periodic
+      setPeriodicity();
+    }
+    
     triangulation.refine_global (userInputs.meshRefineFactor);
 
     //Output image of the mesh in eps format
