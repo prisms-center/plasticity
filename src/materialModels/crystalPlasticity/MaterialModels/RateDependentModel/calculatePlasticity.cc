@@ -1111,6 +1111,8 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
             for (unsigned int i = 0;i < n_twin_systems;i++) {
               s_alpha_iter[cellID][quadPtID][n_slip_systems + i] =100000;
             }
+            Fe_iter[cellID][quadPtID]=IdentityMatrix(dim);
+            Fp_iter[cellID][quadPtID]=IdentityMatrix(dim);
           }
         }
       }
