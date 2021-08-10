@@ -109,16 +109,16 @@ set Enable User Material Model                   = true
 set Enable User Material Model 1                  = true
 
 # Number of User Material Constants in a Material model Phase 1
-set Number of User Material Constants 1              = 8
+set Number of User Material Constants 1              = 12
 
 # Number of User Material State Variables in a Material model Phase 1
-set Number of User Material State Variables 1        = 0
+set Number of User Material State Variables 1        = 62
 
 # Material Constants in a Material model Phase 1
-set User Material Constants 1             = 0.0001, 0.04, 0.000000001, 0.0000001, 0.00000001,  11.0, 1000, 1000
+set User Material Constants 1             = 1.0e-3, 0.04 , 1.0e-6 , 1.0e-6 ,  10000 , 10000,  0, 0, 0, 0 , 0.0, 0.0
 
 # Material State Variables in a Material model Phase 1
-set User Material State Variables Initial Values 1        = 0
+set User Material State Variables Initial Values 1        = 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
 
 
 #   Elastic Stiffness Matrix -Voigt Notation (MPa)
