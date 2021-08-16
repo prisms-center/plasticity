@@ -658,7 +658,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
       } // Outer while
       ////////////////////////////////////End Nonlinear iteration for Slip increments////////////////////////////////////
-    }
+    ////previous end}
 
     s_alpha_tau=s_alpha_it;
     for(unsigned int j=0 ; j<2*dim ; j++)
@@ -705,9 +705,11 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
     for(unsigned int i=0 ; i<n_slip_systems ; i++)
     slipfraction_tau(i) = slipfraction_t(i) + fabs(delgam_tau(i)) ;
+    slipfraction_t=slipfraction_tau;
 
     for(unsigned int i=0 ; i<n_Tslip_systems ; i++)
     signed_slip_tau(i) = signed_slip_t(i) + delgam_tau(i) ;
+    signed_slip_t=signed_slip_tau;
 
     for (unsigned int i = 0;i<n_Tslip_systems;i++){
       temp7=0.0;
@@ -725,14 +727,47 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
       }
     }
+    Ep_t=Ep_tau;
+
     del_Ep_eff_cum_tau=sqrt(2.0/3.0)*del_Ep_tau.frobenius_norm();
     Ep_eff_cum_tau=Ep_eff_cum_t+del_Ep_eff_cum_tau;
+    Ep_eff_cum_t=Ep_eff_cum_tau;
 
     for(unsigned int i=0 ; i<n_twin_systems ; i++)
     twinfraction_tau(i) = twinfraction_t(i) + fabs(delgam_tau(i+n_slip_systems)) ;
-
+    twinfraction_t=twinfraction_tau;
     temp.equ(1.0,matrixExponential(LP_acc)) ;
     temp.mmult(FP_tau,FP_t);
+    FP_t=FP_tau;
+  }
+
+  ///////////////Reading the previous converged state Variables////////////////
+    FE_t=Fe_conv[cellID][quadPtID];
+    FP_t=Fp_conv[cellID][quadPtID];
+
+    for(unsigned int i=0 ; i<n_Tslip_systems ; i++){
+      W_kh_t1(i) = stateVar_conv[cellID][quadPtID][i];
+      W_kh_t2(i) = stateVar_conv[cellID][quadPtID][i+n_Tslip_systems];
+      signed_slip_t(i)=stateVar_conv[cellID][quadPtID][i+2*n_Tslip_systems];
+      s_alpha_t(i)=s_alpha_conv[cellID][quadPtID][i];
+    }
+
+    ii=0;
+    for(unsigned int i=0 ; i<dim ; i++){
+      for(unsigned int j=0 ; j<dim ; j++){
+        Ep_t[i][j]=stateVar_conv[cellID][quadPtID][ii+4*n_Tslip_systems];
+        ii=ii+1;
+      }
+    }
+
+    Ep_eff_cum_t=stateVar_conv[cellID][quadPtID][4*n_Tslip_systems+dim*dim];
+
+    for(unsigned int i=0 ; i<n_slip_systems ; i++)
+    slipfraction_t(i) = slipfraction_conv[cellID][quadPtID][i] ;
+
+    for(unsigned int i=0 ; i<n_twin_systems ; i++)
+    twinfraction_t(i) = twinfraction_conv[cellID][quadPtID][i] ;
+  /////////////////////////////////////////////////////////////////////////////
 
     FP_inv_tau = 0.0; FP_inv_tau.invert(FP_tau);
     FE_tau = 0.0;
