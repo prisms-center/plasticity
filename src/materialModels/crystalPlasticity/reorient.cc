@@ -23,6 +23,13 @@ void crystalPlasticity<dim>::reorient() {
 
             Fe_old=Fe_conv[i][j];
             Fe_new=Fe_iter[i][j];
+            
+            /////In the case of twin reorientation, do not update the orientation for one loading increment
+            if (twin_conv[i][j]!=twin_iter[i][j]){
+              Fe_old=Fe_new;
+            }
+            ///////////////////////////////////////////////////////////////////////////////////
+            
             Fe_old.Tmmult(C_old_temp,Fe_old);
             C_old=C_old_temp;
             C_old.compute_eigenvalues_symmetric(0.0,200000.0,1e-15,eigenvalues, eigenvectors);
@@ -70,7 +77,18 @@ void crystalPlasticity<dim>::reorient() {
             dr=0.0;	dr.add(1.0, Omega_vec); dr.add(1.0,dot_term); dr.add(1.0,cross); dr.equ(0.5,dr);
 
             rnew=0.0; rnew.add(1.0,rold); rnew.add(1.0,dr);
+            
+            ///////Very large Rodrigues vector norm leads to Nan or Inf for updated rnew. Accordingly, we keep the maximum norm to max_rnew_Norm=10000.
+            double rnew_Norm, max_rnew_Norm;
+            max_rnew_Norm=10000;
+            rnew_Norm=sqrt(rnew(0)*rnew(0)+rnew(1)*rnew(1)+rnew(2)*rnew(2));
 
+            if (rnew_Norm>max_rnew_Norm){
+                rnew(0)=rnew(0)*max_rnew_Norm/rnew_Norm;
+                rnew(1)=rnew(1)*max_rnew_Norm/rnew_Norm;
+                rnew(2)=rnew(2)*max_rnew_Norm/rnew_Norm;
+            }
+            ///////////////////////
 
             rotnew_conv[i][j]=rnew;
 
