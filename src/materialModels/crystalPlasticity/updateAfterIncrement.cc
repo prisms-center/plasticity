@@ -13,6 +13,16 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 	const unsigned int num_quad_points = quadrature.size();
 	const unsigned int   dofs_per_cell = this->FE.dofs_per_cell;
 	std::vector<unsigned int> local_dof_indices(dofs_per_cell);
+	if (this->userInputs.flagTaylorModel){
+		if(initCalled == false){
+			if(this->userInputs.enableAdvancedTwinModel){
+				init2(num_quad_points);
+			}
+			else{
+				init(num_quad_points);
+			}
+		}
+	}
 	//loop over elements
 	unsigned int cellID = 0;
 	typename DoFHandler<dim>::active_cell_iterator cell = this->dofHandler.begin_active(), endc = this->dofHandler.end();
@@ -22,23 +32,29 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 			//loop over quadrature points
 			cell->set_user_index(fe_values.get_cell()->user_index());
 			cell->get_dof_indices(local_dof_indices);
-
 			Vector<double> Ulocal(dofs_per_cell);
-
-			for (unsigned int i = 0; i < dofs_per_cell; i++) {
-				Ulocal[i] = this->solutionWithGhosts[local_dof_indices[i]];
+			
+			if (!this->userInputs.flagTaylorModel){
+				for (unsigned int i = 0; i < dofs_per_cell; i++) {
+					Ulocal[i] = this->solutionWithGhosts[local_dof_indices[i]];
+				}
 			}
 			for (unsigned int q = 0; q < num_quad_points; ++q) {
 				//Get deformation gradient
 				F = 0.0;
-				for (unsigned int d = 0; d < dofs_per_cell; ++d) {
-					unsigned int i = fe_values.get_fe().system_to_component_index(d).first;
-					for (unsigned int j = 0; j < dim; ++j) {
-						F[i][j] += Ulocal(d)*fe_values.shape_grad(d, q)[j]; // u_{i,j}= U(d)*N(d)_{,j}, where d is the DOF correonding to the i'th dimension
-					}
+				if (this->userInputs.flagTaylorModel){
+					F =this->Fprev;
 				}
-				for (unsigned int i = 0; i < dim; ++i) {
-					F[i][i] += 1;
+				else{
+					for (unsigned int d = 0; d < dofs_per_cell; ++d) {
+						unsigned int i = fe_values.get_fe().system_to_component_index(d).first;
+						for (unsigned int j = 0; j < dim; ++j) {
+							F[i][j] += Ulocal(d)*fe_values.shape_grad(d, q)[j]; // u_{i,j}= U(d)*N(d)_{,j}, where d is the DOF correonding to the i'th dimension
+						}
+					}
+					for (unsigned int i = 0; i < dim; ++i) {
+						F[i][i] += 1;
+					}
 				}
 				//Update strain, stress, and tangent for current time step/quadrature point
 				calculatePlasticity(cellID, q, 0);
@@ -121,7 +137,7 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 					this->postprocessValues(cellID, q, 1, 0) = eqvstrain;
 					this->postprocessValues(cellID, q, 2, 0) = twin_ouput[cellID][q];
 
-////////User Defined Variables for visualization outputs (output_Var1 to output_Var24)////////
+					////////User Defined Variables for visualization outputs (output_Var1 to output_Var24)////////
 					this->postprocessValues(cellID, q, 3, 0) = 0;
 					this->postprocessValues(cellID, q, 4, 0) = 0;
 					this->postprocessValues(cellID, q, 5, 0) = 0;
@@ -217,20 +233,20 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 	//////////////////////TabularOutput Start///////////////
 	std::vector<unsigned int> tabularTimeInputIncInt;
 	std::vector<double> tabularTimeInputInc;
-if (this->userInputs.tabularOutput){
+	if (this->userInputs.tabularOutput){
 
-	tabularTimeInputInc=this->userInputs.tabularTimeOutput;
-	for(unsigned int i=0;i<this->userInputs.tabularTimeOutput.size();i++){
-	  tabularTimeInputInc[i]=tabularTimeInputInc[i]/this->delT;
-	}
+		tabularTimeInputInc=this->userInputs.tabularTimeOutput;
+		for(unsigned int i=0;i<this->userInputs.tabularTimeOutput.size();i++){
+			tabularTimeInputInc[i]=tabularTimeInputInc[i]/this->delT;
+		}
 
-	tabularTimeInputIncInt.resize(this->userInputs.tabularTimeOutput.size(),0);
-	///Converting to an integer always rounds down, even if the fraction part is 0.99999999.
-	//Hence, I add 0.1 to make sure we always get the correct integer.
-	for(unsigned int i=0;i<this->userInputs.tabularTimeOutput.size();i++){
-	  tabularTimeInputIncInt[i]=int(tabularTimeInputInc[i]+0.1);
+		tabularTimeInputIncInt.resize(this->userInputs.tabularTimeOutput.size(),0);
+		///Converting to an integer always rounds down, even if the fraction part is 0.99999999.
+		//Hence, I add 0.1 to make sure we always get the correct integer.
+		for(unsigned int i=0;i<this->userInputs.tabularTimeOutput.size();i++){
+			tabularTimeInputIncInt[i]=int(tabularTimeInputInc[i]+0.1);
+		}
 	}
-}
 	//////////////////////TabularOutput Finish///////////////
 	if (this->userInputs.writeQuadratureOutput) {
 		if (((!this->userInputs.tabularOutput)&&((this->currentIncrement+1)%this->userInputs.skipQuadratureOutputSteps == 0))||((this->userInputs.tabularOutput)&& (std::count(tabularTimeInputIncInt.begin(), tabularTimeInputIncInt.end(), (this->currentIncrement+1))==1))){

@@ -14,6 +14,7 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
   parameter_handler.parse_input(inputfile);
   #endif
 
+  flagTaylorModel = parameter_handler.get_bool("Flag To Use Taylor Model");
   dim=parameter_handler.get_integer("Number of dimensions");
 
   feOrder=parameter_handler.get_integer("Order of finite elements");
@@ -464,6 +465,7 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
 
 void userInputParameters::declare_parameters(dealii::ParameterHandler & parameter_handler){
 
+  parameter_handler.declare_entry("Flag To Use Taylor Model","false",dealii::Patterns::Bool(),"Flag To Use Taylor Model");
   parameter_handler.declare_entry("Number of dimensions","-1",dealii::Patterns::Integer(),"Number of physical dimensions for the simulation");
   parameter_handler.declare_entry("Order of finite elements","-1",dealii::Patterns::Integer(),"Basis function interpolation order (1-linear)");
   parameter_handler.declare_entry("Order of quadrature","-1",dealii::Patterns::Integer(),"Quadrature point order n^3 (2->8 quadrature points)");
