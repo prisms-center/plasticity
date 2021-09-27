@@ -19,6 +19,7 @@ public:
 
   //Using Taylor Model//
   bool flagTaylorModel;
+  unsigned int numberTaylorSubsteps;
   /*FE parameters*/
   unsigned int feOrder; // Basis function interpolation order (1-linear)
   unsigned int quadOrder;// Quadrature point order n^3 (2->8 quadrature points)

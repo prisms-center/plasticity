@@ -64,6 +64,7 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
 
   delT=parameter_handler.get_double("Time increments");
   criticalDeltaFCriteria=parameter_handler.get_double("critical DeltaF Criteria");
+  numberTaylorSubsteps=parameter_handler.get_integer("Number of Taylor Substeps");
   totalTime=parameter_handler.get_double("Total time");
 
   enableSimpleBCs=parameter_handler.get_bool("Use Simple BCs");
@@ -552,6 +553,8 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Output Equivalent stress","false",dealii::Patterns::Bool(),"Output Equivalent stress");
   parameter_handler.declare_entry("Output Grain ID","false",dealii::Patterns::Bool(),"Output Grain ID");
   parameter_handler.declare_entry("Output Twin fractions","false",dealii::Patterns::Bool(),"Output Twin fractions");
+
+  parameter_handler.declare_entry("Number of Taylor Substeps","1",dealii::Patterns::Integer(),"Number of Taylor Substeps");
 
   parameter_handler.declare_entry("Output Variable 1","false",dealii::Patterns::Bool(),"Output Variable 1");
   parameter_handler.declare_entry("Output Variable 2","false",dealii::Patterns::Bool(),"Output Variable 2");

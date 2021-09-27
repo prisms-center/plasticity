@@ -32,7 +32,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     Vector<double> s_alpha_t(n_Tslip_systems),slipfraction_t(n_slip_systems),twinfraction_t(n_twin_systems); // Slip resistance
     Vector<double> W_kh_t(n_Tslip_systems),W_kh_t1(n_Tslip_systems),W_kh_t2(n_Tslip_systems),signed_slip_t(n_Tslip_systems) ;
     Vector<double> rot1(dim);// Crystal orientation (Rodrigues representation)
-    FullMatrix<double> Tinter_diff_guess(dim,dim), Ep_t (dim,dim);
+    FullMatrix<double> Tinter_diff_guess(dim,dim), Ep_t (dim,dim), iMinusL (dim,dim);
     double Ep_eff_cum_t;
     double tol1, delgam_ref,strexp,locres_tol,locres_tol2,h_back1,h_back2,r_back1,r_back2,m_back1,m_back2,back_lim_1,back_lim_2,b_back1,b_back2;
     unsigned int nitr1,nitr2;
@@ -96,7 +96,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     double twin_pos, twin_max;
     Vector<double> quat1(4), rod(3), quat2(4), quatprod(4);
 
-    double Criteria_Delta_F,inverseNumberOfCuts;
+    double Criteria_Delta_F,inverseNumberOfCuts,Criteria_Delta_F_2;
     unsigned int  numberOfCuts;
     FullMatrix<double> Delta_F,div_Delta_F;
 
@@ -247,18 +247,63 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
     /////////////Dividing the applied DeltaF to small increments///////
     FE_t.mmult(F_t,FP_t) ;
+
     Delta_F.reinit(dim,dim);div_Delta_F.reinit(dim,dim);
     Delta_F=0;
-    Delta_F.add(-1,F_t,1.0,F_tau) ;
-    Criteria_Delta_F=fabs(Delta_F[0][0])+fabs(Delta_F[1][1])+fabs(Delta_F[2][2])+2*fabs(Delta_F[0][1])+2*fabs(Delta_F[0][2])+2*fabs(Delta_F[1][2])+2*fabs(Delta_F[1][0])+2*fabs(Delta_F[2][0])+2*fabs(Delta_F[2][1]);
-    numberOfCuts=std::floor(Criteria_Delta_F/this->userInputs.criticalDeltaFCriteria);
-
-    if (numberOfCuts==0) numberOfCuts=1;
-    inverseNumberOfCuts=1.0/numberOfCuts;
-
-    //delgam_ref=delgam_ref/numberOfCuts;
     div_Delta_F=0;
-    div_Delta_F.add(inverseNumberOfCuts,Delta_F);
+
+    if (!this->userInputs.flagTaylorModel){
+      Delta_F.add(-1,F_t,1.0,F_tau) ;
+      if (this->userInputs.numberTaylorSubsteps==1){
+        Criteria_Delta_F=fabs(Delta_F[0][0])+fabs(Delta_F[1][1])+fabs(Delta_F[2][2])+2*fabs(Delta_F[0][1])+2*fabs(Delta_F[0][2])+2*fabs(Delta_F[1][2])+2*fabs(Delta_F[1][0])+2*fabs(Delta_F[2][0])+2*fabs(Delta_F[2][1]);
+        numberOfCuts=std::floor(Criteria_Delta_F/this->userInputs.criticalDeltaFCriteria);
+      }
+      else{
+        numberOfCuts=this->userInputs.numberTaylorSubsteps;
+      }
+
+      if (numberOfCuts==0) numberOfCuts=1;
+      inverseNumberOfCuts=1.0/numberOfCuts;
+      div_Delta_F.add(inverseNumberOfCuts,Delta_F);
+    }
+    else{
+      numberOfCuts=this->userInputs.numberTaylorSubsteps;
+      if (numberOfCuts==0) numberOfCuts=1;
+      inverseNumberOfCuts=1.0/numberOfCuts;
+    }
+
+    ///Criteria_Delta_F_2 defines if the current F_t is similar to identity matrix (right after reorientation)
+    temp=0;
+    temp1=IdentityMatrix(dim);
+    temp.add(-1,F_t,1.0,temp1) ;
+    Criteria_Delta_F_2=0;
+    for (unsigned int jj = 0;jj<dim;jj++) {
+      for (unsigned int kk = 0;kk<dim;kk++) {
+        Criteria_Delta_F_2=Criteria_Delta_F_2+temp[jj][kk]*temp[jj][kk];
+      }
+    }
+    ///The following condition is set for the case of right after twin reorientation. In that case, twin_conv becomes 1 and
+    ///F_t becomes the identity matrix (or the difference of F_t from identity matrix becomes very small). In that case, the dt
+    ///should not be divided by numberOfCuts, because numberOfCuts is artificially small!!! We keep Dt as it is for this step.
+    if ((twin_conv[cellID][quadPtID] != 1.0)||(Criteria_Delta_F_2>1e-8)) {
+      ///The Dt for constitutive model integration (not the Algorithmic tangent modulus) should be divided by numberOfCuts because
+      ///in the calculation within each mini-step, we update the variable_t to the previously updated variable_tau.
+      ///Accordingly, we should use Dt/numberOfCuts as the new timestep in this part (not the Algorithmic tangent modulus).
+      ///Updating Dt is refelected here as updating delgam_ref (check line 111 for original calculation of delgam_ref).
+      delgam_ref=delgam_ref/numberOfCuts;
+    }
+    else{
+      ///This is the condition when we have right after reorientation
+      ///In the case of Taylor model, we should march all the way to the current F from the identity matrix.
+      ///The number of Cuts should be defined in this case as below:
+      if ((this->userInputs.flagTaylorModel)||(this->userInputs.numberTaylorSubsteps>1)){
+        delgam_ref=delgam_ref/numberOfCuts;
+        numberOfCuts=numberOfCuts*(this->currentIncrement+1);
+        inverseNumberOfCuts=1.0/(this->currentIncrement+1.0);
+        div_Delta_F*=inverseNumberOfCuts;
+      }
+    }
+
     F_tau=F_t;
     //////////////////////////////////////////////////////////////////
 
@@ -289,8 +334,22 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
 
     for(unsigned int Inc=0;Inc<numberOfCuts;Inc++){
 
-      F_tau.add(1,div_Delta_F) ;
-      if (Inc==(numberOfCuts-1)) F_tau=F;
+      if (!this->userInputs.flagTaylorModel){
+        F_tau.add(1,div_Delta_F) ;
+        if (Inc==(numberOfCuts-1)) F_tau=F;
+      }
+      else{
+        iMinusL=IdentityMatrix(dim);
+        temp.reinit(dim,dim);
+        temp1.reinit(dim,dim);
+        temp1=this->targetVelGrad;
+        ///We should use Dt/numberOfCuts as new Dt in this part (not the Algorithmic tangent modulus).
+        temp1*=this->delT/this->userInputs.numberTaylorSubsteps;
+        iMinusL.add(-1,temp1); //I-L
+        temp.invert(iMinusL); //inverse(I-L)
+        temp.mmult(F_tau,F_tau); // F=inverse(I-L)*Fprev
+        if (numberOfCuts==1) F_tau=F;
+      }
 
       del_Ep_tau=0;
       FP_inv_t = 0.0;
@@ -661,6 +720,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     ////previous end}
 
     s_alpha_tau=s_alpha_it;
+    s_alpha_t=s_alpha_tau;
     for(unsigned int j=0 ; j<2*dim ; j++)
     nv1(j) = stateVar_it(j) ;
     matform(T_star_iter,nv1) ;
@@ -741,34 +801,6 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     FP_t=FP_tau;
   }
 
-  ///////////////Reading the previous converged state Variables////////////////
-    FE_t=Fe_conv[cellID][quadPtID];
-    FP_t=Fp_conv[cellID][quadPtID];
-
-    for(unsigned int i=0 ; i<n_Tslip_systems ; i++){
-      W_kh_t1(i) = stateVar_conv[cellID][quadPtID][i];
-      W_kh_t2(i) = stateVar_conv[cellID][quadPtID][i+n_Tslip_systems];
-      signed_slip_t(i)=stateVar_conv[cellID][quadPtID][i+2*n_Tslip_systems];
-      s_alpha_t(i)=s_alpha_conv[cellID][quadPtID][i];
-    }
-
-    ii=0;
-    for(unsigned int i=0 ; i<dim ; i++){
-      for(unsigned int j=0 ; j<dim ; j++){
-        Ep_t[i][j]=stateVar_conv[cellID][quadPtID][ii+4*n_Tslip_systems];
-        ii=ii+1;
-      }
-    }
-
-    Ep_eff_cum_t=stateVar_conv[cellID][quadPtID][4*n_Tslip_systems+dim*dim];
-
-    for(unsigned int i=0 ; i<n_slip_systems ; i++)
-    slipfraction_t(i) = slipfraction_conv[cellID][quadPtID][i] ;
-
-    for(unsigned int i=0 ; i<n_twin_systems ; i++)
-    twinfraction_t(i) = twinfraction_conv[cellID][quadPtID][i] ;
-  /////////////////////////////////////////////////////////////////////////////
-
     FP_inv_tau = 0.0; FP_inv_tau.invert(FP_tau);
     FE_tau = 0.0;
     F_tau.mmult(FE_tau, FP_inv_tau);
@@ -810,6 +842,39 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     if(StiffnessCalFlag==1){
+      ///////////////Reading the previous converged state Variables for Algorithmic Tangent Modulus calculation////////////////
+        FE_t=Fe_conv[cellID][quadPtID];
+        FP_t=Fp_conv[cellID][quadPtID];
+
+        for(unsigned int i=0 ; i<n_Tslip_systems ; i++){
+          W_kh_t1(i) = stateVar_conv[cellID][quadPtID][i];
+          W_kh_t2(i) = stateVar_conv[cellID][quadPtID][i+n_Tslip_systems];
+          signed_slip_t(i)=stateVar_conv[cellID][quadPtID][i+2*n_Tslip_systems];
+          s_alpha_t(i)=s_alpha_conv[cellID][quadPtID][i];
+        }
+
+        ii=0;
+        for(unsigned int i=0 ; i<dim ; i++){
+          for(unsigned int j=0 ; j<dim ; j++){
+            Ep_t[i][j]=stateVar_conv[cellID][quadPtID][ii+4*n_Tslip_systems];
+            ii=ii+1;
+          }
+        }
+
+        Ep_eff_cum_t=stateVar_conv[cellID][quadPtID][4*n_Tslip_systems+dim*dim];
+
+        for(unsigned int i=0 ; i<n_slip_systems ; i++)
+        slipfraction_t(i) = slipfraction_conv[cellID][quadPtID][i] ;
+
+        for(unsigned int i=0 ; i<n_twin_systems ; i++)
+        twinfraction_t(i) = twinfraction_conv[cellID][quadPtID][i] ;
+      /////////////////////////////////////////////////////////////////////////////
+
+      ///For the Algorithmic Tangent Modulus calculation, the Dt should be returned back to the increment Dt. The reason
+      ///for this is the initial value are brought back to the previously converged values.
+      ///Accordingly, the time between the variable_t and variable_tau is the original Dt and not the one divided by numberOfCuts
+      ///for constitutive model integration. Hence, Dt should be brought back to the original value in line 111 as below:
+      delgam_ref = UserMatConstants(0)*this->userInputs.delT ;
       // Contribution 1 - Most straightforward because no need to invoke constitutive model
       FE_tau.mmult(temp,T_star_tau);
       temp.mTmult(temp1,FE_tau);
@@ -1097,6 +1162,9 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     for(unsigned int i=0 ; i<n_slip_systems ; i++)
     slipfraction_iter[cellID][quadPtID][i]=slipfraction_tau(i);
 
+    if (this->userInputs.flagTaylorModel){
+      F=F_tau; // Updating Deformation Gradient if it is Taylor model
+    }
     /////// REORIENTATION Due to TWINNING ////////////////////
 
     if (enableTwinning){
