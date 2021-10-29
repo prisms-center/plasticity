@@ -794,7 +794,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
     Ep_eff_cum_t=Ep_eff_cum_tau;
 
     for(unsigned int i=0 ; i<n_twin_systems ; i++)
-    twinfraction_tau(i) = twinfraction_t(i) + fabs(delgam_tau(i+n_slip_systems)) ;
+    twinfraction_tau(i) = twinfraction_t(i) + fabs(delgam_tau(i+n_slip_systems))/twinShear;
     twinfraction_t=twinfraction_tau;
     temp.equ(1.0,matrixExponential(LP_acc)) ;
     temp.mmult(FP_tau,FP_t);
