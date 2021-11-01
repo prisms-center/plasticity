@@ -112,8 +112,7 @@ PRISMS-Plasticity
 
 <B>Mailing List:</B>
 
- + prismsplasticity.users@umich.edu
- + prismsplasticity.dev@umich.edu  
+ + prisms-cpfe-users@googlegroups.com
  
  <B>Current Developers:</B>
 
