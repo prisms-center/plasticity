@@ -4,9 +4,10 @@
 //Specify Dirichlet boundary conditions
 template <int dim>
 void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value){
-  unsigned int i ;
+  unsigned int i,dof_1, dof_2 ;
 
   Vector<double> externalMeshParameterBCs(dim),nodalDisplacementBCsToleranceVector(dim);
+  double alpha_Torsion;
   for (unsigned int i=0; i<dim; ++i) {
     externalMeshParameterBCs(i)=userInputs.externalMeshParameter*userInputs.span[i];
     nodalDisplacementBCsToleranceVector(i)=userInputs.nodalDisplacementBCsTolerance*userInputs.span[i];
@@ -110,6 +111,33 @@ void ellipticBVP<dim>::setBoundaryValues(const Point<dim>& node, const unsigned 
                 flag=true; value=deluConstraint[i][dof];return;}
         }
     }
+  }
+
+  if(userInputs.enableTorsionBCs){
+    currentTime=delT*(currentIncrement+1);
+
+    if (currentIncrement==0){
+      timeCounter=1;
+    }
+    if (currentTime>userInputs.tabularTimeInputTorsion[timeCounter]){
+      timeCounter=timeCounter+1;
+    }
+    alpha_Torsion=userInputs.tabularTorsionBCsInput[timeCounter]*delT;
+
+    if (userInputs.torsionAxis==2){ //z-axis is torsion axis
+      dof_1=0; dof_2=1;
+    }
+    else if (userInputs.torsionAxis==0){ //x-axis is torsion axis
+      dof_1=1; dof_2=2;
+    }
+    else{ //y-axis is torsion axis
+      dof_1=2; dof_2=0;
+    }
+
+    if ((node[userInputs.torsionAxis] >= (userInputs.span[userInputs.torsionAxis]-externalMeshParameterBCs(userInputs.torsionAxis)))&&(dof==dof_1)){
+                flag=true; value=-(node[dof_2]-userInputs.centerTorsion[1])*alpha_Torsion;}
+    if ((node[userInputs.torsionAxis] >= (userInputs.span[userInputs.torsionAxis]-externalMeshParameterBCs(userInputs.torsionAxis)))&&(dof==dof_2)){
+                flag=true; value=(node[dof_1]-userInputs.centerTorsion[0])*alpha_Torsion;}
   }
 
   if(userInputs.enableNodalDisplacementBCs){

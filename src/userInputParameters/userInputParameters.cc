@@ -84,6 +84,11 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
   tabularNumberofBCs=parameter_handler.get_integer("Number of tabular boundary conditions");
   tabularTimeInput=dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Tabular Time Table")));
 
+  enableTorsionBCs=parameter_handler.get_bool("Use Torsion BCs");
+  torsionAxis=parameter_handler.get_integer("Torsion Axis  x 0  y 1  z 2");
+  tabularTimeInputTorsion=dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Tabular Time Table for Torsion")));
+  tabularTorsionBCsInput=dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Tabular Torsion BCs")));
+  centerTorsion=dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Center point for Torsion")));
 
   enableDICpipeline=parameter_handler.get_bool("Use DIC pipeline");
   DIC_InputStepNumber=parameter_handler.get_integer("Number of Input data for DIC experiment");
@@ -504,6 +509,12 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Number of time data for Tabular BCs","0",dealii::Patterns::Integer(),"Number of time data for Tabular BCs (it includes the initial BCs)");
   parameter_handler.declare_entry("Number of tabular boundary conditions","1",dealii::Patterns::Integer(),"Number of tabular boundary conditions");
   parameter_handler.declare_entry("Tabular Time Table","",dealii::Patterns::List(dealii::Patterns::Double()),"Table for Time intervals of Tabular BCs");
+
+  parameter_handler.declare_entry("Use Torsion BCs","false",dealii::Patterns::Bool(),"Flag to indicate whether to use Torsion BCs");
+  parameter_handler.declare_entry("Torsion Axis  x 0  y 1  z 2","2",dealii::Patterns::Integer(),"Torsion Axis  x 0  y 1  z 2");
+  parameter_handler.declare_entry("Tabular Time Table for Torsion","",dealii::Patterns::List(dealii::Patterns::Double()),"Table for Time intervals of Tabular Torsion BCs");
+  parameter_handler.declare_entry("Tabular Torsion BCs","",dealii::Patterns::List(dealii::Patterns::Double()),"Tabular Torsion BCs (Angular velocity)");
+  parameter_handler.declare_entry("Center point for Torsion","",dealii::Patterns::List(dealii::Patterns::Double()),"Center point for Torsion (x,y) for torsion axis=z or (y,z) for torsion axis=x or (z,x) for torsion axis=y");
 
   parameter_handler.declare_entry("Use DIC pipeline","false",dealii::Patterns::Bool(),"Flag to indicate whether to use DIC experiment pipeline");
   parameter_handler.declare_entry("Number of Input data for DIC experiment","0",dealii::Patterns::Integer(),"Number of Input data for DIC experiment (it includes the initial BCs)");

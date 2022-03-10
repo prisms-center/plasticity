@@ -58,6 +58,11 @@ public:
   std::vector<double> tabularTimeInput; //Table for Time intervals of Tabular BCs
   std::vector<double> tabularDispInput; //Table for Displacements of Tabular BCs
 
+  bool enableTorsionBCs; // Specify whether to use Tabular Torsion BCs
+  unsigned int torsionAxis; //Axis of Torsion (x=0; y=1; z=2)
+  std::vector<double> tabularTimeInputTorsion; //Table for Time intervals of Tabular Torsion BCs
+  std::vector<double> tabularTorsionBCsInput; //Table for Anglular velocity (radians) of Tabular Torsion BCs
+  std::vector<double> centerTorsion; //Center point for Torsion (x,y) for torsion axis=z or (y,z) for torsion axis=x or (z,x) for torsion axis=y
 
   bool enableDICpipeline; // Specify whether to use DIC pipeline
   unsigned int DIC_InputStepNumber, X_dic, Y_dic, Z_dic; //Number of Input data for DIC experiment
