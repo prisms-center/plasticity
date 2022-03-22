@@ -153,6 +153,11 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
   output_Var23 = parameter_handler.get_bool("Output Variable 23");
   output_Var24 = parameter_handler.get_bool("Output Variable 24");
 
+  flagBufferLayer = parameter_handler.get_bool("Output Buffer Layer Removal Feature");
+  dimBufferLayer=parameter_handler.get_integer("Output Buffer Layer Removal dimension x0 y1 z2");
+  lowerBufferLayer=parameter_handler.get_double("Output Buffer Layer Removal Lower Bound");
+  upperBufferLayer=parameter_handler.get_double("Output Buffer Layer Removal Upper Bound");
+
   maxLinearSolverIterations=parameter_handler.get_integer("Maximum linear solver iterations");
   maxNonLinearIterations=parameter_handler.get_integer("Maximum non linear iterations");
   relLinearSolverTolerance=parameter_handler.get_double("Relative linear solver tolerance");
@@ -591,6 +596,11 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Output Variable 22","false",dealii::Patterns::Bool(),"Output Variable 22");
   parameter_handler.declare_entry("Output Variable 23","false",dealii::Patterns::Bool(),"Output Variable 23");
   parameter_handler.declare_entry("Output Variable 24","false",dealii::Patterns::Bool(),"Output Variable 24");
+
+  parameter_handler.declare_entry("Output Buffer Layer Removal Feature","false",dealii::Patterns::Bool(),"Output Buffer Layer Removal Feature");
+  parameter_handler.declare_entry("Output Buffer Layer Removal dimension x0 y1 z2","0",dealii::Patterns::Integer(), "MOutput Buffer Layer Removal dimension x0 y1 z2");
+  parameter_handler.declare_entry("Output Buffer Layer Removal Lower Bound","0",dealii::Patterns::Double(),"Output Buffer Layer Removal Lower Bound");
+  parameter_handler.declare_entry("Output Buffer Layer Removal Upper Bound","1",dealii::Patterns::Double(),"Output Buffer Layer Removal Upper Bound");
 
   parameter_handler.declare_entry("Maximum linear solver iterations","-1",dealii::Patterns::Integer(), "Maximum iterations for linear solver");
   parameter_handler.declare_entry("Maximum non linear iterations","-1",dealii::Patterns::Integer(),"Maximum no. of non-linear iterations");

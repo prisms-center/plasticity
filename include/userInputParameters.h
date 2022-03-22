@@ -105,6 +105,11 @@ public:
   bool output_Var11,output_Var12,output_Var13,output_Var14,output_Var15,output_Var16,output_Var17,output_Var18,output_Var19,output_Var20;
   bool output_Var21,output_Var22,output_Var23,output_Var24;
 
+  bool flagBufferLayer; //flag to exclude the data inside the buffer layers and only output the results from the real specimen.
+  // This is specifically good for HEDM characterization when you're adding buffer layers to exclude the BCs effects, but one doesn't want to include the data inside the buffer layers.
+  unsigned int dimBufferLayer; // The dimension in which the buffer layer is applied. x=0, y=1, and z=2.
+  double lowerBufferLayer,upperBufferLayer; //Upper and lower bounds for Buffer layer.
+
   /*Solver parameters*/
   unsigned int maxLinearSolverIterations; // Maximum iterations for linear solver
   unsigned int maxNonLinearIterations; // Maximum no. of non-linear iterations
