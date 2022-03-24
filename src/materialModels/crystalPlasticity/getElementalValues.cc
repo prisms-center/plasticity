@@ -8,7 +8,6 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 	FullMatrix<double>& elementalJacobian,
 	Vector<double>&     elementalResidual)
 	{
-
 		//Initialized history variables and pfunction variables if unititialized
 		if(initCalled == false){
 			if(this->userInputs.enableAdvancedTwinModel){
@@ -39,6 +38,45 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 			K_local = 0.0; Rlocal = 0.0;
 
 
+			///////Applying NeumannBCs/////////
+			if (this->userInputs.enableNeumannBCs){
+				QGauss<dim-1>  quadrature_face(this->userInputs.quadOrder);
+				FEFaceValues<dim> fe_face_values (this->FE, quadrature_face, update_values | update_gradients | update_JxW_values);
+				const unsigned int   num_quad_points_face = quadrature_face.size();
+				unsigned int neumannBCsBoundaryID,dof_NeumannBCs,timeCounter2;
+				double traction_Neumann,currentTime;
+				timeCounter2=0;
+				for (unsigned int neumannBCsNumber=0;neumannBCsNumber<this->userInputs.neumannBCsNumber;++neumannBCsNumber){
+					neumannBCsBoundaryID=this->userInputs.neumannBCsBoundaryID[neumannBCsNumber]-1;
+					dof_NeumannBCs=this->userInputs.dofNeumannBCs[neumannBCsNumber];
+					currentTime=this->delT*(this->currentIncrement+1);
+
+					if (this->currentIncrement==0){
+						timeCounter2=1;
+					}
+					if (currentTime>this->userInputs.tabularTimeNeumannBCs[timeCounter2]){
+						timeCounter2=timeCounter2+1;
+					}
+
+					traction_Neumann=this->tabularInputNeumannBCs[neumannBCsNumber][timeCounter2-1]+(-this->tabularInputNeumannBCs[neumannBCsNumber][timeCounter2-1]+this->tabularInputNeumannBCs[neumannBCsNumber][timeCounter2])/(this->userInputs.tabularTimeNeumannBCs[timeCounter2]-this->userInputs.tabularTimeNeumannBCs[timeCounter2-1])*(currentTime-this->userInputs.tabularTimeNeumannBCs[timeCounter2-1]);
+					for (unsigned int faceID = 0; faceID < GeometryInfo<dim>::faces_per_cell;++faceID){
+						if (cell->face(faceID)->at_boundary() == true&& cell->face(faceID)->boundary_id() == neumannBCsBoundaryID){
+							fe_face_values.reinit (cell, faceID);
+							for (unsigned int f_q_point=0; f_q_point<num_quad_points_face; ++f_q_point){
+								for (unsigned int i = 0; i < dofs_per_cell; ++i){
+									const unsigned int dof = fe_values.get_fe().system_to_component_index(i).first;
+									const double Ni = fe_face_values.shape_value(i,f_q_point);
+									if ((fe_face_values.shape_value(i, 0)!=0)&&(dof==dof_NeumannBCs)){
+										Rlocal(i)+=Ni*traction_Neumann*fe_face_values.JxW(f_q_point);
+									}
+
+								}
+							}
+						}
+					}
+				}
+			}
+
 			//loop over quadrature points
 			for (unsigned int q=0; q<num_quad_points; ++q){
 				//Get deformation gradient
@@ -56,15 +94,12 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 				//Update strain, stress, and tangent for current time step/quadrature point
 				calculatePlasticity(cellID, q, 1);
 
-				//this->pcout<<P[0][0]<<"\t"<<P[1][1]<<"\t"<<P[2][2]<<"\n";
-
 				//Fill local residual
 				for (unsigned int d=0; d<dofs_per_cell; ++d) {
 					unsigned int i = fe_values.get_fe().system_to_component_index(d).first;
 					for (unsigned int j = 0; j < dim; j++){
 						Rlocal(d) -=  fe_values.shape_grad(d, q)[j]*P[i][j]*fe_values.JxW(q);
 					}
-
 				}
 
 				//evaluate elemental stiffness matrix, K_{ij} = N_{i,k}*C_{mknl}*F_{im}*F{jn}*N_{j,l} + N_{i,k}*F_{kl}*N_{j,l}*del{ij} dV

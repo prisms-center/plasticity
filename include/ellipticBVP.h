@@ -168,7 +168,7 @@ protected:
       std::vector<std::vector<bool>> faceDOFConstrained;
       std::vector<std::vector<double>> deluConstraint;
 
-      FullMatrix<double> tabularDisplacements;
+      FullMatrix<double> tabularDisplacements,tabularInputNeumannBCs;
       unsigned int timeCounter;
       double currentTime;
       /////DIC bc names

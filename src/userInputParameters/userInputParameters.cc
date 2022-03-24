@@ -84,6 +84,15 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
   tabularNumberofBCs=parameter_handler.get_integer("Number of tabular boundary conditions");
   tabularTimeInput=dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Tabular Time Table")));
 
+  enableNeumannBCs=parameter_handler.get_bool("Use Neumann BCs");
+  Tabular_NeumannBCfilename=parameter_handler.get("Tabular Neumann Boundary condition filename");
+  tabularNeumannBCs_InputStepNumber=parameter_handler.get_integer("Number of time data for Tabular Neumann BCs");
+  neumannBCsNumber=parameter_handler.get_integer("Number of tabular Neumann boundary conditions");
+  neumannBCsBoundaryID=dealii::Utilities::string_to_int(dealii::Utilities::split_string_list(parameter_handler.get("Boundary IDs of Neumann BCs")));
+  dofNeumannBCs=dealii::Utilities::string_to_int(dealii::Utilities::split_string_list(parameter_handler.get("dof of Neumann BCs")));
+  tabularTimeNeumannBCs=dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Tabular Time Neumann BCs")));
+
+
   enableTorsionBCs=parameter_handler.get_bool("Use Torsion BCs");
   torsionAxis=parameter_handler.get_integer("Torsion Axis  x 0  y 1  z 2");
   tabularTimeInputTorsion=dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Tabular Time Table for Torsion")));
@@ -514,6 +523,15 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Number of time data for Tabular BCs","0",dealii::Patterns::Integer(),"Number of time data for Tabular BCs (it includes the initial BCs)");
   parameter_handler.declare_entry("Number of tabular boundary conditions","1",dealii::Patterns::Integer(),"Number of tabular boundary conditions");
   parameter_handler.declare_entry("Tabular Time Table","",dealii::Patterns::List(dealii::Patterns::Double()),"Table for Time intervals of Tabular BCs");
+
+  parameter_handler.declare_entry("Use Neumann BCs","false",dealii::Patterns::Bool(),"Flag to indicate whether to Use Neumann BCs");
+  parameter_handler.declare_entry("Tabular Neumann Boundary condition filename","tabularBoundaryConditions.txt",dealii::Patterns::Anything(),"File name containing Tabular Neumann Boundary condition");
+  parameter_handler.declare_entry("Number of time data for Tabular Neumann BCs","0",dealii::Patterns::Integer(),"Number of time data for Tabular Neumann BCs (it includes the initial BCs)");
+  parameter_handler.declare_entry("Number of tabular Neumann boundary conditions","1",dealii::Patterns::Integer(),"Number of tabular Neumann boundary conditions");
+  parameter_handler.declare_entry("Boundary IDs of Neumann BCs","",dealii::Patterns::List(dealii::Patterns::Integer()),"Boundary IDs of Neumann BCs");
+  parameter_handler.declare_entry("dof of Neumann BCs","",dealii::Patterns::List(dealii::Patterns::Integer()),"dof of Neumann BCs");
+  parameter_handler.declare_entry("Tabular Time Neumann BCs","",dealii::Patterns::List(dealii::Patterns::Double()),"Table for Time intervals of Tabular Neumann BCs");
+
 
   parameter_handler.declare_entry("Use Torsion BCs","false",dealii::Patterns::Bool(),"Flag to indicate whether to use Torsion BCs");
   parameter_handler.declare_entry("Torsion Axis  x 0  y 1  z 2","2",dealii::Patterns::Integer(),"Torsion Axis  x 0  y 1  z 2");

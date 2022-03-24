@@ -276,6 +276,32 @@ void ellipticBVP<dim>::init(){
       bcDataFile.close();
     }
 
+    if(userInputs.enableNeumannBCs){
+      tabularInputNeumannBCs.reinit(userInputs.neumannBCsNumber,userInputs.tabularNeumannBCs_InputStepNumber);
+      tabularInputNeumannBCs=0;
+      //open data file to boundary displacements
+      bcDataFile.open(userInputs.Tabular_NeumannBCfilename);
+      //read data
+      if (bcDataFile.is_open()){
+        //read data
+        id=0;
+        while (getline (bcDataFile,line) && id<(userInputs.neumannBCsNumber)){
+          std::stringstream ss(line);
+          for (unsigned int i=0; i<userInputs.tabularNeumannBCs_InputStepNumber; i++){
+            ss >> tabularInputNeumannBCs[id][i];
+          }
+          //cout<<id<<'\t'<<bc_new[id][0]<<'\t'<<bc_new[id][1]<<'\t'<<bc_new[id][2]<<'\n';
+          id=id+1;
+        }
+      }
+      else{
+        pcout << "Unable to open Tabular_NeumannBCfilename \n";
+        exit(1);
+      }
+
+      bcDataFile.close();
+    }
+
     if(userInputs.enableDICpipeline){
       bc_new1.reinit(userInputs.Y_dic,1+2*userInputs.DIC_InputStepNumber);
       bc_new2.reinit(userInputs.Y_dic,1+2*userInputs.DIC_InputStepNumber);

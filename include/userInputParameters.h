@@ -58,6 +58,13 @@ public:
   std::vector<double> tabularTimeInput; //Table for Time intervals of Tabular BCs
   std::vector<double> tabularDispInput; //Table for Displacements of Tabular BCs
 
+  bool enableNeumannBCs; // Specify whether to use Tabular Neumann BCs
+  std::string Tabular_NeumannBCfilename; // Tabular Neumann BCs file
+  unsigned int tabularNeumannBCs_InputStepNumber; //Number of Input data for Tabular Neumann BCs
+  unsigned int neumannBCsNumber; //Number of Tabular Neumann BCs
+  std::vector<double> tabularTimeNeumannBCs; //Table for Time intervals of Tabular Neumann BCs
+  std::vector<int> neumannBCsBoundaryID,dofNeumannBCs; //Vector including the BoundaryID and dof that Neumann BCs are applied
+
   bool enableTorsionBCs; // Specify whether to use Tabular Torsion BCs
   unsigned int torsionAxis; //Axis of Torsion (x=0; y=1; z=2)
   std::vector<double> tabularTimeInputTorsion; //Table for Time intervals of Tabular Torsion BCs
