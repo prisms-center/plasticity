@@ -177,14 +177,11 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
   adaptiveLoadStepFactor=parameter_handler.get_double("Adaptive load step factor");
   adaptiveLoadIncreaseFactor=parameter_handler.get_double("Adaptive load increase Factor");
   succesiveIncForIncreasingTimeStep=parameter_handler.get_double("Succesive increment for increasing time step");
-  enableStiffnessFirstIter = parameter_handler.get_bool("Enable the efficient calculation of stiffness");
-
 
 
   additionalVoxelInfo=parameter_handler.get_integer("Additional Voxel info");
   enableMultiphase = parameter_handler.get_bool("Enable Multiphase");
   numberofPhases=parameter_handler.get_integer("Number of Phases");
-
 
   enableUserMaterialModel = parameter_handler.get_bool("Enable User Material Model");
 
@@ -630,9 +627,6 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Adaptive load step factor","-1",dealii::Patterns::Double(),"Load step factor");
   parameter_handler.declare_entry("Adaptive load increase Factor","-1",dealii::Patterns::Double(),"adaptive Load Increase Factor");
   parameter_handler.declare_entry("Succesive increment for increasing time step","-1",dealii::Patterns::Double(),"Succesive Inc For Increasing Time Step");
-  parameter_handler.declare_entry("Enable the efficient calculation of stiffness","false",dealii::Patterns::Bool(),"Flag to enable the calculation of stiffness matrix only for the first iteration of each increment");
-
-
 
 
   parameter_handler.declare_entry("Additional Voxel info","0",dealii::Patterns::Integer(),"Number of Additional Voxel info Besides three orientation components and Phase if multiphase is enabled");

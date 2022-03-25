@@ -84,7 +84,6 @@ protected:
   virtual void mesh();
   void init();
   void assemble();
-  void assemble2();
   #if ((DEAL_II_VERSION_MAJOR < 9)||(DEAL_II_VERSION_MINOR < 1))
   ConstraintMatrix   constraints, constraints_PBCs_Inc0, constraints_PBCs_IncNot0, constraints_PBCs_Inc0Neg;
   ConstraintMatrix   constraintsMassMatrix;
@@ -125,10 +124,6 @@ protected:
     FullMatrix<double>& elementalJacobian,
     Vector<double>&     elementalResidual) = 0;
 
-    virtual void getElementalValues2(FEValues<dim>& fe_values,
-      unsigned int dofs_per_cell,
-      unsigned int num_quad_points,
-      Vector<double>&     elementalResidual) = 0;
       //methods to allow for pre/post iteration updates
       virtual void updateBeforeIteration();
       virtual void updateAfterIteration();

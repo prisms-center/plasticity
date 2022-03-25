@@ -16,12 +16,7 @@ bool ellipticBVP<dim>::solveNonLinearSystem(){
 
     //Calling assemble
     computing_timer.enter_section("assembly");
-    if ((currentIteration==0)||(!userInputs.enableStiffnessFirstIter)){
-      assemble();
-    }
-    else{
-      assemble2();
-    }
+    assemble();    
     computing_timer.exit_section("assembly");
 
     if (!resetIncrement){

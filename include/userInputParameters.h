@@ -124,7 +124,6 @@ public:
   double absNonLinearTolerance; // Non-linear solver tolerance
   double relNonLinearTolerance; // Relative non-linear solver tolerance
   bool stopOnConvergenceFailure; // Flag to stop problem if convergence fails
-  bool enableStiffnessFirstIter; //Flag to enable the calculation of stiffness matrix only for the first iteration of each increment
 
   /*Adaptive time-stepping parameters*/
   bool enableAdaptiveTimeStepping; //Flag to enable adaptive time steps
