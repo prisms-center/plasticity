@@ -137,6 +137,9 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
   output_Grain_ID = parameter_handler.get_bool("Output Grain ID");
   output_Twin = parameter_handler.get_bool("Output Twin fractions");
 
+  flagUserDefinedAverageOutput = parameter_handler.get_bool("Output Userdefined Average Variable");
+  numberUserDefinedAverageOutput = parameter_handler.get_integer("Number of Output Userdefined Average Variable");
+
   output_Var1 = parameter_handler.get_bool("Output Variable 1");
   output_Var2 = parameter_handler.get_bool("Output Variable 2");
   output_Var3 = parameter_handler.get_bool("Output Variable 3");
@@ -586,6 +589,9 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Output Twin fractions","false",dealii::Patterns::Bool(),"Output Twin fractions");
 
   parameter_handler.declare_entry("Number of Taylor Substeps","1",dealii::Patterns::Integer(),"Number of Taylor Substeps");
+
+  parameter_handler.declare_entry("Output Userdefined Average Variable","false",dealii::Patterns::Bool(),"Flag to enable Output Userdefined Average Variable");
+  parameter_handler.declare_entry("Number of Output Userdefined Average Variable","-1",dealii::Patterns::Integer(),"Number of Output Userdefined Average Variable");
 
   parameter_handler.declare_entry("Output Variable 1","false",dealii::Patterns::Bool(),"Output Variable 1");
   parameter_handler.declare_entry("Output Variable 2","false",dealii::Patterns::Bool(),"Output Variable 2");

@@ -108,6 +108,9 @@ public:
   bool output_Grain_ID;
   bool output_Twin;
 
+  bool flagUserDefinedAverageOutput;
+  unsigned int numberUserDefinedAverageOutput;
+
   bool output_Var1,output_Var2,output_Var3,output_Var4,output_Var5,output_Var6,output_Var7,output_Var8,output_Var9,output_Var10;
   bool output_Var11,output_Var12,output_Var13,output_Var14,output_Var15,output_Var16,output_Var17,output_Var18,output_Var19,output_Var20;
   bool output_Var21,output_Var22,output_Var23,output_Var24;

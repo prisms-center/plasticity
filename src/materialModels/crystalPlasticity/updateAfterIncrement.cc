@@ -11,6 +11,14 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 	unsigned int CheckBufferRegion,dimBuffer;
 	double lowerBuffer,upperBuffer;
 	Point<dim> pnt2;
+	Vector<double> userDefinedAverageOutput,local_userDefinedAverageOutput;
+
+	if (this->userInputs.flagUserDefinedAverageOutput){
+		userDefinedAverageOutput.reinit(this->userInputs.numberUserDefinedAverageOutput);
+		userDefinedAverageOutput=0;
+		local_userDefinedAverageOutput.reinit(this->userInputs.numberUserDefinedAverageOutput);
+		local_userDefinedAverageOutput=0;
+	}
 
 	QGauss<dim>  quadrature(this->userInputs.quadOrder);
 	FEValues<dim> fe_values(this->FE, quadrature, update_quadrature_points | update_gradients | update_JxW_values);
@@ -198,12 +206,19 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 						local_F_e=local_F_e+ TotaltwinvfK[cellID][q]*fe_values.JxW(q);
 					}
 
-
 					for(unsigned int i=0;i<this->userInputs.numSlipSystems1;i++){
 						local_F_s=local_F_s+slipfraction_iter[cellID][q][i]*fe_values.JxW(q);
 					}
-				}
 
+					if (this->userInputs.flagUserDefinedAverageOutput){
+						////One should define their UserDefinedAverageOutput here by defining based on the state Variables
+						///In the following equation, "+0" should be substituted by "+targetVariable", where targetVariable is the variable you want to plot the average value.
+						//Also, the first equation should be copy and paste depending on the number of variables you want to output,
+						//and the integer in paranthesis should be updated accordingly.
+						//The maximum number of lines (output variables) are defined in the input file as "set Number of Output Userdefined Average Variable".
+						local_userDefinedAverageOutput(0)=local_userDefinedAverageOutput(0)+0;
+					}
+				}
 
 			}
 			if (this->userInputs.writeOutput){
@@ -556,6 +571,12 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 		F_e=0;F_r=0;F_s=0;
 	}
 
+	if (this->userInputs.flagUserDefinedAverageOutput){
+		for(unsigned int i=0;i<this->userInputs.numberUserDefinedAverageOutput;i++){
+			userDefinedAverageOutput(i)=Utilities::MPI::sum(local_userDefinedAverageOutput(i),this->mpi_communicator)/microvol;
+		}
+	}
+
 	//check whether to write stress and strain data to file
 	//write stress and strain data to file
 	std::string dir(this->userInputs.outputDirectory);
@@ -566,11 +587,23 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 
 		if(this->currentIncrement==0){
 			outputFile.open(dir.c_str());
-			outputFile << "Exx"<<'\t'<<"Eyy"<<'\t'<<"Ezz"<<'\t'<<"Eyz"<<'\t'<<"Exz"<<'\t'<<"Exy"<<'\t'<<"Txx"<<'\t'<<"Tyy"<<'\t'<<"Tzz"<<'\t'<<"Tyz"<<'\t'<<"Txz"<<'\t'<<"Txy"<<'\t'<<"TwinRealVF"<<'\t'<<"TwinMade"<<'\t'<<"SlipTotal"<<'\n';
+			outputFile << "Exx"<<'\t'<<"Eyy"<<'\t'<<"Ezz"<<'\t'<<"Eyz"<<'\t'<<"Exz"<<'\t'<<"Exy"<<'\t'<<"Txx"<<'\t'<<"Tyy"<<'\t'<<"Tzz"<<'\t'<<"Tyz"<<'\t'<<"Txz"<<'\t'<<"Txy"<<'\t'<<"TwinRealVF"<<'\t'<<"TwinMade"<<'\t'<<"SlipTotal";
+			if (this->userInputs.flagUserDefinedAverageOutput){
+				for(unsigned int i=0;i<this->userInputs.numberUserDefinedAverageOutput;i++){
+					outputFile <<'\t'<<"userDefined"<<i;
+				}
+			}
+			outputFile <<'\n';
 			outputFile.close();
 		}
 		outputFile.open(dir.c_str(),std::fstream::app);
-		outputFile << global_strain[0][0]<<'\t'<<global_strain[1][1]<<'\t'<<global_strain[2][2]<<'\t'<<global_strain[1][2]<<'\t'<<global_strain[0][2]<<'\t'<<global_strain[0][1]<<'\t'<<global_stress[0][0]<<'\t'<<global_stress[1][1]<<'\t'<<global_stress[2][2]<<'\t'<<global_stress[1][2]<<'\t'<<global_stress[0][2]<<'\t'<<global_stress[0][1]<<'\t'<<F_r<<'\t'<<F_e<<'\t'<<F_s<<'\n';
+		outputFile << global_strain[0][0]<<'\t'<<global_strain[1][1]<<'\t'<<global_strain[2][2]<<'\t'<<global_strain[1][2]<<'\t'<<global_strain[0][2]<<'\t'<<global_strain[0][1]<<'\t'<<global_stress[0][0]<<'\t'<<global_stress[1][1]<<'\t'<<global_stress[2][2]<<'\t'<<global_stress[1][2]<<'\t'<<global_stress[0][2]<<'\t'<<global_stress[0][1]<<'\t'<<F_r<<'\t'<<F_e<<'\t'<<F_s;
+		if (this->userInputs.flagUserDefinedAverageOutput){
+			for(unsigned int i=0;i<this->userInputs.numberUserDefinedAverageOutput;i++){
+				outputFile <<'\t'<<userDefinedAverageOutput(i);
+			}
+		}
+		outputFile <<'\n';
 		outputFile.close();
 	}
 
