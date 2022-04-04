@@ -647,6 +647,9 @@ void crystalPlasticity<dim>::quatproduct(Vector<double> &quatp,Vector<double> &q
 template <int dim>
 void crystalPlasticity<dim>::quat2rod(Vector<double> &quat,Vector<double> &rod)
 {
+	if (fabs(quat(0))<1e-4){
+	   quat(0)=1e-4;
+	}
 	double invquat1 = 1/quat(0);
 
 	for (int i = 0;i <= 2;i++)
