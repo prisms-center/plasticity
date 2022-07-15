@@ -863,7 +863,7 @@ void ellipticBVP<dim>::setPeriodicityConstraintsInit(){
 }
 
 template <int dim>
-#if ((DEAL_II_VERSION_MAJOR < 9)||(DEAL_II_VERSION_MINOR < 1))
+#if ((DEAL_II_VERSION_MAJOR < 9)||((DEAL_II_VERSION_MINOR < 1)&&(DEAL_II_VERSION_MAJOR==9)))
 void ellipticBVP<dim>::setNodeConstraints(ConstraintMatrix& constraintmatrix){
 #else
 void ellipticBVP<dim>::setNodeConstraints(AffineConstraints<double>& constraintmatrix){
@@ -919,7 +919,7 @@ void ellipticBVP<dim>::setNodeConstraints(AffineConstraints<double>& constraintm
 }
 
 template <int dim>
-#if ((DEAL_II_VERSION_MAJOR < 9)||(DEAL_II_VERSION_MINOR < 1))
+#if ((DEAL_II_VERSION_MAJOR < 9)||((DEAL_II_VERSION_MINOR < 1)&&(DEAL_II_VERSION_MAJOR==9)))
 void ellipticBVP<dim>::setEdgeConstraints(ConstraintMatrix& constraintmatrix){
 #else
 void ellipticBVP<dim>::setEdgeConstraints(AffineConstraints<double>& constraintmatrix){
@@ -1003,7 +1003,7 @@ void ellipticBVP<dim>::setEdgeConstraints(AffineConstraints<double>& constraintm
 }
 
 template <int dim>
-#if ((DEAL_II_VERSION_MAJOR < 9)||(DEAL_II_VERSION_MINOR < 1))
+#if ((DEAL_II_VERSION_MAJOR < 9)||((DEAL_II_VERSION_MINOR < 1)&&(DEAL_II_VERSION_MAJOR==9)))
 void ellipticBVP<dim>::setFaceConstraints(ConstraintMatrix& constraintmatrix){
 #else
 void ellipticBVP<dim>::setFaceConstraints(AffineConstraints<double>& constraintmatrix){

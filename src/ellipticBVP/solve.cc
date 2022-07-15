@@ -42,12 +42,21 @@ void ellipticBVP<dim>::solve(){
           sprintf(buffer1, "current increment increased. Restarting increment with loadFactorSetByModel: %12.6e\n", loadFactorSetByModel);
           pcout << buffer1;
         }
-
+        #if ((DEAL_II_VERSION_MAJOR < 9)||((DEAL_II_VERSION_MINOR < 3)&&(DEAL_II_VERSION_MAJOR==9)))
         computing_timer.enter_section("postprocess");
+        #else
+	computing_timer.enter_subsection("postprocess");
+        #endif
 
         if (currentIncrement%userInputs.skipOutputSteps==0)
         if (userInputs.writeOutput) output();
+
+        #if ((DEAL_II_VERSION_MAJOR < 9)||((DEAL_II_VERSION_MINOR < 3)&&(DEAL_II_VERSION_MAJOR==9)))
         computing_timer.exit_section("postprocess");
+        #else
+	computing_timer.leave_subsection("postprocess");
+        #endif
+        
       }
       else{
         successiveIncs=0;
@@ -78,7 +87,12 @@ void ellipticBVP<dim>::solve(){
       //increase loadFactorSetByModel, if succesiveIncForIncreasingTimeStep satisfied.
       successiveIncs++;
       //output results to file
+      //
+      #if ((DEAL_II_VERSION_MAJOR < 9)||((DEAL_II_VERSION_MINOR < 3)&&(DEAL_II_VERSION_MAJOR==9)))
       computing_timer.enter_section("postprocess");
+      #else
+      computing_timer.enter_subsection("postprocess");
+      #endif
 
       //////////////////////TabularOutput Start///////////////
       std::vector<unsigned int> tabularTimeInputIncInt;
@@ -100,7 +114,12 @@ void ellipticBVP<dim>::solve(){
       if (((!userInputs.tabularOutput)&&((currentIncrement+1)%userInputs.skipOutputSteps==0))||((userInputs.tabularOutput)&& (std::count(tabularTimeInputIncInt.begin(), tabularTimeInputIncInt.end(), (currentIncrement+1))==1))){
         if (userInputs.writeOutput) output();
       }
+
+      #if ((DEAL_II_VERSION_MAJOR < 9)||((DEAL_II_VERSION_MINOR < 3)&&(DEAL_II_VERSION_MAJOR==9)))
       computing_timer.exit_section("postprocess");
+      #else
+      computing_timer.leave_subsection("postprocess");
+      #endif
     }
     else{
       successiveIncs=0;

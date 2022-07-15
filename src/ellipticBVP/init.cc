@@ -183,11 +183,19 @@ void ellipticBVP<dim>::init(){
   if(!userInputs.enablePeriodicBCs){
     DynamicSparsityPattern dsp (locally_relevant_dofs);
     DoFTools::make_sparsity_pattern (dofHandler, dsp, constraints, false);
+    #if ((DEAL_II_VERSION_MAJOR < 9)||((DEAL_II_VERSION_MINOR < 3)&&(DEAL_II_VERSION_MAJOR==9)))
     SparsityTools::distribute_sparsity_pattern (dsp,
       dofHandler.n_locally_owned_dofs_per_processor(),
       mpi_communicator,
       locally_relevant_dofs);
       jacobian.reinit (locally_owned_dofs, locally_owned_dofs, dsp, mpi_communicator);
+    #else
+    SparsityTools::distribute_sparsity_pattern (dsp,
+      dofHandler.locally_owned_dofs(),
+      mpi_communicator,
+      locally_relevant_dofs);
+      jacobian.reinit (locally_owned_dofs, locally_owned_dofs, dsp, mpi_communicator);
+    #endif
     }
 
     // Read boundary conditions

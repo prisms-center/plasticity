@@ -36,10 +36,14 @@ void ellipticBVP<dim>::initProjection(){
   //create mass matrix
   DynamicSparsityPattern dsp (locally_relevant_dofs_Scalar);
   DoFTools::make_sparsity_pattern (dofHandler_Scalar, dsp, constraintsMassMatrix, false);
+  #if ((DEAL_II_VERSION_MAJOR < 9)||((DEAL_II_VERSION_MINOR < 3)&&(DEAL_II_VERSION_MAJOR==9)))
   SparsityTools::distribute_sparsity_pattern (dsp,
 					      dofHandler_Scalar.n_locally_owned_dofs_per_processor(),
 					      mpi_communicator,
 					      locally_relevant_dofs_Scalar);
+  #else
+  SparsityTools::distribute_sparsity_pattern (dsp, dofHandler_Scalar.locally_owned_dofs(), mpi_communicator, locally_relevant_dofs_Scalar);
+  #endif
   massMatrix.reinit (locally_owned_dofs_Scalar, locally_owned_dofs_Scalar, dsp, mpi_communicator); massMatrix=0.0;
 
   //local variables

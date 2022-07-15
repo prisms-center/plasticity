@@ -15,9 +15,15 @@ bool ellipticBVP<dim>::solveNonLinearSystem(){
     updateBeforeIteration();
 
     //Calling assemble
+    #if ((DEAL_II_VERSION_MAJOR < 9)||((DEAL_II_VERSION_MINOR < 3)&&(DEAL_II_VERSION_MAJOR==9)))
     computing_timer.enter_section("assembly");
     assemble();    
     computing_timer.exit_section("assembly");
+    #else
+    computing_timer.enter_subsection("assembly");
+    assemble();
+    computing_timer.leave_subsection("assembly");
+    #endif
 
     if (!resetIncrement){
       //Calculate residual norms and check for convergence
@@ -33,10 +39,17 @@ bool ellipticBVP<dim>::solveNonLinearSystem(){
         relNorm);
         pcout << buffer;
         //if not converged, solveLinearSystem Ax=b
+        #if ((DEAL_II_VERSION_MAJOR < 9)||((DEAL_II_VERSION_MINOR < 3)&&(DEAL_II_VERSION_MAJOR==9)))
         computing_timer.enter_section("solve");
         solveLinearSystem(constraints, jacobian, residual, solution, solutionWithGhosts, solutionIncWithGhosts);
         computing_timer.exit_section("solve");
-        currentIteration++;
+        #else
+	computing_timer.enter_subsection("solve");
+        solveLinearSystem(constraints, jacobian, residual, solution, solutionWithGhosts, solutionIncWithGhosts);
+        computing_timer.leave_subsection("solve");
+        #endif
+	
+	currentIteration++;
       }
       //call updateAfterIteration, if any
       updateAfterIteration();

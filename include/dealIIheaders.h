@@ -27,7 +27,7 @@
 #include <deal.II/base/parameter_handler.h>
 #include <deal.II/grid/grid_refinement.h>
 
-#if ((DEAL_II_VERSION_MAJOR < 9)||(DEAL_II_VERSION_MINOR < 1))
+#if ((DEAL_II_VERSION_MAJOR < 9)||((DEAL_II_VERSION_MINOR < 1)&&(DEAL_II_VERSION_MAJOR==9)))
 #include <deal.II/grid/tria_boundary_lib.h>
 #include <deal.II/lac/petsc_parallel_vector.h>
 #include <deal.II/lac/petsc_parallel_sparse_matrix.h>
