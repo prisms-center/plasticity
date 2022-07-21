@@ -34,6 +34,17 @@ void ellipticBVP<dim>::assemble(){
       jacobian.reinit (locally_owned_dofs, locally_owned_dofs, dsp, mpi_communicator);
     #endif
     }
+
+    if (userInputs.enableNeumannBCs){
+      double currentTime;
+      currentTime=delT*(currentIncrement+1);
+			if (currentIncrement==0){
+				timeCounter_Neumann=1;
+			}
+			if (currentTime>userInputs.tabularTimeNeumannBCs[timeCounter_Neumann]){
+				timeCounter_Neumann=timeCounter_Neumann+1;
+			}
+    }
   //initialize global data structures to zero
   //The additional compress operations are only to flush out data and
   //switch to the correct write state. For  details look at the documentation

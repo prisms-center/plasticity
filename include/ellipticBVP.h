@@ -164,7 +164,7 @@ protected:
       std::vector<std::vector<double>> deluConstraint;
 
       FullMatrix<double> tabularDisplacements,tabularInputNeumannBCs;
-      unsigned int timeCounter;
+      unsigned int timeCounter,timeCounter_Neumann;
       double currentTime;
       /////DIC bc names
       FullMatrix<double> bc_new1,bc_new2,bc_new3,bc_new4;
