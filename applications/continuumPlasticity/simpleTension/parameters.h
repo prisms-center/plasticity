@@ -1,73 +1,73 @@
 /**
  *Lagrangian basis function order
  */
-#define feOrder   1
+const int feOrder=1;
 /**
  *Gaussian quadrature point order
  */
-#define quadOrder 2 
+const int quadOrder = 2;
 /**
  *Set the length of the domain in the x-direction, from zero to the specified length
  */
-#define spanX 5.0
+const float spanX =5.0;
 /**
  *Set the length of the domain in the y-direction, from zero to the specified length
  */
-#define spanY 1.0
+const float spanY =1.0;
 /**
  *Set the length of the domain in the z-direction, from zero to the specified length
  */
-#define spanZ 1.0
+const float spanZ =1.0;
 /**
  *The number of elements in the x-direction
  *The number of elements in each direction is 2^(refineFactor) * subdivisions
  *For optimal performance, use meshRefineFactor primarily to determine the element size
  */
-#define subdivisionsX 5
+const int subdivisionsX= 5;
 /**
  *The number of elements in the y-direction
  *The number of elements in each direction is 2^(refineFactor) * subdivisions
  *For optimal performance, use meshRefineFactor primarily to determine the element size
  */
-#define subdivisionsY 1
+const int subdivisionsY= 1;
 /**
  *The number of elements in the z-direction
  *The number of elements in each direction is 2^(refineFactor) * subdivisions
  *For optimal performance, use meshRefineFactor primarily to determine the element size
  */
-#define subdivisionsZ 1
+const int subdivisionsZ= 1;
 /**
  *Exponential value used to define mesh refinement (2^n*2^n*2^n elements(3->8*8*8 =512 elements) )
  */
-#define meshRefineFactor 2
+const int meshRefineFactor =2;
 /**
  *Write .eps file of the mesh (Only written for serial runs and if number of elements < 10000)
  */
-#define writeMeshToEPS  true
+const bool writeMeshToEPS = true;
 /**
  *Flag to write output vtu and pvtu files
  */
-#define writeOutput true
+const bool writeOutput = true;
 /**
  *Define directory to ouput results
  */
-#define outputDirectory "."
+const char outputDirectory[2] = ".";
 /**
  *Specify how frequently to write output files (i.e. output every n steps; using 0 or 1 will output every step)
  */
-#define skipOutputSteps 0
+const int skipOutputSteps= 0;
 /**
  *Flag to output the equivalent plastic strain field
  */
-#define output_alpha true
+const bool output_alpha =true;
 /**
  *Flag to output the von Mises (Kirchhoff) stress field
  */
-#define output_tau_vm true
+const bool output_tau_vm= true;
 /**
  *Total applied displacement
  */
-#define totalDisplacement 0.5
+const float totalDisplacement =0.5;
 /**
 *Solve type for linear solves
  */
@@ -75,52 +75,52 @@
 /**
  *Number of increments (i.e. loads steps, pseudo-time steps)
  */
-#define totalNumIncrements 10
+const int totalNumIncrements =10;
 /**
  *Maximum iterations within the linear solve
  */
-#define maxLinearSolverIterations 8000
+const int maxLinearSolverIterations =8000;
 /**
  *Relative tolerance for the linear solver
  */
-#define relLinearSolverTolerance  1.0e-14
+const float relLinearSolverTolerance = 1.0e-14;
 /**
  *Maximum iterations within the nonlinear solve (Newton-Raphson iterations)
  */
-#define maxNonLinearIterations 30
+const int maxNonLinearIterations= 30;
 /**
  *Absolute tolerance for nonlinear solver
  */
-#define absNonLinearTolerance 1.0e-15
+const float absNonLinearTolerance =1.0e-15;
 /**
  *Relative tolerance for the nonlinear solver
  */
-#define relNonLinearTolerance 1.0e-10
+const float relNonLinearTolerance =1.0e-10;
 /**
  *Flag to stop the problem if convergence fails
  */
-#define stopOnConvergenceFailure true
+const bool stopOnConvergenceFailure =true;
 
 /**
  *Lame' material parameter, lambda
  */
-#define lame_lambda 100.6582e9
+const float lame_lambda =100.6582e9;
 /**
  *Lame' material parameter, mu
  */
-#define lame_mu 45.6473e9
+const float lame_mu =45.6473e9;
 /**
  *Value for yield stress (Kirchhoff)
  */
-#define yield_stress 33.014025e6
+const float yield_stress =33.014025e3;
 /**
  *Linear isotropic strain hardening coefficient
  */
-#define strain_hardening 2.0259e9
+const float strain_hardening =2.0259e9;
 /**
  *Kinematic strain hardening coefficient
  */
-#define kinematic_hardening 1e6
+const float  kinematic_hardening =1e6;
 /**
  *Strain energy density function ("quadlog", "stvenkir", or "neohook")
  */

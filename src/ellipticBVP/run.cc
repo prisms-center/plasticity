@@ -18,7 +18,7 @@ void ellipticBVP<dim>::run(){
   initProjection();
 
   computing_timer.exit_section("mesh and initialization");
-
+  pcout<<"sanity check in ellipticBVP<dim>::run\n";
   //solve();
   solve();
 }

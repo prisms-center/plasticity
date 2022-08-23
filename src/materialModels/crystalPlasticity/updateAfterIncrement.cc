@@ -13,48 +13,33 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 	const unsigned int num_quad_points = quadrature.size();
 	const unsigned int   dofs_per_cell = this->FE.dofs_per_cell;
 	std::vector<unsigned int> local_dof_indices(dofs_per_cell);
-	if (this->userInputs.flagTaylorModel){
-		if(initCalled == false){
-			if(this->userInputs.enableAdvancedTwinModel){
-				init2(num_quad_points);
-			}
-			else{
-				init(num_quad_points);
-			}
-		}
-	}
 	//loop over elements
 	unsigned int cellID = 0;
 	typename DoFHandler<dim>::active_cell_iterator cell = this->dofHandler.begin_active(), endc = this->dofHandler.end();
+
 	for (; cell != endc; ++cell) {
 		if (cell->is_locally_owned()) {
 			fe_values.reinit(cell);
 			//loop over quadrature points
 			cell->set_user_index(fe_values.get_cell()->user_index());
 			cell->get_dof_indices(local_dof_indices);
+
 			Vector<double> Ulocal(dofs_per_cell);
-			
-			if (!this->userInputs.flagTaylorModel){
-				for (unsigned int i = 0; i < dofs_per_cell; i++) {
-					Ulocal[i] = this->solutionWithGhosts[local_dof_indices[i]];
-				}
+
+			for (unsigned int i = 0; i < dofs_per_cell; i++) {
+				Ulocal[i] = this->solutionWithGhosts[local_dof_indices[i]];
 			}
 			for (unsigned int q = 0; q < num_quad_points; ++q) {
 				//Get deformation gradient
 				F = 0.0;
-				if (this->userInputs.flagTaylorModel){
-					F =this->Fprev;
+				for (unsigned int d = 0; d < dofs_per_cell; ++d) {
+					unsigned int i = fe_values.get_fe().system_to_component_index(d).first;
+					for (unsigned int j = 0; j < dim; ++j) {
+						F[i][j] += Ulocal(d)*fe_values.shape_grad(d, q)[j]; // u_{i,j}= U(d)*N(d)_{,j}, where d is the DOF correonding to the i'th dimension
+					}
 				}
-				else{
-					for (unsigned int d = 0; d < dofs_per_cell; ++d) {
-						unsigned int i = fe_values.get_fe().system_to_component_index(d).first;
-						for (unsigned int j = 0; j < dim; ++j) {
-							F[i][j] += Ulocal(d)*fe_values.shape_grad(d, q)[j]; // u_{i,j}= U(d)*N(d)_{,j}, where d is the DOF correonding to the i'th dimension
-						}
-					}
-					for (unsigned int i = 0; i < dim; ++i) {
-						F[i][i] += 1;
-					}
+				for (unsigned int i = 0; i < dim; ++i) {
+					F[i][i] += 1;
 				}
 				//Update strain, stress, and tangent for current time step/quadrature point
 				calculatePlasticity(cellID, q, 0);
@@ -137,19 +122,19 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 					this->postprocessValues(cellID, q, 1, 0) = eqvstrain;
 					this->postprocessValues(cellID, q, 2, 0) = twin_ouput[cellID][q];
 
-					////////User Defined Variables for visualization outputs (output_Var1 to output_Var24)////////
-					this->postprocessValues(cellID, q, 3, 0) = 0;
-					this->postprocessValues(cellID, q, 4, 0) = 0;
-					this->postprocessValues(cellID, q, 5, 0) = 0;
-					this->postprocessValues(cellID, q, 6, 0) = 0;
-					this->postprocessValues(cellID, q, 7, 0) = 0;
-					this->postprocessValues(cellID, q, 8, 0) = 0;
-					this->postprocessValues(cellID, q, 9, 0) = 0;
-					this->postprocessValues(cellID, q, 10, 0) = 0;
-					this->postprocessValues(cellID, q, 11, 0) = 0;
-					this->postprocessValues(cellID, q, 12, 0) = 0;
-					this->postprocessValues(cellID, q, 13, 0) = 0;
-					this->postprocessValues(cellID, q, 14, 0) = 0;
+////////User Defined Variables for visualization outputs (output_Var1 to output_Var24)////////
+					this->postprocessValues(cellID, q, 3, 0) = CauchyStress[cellID][q][0][0];
+					this->postprocessValues(cellID, q, 4, 0) = CauchyStress[cellID][q][1][1];
+					this->postprocessValues(cellID, q, 5, 0) = CauchyStress[cellID][q][2][2];
+					this->postprocessValues(cellID, q, 6, 0) = CauchyStress[cellID][q][1][2];
+					this->postprocessValues(cellID, q, 7, 0) = CauchyStress[cellID][q][0][2];
+					this->postprocessValues(cellID, q, 8, 0) = CauchyStress[cellID][q][0][1];
+					this->postprocessValues(cellID, q, 9, 0) = E_tau[0][0];
+					this->postprocessValues(cellID, q, 10, 0) = E_tau[1][1];
+					this->postprocessValues(cellID, q, 11, 0) = E_tau[2][2];
+					this->postprocessValues(cellID, q, 12, 0) = E_tau[1][2];
+					this->postprocessValues(cellID, q, 13, 0) = E_tau[0][2];
+					this->postprocessValues(cellID, q, 14, 0) = E_tau[0][1];
 					this->postprocessValues(cellID, q, 15, 0) = 0;
 					this->postprocessValues(cellID, q, 16, 0) = 0;
 					this->postprocessValues(cellID, q, 17, 0) = 0;
@@ -194,7 +179,7 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 	//In Case we have twinning
 	rotnew_conv=rotnew_iter;
 
-	if (!this->userInputs.enableAdvancedTwinModel){
+    if (!this->userInputs.enableAdvancedTwinModel){
 		//reorient() updates the rotnew_conv.
 		reorient();
 	}
@@ -233,21 +218,22 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 	//////////////////////TabularOutput Start///////////////
 	std::vector<unsigned int> tabularTimeInputIncInt;
 	std::vector<double> tabularTimeInputInc;
-	if (this->userInputs.tabularOutput){
+if (this->userInputs.tabularOutput){
 
-		tabularTimeInputInc=this->userInputs.tabularTimeOutput;
-		for(unsigned int i=0;i<this->userInputs.tabularTimeOutput.size();i++){
-			tabularTimeInputInc[i]=tabularTimeInputInc[i]/this->delT;
-		}
-
-		tabularTimeInputIncInt.resize(this->userInputs.tabularTimeOutput.size(),0);
-		///Converting to an integer always rounds down, even if the fraction part is 0.99999999.
-		//Hence, I add 0.1 to make sure we always get the correct integer.
-		for(unsigned int i=0;i<this->userInputs.tabularTimeOutput.size();i++){
-			tabularTimeInputIncInt[i]=int(tabularTimeInputInc[i]+0.1);
-		}
+	tabularTimeInputInc=this->userInputs.tabularTimeOutput;
+	for(unsigned int i=0;i<this->userInputs.tabularTimeOutput.size();i++){
+	  tabularTimeInputInc[i]=tabularTimeInputInc[i]/this->delT;
 	}
+
+	tabularTimeInputIncInt.resize(this->userInputs.tabularTimeOutput.size(),0);
+	///Converting to an integer always rounds down, even if the fraction part is 0.99999999.
+	//Hence, I add 0.1 to make sure we always get the correct integer.
+	for(unsigned int i=0;i<this->userInputs.tabularTimeOutput.size();i++){
+	  tabularTimeInputIncInt[i]=int(tabularTimeInputInc[i]+0.1);
+	}
+}
 	//////////////////////TabularOutput Finish///////////////
+    //std::cout<<"line 236\n";
 	if (this->userInputs.writeQuadratureOutput) {
 		if (((!this->userInputs.tabularOutput)&&((this->currentIncrement+1)%this->userInputs.skipQuadratureOutputSteps == 0))||((this->userInputs.tabularOutput)&& (std::count(tabularTimeInputIncInt.begin(), tabularTimeInputIncInt.end(), (this->currentIncrement+1))==1))){
 			//copy rotnew to output
@@ -522,7 +508,7 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 		for(unsigned int j=0;j<dim;j++){
 			global_strain[i][j]=Utilities::MPI::sum(local_strain[i][j]/microvol,this->mpi_communicator);
 			global_stress[i][j]=Utilities::MPI::sum(local_stress[i][j]/microvol,this->mpi_communicator);
-		}
+        }
 	}
 	if (!this->userInputs.enableMultiphase){
 		F_e = Utilities::MPI::sum(local_F_e / microvol, this->mpi_communicator);
@@ -536,21 +522,39 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 	//check whether to write stress and strain data to file
 	//write stress and strain data to file
 	std::string dir(this->userInputs.outputDirectory);
-	if(Utilities::MPI::this_mpi_process(this->mpi_communicator)==0){
-		dir+="/";
-		std::ofstream outputFile;
-		dir += std::string("stressstrain.txt");
+	if(Utilities::MPI::this_mpi_process(this->mpi_communicator)==0) {
+        dir += "/";
+        std::ofstream outputFile;
+        dir += std::string("stressstrain.txt");
 
-		if(this->currentIncrement==0){
-			outputFile.open(dir.c_str());
-			outputFile << "Exx"<<'\t'<<"Eyy"<<'\t'<<"Ezz"<<'\t'<<"Eyz"<<'\t'<<"Exz"<<'\t'<<"Exy"<<'\t'<<"Txx"<<'\t'<<"Tyy"<<'\t'<<"Tzz"<<'\t'<<"Tyz"<<'\t'<<"Txz"<<'\t'<<"Txy"<<'\t'<<"TwinRealVF"<<'\t'<<"TwinMade"<<'\t'<<"SlipTotal"<<'\n';
-			outputFile.close();
-		}
-		outputFile.open(dir.c_str(),std::fstream::app);
-		outputFile << global_strain[0][0]<<'\t'<<global_strain[1][1]<<'\t'<<global_strain[2][2]<<'\t'<<global_strain[1][2]<<'\t'<<global_strain[0][2]<<'\t'<<global_strain[0][1]<<'\t'<<global_stress[0][0]<<'\t'<<global_stress[1][1]<<'\t'<<global_stress[2][2]<<'\t'<<global_stress[1][2]<<'\t'<<global_stress[0][2]<<'\t'<<global_stress[0][1]<<'\t'<<F_r<<'\t'<<F_e<<'\t'<<F_s<<'\n';
-		outputFile.close();
-	}
+        if (this->currentIncrement == 0) {
+            outputFile.open(dir.c_str());//INDENTATION!!
+            outputFile << "Exx" << '\t' << "Eyy" << '\t' << "Ezz" << '\t' << "Eyz" << '\t' << "Exz" << '\t' << "Exy"
+                       << '\t' << "Txx" << '\t' << "Tyy" << '\t' << "Tzz" << '\t' << "Tyz" << '\t' << "Txz" << '\t'
+                       << "Txy" << '\t' << "TwinRealVF" << '\t' << "TwinMade" << '\t' << "SlipTotal";
+            if (this->userInputs.enableIndentationBCs)
+                outputFile << "\tInd_Load\tInd_U";
+            outputFile << '\n';
+            outputFile.close();
+        }
+        outputFile.open(dir.c_str(), std::fstream::app);
+        outputFile << global_strain[0][0] << '\t' << global_strain[1][1] << '\t' << global_strain[2][2] << '\t'
+                   << global_strain[1][2] << '\t' << global_strain[0][2] << '\t' << global_strain[0][1] << '\t'
+                   << global_stress[0][0] << '\t' << global_stress[1][1] << '\t' << global_stress[2][2] << '\t'
+                   << global_stress[1][2] << '\t' << global_stress[0][2] << '\t' << global_stress[0][1] << '\t' << F_r
+                   << '\t' << F_e << '\t' << F_s;
+        if (this->userInputs.enableIndentationBCs) {
+            double Ind_displacement;
+            double Ind_load;
+            Ind_displacement = this->currentIndentDisp;
+            Ind_load = this->indenterLoad;
+            std::cout<<"IndenterLoad = "<<Ind_load<<'\n';
 
+            outputFile << '\t' << Ind_load << '\t' << Ind_displacement ;
+        }
+        outputFile << '\n';
+        outputFile.close();
+    }
 
 	//call base class project() function to project post processed fields
 	ellipticBVP<dim>::projection();

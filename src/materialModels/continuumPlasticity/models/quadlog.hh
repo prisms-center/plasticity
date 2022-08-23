@@ -8,7 +8,7 @@
 
 #include <cmath>
 #include <cstdlib>
-#include "IntegrationTools/PFunction.hh"
+#include "../../../../utils/IntegrationTools/PFunction.hh"
 
 namespace PRISMS
 {

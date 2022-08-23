@@ -5,7 +5,7 @@
 template <int dim>
 void ellipticBVP<dim>::solve(){
   pcout << "begin solve...\n\n";
-  bool success;
+
   //load increments
   unsigned int successiveIncs=0;
 
@@ -21,13 +21,11 @@ void ellipticBVP<dim>::solve(){
       //call updateBeforeIncrement, if any
       updateBeforeIncrement();
 
-      if (!userInputs.flagTaylorModel){
-        //solve time increment
-        success=solveNonLinearSystem();
-      }
+      //solve time increment
+      bool success=solveNonLinearSystem();
 
       //call updateAfterIncrement, if any
-      if ((success)||(userInputs.flagTaylorModel)){
+      if (success){
         updateAfterIncrement();
 
         //update totalLoadFactor
@@ -39,16 +37,16 @@ void ellipticBVP<dim>::solve(){
         if (successiveIncs>=userInputs.succesiveIncForIncreasingTimeStep){
           loadFactorSetByModel*=userInputs.adaptiveLoadIncreaseFactor;
           char buffer1[100];
-          sprintf(buffer1, "current increment increased. Restarting increment with loadFactorSetByModel: %12.6e\n", loadFactorSetByModel);
-          pcout << buffer1;
+        	sprintf(buffer1, "current increment increased. Restarting increment with loadFactorSetByModel: %12.6e\n", loadFactorSetByModel);
+        	pcout << buffer1;
         }
 
         computing_timer.enter_section("postprocess");
 
         if (currentIncrement%userInputs.skipOutputSteps==0)
-        if (userInputs.writeOutput) output();
+          if (userInputs.writeOutput) output();
         computing_timer.exit_section("postprocess");
-      }
+        }
       else{
         successiveIncs=0;
       }
@@ -58,18 +56,25 @@ void ellipticBVP<dim>::solve(){
     pcout << buffer;
   }
   else
-  for (;currentIncrement<totalIncrements; ++currentIncrement){
-    pcout << "\nincrement: "  << currentIncrement << std::endl;
-    //call updateBeforeIncrement, if any
-    updateBeforeIncrement();
-
-    if (!userInputs.flagTaylorModel){
-      //solve time increment
-      success=solveNonLinearSystem();
+    for (;currentIncrement<totalIncrements; ++currentIncrement){
+    pcout << "\nincrement: "  << currentIncrement << " check" << std::endl;
+    if (userInputs.enableIndentationBCs){
+        ellipticBVP<dim>::updateBeforeIncrement();
+        if (!userInputs.continuum_Isotropic)
+            updateBeforeIncrement();
     }
+    else{
+        updateBeforeIncrement();
+    }
+    //call updateBeforeIncrement, if any
+
+
+
+    //solve time increment
+    bool success=solveNonLinearSystem();
 
     //call updateAfterIncrement, if any
-    if ((success)||(userInputs.flagTaylorModel)){
+    if (success){
       updateAfterIncrement();
 
       //update totalLoadFactor
@@ -82,26 +87,26 @@ void ellipticBVP<dim>::solve(){
 
       //////////////////////TabularOutput Start///////////////
       std::vector<unsigned int> tabularTimeInputIncInt;
-      std::vector<double> tabularTimeInputInc;
-      if (userInputs.tabularOutput){
+    	std::vector<double> tabularTimeInputInc;
+    if (userInputs.tabularOutput){
 
-        tabularTimeInputInc=userInputs.tabularTimeOutput;
-        for(unsigned int i=0;i<userInputs.tabularTimeOutput.size();i++){
-          tabularTimeInputInc[i]=tabularTimeInputInc[i]/delT;
-        }
-        tabularTimeInputIncInt.resize(userInputs.tabularTimeOutput.size(),0);
-        ///Converting to an integer always rounds down, even if the fraction part is 0.99999999.
-        //Hence, I add 0.1 to make sure we always get the correct integer.
-        for(unsigned int i=0;i<userInputs.tabularTimeOutput.size();i++){
-          tabularTimeInputIncInt[i]=int(tabularTimeInputInc[i]+0.1);
-        }
-      }
-      //////////////////////TabularOutput Finish///////////////
+    	tabularTimeInputInc=userInputs.tabularTimeOutput;
+    	for(unsigned int i=0;i<userInputs.tabularTimeOutput.size();i++){
+    	  tabularTimeInputInc[i]=tabularTimeInputInc[i]/delT;
+    	}
+    	tabularTimeInputIncInt.resize(userInputs.tabularTimeOutput.size(),0);
+    	///Converting to an integer always rounds down, even if the fraction part is 0.99999999.
+    	//Hence, I add 0.1 to make sure we always get the correct integer.
+    	for(unsigned int i=0;i<userInputs.tabularTimeOutput.size();i++){
+    	  tabularTimeInputIncInt[i]=int(tabularTimeInputInc[i]+0.1);
+    	}
+    }
+    	//////////////////////TabularOutput Finish///////////////
       if (((!userInputs.tabularOutput)&&((currentIncrement+1)%userInputs.skipOutputSteps==0))||((userInputs.tabularOutput)&& (std::count(tabularTimeInputIncInt.begin(), tabularTimeInputIncInt.end(), (currentIncrement+1))==1))){
         if (userInputs.writeOutput) output();
       }
       computing_timer.exit_section("postprocess");
-    }
+      }
     else{
       successiveIncs=0;
     }

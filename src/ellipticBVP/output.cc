@@ -14,16 +14,25 @@ void ellipticBVP<dim>::output(){
 			    nodal_solution_names,
 			    DataOut<dim>::type_dof_data,
 			    nodal_data_component_interpretation);
-
+  pcout<<"step0/n";
   //add postprocessing fields
   unsigned int numPostProcessedFieldsWritten=0;
   for (unsigned int field=0; field<numPostProcessedFields; field++){
-  if(!userInputs.output_Eqv_strain)
-    if (postprocessed_solution_names[field].compare(std::string("Eqv_strain"))==0) continue;
-  if(!userInputs.output_Eqv_stress)
-    if (postprocessed_solution_names[field].compare(std::string("Eqv_stress"))==0) continue;
-  if(!userInputs.output_Twin)
-    if (postprocessed_solution_names[field].compare(std::string("Twin"))==0) continue;
+    if(!userInputs.output_Eqv_strain)
+        if (postprocessed_solution_names[field].compare(std::string("Eqv_strain"))==0) continue;
+    if(!userInputs.output_Eqv_stress)
+        if (postprocessed_solution_names[field].compare(std::string("Eqv_stress"))==0) continue;
+    if (userInputs.continuum_Isotropic){
+      if(!userInputs.output_alpha)
+        if (postprocessed_solution_names[field].compare(std::string("alpha"))==0) continue;
+    }
+    else {
+      if(!userInputs.output_Twin)
+        if (postprocessed_solution_names[field].compare(std::string("Twin"))==0) continue;
+    }
+
+
+//pcout<<"field="<<field<<"step1\n";
 
   if(!userInputs.output_Var1)
     if (postprocessed_solution_names[field].compare(std::string("output_Var1"))==0) continue;
@@ -76,13 +85,9 @@ void ellipticBVP<dim>::output(){
 
 
 
+//pcout<<"field="<<field<<"step2\n";
 
-  //if(!userInputs.output_alpha)
-    //if (postprocessed_solution_names[field].compare(std::string("alpha"))==0) continue;
-  //if(!userInputs.output_tau_vm)
-    //if (postprocessed_solution_names[field].compare(std::string("tau_vm"))==0) continue;
-    //
-    data_out_Scalar.add_data_vector (*postFieldsWithGhosts[field],
+  data_out_Scalar.add_data_vector (*postFieldsWithGhosts[field],
 				     postprocessed_solution_names[field].c_str());
     numPostProcessedFieldsWritten++;
   }
@@ -95,7 +100,7 @@ void ellipticBVP<dim>::output(){
   if (numPostProcessedFieldsWritten>0){
     data_out_Scalar.add_data_vector (subdomain, "subdomain");
   }
-
+//pcout<<"field="<<"step3 \n";
    //add material id to output file
    Vector<float> material (triangulation.n_active_cells());
    unsigned int matID=0;
@@ -118,15 +123,25 @@ void ellipticBVP<dim>::output(){
        //else{material(cellID)=-10;}
      }
    }
+   if (userInputs.continuum_Isotropic){
+       data_out.add_data_vector(material, "meshGrain_ID");
+       data_out.build_patches();
 
-   data_out.add_data_vector (material, "meshGrain_ID");
-   data_out.build_patches ();
-
-   if (numPostProcessedFieldsWritten>0){
-     data_out_Scalar.add_data_vector (material, "meshGrain_ID");
-     data_out_Scalar.build_patches ();
+       if (numPostProcessedFieldsWritten > 0) {
+           data_out_Scalar.add_data_vector(material, "meshGrain_ID");
+           data_out_Scalar.build_patches();
+       }
    }
+   else {
+       data_out.add_data_vector(material, "meshGrain_ID");
+       data_out.build_patches();
 
+       if (numPostProcessedFieldsWritten > 0) {
+           data_out_Scalar.add_data_vector(material, "meshGrain_ID");
+           data_out_Scalar.build_patches();
+       }
+   }
+   //pcout<<"field="<<"step5 \n";
   //write to results file
   std::string dir(userInputs.outputDirectory);
   dir+="/";

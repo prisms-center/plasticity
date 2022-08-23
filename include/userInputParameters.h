@@ -58,6 +58,18 @@ public:
   std::vector<double> tabularTimeInput; //Table for Time intervals of Tabular BCs
   std::vector<double> tabularDispInput; //Table for Displacements of Tabular BCs
 
+  bool enableNeumannBCs; // Specify whether to use Tabular Neumann BCs
+  std::string Tabular_NeumannBCfilename; // Tabular Neumann BCs file
+  unsigned int tabularNeumannBCs_InputStepNumber; //Number of Input data for Tabular Neumann BCs
+  unsigned int neumannBCsNumber; //Number of Tabular Neumann BCs
+  std::vector<double> tabularTimeNeumannBCs; //Table for Time intervals of Tabular Neumann BCs
+  std::vector<int> neumannBCsBoundaryID,dofNeumannBCs; //Vector including the BoundaryID and dof that Neumann BCs are applied
+
+  bool enableTorsionBCs; // Specify whether to use Tabular Torsion BCs
+  unsigned int torsionAxis; //Axis of Torsion (x=0; y=1; z=2)
+  std::vector<double> tabularTimeInputTorsion; //Table for Time intervals of Tabular Torsion BCs
+  std::vector<double> tabularTorsionBCsInput; //Table for Anglular velocity (radians) of Tabular Torsion BCs
+  std::vector<double> centerTorsion; //Center point for Torsion (x,y) for torsion axis=z or (y,z) for torsion axis=x or (z,x) for torsion axis=y
 
   bool enableDICpipeline; // Specify whether to use DIC pipeline
   unsigned int DIC_InputStepNumber, X_dic, Y_dic, Z_dic; //Number of Input data for DIC experiment
@@ -84,6 +96,27 @@ public:
   std::vector<std::vector<int>> periodicBCsInput,tabularPeriodicCoef; // 	Periodic BCs Input
   std::vector<std::vector<double>> periodicBCsInput2,tabularPeriodicTimeInput; // 	Periodic BCs Input
 
+  //INDENTATION
+  bool enableIndentationBCs; // Specify whether to use Indentation BCs
+  unsigned int indentationKeyFrames; // How many key frames in indentation
+  unsigned int freezeActiveSetSteps;
+  bool freezeActiveSetNewIteration;
+  std::vector<int> indentationKeyFrameTimeIncs; // the increment number of each key frame
+  std::string Indentation_BCfilename; // Indentation BCs Constraints file
+  std::vector<double> refinementCenter; // the center point of the refinement zone
+  std::vector<double> refinementZoneSize; // Radius of refinement zone from center
+  std::vector<int> refinementFactor; // Number of cell refinements for plastic zone
+  double activeSetCriterionCoefficient; // The number to multiply the stiffness by for the active set criterion
+  double activeSetLambdaTolerance; // The value to add to the criterion to account for errors in lambda/mass
+  bool debugIndentation; // If true, debugging information will be written about the initial active set for each increment
+
+
+  //Continuum
+  bool continuum_Isotropic; // Specify whether to use Isotropic Continuum Elasto-Plasticity model
+  double lame_lambda, lame_mu, yield_stress, strain_hardening, kinematic_hardening;
+  std::string strain_energy_function, yield_function, iso_hardening_function;
+
+
   /*Solution output parameters*/
   bool writeOutput; // flag to write output vtu and pvtu files
   bool writeQuadratureOutput; // flag to write quadrature points output
@@ -93,12 +126,23 @@ public:
   unsigned int skipOutputSteps, skipQuadratureOutputSteps;
   bool output_Eqv_strain;
   bool output_Eqv_stress;
+  bool output_Time;
+  bool output_alpha;
+  bool output_Indenter_Load;
   bool output_Grain_ID;
   bool output_Twin;
+
+  bool flagUserDefinedAverageOutput;
+  unsigned int numberUserDefinedAverageOutput;
 
   bool output_Var1,output_Var2,output_Var3,output_Var4,output_Var5,output_Var6,output_Var7,output_Var8,output_Var9,output_Var10;
   bool output_Var11,output_Var12,output_Var13,output_Var14,output_Var15,output_Var16,output_Var17,output_Var18,output_Var19,output_Var20;
   bool output_Var21,output_Var22,output_Var23,output_Var24;
+
+  bool flagBufferLayer; //flag to exclude the data inside the buffer layers and only output the results from the real specimen.
+  // This is specifically good for HEDM characterization when you're adding buffer layers to exclude the BCs effects, but one doesn't want to include the data inside the buffer layers.
+  unsigned int dimBufferLayer; // The dimension in which the buffer layer is applied. x=0, y=1, and z=2.
+  double lowerBufferLayer,upperBufferLayer; //Upper and lower bounds for Buffer layer.
 
   /*Solver parameters*/
   unsigned int maxLinearSolverIterations; // Maximum iterations for linear solver
@@ -107,7 +151,6 @@ public:
   double absNonLinearTolerance; // Non-linear solver tolerance
   double relNonLinearTolerance; // Relative non-linear solver tolerance
   bool stopOnConvergenceFailure; // Flag to stop problem if convergence fails
-  bool enableStiffnessFirstIter; //Flag to enable the calculation of stiffness matrix only for the first iteration of each increment
 
   /*Adaptive time-stepping parameters*/
   bool enableAdaptiveTimeStepping; //Flag to enable adaptive time steps

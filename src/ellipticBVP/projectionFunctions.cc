@@ -40,7 +40,53 @@ void ellipticBVP<dim>::initProjection(){
 					      dofHandler_Scalar.n_locally_owned_dofs_per_processor(),
 					      mpi_communicator,
 					      locally_relevant_dofs_Scalar);
-  massMatrix.reinit (locally_owned_dofs_Scalar, locally_owned_dofs_Scalar, dsp, mpi_communicator); massMatrix=0.0;
+
+    if(userInputs.enableIndentationBCs) {
+        hanging_constraints.clear ();
+        hanging_constraints.reinit (locally_relevant_dofs);
+        //pcout<<"lambda -issues: locally_relevant_dofs ascending and 1:1? "<<locally_relevant_dofs.is_ascending_and_one_to_one(mpi_communicator)<<"\n";
+        //lambda.reinit(locally_relevant_dofs, mpi_communicator); //THIS ISNT WORKING FOR MPI np>1
+        //lambda.reinit(locally_owned_dofs,locally_relevant_ghost_dofs,mpi_communicator);
+        //local one to one and ascending is violated
+        DoFTools::make_hanging_node_constraints (dofHandler, hanging_constraints);
+        hanging_constraints.close ();
+        DynamicSparsityPattern dsp2 (locally_relevant_dofs);
+        DoFTools::make_sparsity_pattern (dofHandler, dsp2, hanging_constraints, false);
+        SparsityTools::distribute_sparsity_pattern (dsp2,
+                                                    dofHandler.n_locally_owned_dofs_per_processor(),
+                                                    mpi_communicator,
+                                                    locally_relevant_dofs);
+        massMatrix.reinit (locally_owned_dofs, locally_owned_dofs, dsp2, mpi_communicator); massMatrix=0.0;
+        pcout << "massMatrix.domain " << massMatrix.locally_owned_domain_indices().size() <<std::endl;
+        diag_mass_matrix_vector.reinit(locally_owned_dofs, mpi_communicator);
+        //diag_mass_matrix_vector = 0;
+        //residual.compress();
+        pcout << "before assemble mass matrix diagonal " << std::endl;
+        assemble_mass_matrix_diagonal();
+        pcout << "after assemble mass matrix diagonal " << std::endl;
+        unsigned int start = (residual.local_range().first),
+                end = (residual.local_range().second);
+        std::cout << "start " << start << "end " << end << std::endl;
+        for (unsigned int j = start; j < end; ++j) {
+            diag_mass_matrix_vector(j) = massMatrix.diag_element(j);
+            //std::cout << "mass matrix vector entry " << j << ": " << diag_mass_matrix_vector(j) << std::endl;
+        }
+
+
+        pcout << "initializing Indentation arrays\n";
+        active_set.clear();
+        active_set.set_size(dofHandler.n_dofs());
+        indentation_constraints.clear();
+        indentation_constraints.reinit(locally_relevant_dofs);
+        newton_rhs_uncondensed.reinit(locally_owned_dofs, mpi_communicator);
+        newton_rhs_uncondensed_inc.reinit(locally_owned_dofs, mpi_communicator);
+        pcout << "before diagonal mass matrix compress " << std::endl;
+        diag_mass_matrix_vector.compress(VectorOperation::insert);
+        massMatrix = 0.0;
+        pcout << "after diagonal mass matrix compress " << std::endl;
+    }
+    massMatrix.reinit (locally_owned_dofs_Scalar, locally_owned_dofs_Scalar, dsp, mpi_communicator); massMatrix=0.0;
+
 
   //local variables
   FEValues<dim> fe_values (FE_Scalar, quadrature, update_values | update_JxW_values);
@@ -93,8 +139,8 @@ void ellipticBVP<dim>::projection(){
   //return if no post processing fields
   if (!userInputs.writeOutput) return;
   if (numPostProcessedFields==0) return;
-  
- 
+
+
 
   //////////////////////TabularOutput Start///////////////
   std::vector<unsigned int> tabularTimeInputIncInt;
@@ -124,7 +170,7 @@ if (userInputs.tabularOutput){
   for (unsigned int field=0; field<numPostProcessedFields; field++){
     (*postResidual[field])=0.0;
   }
-
+  //pcout <<"step1 \n";
   //local variables
   QGauss<dim>  quadrature(userInputs.quadOrder);
   FEValues<dim> fe_values (FE_Scalar, quadrature, update_values | update_JxW_values);
@@ -132,7 +178,7 @@ if (userInputs.tabularOutput){
   const unsigned int   num_quad_points = quadrature.size();
   Vector<double>       elementalResidual (dofs_per_cell);
   std::vector<types::global_dof_index> local_dof_indices (dofs_per_cell);
-
+//pcout <<"step2 \n";
   //parallel loop over all elements
   typename DoFHandler<dim>::active_cell_iterator cell = dofHandler_Scalar.begin_active(), endc = dofHandler_Scalar.end();
   unsigned int cellID=0;
@@ -145,7 +191,6 @@ if (userInputs.tabularOutput){
       cell->get_dof_indices (local_dof_indices);
       for (unsigned int field=0; field<numPostProcessedFields; field++){
 	elementalResidual = 0;
-
 	//elementalSolution=N*solution
 	for (unsigned int d1=0; d1<dofs_per_cell; ++d1) {
 	  unsigned int i = fe_values.get_fe().system_to_component_index(d1).first;
@@ -159,11 +204,11 @@ if (userInputs.tabularOutput){
       cellID++;
     }
   }
-
+//pcout <<"numPostProcessedFields"<<numPostProcessedFields<<"step4 \n";
   //MPI operation to sync data
   for (unsigned int field=0; field<numPostProcessedFields; field++){
     postResidual[field]->compress(VectorOperation::add);
-
+//std::cout <<"field="<<field<<"step \n";
     //L2 projection by solving for Mx=b problem
     *postFields[field]=0.0;
     solveLinearSystem2(constraintsMassMatrix, massMatrix, *postResidual[field], *postFields[field],  *postFieldsWithGhosts[field],  *postFieldsWithGhosts[field]);

@@ -9,6 +9,8 @@
 
 //dealii headers
 #include "../../include/dealIIheaders.h"
+#include "../../include/userInputParameters.h"
+
 //Static condensation
 #include "../utilityObjects/staticCondensation.cc"
 
@@ -25,7 +27,7 @@ public:
    *Class constructor. Takes as inputs the deal.II FiniteElement object used in the current problem,
    *and the parallel cout object.
    */
-  enhancedStrain(const FiniteElement<dim, dim> &fe, ConditionalOStream  pcout_temp);
+  enhancedStrain(const FiniteElement<dim, dim> &fe, ConditionalOStream  pcout_temp, userInputParameters _userInputs);
   /**
    *Class destructor.
    */
@@ -132,6 +134,7 @@ private:
    *The jacobian matrix and its inverse at the center of the element (jacobian of the isoparametric mapping).
    */
   Tensor<2,dim> J_0, J_0inv;
+  Tensor<1,dim,double> HlocalT;
   /**
    *The determinant of the jacobian matrix at the center of the element (jacobian of the isoparametric mapping).
    */
@@ -147,10 +150,10 @@ private:
 };
 
 template <int dim>
-enhancedStrain<dim>::enhancedStrain(const FiniteElement<dim, dim> &fe, ConditionalOStream  pcout_temp)
+enhancedStrain<dim>::enhancedStrain(const FiniteElement<dim, dim> &fe, ConditionalOStream  pcout_temp, userInputParameters _userInputs)
   :
   center_quad(1),
-  quad_formula(quadOrder),
+  quad_formula(_userInputs.quadOrder),
   fe_values (fe, quad_formula, update_values   | update_gradients | update_quadrature_points | update_jacobians | update_JxW_values),
   center_values (fe, center_quad, update_values   | update_gradients | update_jacobians | update_quadrature_points | update_JxW_values)
 {
@@ -269,6 +272,7 @@ Tensor<1,dim,double> enhancedStrain<dim>::bar_grad(unsigned int function_no, uns
 
   //Hold enhanced strain gradient function value
   Tensor<1,dim,double> grad;
+
   //Jacobian at given quad. point
   Tensor<2,dim> J_xi = fe_values.jacobian(point_no);
   double j_xi = determinant(J_xi);
@@ -375,7 +379,7 @@ void enhancedStrain<dim>::create_block_mat_vec(FullMatrix<double> F, FullMatrix<
   }
 
   Klocal = 0.; Glocal = 0.; Mlocal = 0.;
-  Flocal = 0.; Hlocal = 0.;
+  Flocal = 0.; Hlocal = 0.; HlocalT = 0.;
 
   Tensor<2,dim,double> F_enh, Fenh_inv, tau_enh;
   unsigned int dofs_per_elem = fe_values.get_fe().dofs_per_cell;
@@ -433,7 +437,7 @@ void enhancedStrain<dim>::create_block_mat_vec(FullMatrix<double> F, FullMatrix<
     }
     else{
       //see line 2 of equation (4.9)
-      Hlocal(d) += double_contract(F0_Finv,tau_enh)*tilde_grad(d,q)[i];
+      Hlocal(d) += scalar_product(F0_Finv,tau_enh)*tilde_grad(d,q)[i]; //double_contract wants symmetricTensor
     }
   }
 
@@ -467,7 +471,7 @@ void enhancedStrain<dim>::create_block_mat_vec(FullMatrix<double> F, FullMatrix<
       }
       //See also line 3 of equation (4.19)
       if(I >= prim_enh_dofs_per_elem && J >= prim_enh_dofs_per_elem){
-	Mlocal[I][J] += (contract3(F0_Finv,c_ep,F0_Finv) + double_contract(F0_Finv,tau_enh*F0_Finv))*
+	Mlocal[I][J] += (contract3(F0_Finv,c_ep,F0_Finv) + scalar_product(F0_Finv,tau_enh*F0_Finv))*
 	  tilde_grad(I,q)[j]*tilde_grad(J,q)[k];
       }
     }
