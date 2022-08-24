@@ -94,8 +94,7 @@ protected:
   virtual void mesh();
   void init();
   void assemble();
-  //void assemble2();
-  #if ((DEAL_II_VERSION_MAJOR < 9)||(DEAL_II_VERSION_MINOR < 1))
+  #if ((DEAL_II_VERSION_MAJOR < 9)||((DEAL_II_VERSION_MINOR < 1)&&(DEAL_II_VERSION_MAJOR==9)))
   ConstraintMatrix   constraints, constraints_PBCs_Inc0, constraints_PBCs_IncNot0, constraints_PBCs_Inc0Neg;
   ConstraintMatrix   constraintsMassMatrix;
   void solveLinearSystem(ConstraintMatrix& constraintmatrix, matrixType& A, vectorType& b, vectorType& x, vectorType& xGhosts, vectorType& dxGhosts);
@@ -137,10 +136,6 @@ protected:
     FullMatrix<double>& elementalJacobian,
     Vector<double>&     elementalResidual) = 0;
 
-//    virtual void getElementalValues2(FEValues<dim>& fe_values,
-//      unsigned int dofs_per_cell,
-//      unsigned int num_quad_points,
-//      Vector<double>&     elementalResidual) = 0;
       //methods to allow for pre/post iteration updates
       virtual void updateBeforeIteration();
       virtual void updateAfterIteration();
@@ -203,7 +198,7 @@ protected:
       std::vector<std::vector<double>> deluConstraint;
 
       FullMatrix<double> tabularDisplacements,tabularInputNeumannBCs;
-      unsigned int timeCounter;
+      unsigned int timeCounter,timeCounter_Neumann;
       double currentTime;
       /////DIC bc names
       FullMatrix<double> bc_new1,bc_new2,bc_new3,bc_new4;
@@ -239,7 +234,7 @@ protected:
       std::vector<std::string> postprocessed_solution_names;
       //postprocessing data structures
       std::vector<vectorType*> postFields, postFieldsWithGhosts, postResidual;
-      matrixType massMatrix;//, massMatrix2;
+      matrixType massMatrix;
       Table<4,double> postprocessValues;
       Table<2,double> postprocessValuesAtCellCenters;
 

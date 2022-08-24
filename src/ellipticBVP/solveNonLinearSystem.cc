@@ -13,14 +13,19 @@ bool ellipticBVP<dim>::solveNonLinearSystem(){
   currentIteration=0;
   while (currentIteration < userInputs.maxNonLinearIterations + extra_non_linear_iterations){
     //call updateBeforeIteration, if any
-    //pcout << "debug solveNonLinearSystem 1\n";
     updateBeforeIteration();
-    //pcout << "debug solveNonLinearSystem 2\n";
+
     //Calling assemble
+    #if ((DEAL_II_VERSION_MAJOR < 9)||((DEAL_II_VERSION_MINOR < 3)&&(DEAL_II_VERSION_MAJOR==9)))
     computing_timer.enter_section("assembly");
     assemble();
     computing_timer.exit_section("assembly");
-    //pcout << "debug solveNonLinearSystem 3\n";
+    #else
+    computing_timer.enter_subsection("assembly");
+    assemble();
+    computing_timer.leave_subsection("assembly");
+    #endif
+
     if (!resetIncrement){
       //Calculate residual norms and check for convergence
       currentNorm=residual.l2_norm();
@@ -35,10 +40,17 @@ bool ellipticBVP<dim>::solveNonLinearSystem(){
         relNorm);
         pcout << buffer;
         //if not converged, solveLinearSystem Ax=b
+        #if ((DEAL_II_VERSION_MAJOR < 9)||((DEAL_II_VERSION_MINOR < 3)&&(DEAL_II_VERSION_MAJOR==9)))
         computing_timer.enter_section("solve");
         solveLinearSystem(constraints, jacobian, residual, solution, solutionWithGhosts, solutionIncWithGhosts);
         computing_timer.exit_section("solve");
-        currentIteration++;
+        #else
+	computing_timer.enter_subsection("solve");
+        solveLinearSystem(constraints, jacobian, residual, solution, solutionWithGhosts, solutionIncWithGhosts);
+        computing_timer.leave_subsection("solve");
+        #endif
+
+	currentIteration++;
       }
       //call updateAfterIteration, if any
       if (userInputs.enableIndentationBCs){
@@ -60,7 +72,6 @@ bool ellipticBVP<dim>::solveNonLinearSystem(){
       }
 
       updateAfterIteration();
-      //pcout << "debug solveNonLinearSystem 4\n";
     }
 
     //check if maxNonLinearIterations reached

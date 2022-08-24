@@ -37,7 +37,7 @@ ellipticBVP<dim>::ellipticBVP (userInputParameters _userInputs):
   }
   if(userInputs.enableCyclicLoading)
     cycleTime=4*userInputs.quarterCycleTime;
-  totalIncrements=totalT/delT;
+  totalIncrements=std::round(totalT/delT);
   if(userInputs.enableTabularPeriodicBCs)
     periodicTotalIncrements=userInputs.periodicTabularTime/delT;
 }

@@ -4,7 +4,7 @@
 //solve linear system of equations AX=b using iterative solver
 template <int dim>
 
-#if ((DEAL_II_VERSION_MAJOR < 9)||(DEAL_II_VERSION_MINOR < 1))
+#if ((DEAL_II_VERSION_MAJOR < 9)||((DEAL_II_VERSION_MINOR < 1)&&(DEAL_II_VERSION_MAJOR==9)))
 void ellipticBVP<dim>::solveLinearSystem(ConstraintMatrix& constraintmatrix, matrixType& A, vectorType& b, vectorType& x, vectorType& xGhosts, vectorType& dxGhosts){
 #else
 void ellipticBVP<dim>::solveLinearSystem(AffineConstraints<double>& constraintmatrix, matrixType& A, vectorType& b, vectorType& x, vectorType& xGhosts, vectorType& dxGhosts){
@@ -39,7 +39,7 @@ void ellipticBVP<dim>::solveLinearSystem(AffineConstraints<double>& constraintma
 //This method is for solving the linear system of equations that arise in
 //the projection of scalar post-processing fields
 template <int dim>
-#if ((DEAL_II_VERSION_MAJOR < 9)||(DEAL_II_VERSION_MINOR < 1))
+#if ((DEAL_II_VERSION_MAJOR < 9)||((DEAL_II_VERSION_MINOR < 1)&&(DEAL_II_VERSION_MAJOR==9)))
 void ellipticBVP<dim>::solveLinearSystem2(ConstraintMatrix& constraintmatrix, matrixType& A, vectorType& b, vectorType& x, vectorType& xGhosts, vectorType& dxGhosts){
 #else
 void ellipticBVP<dim>::solveLinearSystem2(AffineConstraints<double>& constraintmatrix, matrixType& A, vectorType& b, vectorType& x, vectorType& xGhosts, vectorType& dxGhosts){

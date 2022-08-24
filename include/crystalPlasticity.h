@@ -94,11 +94,6 @@ public:
             FullMatrix<double>& elementalJacobian,
             Vector<double>&     elementalResidual);
 
-            void getElementalValues2(FEValues<dim>& fe_values,
-              unsigned int dofs_per_cell,
-              unsigned int num_quad_points,
-              Vector<double>&     elementalResidual);
-
               void updateAfterIncrement();
 
               void updateBeforeIteration();

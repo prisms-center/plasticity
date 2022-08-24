@@ -36,10 +36,14 @@ void ellipticBVP<dim>::initProjection(){
   //create mass matrix
   DynamicSparsityPattern dsp (locally_relevant_dofs_Scalar);
   DoFTools::make_sparsity_pattern (dofHandler_Scalar, dsp, constraintsMassMatrix, false);
+  #if ((DEAL_II_VERSION_MAJOR < 9)||((DEAL_II_VERSION_MINOR < 3)&&(DEAL_II_VERSION_MAJOR==9)))
   SparsityTools::distribute_sparsity_pattern (dsp,
 					      dofHandler_Scalar.n_locally_owned_dofs_per_processor(),
 					      mpi_communicator,
 					      locally_relevant_dofs_Scalar);
+  #else
+  SparsityTools::distribute_sparsity_pattern (dsp, dofHandler_Scalar.locally_owned_dofs(), mpi_communicator, locally_relevant_dofs_Scalar);
+  #endif
 
     if(userInputs.enableIndentationBCs) {
         hanging_constraints.clear ();
@@ -52,10 +56,14 @@ void ellipticBVP<dim>::initProjection(){
         hanging_constraints.close ();
         DynamicSparsityPattern dsp2 (locally_relevant_dofs);
         DoFTools::make_sparsity_pattern (dofHandler, dsp2, hanging_constraints, false);
+        #if ((DEAL_II_VERSION_MAJOR < 9)||((DEAL_II_VERSION_MINOR < 3)&&(DEAL_II_VERSION_MAJOR==9)))
         SparsityTools::distribute_sparsity_pattern (dsp2,
                                                     dofHandler.n_locally_owned_dofs_per_processor(),
                                                     mpi_communicator,
                                                     locally_relevant_dofs);
+        #else
+        SparsityTools::distribute_sparsity_pattern (dsp2, dofHandler.locally_owned_dofs(), mpi_communicator, locally_relevant_dofs);
+        #endif
         massMatrix.reinit (locally_owned_dofs, locally_owned_dofs, dsp2, mpi_communicator); massMatrix=0.0;
         pcout << "massMatrix.domain " << massMatrix.locally_owned_domain_indices().size() <<std::endl;
         diag_mass_matrix_vector.reinit(locally_owned_dofs, mpi_communicator);
@@ -86,7 +94,6 @@ void ellipticBVP<dim>::initProjection(){
         pcout << "after diagonal mass matrix compress " << std::endl;
     }
     massMatrix.reinit (locally_owned_dofs_Scalar, locally_owned_dofs_Scalar, dsp, mpi_communicator); massMatrix=0.0;
-
 
   //local variables
   FEValues<dim> fe_values (FE_Scalar, quadrature, update_values | update_JxW_values);
@@ -139,8 +146,8 @@ void ellipticBVP<dim>::projection(){
   //return if no post processing fields
   if (!userInputs.writeOutput) return;
   if (numPostProcessedFields==0) return;
-
-
+  
+ 
 
   //////////////////////TabularOutput Start///////////////
   std::vector<unsigned int> tabularTimeInputIncInt;
@@ -170,7 +177,7 @@ if (userInputs.tabularOutput){
   for (unsigned int field=0; field<numPostProcessedFields; field++){
     (*postResidual[field])=0.0;
   }
-  //pcout <<"step1 \n";
+
   //local variables
   QGauss<dim>  quadrature(userInputs.quadOrder);
   FEValues<dim> fe_values (FE_Scalar, quadrature, update_values | update_JxW_values);
@@ -178,7 +185,7 @@ if (userInputs.tabularOutput){
   const unsigned int   num_quad_points = quadrature.size();
   Vector<double>       elementalResidual (dofs_per_cell);
   std::vector<types::global_dof_index> local_dof_indices (dofs_per_cell);
-//pcout <<"step2 \n";
+
   //parallel loop over all elements
   typename DoFHandler<dim>::active_cell_iterator cell = dofHandler_Scalar.begin_active(), endc = dofHandler_Scalar.end();
   unsigned int cellID=0;
@@ -191,6 +198,7 @@ if (userInputs.tabularOutput){
       cell->get_dof_indices (local_dof_indices);
       for (unsigned int field=0; field<numPostProcessedFields; field++){
 	elementalResidual = 0;
+
 	//elementalSolution=N*solution
 	for (unsigned int d1=0; d1<dofs_per_cell; ++d1) {
 	  unsigned int i = fe_values.get_fe().system_to_component_index(d1).first;
@@ -204,11 +212,11 @@ if (userInputs.tabularOutput){
       cellID++;
     }
   }
-//pcout <<"numPostProcessedFields"<<numPostProcessedFields<<"step4 \n";
+
   //MPI operation to sync data
   for (unsigned int field=0; field<numPostProcessedFields; field++){
     postResidual[field]->compress(VectorOperation::add);
-//std::cout <<"field="<<field<<"step \n";
+
     //L2 projection by solving for Mx=b problem
     *postFields[field]=0.0;
     solveLinearSystem2(constraintsMassMatrix, massMatrix, *postResidual[field], *postFields[field],  *postFieldsWithGhosts[field],  *postFieldsWithGhosts[field]);
