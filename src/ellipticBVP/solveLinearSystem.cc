@@ -25,9 +25,9 @@ void ellipticBVP<dim>::solveLinearSystem(AffineConstraints<double>& constraintma
     pcout << buffer;
   }
   catch (...) {
-    //pcout << "\nWarning: solver did not converge in "
-	  //<< solver_control.last_step()
-	  //<< " iterations as per set tolerances. consider increasing maxSolverIterations or decreasing relSolverTolerance.\n";
+    pcout << "\nWarning: solver did not converge in "
+	  << solver_control.last_step()
+	  << " iterations as per set tolerances. consider increasing maxSolverIterations or decreasing relSolverTolerance.\n";
   }
   constraintmatrix.distribute (completely_distributed_solutionInc);
   dxGhosts=completely_distributed_solutionInc;

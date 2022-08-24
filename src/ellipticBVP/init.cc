@@ -224,6 +224,8 @@ void ellipticBVP<dim>::init(){
 
 
     if(userInputs.enableNodalDisplacementBCs){
+
+
       std::ifstream BCfileNodal(userInputs.nodalDisplacement_BCfilename);
       nodalDisplacement.resize(userInputs.numberOfNodalBCs,std::vector<double>(3,0));
       dofNodalDisplacement.resize(userInputs.numberOfNodalBCs);
@@ -241,8 +243,76 @@ void ellipticBVP<dim>::init(){
         }
       }
     }
+//INDENTATION
+    if(userInputs.enableIndentationBCs){
+        locally_relevant_ghost_dofs = locally_relevant_dofs;
+        locally_relevant_ghost_dofs.subtract_set(locally_owned_dofs);
 
+        std::ifstream IndentationBCfile(userInputs.Indentation_BCfilename);
 
+        //read 5 header lines for documentation for now!!!
+        // read 4 data lines for now!!
+
+        if (IndentationBCfile.is_open()){
+            KeyPosIndenter.resize(userInputs.indentationKeyFrames);
+            initPosIndenter.resize(dim);
+            finalPosIndenter.resize(dim);
+            currentPosIndenter.resize(dim);
+            prevPosIndenter.resize(dim);
+            pcout << "Reading Indentation boundary conditions\n";
+            for (unsigned int i=0; i<4; i++) std::getline (IndentationBCfile,line);
+            //pcout << "After Header lines\n";
+
+            unsigned int temp;
+            unsigned int roughTemp;
+            unsigned int lines =userInputs.indentationKeyFrames + 1;
+            for (unsigned int i=0; i < lines; i++){
+                std::getline (IndentationBCfile,line);
+                std::stringstream ss(line);
+                if (i == 0) {
+                        ss>>indenterShape>>indenterSize>>temp>>indenterTolerance>>roughTemp;
+                        indenterFace = temp - 1;
+                        indentDof = (int)(temp - 1) / (int)2;
+                        if (roughTemp == 0) {
+                            roughIndenter = false;
+                        }
+                        else {
+                            roughIndenter = true;
+                        }
+                    }
+                else {
+                    if (dim==3){
+                        double tem1=0;
+                        double tem2=0;
+                        double tem3=0;
+                        std::string debugstring;
+                        ss>>tem1>>tem2>>tem3;
+                        KeyPosIndenter[i-1](0)=tem1;
+                        KeyPosIndenter[i-1](1)=tem2;
+                        KeyPosIndenter[i-1](2)=tem3;
+                    }
+                    else if (dim==2){
+                        double tem1=0, tem2=0;
+                        ss>>tem1>>tem2;
+                        KeyPosIndenter[i-1](0)=tem1;
+                        KeyPosIndenter[i-1](1)=tem2;
+                    }
+                    pcout<<KeyPosIndenter[i-1](0)<<" "<<KeyPosIndenter[i-1](1)<<" "<<KeyPosIndenter[i-1](2)<<"\n";
+                }
+            }
+            for (unsigned int i=0; i<3; i++){
+//                currentPosIndenter[i] = initPosIndenter[i];
+//                prevPosIndenter[i] = initPosIndenter[i];
+                currentPosIndenter[i] = KeyPosIndenter[0](i);
+                prevPosIndenter[i] = KeyPosIndenter[0](i);
+            }
+        }
+    }
+// Isotropic Continuum
+//    if(userInputs.continuum_Isotropic){
+//        numPostProcessedFields = 2;
+//        numPostProcessedFieldsAtCellCenters = 1;
+//    }
 
     if(userInputs.useVelocityGrad){
       targetVelGrad.reinit(3,3); targetVelGrad=0.0;

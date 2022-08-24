@@ -96,6 +96,27 @@ public:
   std::vector<std::vector<int>> periodicBCsInput,tabularPeriodicCoef; // 	Periodic BCs Input
   std::vector<std::vector<double>> periodicBCsInput2,tabularPeriodicTimeInput; // 	Periodic BCs Input
 
+  //INDENTATION
+  bool enableIndentationBCs; // Specify whether to use Indentation BCs
+  unsigned int indentationKeyFrames; // How many key frames in indentation
+  unsigned int freezeActiveSetSteps;
+  bool freezeActiveSetNewIteration;
+  std::vector<int> indentationKeyFrameTimeIncs; // the increment number of each key frame
+  std::string Indentation_BCfilename; // Indentation BCs Constraints file
+  std::vector<double> refinementCenter; // the center point of the refinement zone
+  std::vector<double> refinementZoneSize; // Radius of refinement zone from center
+  std::vector<int> refinementFactor; // Number of cell refinements for plastic zone
+  double activeSetCriterionCoefficient; // The number to multiply the stiffness by for the active set criterion
+  double activeSetLambdaTolerance; // The value to add to the criterion to account for errors in lambda/mass
+  bool debugIndentation; // If true, debugging information will be written about the initial active set for each increment
+
+
+  //Continuum
+  bool continuum_Isotropic; // Specify whether to use Isotropic Continuum Elasto-Plasticity model
+  double lame_lambda, lame_mu, yield_stress, strain_hardening, kinematic_hardening;
+  std::string strain_energy_function, yield_function, iso_hardening_function;
+
+
   /*Solution output parameters*/
   bool writeOutput; // flag to write output vtu and pvtu files
   bool writeQuadratureOutput; // flag to write quadrature points output
@@ -105,6 +126,9 @@ public:
   unsigned int skipOutputSteps, skipQuadratureOutputSteps;
   bool output_Eqv_strain;
   bool output_Eqv_stress;
+  bool output_Time;
+  bool output_alpha;
+  bool output_Indenter_Load;
   bool output_Grain_ID;
   bool output_Twin;
 

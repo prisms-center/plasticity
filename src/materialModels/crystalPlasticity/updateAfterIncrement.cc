@@ -164,19 +164,19 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 					this->postprocessValues(cellID, q, 1, 0) = eqvstrain;
 					this->postprocessValues(cellID, q, 2, 0) = twin_ouput[cellID][q];
 
-					////////User Defined Variables for visualization outputs (output_Var1 to output_Var24)////////
-					this->postprocessValues(cellID, q, 3, 0) = 0;
-					this->postprocessValues(cellID, q, 4, 0) = 0;
-					this->postprocessValues(cellID, q, 5, 0) = 0;
-					this->postprocessValues(cellID, q, 6, 0) = 0;
-					this->postprocessValues(cellID, q, 7, 0) = 0;
-					this->postprocessValues(cellID, q, 8, 0) = 0;
-					this->postprocessValues(cellID, q, 9, 0) = 0;
-					this->postprocessValues(cellID, q, 10, 0) = 0;
-					this->postprocessValues(cellID, q, 11, 0) = 0;
-					this->postprocessValues(cellID, q, 12, 0) = 0;
-					this->postprocessValues(cellID, q, 13, 0) = 0;
-					this->postprocessValues(cellID, q, 14, 0) = 0;
+////////User Defined Variables for visualization outputs (output_Var1 to output_Var24)////////
+					this->postprocessValues(cellID, q, 3, 0) = CauchyStress[cellID][q][0][0];
+					this->postprocessValues(cellID, q, 4, 0) = CauchyStress[cellID][q][1][1];
+					this->postprocessValues(cellID, q, 5, 0) = CauchyStress[cellID][q][2][2];
+					this->postprocessValues(cellID, q, 6, 0) = CauchyStress[cellID][q][1][2];
+					this->postprocessValues(cellID, q, 7, 0) = CauchyStress[cellID][q][0][2];
+					this->postprocessValues(cellID, q, 8, 0) = CauchyStress[cellID][q][0][1];
+					this->postprocessValues(cellID, q, 9, 0) = E_tau[0][0];
+					this->postprocessValues(cellID, q, 10, 0) = E_tau[1][1];
+					this->postprocessValues(cellID, q, 11, 0) = E_tau[2][2];
+					this->postprocessValues(cellID, q, 12, 0) = E_tau[1][2];
+					this->postprocessValues(cellID, q, 13, 0) = E_tau[0][2];
+					this->postprocessValues(cellID, q, 14, 0) = E_tau[0][1];
 					this->postprocessValues(cellID, q, 15, 0) = 0;
 					this->postprocessValues(cellID, q, 16, 0) = 0;
 					this->postprocessValues(cellID, q, 17, 0) = 0;
@@ -585,28 +585,43 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 		std::ofstream outputFile;
 		dir += std::string("stressstrain.txt");
 
-		if(this->currentIncrement==0){
-			outputFile.open(dir.c_str());
-			outputFile << "Exx"<<'\t'<<"Eyy"<<'\t'<<"Ezz"<<'\t'<<"Eyz"<<'\t'<<"Exz"<<'\t'<<"Exy"<<'\t'<<"Txx"<<'\t'<<"Tyy"<<'\t'<<"Tzz"<<'\t'<<"Tyz"<<'\t'<<"Txz"<<'\t'<<"Txy"<<'\t'<<"TwinRealVF"<<'\t'<<"TwinMade"<<'\t'<<"SlipTotal";
-			if (this->userInputs.flagUserDefinedAverageOutput){
-				for(unsigned int i=0;i<this->userInputs.numberUserDefinedAverageOutput;i++){
-					outputFile <<'\t'<<"userDefined"<<i;
-				}
-			}
-			outputFile <<'\n';
-			outputFile.close();
-		}
-		outputFile.open(dir.c_str(),std::fstream::app);
-		outputFile << global_strain[0][0]<<'\t'<<global_strain[1][1]<<'\t'<<global_strain[2][2]<<'\t'<<global_strain[1][2]<<'\t'<<global_strain[0][2]<<'\t'<<global_strain[0][1]<<'\t'<<global_stress[0][0]<<'\t'<<global_stress[1][1]<<'\t'<<global_stress[2][2]<<'\t'<<global_stress[1][2]<<'\t'<<global_stress[0][2]<<'\t'<<global_stress[0][1]<<'\t'<<F_r<<'\t'<<F_e<<'\t'<<F_s;
-		if (this->userInputs.flagUserDefinedAverageOutput){
-			for(unsigned int i=0;i<this->userInputs.numberUserDefinedAverageOutput;i++){
-				outputFile <<'\t'<<userDefinedAverageOutput(i);
-			}
-		}
-		outputFile <<'\n';
-		outputFile.close();
-	}
-
+        if (this->currentIncrement == 0) {
+            outputFile.open(dir.c_str());//INDENTATION!!
+            outputFile << "Exx" << '\t' << "Eyy" << '\t' << "Ezz" << '\t' << "Eyz" << '\t' << "Exz" << '\t' << "Exy"
+                       << '\t' << "Txx" << '\t' << "Tyy" << '\t' << "Tzz" << '\t' << "Tyz" << '\t' << "Txz" << '\t'
+                       << "Txy" << '\t' << "TwinRealVF" << '\t' << "TwinMade" << '\t' << "SlipTotal";
+            if (this->userInputs.enableIndentationBCs)
+                outputFile << "\tInd_Load\tInd_U";
+            if (this->userInputs.flagUserDefinedAverageOutput){
+                for(unsigned int i=0;i<this->userInputs.numberUserDefinedAverageOutput;i++){
+                    outputFile <<'\t'<<"userDefined"<<i;
+                }
+            }
+            outputFile << '\n';
+            outputFile.close();
+        }
+        outputFile.open(dir.c_str(), std::fstream::app);
+        outputFile << global_strain[0][0] << '\t' << global_strain[1][1] << '\t' << global_strain[2][2] << '\t'
+                   << global_strain[1][2] << '\t' << global_strain[0][2] << '\t' << global_strain[0][1] << '\t'
+                   << global_stress[0][0] << '\t' << global_stress[1][1] << '\t' << global_stress[2][2] << '\t'
+                   << global_stress[1][2] << '\t' << global_stress[0][2] << '\t' << global_stress[0][1] << '\t' << F_r
+                   << '\t' << F_e << '\t' << F_s;
+        if (this->userInputs.enableIndentationBCs) {
+            double Ind_displacement;
+            double Ind_load;
+            Ind_displacement = this->currentIndentDisp;
+            Ind_load = this->indenterLoad;
+            std::cout<<"IndenterLoad = "<<Ind_load<<'\n';
+            outputFile << '\t' << Ind_load << '\t' << Ind_displacement ;
+        }
+        if (this->userInputs.flagUserDefinedAverageOutput){
+            for(unsigned int i=0;i<this->userInputs.numberUserDefinedAverageOutput;i++){
+                outputFile <<'\t'<<userDefinedAverageOutput(i);
+            }
+        }
+        outputFile << '\n';
+        outputFile.close();
+    }
 
 	//call base class project() function to project post processed fields
 	ellipticBVP<dim>::projection();

@@ -6,9 +6,10 @@
 #include<vector>
 #include<cstdlib>
 
-#include "IntegrationTools/PExtern.hh"
-#include "IntegrationTools/PFunction.hh"
-#include "IntegrationTools/PField.hh"
+#include "../../../../utils/IntegrationTools/PExtern.hh"
+#include "../../../../utils/IntegrationTools/PFunction.hh"
+#include "../../../../utils/IntegrationTools/PField.hh"
+
 
 // In future, might have more complicated OutType, 
 //   so make all have 'void' return and pass everything by reference

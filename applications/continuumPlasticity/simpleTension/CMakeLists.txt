@@ -40,6 +40,7 @@ ENDIF()
 DEAL_II_INITIALIZE_CACHED_VARIABLES()
 
 INCLUDE_DIRECTORIES(${DEAL_II_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/../../../utils)
+INCLUDE_DIRECTORIES(/../../../include)
 SET(CMAKE_BUILD_TYPE "Debug" CACHE STRING
 	"Choose the type of build, options are: Debug, Release"
 	)
@@ -51,10 +52,15 @@ PROJECT(${TARGET})
 ADD_LIBRARY(PLibrary SHARED ${CMAKE_CURRENT_SOURCE_DIR}/../../../src/materialModels/continuumPlasticity/models/PLibrary.cc)
 DEAL_II_SETUP_TARGET(PLibrary)
 
+##ADD_LIBRARY(BVPLibrary STATIC ${EBVPfunctions})
+##DEAL_II_SETUP_TARGET(BVPLibrary)
+
+
 ADD_EXECUTABLE(${TARGET} ${TARGET}.cc)
 DEAL_II_SETUP_TARGET(${TARGET})
 
 TARGET_LINK_LIBRARIES(${TARGET} ${DEAL_II_LIBRARIES} PLibrary)
+TARGET_LINK_LIBRARIES(main ${CMAKE_SOURCE_DIR}/../../../libprisms_cp_debug.a)
 
 ADD_CUSTOM_TARGET(run
   COMMAND ${TARGET} -pc_type jacobi

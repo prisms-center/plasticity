@@ -95,8 +95,15 @@ void ellipticBVP<dim>::mesh(){
       // Set which (if any) faces of the triangulation are periodic
       setPeriodicity();
     }
+
+
     
     triangulation.refine_global (userInputs.meshRefineFactor);
+
+    if(userInputs.enableIndentationBCs){
+          // Set which (if any) faces of the triangulation are indentation
+          meshRefineIndentation();
+    }
 
     //Output image of the mesh in eps format
     if(userInputs.writeMeshToEPS)

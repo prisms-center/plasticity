@@ -131,9 +131,35 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
   periodicTabularTime=parameter_handler.get_double("periodic Tabular time");
   tabularPeriodicTimeInput.push_back(dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Tabular Periodic Time Table"))));
   tabularPeriodicCoef.push_back(dealii::Utilities::string_to_int(dealii::Utilities::split_string_list(parameter_handler.get("Tabular Periodic Time Table Coefficient"))));
-
+  enableIndentationBCs=parameter_handler.get_bool("Use Indentation BCs");
+  indentationKeyFrames=parameter_handler.get_integer("Indentation Key Frame Number");
+  freezeActiveSetSteps=parameter_handler.get_integer("Indentation Active Set Freeze Iterations");
+  freezeActiveSetNewIteration=parameter_handler.get_bool("Indentation Active Set Freeze on Iteration 1");
+  activeSetCriterionCoefficient=parameter_handler.get_double("Active Set Criterion Coefficient");
+  activeSetLambdaTolerance=parameter_handler.get_double("Active Set Lambda Tolerance");
+  indentationKeyFrameTimeIncs=dealii::Utilities::string_to_int(dealii::Utilities::split_string_list(parameter_handler.get("Indentation Key Frame Increment Numbers")));
+  Indentation_BCfilename=parameter_handler.get("Indentation Boundary condition Constraint filename");
+  refinementCenter=dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Refinement Zone Center")));
+  refinementZoneSize=dealii::Utilities::string_to_double(dealii::Utilities::split_string_list(parameter_handler.get("Refinement Zone Size")));
+  refinementFactor=dealii::Utilities::string_to_int(dealii::Utilities::split_string_list(parameter_handler.get("Refinement Factor")));
+  debugIndentation=parameter_handler.get_bool("Debug Indentation Active Set");
+  continuum_Isotropic = parameter_handler.get_bool("Continuum Isotropic");
+  if(continuum_Isotropic){
+      pcout<<"Isotropic Plasticity enabled (not crystal plasticity) \n";
+      lame_lambda = parameter_handler.get_double("lame_lambda");
+      lame_mu = parameter_handler.get_double("lame_mu");
+      yield_stress = parameter_handler.get_double("yield_stress");
+      strain_hardening = parameter_handler.get_double("strain_hardening");
+      kinematic_hardening = parameter_handler.get_double("kinematic_hardening");
+      strain_energy_function=parameter_handler.get("strain_energy_function");
+      yield_function=parameter_handler.get("yield_function");
+      iso_hardening_function=parameter_handler.get("iso_hardening_function");
+  }
   output_Eqv_strain = parameter_handler.get_bool("Output Equivalent strain");
   output_Eqv_stress = parameter_handler.get_bool("Output Equivalent stress");
+  output_Time = parameter_handler.get_bool("Output Time");
+  output_alpha = parameter_handler.get_bool("Output Equivalent plastic strain alpha");
+  output_Indenter_Load = parameter_handler.get_bool("Output Indenter Load");
   output_Grain_ID = parameter_handler.get_bool("Output Grain ID");
   output_Twin = parameter_handler.get_bool("Output Twin fractions");
 
@@ -572,6 +598,31 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("periodic Tabular time","-1",dealii::Patterns::Double(),"Time for finishing the largest displacement defined in Vertices Periodic BCs row 2");
   parameter_handler.declare_entry("Tabular Periodic Time Table","",dealii::Patterns::List(dealii::Patterns::Double()),"Table for Time intervals of Tabular Periodic BCs");
   parameter_handler.declare_entry("Tabular Periodic Time Table Coefficient","",dealii::Patterns::List(dealii::Patterns::Integer()),"Table for Coefficient of Tabular Periodic BCs ");
+    //INDENTATION 2
+  parameter_handler.declare_entry("Use Indentation BCs","false",dealii::Patterns::Bool(),"Flag to indicate whether to use indentation BCs");
+  parameter_handler.declare_entry("Indentation Active Set Freeze Iterations", "0",dealii::Patterns::Integer(),"How many non linear iterations should active set be frozen for if it is changed");
+  parameter_handler.declare_entry("Active Set Lambda Tolerance", "0.0",dealii::Patterns::Double(),"How much to bias against errors in lambda/mass (positive biases into active set)");
+  parameter_handler.declare_entry("Indentation Active Set Freeze on Iteration 1","false",dealii::Patterns::Bool(),"Flag to indicate whether to freeze active set for first iteration");
+  parameter_handler.declare_entry("Active Set Criterion Coefficient","100",dealii::Patterns::List(dealii::Patterns::Double()),"How much to multiply stiffness by to determine the active set criterion");
+  parameter_handler.declare_entry("Indentation Key Frame Number","3",dealii::Patterns::Integer(),"How many key positions does the indenter visit?");
+  parameter_handler.declare_entry("Indentation Key Frame Increment Numbers","0, 80, 160",dealii::Patterns::List(dealii::Patterns::Integer()),"Number of times to refine cells in refinement zone");
+  parameter_handler.declare_entry("Indentation Boundary condition Constraint filename","IndentationBCsConstraints.txt",dealii::Patterns::Anything(),"File name containing Indentation Boundary condition Constraint");
+  parameter_handler.declare_entry("Refinement Zone Center","0.0, 0.0, 0.0",dealii::Patterns::List(dealii::Patterns::Double()),"x, y, z Coordinates of refinement zone center");
+  parameter_handler.declare_entry("Refinement Zone Size","0.0",dealii::Patterns::List(dealii::Patterns::Double()),"the radius of the refinement zone for indentation");
+  parameter_handler.declare_entry("Refinement Factor","0",dealii::Patterns::List(dealii::Patterns::Integer()),"Number of times to refine cells in refinement zone");
+  parameter_handler.declare_entry("Debug Indentation Active Set","false",dealii::Patterns::Bool(),"Flag to indicate whether to debug indentation active set");
+
+  //Isotropic material 2
+  parameter_handler.declare_entry("Continuum Isotropic","false",dealii::Patterns::Bool(),"Flag to indicate whether to use isotropic material");
+  parameter_handler.declare_entry("lame_lambda","-1",dealii::Patterns::Double(),"Lame' parameter lambda");
+  parameter_handler.declare_entry("lame_mu","-1",dealii::Patterns::Double(),"Lame' parameter mu");
+  parameter_handler.declare_entry("yield_stress","-1",dealii::Patterns::Double(),"Isotropic yield stress (Kirchhoff)");
+  parameter_handler.declare_entry("strain_hardening","-1",dealii::Patterns::Double(),"Linear Isotropic strain hardening coefficient");
+  parameter_handler.declare_entry("kinematic_hardening","-1",dealii::Patterns::Double(),"Kinematic strain hardening coefficient");
+  parameter_handler.declare_entry("strain_energy_function","quadlog",dealii::Patterns::Anything(),"Strain energy density function (quadlog, stvenkir, or neohook)");
+  parameter_handler.declare_entry("yield_function","von_mises",dealii::Patterns::Anything(),"Yield function (currently only von_mises)");
+  parameter_handler.declare_entry("iso_hardening_function","linear_hardening",dealii::Patterns::Anything(),"Isotropic hardening function");
+
 
 
   parameter_handler.declare_entry("Write Output","false",dealii::Patterns::Bool(),"Flag to write output vtu and pvtu files");
@@ -585,6 +636,10 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Skip Quadrature Output Steps","-1",dealii::Patterns::Integer(),"Skip Quadrature Output Steps");
   parameter_handler.declare_entry("Output Equivalent strain","false",dealii::Patterns::Bool(),"Output Equivalent strain");
   parameter_handler.declare_entry("Output Equivalent stress","false",dealii::Patterns::Bool(),"Output Equivalent stress");
+  parameter_handler.declare_entry("Output Time","false",dealii::Patterns::Bool(),"Output Time in stressstrain");
+  parameter_handler.declare_entry("Output Equivalent plastic strain alpha","false",dealii::Patterns::Bool(),"Output Equivalent plastic strain alpha");
+
+  parameter_handler.declare_entry("Output Indenter Load","false",dealii::Patterns::Bool(),"Output Indenter Load"); //Indentation 3
   parameter_handler.declare_entry("Output Grain ID","false",dealii::Patterns::Bool(),"Output Grain ID");
   parameter_handler.declare_entry("Output Twin fractions","false",dealii::Patterns::Bool(),"Output Twin fractions");
 
