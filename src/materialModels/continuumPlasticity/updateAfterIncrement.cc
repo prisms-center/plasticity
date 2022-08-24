@@ -259,41 +259,34 @@ void continuumPlasticity<dim>::updateAfterIncrement()
 		if(this->currentIncrement==0){
 			outputFile.open(dir.c_str());
 			outputFile << "Exx"<<'\t'<<"Eyy"<<'\t'<<"Ezz"<<'\t'<<"Eyz"<<'\t'<<"Exz"<<'\t'<<"Exy"<<'\t'<<"Txx"<<'\t'<<"Tyy"<<'\t'<<"Tzz"<<'\t'<<"Tyz"<<'\t'<<"Txz"<<'\t'<<"Txy";
-			if (this->userInputs.flagUserDefinedAverageOutput){
+      if (this->userInputs.enableIndentationBCs)
+			outputFile << "\tInd_Load\tInd_U";
+      if (this->userInputs.flagUserDefinedAverageOutput){
 				for(unsigned int i=0;i<this->userInputs.numberUserDefinedAverageOutput;i++){
 					outputFile <<'\t'<<"userDefined"<<i;
 				}
 			}
-      if (this->userInputs.output_Time)
-        outputFile << "\tTime";
-      if (this->userInputs.enableIndentationBCs)
-          outputFile << "\tInd_Load\tInd_U";
 			outputFile <<'\n';
 			outputFile.close();
 		}
 		outputFile.open(dir.c_str(),std::fstream::app);
 		outputFile << global_strain[0][0]<<'\t'<<global_strain[1][1]<<'\t'<<global_strain[2][2]<<'\t'<<global_strain[1][2]<<'\t'<<global_strain[0][2]<<'\t'<<global_strain[0][1]<<'\t'<<global_stress[0][0]<<'\t'<<global_stress[1][1]<<'\t'<<global_stress[2][2]<<'\t'<<global_stress[1][2]<<'\t'<<global_stress[0][2]<<'\t'<<global_stress[0][1];
+		if (this->userInputs.enableIndentationBCs) {
+			double Ind_displacement;
+			double Ind_load;
+			Ind_displacement = this->currentIndentDisp;
+			Ind_load = this->indenterLoad;
+			std::cout<<"IndenterLoad = "<<Ind_load<<'\n';
+			outputFile << '\t' << Ind_load << '\t' << Ind_displacement ;
+		}
 		if (this->userInputs.flagUserDefinedAverageOutput){
 			for(unsigned int i=0;i<this->userInputs.numberUserDefinedAverageOutput;i++){
 				outputFile <<'\t'<<userDefinedAverageOutput(i);
 			}
 		}
-    if (this->userInputs.output_Time)
-        outputFile << '\t' << this->currentIncrement * this->delT;
-    if (this->userInputs.enableIndentationBCs) {
-        double Ind_displacement;
-        double Ind_load;
-        Ind_displacement = this->currentIndentDisp;
-        Ind_load = this->indenterLoad;
-        std::cout<<"IndenterLoad = "<<Ind_load<<'\n';
-
-        outputFile << '\t' << Ind_load << '\t' << Ind_displacement ;
-    }
-
 		outputFile <<'\n';
 		outputFile.close();
 	}
-
 
 	//call base class project() function to project post processed fields
 	ellipticBVP<dim>::projection();
