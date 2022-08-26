@@ -33,20 +33,14 @@ set Domain size Z                                = 1
 #Note: set Refine factor must always be zero and one must use Subdivisions to refine mesh.
 ##############Important Note for Periodic BCs Mesh###############
 
-# The number of mesh subdivisions in the x direction.
-set Subdivisions X                               = 1
+#Flag to indicate whether to use external mesh
+set Use external mesh                            = true
 
-# The number of mesh subdivisions in the y direction.
-set Subdivisions Y                               = 1
+#Name of external mesh file
+set Name of file containing external mesh        = t1.msh
 
-# The number of mesh subdivisions in the z direction.
-set Subdivisions Z                               = 1
-
-# The number of initial refinements of the coarse mesh.
-set Refine factor                                = 5
-
-# Only written for serial runs and if number of elements < 10000
-set Write Mesh To EPS                            = false
+#The external mesh parameter: The ratio of defiend region size to the Domain size
+set External mesh parameter        = 0
 
 ####################################
 # Solver output parameters
@@ -122,14 +116,14 @@ set Active Set Lambda Tolerance 		   = 0.1
 
 set Debug Indentation Active Set 		   = true
 
-set Indentation Key Frame Increment Numbers      = 0, 8, 18, 30
+set Indentation Key Frame Increment Numbers      = 0, 80, 180, 300
 
 set Indentation Boundary condition Constraint filename      = IndentationBCsConstraints.txt
 
 set Refinement Zone Center	      		   = 0, 0, 0.99
 
 #set Refinement Zone Size	      		   = 0.25,0.13,0.08
-set Refinement Zone Size	      		   = 0.25
+set Refinement Zone Size	      		   = 0.0
 
 set Refinement Factor			   	   = 0, 0, 0
 
@@ -138,7 +132,7 @@ set Refinement Factor			   	   = 0, 0, 0
 # Solver parameters
 ####################################
 #delta T for every increment
-set Time increments                              = 0.05
+set Time increments                              = 0.005
 
 #Total simulation time
 set Total time                                   = 1.5
