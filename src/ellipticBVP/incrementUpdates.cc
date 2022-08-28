@@ -6,9 +6,9 @@ template <int dim>
 void ellipticBVP<dim>::updateBeforeIncrement(){
   //default method does nothing
   //Overwritten in crystal plasticity
-  pcout << "eBVP::updateBeforeIncrement\n";
+  //pcout << "eBVP::updateBeforeIncrement\n";
   if (userInputs.enableIndentationBCs){
-      pcout << "enableIndentationBCs\n";
+  //    pcout << "enableIndentationBCs\n";
       updateIndentPos();
       //newton_rhs_uncondensed += n
   }

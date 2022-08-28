@@ -68,7 +68,7 @@ void ellipticBVP<dim>::solve(){
   }
   else
     for (;currentIncrement<totalIncrements; ++currentIncrement){
-    pcout << "\nincrement: "  << currentIncrement << " check" << std::endl;
+    pcout << "\nincrement: "  << currentIncrement << std::endl;
     if (userInputs.enableIndentationBCs){
         ellipticBVP<dim>::updateBeforeIncrement();
         if (!userInputs.continuum_Isotropic)

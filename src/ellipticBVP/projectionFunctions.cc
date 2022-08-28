@@ -65,33 +65,32 @@ void ellipticBVP<dim>::initProjection(){
         SparsityTools::distribute_sparsity_pattern (dsp2, dofHandler.locally_owned_dofs(), mpi_communicator, locally_relevant_dofs);
         #endif
         massMatrix.reinit (locally_owned_dofs, locally_owned_dofs, dsp2, mpi_communicator); massMatrix=0.0;
-        pcout << "massMatrix.domain " << massMatrix.locally_owned_domain_indices().size() <<std::endl;
+      //  pcout << "massMatrix.domain " << massMatrix.locally_owned_domain_indices().size() <<std::endl;
         diag_mass_matrix_vector.reinit(locally_owned_dofs, mpi_communicator);
         //diag_mass_matrix_vector = 0;
         //residual.compress();
-        pcout << "before assemble mass matrix diagonal " << std::endl;
+      //  pcout << "before assemble mass matrix diagonal " << std::endl;
         assemble_mass_matrix_diagonal();
-        pcout << "after assemble mass matrix diagonal " << std::endl;
-        unsigned int start = (residual.local_range().first),
-                end = (residual.local_range().second);
-        std::cout << "start " << start << "end " << end << std::endl;
+      //  pcout << "after assemble mass matrix diagonal " << std::endl;
+        unsigned int start = (residual.local_range().first),end = (residual.local_range().second);
+      //  std::cout << "start " << start << "end " << end << std::endl;
         for (unsigned int j = start; j < end; ++j) {
             diag_mass_matrix_vector(j) = massMatrix.diag_element(j);
             //std::cout << "mass matrix vector entry " << j << ": " << diag_mass_matrix_vector(j) << std::endl;
         }
 
 
-        pcout << "initializing Indentation arrays\n";
+        //pcout << "initializing Indentation arrays\n";
         active_set.clear();
         active_set.set_size(dofHandler.n_dofs());
         indentation_constraints.clear();
         indentation_constraints.reinit(locally_relevant_dofs);
         newton_rhs_uncondensed.reinit(locally_owned_dofs, mpi_communicator);
         newton_rhs_uncondensed_inc.reinit(locally_owned_dofs, mpi_communicator);
-        pcout << "before diagonal mass matrix compress " << std::endl;
+      //pcout << "before diagonal mass matrix compress " << std::endl;
         diag_mass_matrix_vector.compress(VectorOperation::insert);
         massMatrix = 0.0;
-        pcout << "after diagonal mass matrix compress " << std::endl;
+      //pcout << "after diagonal mass matrix compress " << std::endl;
     }
     massMatrix.reinit (locally_owned_dofs_Scalar, locally_owned_dofs_Scalar, dsp, mpi_communicator); massMatrix=0.0;
 
@@ -146,8 +145,8 @@ void ellipticBVP<dim>::projection(){
   //return if no post processing fields
   if (!userInputs.writeOutput) return;
   if (numPostProcessedFields==0) return;
-  
- 
+
+
 
   //////////////////////TabularOutput Start///////////////
   std::vector<unsigned int> tabularTimeInputIncInt;
