@@ -13,12 +13,10 @@ void ellipticBVP<dim>::assemble(){
   FullMatrix<double>   elementalJacobian (dofs_per_cell, dofs_per_cell);
   Vector<double>       elementalResidual (dofs_per_cell);
   std::vector<types::global_dof_index> local_dof_indices (dofs_per_cell);
-  //pcout<<"debug assemble 1\n";
+
   //apply Dirichlet BC's
-  computing_timer.enter_section("assembly: boundary conditions");
   applyDirichletBCs();
-  computing_timer.exit_section("assembly: boundary conditions");
-    //pcout<<"debug assemble 2\n";
+
   if(userInputs.enablePeriodicBCs){
     DynamicSparsityPattern dsp (locally_relevant_dofs_Mod);
     DoFTools::make_sparsity_pattern (dofHandler, dsp, constraints, false);
@@ -61,7 +59,6 @@ void ellipticBVP<dim>::assemble(){
       newton_rhs_uncondensed.compress(VectorOperation::add);
       newton_rhs_uncondensed = 0.0;
   }
-    //pcout<<"debug assemble 3\n";
   try{
     //parallel loop over all elements
     typename DoFHandler<dim>::active_cell_iterator cell = dofHandler.begin_active(), endc = dofHandler.end();
@@ -101,7 +98,6 @@ void ellipticBVP<dim>::assemble(){
       resetIncrement=true;
       loadFactorSetByModel=Utilities::MPI::min(loadFactorSetByModel, mpi_communicator);
     }
-    //pcout<<"debug assemble 4\n";
     //MPI operation to sync data
     residual.compress(VectorOperation::add);
     jacobian.compress(VectorOperation::add);
