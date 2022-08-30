@@ -245,15 +245,16 @@ void ellipticBVP<dim>::init(){
     }
 //INDENTATION
     if(userInputs.enableIndentationBCs){
-        locally_relevant_ghost_dofs = locally_relevant_dofs;
-        locally_relevant_ghost_dofs.subtract_set(locally_owned_dofs);
+      
+      locally_relevant_ghost_dofs = locally_relevant_dofs;
+      locally_relevant_ghost_dofs.subtract_set(locally_owned_dofs);
 
-        std::ifstream IndentationBCfile(userInputs.Indentation_BCfilename);
+      std::ifstream IndentationBCfile(userInputs.Indentation_BCfilename);
 
-        //read 5 header lines for documentation for now!!!
-        // read 4 data lines for now!!
+      //read 5 header lines for documentation for now!!!
+      // read 4 data lines for now!!
 
-        if (IndentationBCfile.is_open()){
+      if (IndentationBCfile.is_open()){
             KeyPosIndenter.resize(userInputs.indentationKeyFrames);
             initPosIndenter.resize(dim);
             finalPosIndenter.resize(dim);
@@ -306,6 +307,70 @@ void ellipticBVP<dim>::init(){
                 currentPosIndenter[i] = KeyPosIndenter[0](i);
                 prevPosIndenter[i] = KeyPosIndenter[0](i);
             }
+        }
+
+
+      if(userInputs.readExternalMesh){
+          // Set which (if any) faces of the triangulation are indentation
+          QGaussLobatto<dim - 1> face_quadrature_formula(FE.degree + 1);
+          FEFaceValues<dim> fe_values_face(FE,face_quadrature_formula,update_values | update_JxW_values);
+          const unsigned int dofs_per_cell   = FE.n_dofs_per_cell();
+          std::vector<types::global_dof_index> local_dof_indices(dofs_per_cell);
+          Vector<double> externalMeshParameterBCs(dim);
+          Point<dim> node_BoundaryID;
+          unsigned int globalDOF;
+          for (unsigned int i=0; i<dim; ++i) {
+            externalMeshParameterBCs(i)=this->userInputs.externalMeshParameter*this->userInputs.span[i];
+          }
+          for (const auto &cell : dofHandler.active_cell_iterators()){
+            if (cell->is_locally_owned()) {
+              //std::cout << "cell locally owned! "<< std::endl;
+              for (const auto &face: cell->face_iterators()){
+                if (face->at_boundary()) {
+                  fe_values_face.reinit(cell, face);
+                  cell->get_dof_indices (local_dof_indices);
+                  for (unsigned int i=0; i<dofs_per_cell; ++i) {
+                    if (fe_values_face.shape_value(i, 0)!=0){
+
+                      globalDOF=local_dof_indices[i];
+                      node_BoundaryID=this->supportPoints[globalDOF];
+
+                      if (node_BoundaryID[0] <= externalMeshParameterBCs(0)) {
+                        face->set_boundary_id(0);
+                        break;
+                      }
+
+                      if (node_BoundaryID[0] >= (this->userInputs.span[0]-externalMeshParameterBCs(0))) {
+                        face->set_boundary_id(1);
+                        break;
+                      }
+
+                      if (node_BoundaryID[1] <= externalMeshParameterBCs(1)) {
+                        face->set_boundary_id(2);
+                        break;
+                      }
+
+                      if (node_BoundaryID[1] >= (this->userInputs.span[1]-externalMeshParameterBCs(1))) {
+                        face->set_boundary_id(3);
+                        break;
+                      }
+
+                      if (node_BoundaryID[2] <= externalMeshParameterBCs(2)) {
+                        face->set_boundary_id(4);
+                        break;
+                      }
+
+                      if (node_BoundaryID[2] >= (this->userInputs.span[2]-externalMeshParameterBCs(2))) {
+                        face->set_boundary_id(5);
+                        break;
+                      }
+                    }
+
+                  }
+                }
+              }
+            }
+          }
         }
     }
 // Isotropic Continuum
@@ -493,5 +558,6 @@ void ellipticBVP<dim>::init(){
     applyInitialConditions();
     solutionWithGhosts=solution;
     oldSolution=solution;
+
   }
   #include "../../include/ellipticBVP_template_instantiations.h"
