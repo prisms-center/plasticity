@@ -37,10 +37,10 @@ set Domain size Z                                = 1
 set Use external mesh                            = true
 
 #Name of external mesh file
-set Name of file containing external mesh        = t1.msh
+set Name of file containing external mesh        = t2.msh
 
 #The external mesh parameter: The ratio of defiend region size to the Domain size
-set External mesh parameter        = 0
+set External mesh parameter        = 1e-3
 
 ####################################
 # Solver output parameters

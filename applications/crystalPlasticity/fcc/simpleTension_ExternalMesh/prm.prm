@@ -32,23 +32,24 @@ set Domain size Z                                = 1.0
 set Use external mesh                            = true
 
 #Name of external mesh file
-set Name of file containing external mesh        = n10-id2_hex.msh
+#set Name of file containing external mesh        = n10-id2_hex.msh
+set Name of file containing external mesh        = t2.msh
 
 #The external mesh parameter: The ratio of defiend region size to the Domain size
-set External mesh parameter        = 0.05
+set External mesh parameter        = 0.01
 
 ####################################
 # Solver output parameters
 ####################################
 # Flag to write output vtu and pvtu files
-set Write Output                                 = false
+set Write Output                                 = true
 
 # Output Directory
 # Need to create directory before using this. Will be corrected in future versions of the software
 set Output Directory                             = results
 
 # Skip Output Steps
-set Skip Output Steps                            = 100000
+set Skip Output Steps                            = 0
 
 # Output Equivalent strain
 set Output Equivalent strain                     = true

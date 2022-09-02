@@ -197,55 +197,9 @@ void ellipticBVP<dim>::init(){
       jacobian.reinit (locally_owned_dofs, locally_owned_dofs, dsp, mpi_communicator);
     #endif
     }
-
-    // Read boundary conditions
-    if((userInputs.enableSimpleBCs)||(userInputs.enableCyclicLoading)){
-      std::ifstream BCfile(userInputs.BCfilename);
-
-      //read data
-      if (BCfile.is_open()){
-        pcout << "Reading boundary conditions\n";
-        //skip header lines
-        for (unsigned int i=0; i<userInputs.BCheaderLines; i++) std::getline (BCfile,line);
-        for (unsigned int i=0; i<userInputs.NumberofBCs; i++){
-          std::getline (BCfile,line);
-          std::stringstream ss(line);
-          ss>>faceID>>dof;
-          faceDOFConstrained[faceID-1][dof-1]=true;
-          ss>>totalU;
-          deluConstraint[faceID-1][dof-1]=totalU/totalIncrements;
-        }
-
-        if(userInputs.enableCyclicLoading){
-          deluConstraint[userInputs.cyclicLoadingFace-1][userInputs.cyclicLoadingDOF-1]=deluConstraint[userInputs.cyclicLoadingFace-1][userInputs.cyclicLoadingDOF-1]*totalIncrements*userInputs.delT/userInputs.quarterCycleTime;
-        }
-      }
-    }
-
-
-    if(userInputs.enableNodalDisplacementBCs){
-
-
-      std::ifstream BCfileNodal(userInputs.nodalDisplacement_BCfilename);
-      nodalDisplacement.resize(userInputs.numberOfNodalBCs,std::vector<double>(3,0));
-      dofNodalDisplacement.resize(userInputs.numberOfNodalBCs);
-      deluNodalDisplacement.resize(userInputs.numberOfNodalBCs);
-
-      //read data
-      if (BCfileNodal.is_open()){
-        pcout << "Reading Nodal boundary conditions\n";
-        for (unsigned int i=0; i<userInputs.numberOfNodalBCs; i++){
-          std::getline (BCfileNodal,line);
-          std::stringstream ss(line);
-          ss>>nodalDisplacement[i][0]>>nodalDisplacement[i][1]>>nodalDisplacement[i][2]>>dofNodalDisplacement[i];
-          ss>>totalU;
-          deluNodalDisplacement[i]=totalU/totalIncrements;
-        }
-      }
-    }
 //INDENTATION
     if(userInputs.enableIndentationBCs){
-      
+
       locally_relevant_ghost_dofs = locally_relevant_dofs;
       locally_relevant_ghost_dofs.subtract_set(locally_owned_dofs);
 
@@ -331,39 +285,21 @@ void ellipticBVP<dim>::init(){
                   cell->get_dof_indices (local_dof_indices);
                   for (unsigned int i=0; i<dofs_per_cell; ++i) {
                     if (fe_values_face.shape_value(i, 0)!=0){
-
                       globalDOF=local_dof_indices[i];
                       node_BoundaryID=this->supportPoints[globalDOF];
+                      for (unsigned int i2=0; i2<dim; ++i2)
+                      {
+                          if (node_BoundaryID[i2] <= externalMeshParameterBCs(0)) {
+                              face->set_boundary_id(2 * i2);
+                              break;
+                          }
 
-                      if (node_BoundaryID[0] <= externalMeshParameterBCs(0)) {
-                        face->set_boundary_id(0);
-                        break;
+                          if (node_BoundaryID[i2] >= (this->userInputs.span[i2]-externalMeshParameterBCs(0))) {
+                              face->set_boundary_id(2 * i2 + 1);
+                              break;
+                          }
                       }
 
-                      if (node_BoundaryID[0] >= (this->userInputs.span[0]-externalMeshParameterBCs(0))) {
-                        face->set_boundary_id(1);
-                        break;
-                      }
-
-                      if (node_BoundaryID[1] <= externalMeshParameterBCs(1)) {
-                        face->set_boundary_id(2);
-                        break;
-                      }
-
-                      if (node_BoundaryID[1] >= (this->userInputs.span[1]-externalMeshParameterBCs(1))) {
-                        face->set_boundary_id(3);
-                        break;
-                      }
-
-                      if (node_BoundaryID[2] <= externalMeshParameterBCs(2)) {
-                        face->set_boundary_id(4);
-                        break;
-                      }
-
-                      if (node_BoundaryID[2] >= (this->userInputs.span[2]-externalMeshParameterBCs(2))) {
-                        face->set_boundary_id(5);
-                        break;
-                      }
                     }
 
                   }
@@ -373,6 +309,52 @@ void ellipticBVP<dim>::init(){
           }
         }
     }
+    // Read boundary conditions
+    if((userInputs.enableSimpleBCs)||(userInputs.enableCyclicLoading)){
+      std::ifstream BCfile(userInputs.BCfilename);
+
+      //read data
+      if (BCfile.is_open()){
+        pcout << "Reading boundary conditions\n";
+        //skip header lines
+        for (unsigned int i=0; i<userInputs.BCheaderLines; i++) std::getline (BCfile,line);
+        for (unsigned int i=0; i<userInputs.NumberofBCs; i++){
+          std::getline (BCfile,line);
+          std::stringstream ss(line);
+          ss>>faceID>>dof;
+          faceDOFConstrained[faceID-1][dof-1]=true;
+          ss>>totalU;
+          deluConstraint[faceID-1][dof-1]=totalU/totalIncrements;
+        }
+
+        if(userInputs.enableCyclicLoading){
+          deluConstraint[userInputs.cyclicLoadingFace-1][userInputs.cyclicLoadingDOF-1]=deluConstraint[userInputs.cyclicLoadingFace-1][userInputs.cyclicLoadingDOF-1]*totalIncrements*userInputs.delT/userInputs.quarterCycleTime;
+        }
+      }
+    }
+
+
+    if(userInputs.enableNodalDisplacementBCs){
+
+
+      std::ifstream BCfileNodal(userInputs.nodalDisplacement_BCfilename);
+      nodalDisplacement.resize(userInputs.numberOfNodalBCs,std::vector<double>(3,0));
+      dofNodalDisplacement.resize(userInputs.numberOfNodalBCs);
+      deluNodalDisplacement.resize(userInputs.numberOfNodalBCs);
+
+      //read data
+      if (BCfileNodal.is_open()){
+        pcout << "Reading Nodal boundary conditions\n";
+        for (unsigned int i=0; i<userInputs.numberOfNodalBCs; i++){
+          std::getline (BCfileNodal,line);
+          std::stringstream ss(line);
+          ss>>nodalDisplacement[i][0]>>nodalDisplacement[i][1]>>nodalDisplacement[i][2]>>dofNodalDisplacement[i];
+          ss>>totalU;
+          deluNodalDisplacement[i]=totalU/totalIncrements;
+        }
+      }
+    }
+
 // Isotropic Continuum
 //    if(userInputs.continuum_Isotropic){
 //        numPostProcessedFields = 2;
