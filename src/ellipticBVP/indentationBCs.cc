@@ -567,7 +567,7 @@ void ellipticBVP<dim>::setActiveSet(){
                 if (face->at_boundary() && face->boundary_id()==indenterFace) {
                     fe_face_values.reinit(cell, face);
                     cell->get_dof_indices (local_dof_indices);
-                    //std::cout<<"cell "<<cell<<" boundary_id "<<face->boundary_id()<<"\n";
+                    std::cout<<"cell "<<cell<<" face "<<face<<" boundary_id "<<face->boundary_id()<<"\n";
 //                for (unsigned int i = 0; i < dofs_per_cell; i++) {
 //                    Ulocal[i] = 0;
 //                    Ulocal[i] = solutionWithGhosts[local_dof_indices[i]];
