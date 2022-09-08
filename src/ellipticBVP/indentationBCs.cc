@@ -408,7 +408,7 @@ void ellipticBVP<dim>::assemble_mass_matrix_diagonal()
         if (cell->is_locally_owned()) {
             //std::cout << "cell locally owned! "<< std::endl;
             for (const auto &face: cell->face_iterators())
-                if (face->at_boundary() && face->boundary_id() == indenterFace) {
+                if (face->at_boundary() && (face->boundary_id() == indenterFace || userInputs.readExternalMesh)) {
                     fe_values_face.reinit(cell, face);
                     cell_matrix = 0;
 
@@ -564,7 +564,7 @@ void ellipticBVP<dim>::setActiveSet(){
             cell->get_dof_indices (local_dof_indices);
             fe_values.reinit (cell);
             for (unsigned int faceID=0; faceID<GeometryInfo<dim>::faces_per_cell; faceID++){ //(const auto &face: cell->face_iterators()){
-                if (cell->face(faceID)->at_boundary() && cell->face(faceID)->boundary_id()==indenterFace){ //(face->at_boundary() && face->boundary_id()==indenterFace) {
+                if (cell->face(faceID)->at_boundary() && (cell->face(faceID)->boundary_id() == indenterFace || userInputs.readExternalMesh)){ //&& cell->face(faceID)->boundary_id()==indenterFace){ //(face->at_boundary() && face->boundary_id()==indenterFace) {
                     fe_face_values.reinit(cell, faceID); //face);
                     //cell->get_dof_indices (local_dof_indices);
                     //std::cout<<"cell "<<cell<<" boundary_id "<<face->boundary_id()<<"\n";
@@ -832,7 +832,7 @@ void ellipticBVP<dim>::setActiveSet3(){
             cell->get_dof_indices (local_dof_indices);
             fe_values.reinit (cell);
             for (unsigned int faceID=0; faceID<GeometryInfo<dim>::faces_per_cell; faceID++){ //(const auto &face: cell->face_iterators()){
-                if (cell->face(faceID)->at_boundary() && cell->face(faceID)->boundary_id()==indenterFace){ //(face->at_boundary() && face->boundary_id()==indenterFace) {
+                if (cell->face(faceID)->at_boundary()){ //&& cell->face(faceID)->boundary_id()==indenterFace){ //(face->at_boundary() && face->boundary_id()==indenterFace) {
                     fe_face_values.reinit(cell, faceID); //face);
                     //cell->get_dof_indices (local_dof_indices);
                     //fe_face_values.reinit(cell, indenterFace);
@@ -993,8 +993,7 @@ void ellipticBVP<dim>::setFrozenSet(){
             cell->get_dof_indices(local_dof_indices);
             fe_values.reinit(cell);
             for (unsigned int faceID = 0; faceID < GeometryInfo<dim>::faces_per_cell; faceID++) { //(const auto &face: cell->face_iterators()){
-                if (cell->face(faceID)->at_boundary() && cell->face(faceID)->boundary_id() ==
-                                                         indenterFace) { //(face->at_boundary() && face->boundary_id()==indenterFace) {
+                if (cell->face(faceID)->at_boundary()){// && cell->face(faceID)->boundary_id() ==indenterFace) { //(face->at_boundary() && face->boundary_id()==indenterFace) {
                     fe_face_values.reinit(cell, faceID); //face);
 //                for (unsigned int i = 0; i < dofs_per_cell; i++) {
 //                    Ulocal[i] = 0;
@@ -1103,9 +1102,9 @@ void ellipticBVP<dim>::setIndentationConstraints(){
         }
         else
         {
-            setActiveSet3();
-//            if (userInputs.readExternalMesh)  setActiveSet3();
-//            else setActiveSet2();
+            //setActiveSet3();
+            if (userInputs.readExternalMesh)  setActiveSet3();
+            else setActiveSet2();
             frozen_set = active_set;
         }
         //pcout << "debug set indentation constraints 2\n";

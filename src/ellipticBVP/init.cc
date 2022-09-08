@@ -284,7 +284,7 @@ void ellipticBVP<dim>::init(){
                     fe_face_values.reinit(cell, faceID);
                   cell->get_dof_indices (local_dof_indices);
                   for (unsigned int i=0; i<dofs_per_cell; ++i) {
-                    if (fe_face_values.shape_value(i, 0)!=0){
+                    if (fe_face_values.shape_value(i, 0)!=0){ //skip cell support points not on face
                       globalDOF=local_dof_indices[i];
                       node_BoundaryID=this->supportPoints[globalDOF];
                       unsigned int boundary= dim * 2 + 1;
@@ -293,7 +293,6 @@ void ellipticBVP<dim>::init(){
                           if (node_BoundaryID[i2] <= externalMeshParameterBCs(0)) {
                               if (boundary == dim * 2 + 1) boundary = 2 * i2;
                               else boundary = 2 * dim;
-
                               //cell->face(faceID)->set_boundary_id(2 * i2);
                               //break;
                           }
