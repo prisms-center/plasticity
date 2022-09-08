@@ -563,10 +563,10 @@ void ellipticBVP<dim>::setActiveSet(){
         if (cell->is_locally_owned()){
             cell->get_dof_indices (local_dof_indices);
             fe_values.reinit (cell);
-            for (const auto &face: cell->face_iterators()){
-                if (face->at_boundary() && face->boundary_id()==indenterFace) {
-                    fe_face_values.reinit(cell, face);
-                    cell->get_dof_indices (local_dof_indices);
+            for (unsigned int faceID=0; faceID<GeometryInfo<dim>::faces_per_cell; faceID++){ //(const auto &face: cell->face_iterators()){
+                if (cell->face(faceID)->at_boundary() && cell->face(faceID)->boundary_id()==indenterFace){ //(face->at_boundary() && face->boundary_id()==indenterFace) {
+                    fe_face_values.reinit(cell, faceID); //face);
+                    //cell->get_dof_indices (local_dof_indices);
                     //std::cout<<"cell "<<cell<<" boundary_id "<<face->boundary_id()<<"\n";
 //                for (unsigned int i = 0; i < dofs_per_cell; i++) {
 //                    Ulocal[i] = 0;
@@ -831,10 +831,10 @@ void ellipticBVP<dim>::setActiveSet3(){
         if (cell->is_locally_owned()){
             cell->get_dof_indices (local_dof_indices);
             fe_values.reinit (cell);
-            for (const auto &face: cell->face_iterators()){
-                if (face->at_boundary() && face->boundary_id()==indenterFace) {
-                    fe_face_values.reinit(cell, face);
-                    cell->get_dof_indices (local_dof_indices);
+            for (unsigned int faceID=0; faceID<GeometryInfo<dim>::faces_per_cell; faceID++){ //(const auto &face: cell->face_iterators()){
+                if (cell->face(faceID)->at_boundary() && cell->face(faceID)->boundary_id()==indenterFace){ //(face->at_boundary() && face->boundary_id()==indenterFace) {
+                    fe_face_values.reinit(cell, faceID); //face);
+                    //cell->get_dof_indices (local_dof_indices);
                     //fe_face_values.reinit(cell, indenterFace);
 //                for (unsigned int i = 0; i < dofs_per_cell; i++) {
 //                    Ulocal[i] = 0;
@@ -989,45 +989,48 @@ void ellipticBVP<dim>::setFrozenSet(){
     const double c = userInputs.activeSetCriterionCoefficient*stiffness;
     typename DoFHandler<dim>::active_cell_iterator cell = dofHandler.begin_active(), endc = dofHandler.end();
     for (; cell!=endc; ++cell) {
-        if (cell->is_locally_owned()){
-            cell->get_dof_indices (local_dof_indices);
-            fe_values.reinit (cell);
-            if (cell->face(indenterFace)->at_boundary()) {
-                fe_face_values.reinit(cell, indenterFace);
+        if (cell->is_locally_owned()) {
+            cell->get_dof_indices(local_dof_indices);
+            fe_values.reinit(cell);
+            for (unsigned int faceID = 0;
+                 faceID < GeometryInfo<dim>::faces_per_cell; faceID++) { //(const auto &face: cell->face_iterators()){
+                if (cell->face(faceID)->at_boundary() && cell->face(faceID)->boundary_id() ==
+                                                         indenterFace) { //(face->at_boundary() && face->boundary_id()==indenterFace) {
+                    fe_face_values.reinit(cell, faceID); //face);
 //                for (unsigned int i = 0; i < dofs_per_cell; i++) {
 //                    Ulocal[i] = 0;
 //                    Ulocal[i] = solutionWithGhosts[local_dof_indices[i]];
 //                }
 
-                for (unsigned int i = 0; i < dofs_per_cell; ++i) {
-                    if (fe_face_values.shape_value(i, 0) != 0) {
-                        const unsigned int dof = fe_values.get_fe().system_to_component_index(i).first;
-                        unsigned int globalDOF = local_dof_indices[i];
-                        unsigned int index_z;
-                        bool flag = false;
-                        double value = 0;
-                        node = supportPoints[globalDOF];
-                        for (unsigned int i2 = 0; i2 < dofs_per_cell; ++i2) {
-                            if (fe_face_values.shape_value(i2, 0) != 0) {
-                                const unsigned int dof2 = fe_values.get_fe().system_to_component_index(i2).first;
-                                unsigned int globalDOF2 = local_dof_indices[i2];
-                                if (supportPoints[globalDOF2] == supportPoints[globalDOF]){
-                                    nodeU2(dof2) = solutionWithGhosts[globalDOF2];
-                                    if (dof2 == indentDof)
-                                        index_z = globalDOF2;
+                    for (unsigned int i = 0; i < dofs_per_cell; ++i) {
+                        if (fe_face_values.shape_value(i, 0) != 0) {
+                            const unsigned int dof = fe_values.get_fe().system_to_component_index(i).first;
+                            unsigned int globalDOF = local_dof_indices[i];
+                            unsigned int index_z;
+                            bool flag = false;
+                            double value = 0;
+                            node = supportPoints[globalDOF];
+                            for (unsigned int i2 = 0; i2 < dofs_per_cell; ++i2) {
+                                if (fe_face_values.shape_value(i2, 0) != 0) {
+                                    const unsigned int dof2 = fe_values.get_fe().system_to_component_index(i2).first;
+                                    unsigned int globalDOF2 = local_dof_indices[i2];
+                                    if (supportPoints[globalDOF2] == supportPoints[globalDOF]) {
+                                        nodeU2(dof2) = solutionWithGhosts[globalDOF2];
+                                        if (dof2 == indentDof)
+                                            index_z = globalDOF2;
+                                    }
                                 }
                             }
-                        }
-                        for (unsigned int i2 = 0; i2 < dim; ++i2) {
-                            nodeU(i2) = node(i2) + nodeU2(i2);
-                            if (i2 == indentDof)
-                                nodedU(i2) = node(i2);
-                            else
-                                nodedU(i2) = nodeU(i2);
-                        }
-                        //setIndentation(nodeU, dof, flag, value);
+                            for (unsigned int i2 = 0; i2 < dim; ++i2) {
+                                nodeU(i2) = node(i2) + nodeU2(i2);
+                                if (i2 == indentDof)
+                                    nodedU(i2) = node(i2);
+                                else
+                                    nodedU(i2) = nodeU(i2);
+                            }
+                            //setIndentation(nodeU, dof, flag, value);
 
-                        if ((dof == indentDof) || (roughIndenter == true)) {
+                            if ((dof == indentDof) || (roughIndenter == true)) {
 //                                std::cout << "flag true, value " << value << "dof " << dof << "\n";
 //                                std::cout << " " << "point " << node(0) << " " << node(1) << " " << node(2) << " " <<"\n";
 //                                std::cout << " " << "U at point " << nodeU(0) << " " << nodeU(1) << " " << nodeU(2) << " " <<"\n";
@@ -1036,42 +1039,43 @@ void ellipticBVP<dim>::setFrozenSet(){
 //                            }
 
 
-                            //if (currentIteration == 0) {
-                            criterion = (lambda2(index_z) /
-                                         diag_mass_matrix_vector_relevant(index_z) + userInputs.activeSetLambdaTolerance +
-                                         c * (solutionWithGhosts[index_z] - Obstacle(nodedU, indentDof, currentPosIndenter)));// + indenterTolerance
-                            if (dof_touched[globalDOF] == false) {
-                                dof_touched[globalDOF] = true;
-                                std::vector<unsigned int> arr1={globalDOF};
-                                if (std::includes(frozen_set.begin(), frozen_set.end(), arr1.begin(), arr1.end())){
-                                    flag = true;
-                                    double arbitrary=100;
-                                    setIndentation2(nodeU, dof, flag, value, arbitrary);
-                                }
+                                //if (currentIteration == 0) {
+                                criterion = (lambda2(index_z) /
+                                             diag_mass_matrix_vector_relevant(index_z) +
+                                             userInputs.activeSetLambdaTolerance +
+                                             c * (solutionWithGhosts[index_z] - Obstacle(nodedU, indentDof,
+                                                                                         currentPosIndenter)));// + indenterTolerance
+                                if (dof_touched[globalDOF] == false) {
+                                    dof_touched[globalDOF] = true;
+                                    std::vector<unsigned int> arr1 = {globalDOF};
+                                    if (std::includes(frozen_set.begin(), frozen_set.end(), arr1.begin(), arr1.end())) {
+                                        flag = true;
+                                        double arbitrary = 100;
+                                        setIndentation2(nodeU, dof, flag, value, arbitrary);
+                                    }
 
 //                                if ((criterion > -10) && ((dof == indentDof) && (solutionWithGhosts[index_z] < 0))) //currently prints many nodes away from indenter, due to lack of categorical value for missed nodes in Obstacle()
 //                                    std::cout<<"dof# "<<globalDOF<<" value: "<<value<<" nodeU: "<<nodeU<<" soln:"<<
 //                                             solutionWithGhosts[globalDOF]<<" next? "<<value+nodeU[dof]<<" crit: "<<criterion<<"\n";
 //                                if (solutionWithGhosts[globalDOF]<-1e-3)
 //                                    std::cout<<"dof# "<<globalDOF<<" value: "<<value<<" nodeU: "<<nodeU<<" soln:"<<solutionWithGhosts[globalDOF]<<" gap "<<Obstacle(nodedU, indentDof, currentPosIndenter)<<"\n";
-                            }
-                            else
-                                flag = false;
-                            if (flag) {
+                                } else
+                                    flag = false;
+                                if (flag) {
 
-                                //active_set.add_line(globalDOF);
-                                //active_set.set_inhomogeneity(globalDOF, value);
-                                if (dof == indentDof) {
-                                    if (active_set_empty) {
-                                        indenterLoad = lambda2(index_z);
-                                        active_set_empty = false;
+                                    //active_set.add_line(globalDOF);
+                                    //active_set.set_inhomogeneity(globalDOF, value);
+                                    if (dof == indentDof) {
+                                        if (active_set_empty) {
+                                            indenterLoad = lambda2(index_z);
+                                            active_set_empty = false;
+                                        } else
+                                            indenterLoad = indenterLoad + lambda2(index_z);
+                                        active_set.add_index(globalDOF);
                                     }
-                                    else
-                                        indenterLoad = indenterLoad + lambda2(index_z);
-                                    active_set.add_index(globalDOF);
+                                    indentation_constraints.add_line(globalDOF);
+                                    indentation_constraints.set_inhomogeneity(globalDOF, value);
                                 }
-                                indentation_constraints.add_line(globalDOF);
-                                indentation_constraints.set_inhomogeneity(globalDOF, value);
                             }
                         }
                     }
