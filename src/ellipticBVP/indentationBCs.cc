@@ -992,8 +992,7 @@ void ellipticBVP<dim>::setFrozenSet(){
         if (cell->is_locally_owned()) {
             cell->get_dof_indices(local_dof_indices);
             fe_values.reinit(cell);
-            for (unsigned int faceID = 0;
-                 faceID < GeometryInfo<dim>::faces_per_cell; faceID++) { //(const auto &face: cell->face_iterators()){
+            for (unsigned int faceID = 0; faceID < GeometryInfo<dim>::faces_per_cell; faceID++) { //(const auto &face: cell->face_iterators()){
                 if (cell->face(faceID)->at_boundary() && cell->face(faceID)->boundary_id() ==
                                                          indenterFace) { //(face->at_boundary() && face->boundary_id()==indenterFace) {
                     fe_face_values.reinit(cell, faceID); //face);
