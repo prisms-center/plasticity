@@ -287,17 +287,26 @@ void ellipticBVP<dim>::init(){
                     if (fe_face_values.shape_value(i, 0)!=0){
                       globalDOF=local_dof_indices[i];
                       node_BoundaryID=this->supportPoints[globalDOF];
+                      int boundary= -1;
                       for (unsigned int i2=0; i2<dim; ++i2)
                       {
                           if (node_BoundaryID[i2] <= externalMeshParameterBCs(0)) {
-                              cell->face(faceID)->set_boundary_id(2 * i2);
-                              break;
+                              if (boundary < 0) boundary = 2 * i2;
+                              else boundary = 2 * dim;
+
+                              //cell->face(faceID)->set_boundary_id(2 * i2);
+                              //break;
                           }
 
                           if (node_BoundaryID[i2] >= (this->userInputs.span[i2]-externalMeshParameterBCs(0))) {
-                              cell->face(faceID)->set_boundary_id(2 * i2 + 1);
-                              break;
+                              if (boundary < 0) boundary = 2 * i2 + 1;
+                              else boundary = 2 * dim;
+                              //break;
                           }
+                      }
+                      if (boundary <= dim * 2){
+                          cell->face(faceID)->set_boundary_id(boundary);
+                          break;
                       }
 
                     }
