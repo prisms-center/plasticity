@@ -304,7 +304,7 @@ void ellipticBVP<dim>::init(){
                               //break;
                           }
                       }
-                      if (boundary <= dim * 2){
+                      if (boundary < dim * 2){
                           cell->face(faceID)->set_boundary_id(boundary);
                           break;
                       }
