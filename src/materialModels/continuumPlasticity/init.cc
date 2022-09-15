@@ -111,7 +111,7 @@ void continuumPlasticity<dim>::init(unsigned int num_quad_points)
   projectVonMisesStress.resize(num_local_cells,std::vector<double>(num_quad_points,0));
 
   //Initialize projection of post process parameters???
-  ellipticBVP<dim>::initProjection();
+  //ellipticBVP<dim>::initProjection();
   //Initialize the "plasticOnset" marker
   plasticOnset = false;
   //Change "initCalled" to "true" to show that the "init" function has now been called
