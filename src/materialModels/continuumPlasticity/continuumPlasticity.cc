@@ -8,7 +8,7 @@ ellipticBVP<dim>(_userInputs),
 {
   //initialize "initCalled"
   initCalled = false;
-  initCalled = false;
+  //initCalled = false;
 
   //post processing
   ellipticBVP<dim>::postprocessed_solution_names.push_back("Eqv_stress");

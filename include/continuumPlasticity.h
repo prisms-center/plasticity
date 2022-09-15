@@ -32,7 +32,7 @@ class continuumPlasticity : public ellipticBVP<dim>
     /**
    *Initialize and resize class data structures.
    */
-   void init(unsigned int num_quad_points);
+   void initcont(unsigned int num_quad_points);
  private:
 
   //void setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value);

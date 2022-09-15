@@ -145,7 +145,7 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
   debugIndentation=parameter_handler.get_bool("Debug Indentation Active Set");
   continuum_Isotropic = parameter_handler.get_bool("Continuum Isotropic");
   if(continuum_Isotropic){
-      pcout<<"Isotropic Plasticity enabled (not crystal plasticity) \n";
+      pcout<<"\n Isotropic Plasticity enabled (not crystal plasticity) \n";
       lame_lambda = parameter_handler.get_double("lame_lambda");
       lame_mu = parameter_handler.get_double("lame_mu");
       yield_stress = parameter_handler.get_double("yield_stress");
