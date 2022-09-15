@@ -171,7 +171,6 @@ protected:
       void updateActiveSet();
       void setActiveSet();
       void setActiveSet2();
-      void setActiveSet3();
       void setFrozenSet();
       void assemble_mass_matrix_diagonal();
       double Obstacle(const Point<dim> & p, const unsigned int & component, const std::vector<double> & ind);

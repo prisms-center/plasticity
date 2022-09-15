@@ -647,165 +647,6 @@ void ellipticBVP<dim>::setActiveSet2(){
     //pcout << "in updateActiveSet2 2\n";
     lambda2 = newton_rhs_uncondensed_inc; //NEED THIS COMPUTED PRIOR TO CALL Done
     vectorType diag_mass_matrix_vector_relevant(locally_owned_dofs,
-            locally_relevant_ghost_dofs, mpi_communicator); // this is needed for petsc to work (not needed in step-42 trilinos)
-    //pcout << "in updateActiveSet2 3\n";
-    diag_mass_matrix_vector_relevant = diag_mass_matrix_vector;
-    active_set.clear();
-    indenterLoad = 0.;
-    //updateIndentationSet();
-    //parallel loop over all elements
-    //pcout << "in setIndentationConstraints\n";
-    //pcout << "in updateActiveSet2 4\n";
-    indentation_constraints.clear ();
-    indentation_constraints.reinit (locally_relevant_dofs);
-    //pcout << "in updateActiveSet2 5\n";
-    double criterion;
-    double solve_for_c;
-    double stiffness;
-    if (userInputs.continuum_Isotropic)
-        stiffness = (userInputs.lame_lambda + 4/3 * userInputs.lame_mu);
-    else
-        stiffness = userInputs.elasticStiffness1[0][0];
-    const double c = userInputs.activeSetCriterionCoefficient*stiffness;
-    typename DoFHandler<dim>::active_cell_iterator cell = dofHandler.begin_active(), endc = dofHandler.end();
-    for (; cell!=endc; ++cell) {
-        if (cell->is_locally_owned()){
-            cell->get_dof_indices (local_dof_indices);
-            fe_values.reinit (cell);
-            if (cell->face(indenterFace)->at_boundary()) {
-                fe_face_values.reinit(cell, indenterFace);
-//                for (unsigned int i = 0; i < dofs_per_cell; i++) {
-//                    Ulocal[i] = 0;
-//                    Ulocal[i] = solutionWithGhosts[local_dof_indices[i]];
-//                }
-                for (unsigned int i = 0; i < dofs_per_cell; ++i) {
-                    if (fe_face_values.shape_value(i, 0) != 0) {
-                        const unsigned int dof = fe_values.get_fe().system_to_component_index(i).first;
-                        unsigned int globalDOF = local_dof_indices[i];
-                        unsigned int index_z;
-                        bool flag = false;
-                        double value = 0;
-                        node = supportPoints[globalDOF];
-                        for (unsigned int i2 = 0; i2 < dofs_per_cell; ++i2) {
-                            if (fe_face_values.shape_value(i2, 0) != 0) {
-                                const unsigned int dof2 = fe_values.get_fe().system_to_component_index(i2).first;
-                                unsigned int globalDOF2 = local_dof_indices[i2];
-                                if (supportPoints[globalDOF2] == supportPoints[globalDOF]){
-                                    nodeU2(dof2) = solutionWithGhosts[globalDOF2];
-                                    if (dof2 == indentDof)
-                                        index_z = globalDOF2;
-                                }
-                            }
-                        }
-                        for (unsigned int i2 = 0; i2 < dim; ++i2) {
-                            nodeU(i2) = node(i2) + nodeU2(i2);
-                            if (i2 == indentDof)
-                                nodedU(i2) = node(i2);
-                            else
-                                nodedU(i2) = nodeU(i2);
-                        }
-                        //setIndentation(nodeU, dof, flag, value);
-                        if ((dof == indentDof) || roughIndenter) {
-
-                            criterion = (lambda2(index_z) /
-                                         diag_mass_matrix_vector_relevant(index_z) + userInputs.activeSetLambdaTolerance +
-                                         c * (solutionWithGhosts[index_z] - Obstacle(nodedU, indentDof, currentPosIndenter)));// + indenterTolerance
-//                            solve_for_c = (0.1* diag_mass_matrix_vector_relevant(index_z) - lambda2(index_z)) /
-//                                    (diag_mass_matrix_vector_relevant(index_z) *
-//                                    (solutionWithGhosts[index_z] - Obstacle(nodedU, indentDof, currentPosIndenter)));
-
-                            if (!dof_touched[globalDOF]) {
-                                dof_touched[globalDOF] = true;
-                                setIndentation2(nodeU, dof, flag, value, criterion);
-                                if (userInputs.debugIndentation)
-                                {
-                                    std::vector<unsigned int> arr1={globalDOF};
-                                    if (std::includes(debug_set.begin(), debug_set.end(), arr1.begin(), arr1.end())) {
-                                        std::cout << "globalDOF: " << globalDOF <<
-                                        " criterion: " << criterion
-                                                  << " solution: " << solutionWithGhosts[index_z]
-                                                  //<< " c->crit==0.1: " << solve_for_c
-                                                  //<< " gap1: " << solutionWithGhosts[index_z] - Obstacle(nodedU, indentDof, currentPosIndenter)
-                                                  << " gap: " << Obstacle(nodeU, indentDof, currentPosIndenter)
-                                                  //<< " obs(node): " << Obstacle(node, indentDof, currentPosIndenter)
-                                                  //<< " obs(nodeU): " << Obstacle(nodeU, indentDof, currentPosIndenter)
-                                                  << " lambda/mass: "
-                                                  << lambda2(index_z) / diag_mass_matrix_vector_relevant(index_z) <<
-                                                  " Node: " << node << "\n";
-                                    }
-                                }
-//                                if ((criterion > -10) && ((dof == indentDof) && (solutionWithGhosts[index_z] < 0))) //currently prints many nodes away from indenter, due to lack of categorical value for missed nodes in Obstacle()
-//                                    std::cout<<"dof# "<<globalDOF<<" value: "<<value<<" nodeU: "<<nodeU<<" soln:"<<
-//                                             solutionWithGhosts[globalDOF]<<" next? "<<value+nodeU[dof]<<" crit: "<<criterion<<"\n";
-//                                if (solutionWithGhosts[globalDOF]<-1e-3)
-//                                    std::cout<<"dof# "<<globalDOF<<" value: "<<value<<" nodeU: "<<nodeU<<" soln:"<<solutionWithGhosts[globalDOF]<<" gap "<<Obstacle(nodedU, indentDof, currentPosIndenter)<<"\n";
-                            }
-                            else
-                                flag = false;
-//                            if (dof == indentDof) std::cout<<"solution: "<<solution(index_z)<<" obs(node): "<<Obstacle(node, indentDof, currentPosIndenter)
-//                            <<" obs(nodeU): "<<Obstacle(nodeU, indentDof, currentPosIndenter)<<" lambda/mass: "<<lambda(index_z) / diag_mass_matrix_vector_relevant(index_z)<<
-//                            "\n";
-//                                if (flag) active_set.add_index(index_z);
-//                                    value=Obstacle(node, i);
-//                                    value*=loadFactorSetByModel;
-//                            } else {
-//                                setIndentation2(nodeU, dof, flag, value);
-//                                    value=Obstacle(node, i);
-//                            }
-
-                            if (flag) {
-
-                                //active_set.add_line(globalDOF);
-                                //active_set.set_inhomogeneity(globalDOF, value);
-                                if (dof == indentDof) {
-                                    if (active_set_empty) {
-                                        indenterLoad = lambda2(index_z);
-                                        active_set_empty = false;
-                                    }
-                                    else
-                                        indenterLoad = indenterLoad + lambda2(index_z);
-                                    active_set.add_index(globalDOF);
-                                    //std::cout<<"load of indenter += "<<lambda2(index_z)<<"\n";
-                                    //std::cout<<"indenterLoad = "<<indenterLoad<<"\n";
-                                }
-                                indentation_constraints.add_line(globalDOF);
-                                indentation_constraints.set_inhomogeneity(globalDOF, value);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    //pcout << "in updateActiveSet2 6\n";
-    indentation_constraints.close();
-
-}
-
-template <int dim>
-void ellipticBVP<dim>::setActiveSet3(){
-    vectorType lambda2(locally_owned_dofs,locally_relevant_ghost_dofs,mpi_communicator);
-    std::vector<bool> dof_touched(dofHandler.n_dofs(), false);
-    bool active_set_empty = true;
-    const unsigned int   dofs_per_cell   = FE.dofs_per_cell;
-    std::vector<types::global_dof_index> local_dof_indices (dofs_per_cell);
-    FEValues<dim> fe_values (FE, QGauss<dim>(userInputs.quadOrder), update_values);
-    FEFaceValues<dim> fe_face_values (FE, QGauss<dim-1>(userInputs.quadOrder), update_values);
-    Quadrature<dim - 1> face_quadrature(FE.get_unit_face_support_points());
-    Vector<double> Ulocal(dofs_per_cell);
-    const unsigned int n_face_q_points = face_quadrature.size();
-    solution.compress(VectorOperation::add);
-    newton_rhs_uncondensed_inc.compress(VectorOperation::add);
-    //diag_mass_matrix_vector.compress(VectorOperation::unknown);
-//    std::vector<bool> dof_touched(dofHandler.n_dofs(), false);
-    vectorType distributed_solution(locally_owned_dofs,
-                                    mpi_communicator);
-    //pcout << "in updateActiveSet2 1\n";
-    distributed_solution = solution;
-
-    //pcout << "in updateActiveSet2 2\n";
-    lambda2 = newton_rhs_uncondensed_inc; //NEED THIS COMPUTED PRIOR TO CALL Done
-    vectorType diag_mass_matrix_vector_relevant(locally_owned_dofs,
                                                 locally_relevant_ghost_dofs, mpi_communicator); // this is needed for petsc to work (not needed in step-42 trilinos)
     //pcout << "in updateActiveSet2 3\n";
     diag_mass_matrix_vector_relevant = diag_mass_matrix_vector;
@@ -832,7 +673,7 @@ void ellipticBVP<dim>::setActiveSet3(){
             cell->get_dof_indices (local_dof_indices);
             fe_values.reinit (cell);
             for (unsigned int faceID=0; faceID<GeometryInfo<dim>::faces_per_cell; faceID++){ //(const auto &face: cell->face_iterators()){
-                if (cell->face(faceID)->at_boundary()){ //&& cell->face(faceID)->boundary_id()==indenterFace){ //(face->at_boundary() && face->boundary_id()==indenterFace) {
+                if (cell->face(faceID)->at_boundary() && (cell->face(faceID)->boundary_id()==indenterFace || userInputs.readExternalMesh)){ //(face->at_boundary() && face->boundary_id()==indenterFace) {
                     fe_face_values.reinit(cell, faceID); //face);
                     //cell->get_dof_indices (local_dof_indices);
                     //fe_face_values.reinit(cell, indenterFace);
@@ -993,7 +834,7 @@ void ellipticBVP<dim>::setFrozenSet(){
             cell->get_dof_indices(local_dof_indices);
             fe_values.reinit(cell);
             for (unsigned int faceID = 0; faceID < GeometryInfo<dim>::faces_per_cell; faceID++) { //(const auto &face: cell->face_iterators()){
-                if (cell->face(faceID)->at_boundary()){// && cell->face(faceID)->boundary_id() ==indenterFace) { //(face->at_boundary() && face->boundary_id()==indenterFace) {
+                if (cell->face(faceID)->at_boundary() && (cell->face(faceID)->boundary_id()==indenterFace || userInputs.readExternalMesh)){ // && cell->face(faceID)->boundary_id() ==indenterFace) { //(face->at_boundary() && face->boundary_id()==indenterFace) {
                     fe_face_values.reinit(cell, faceID); //face);
 //                for (unsigned int i = 0; i < dofs_per_cell; i++) {
 //                    Ulocal[i] = 0;
@@ -1102,9 +943,7 @@ void ellipticBVP<dim>::setIndentationConstraints(){
         }
         else
         {
-            //setActiveSet3();
-            if (userInputs.readExternalMesh)  setActiveSet3();
-            else setActiveSet2();
+            setActiveSet2();
             frozen_set = active_set;
         }
         //pcout << "debug set indentation constraints 2\n";
