@@ -599,7 +599,7 @@ void ellipticBVP<dim>::setActiveSet(){
                         if ((dof == indentDof) || (roughIndenter == true)) {
                             if (dof_touched[globalDOF] == false) {
                                 dof_touched[globalDOF] = true;
-                                std::cout<<"globalDOF "<<globalDOF<<" nodeU "<<nodeU<<"\n";
+                                //std::cout<<"globalDOF "<<globalDOF<<" nodeU "<<nodeU<<"\n";
                                 setIndentation(nodeU, dof, flag, value);
                             }
                             else
