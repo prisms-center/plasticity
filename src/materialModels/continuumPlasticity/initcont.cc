@@ -1,9 +1,10 @@
 #include "../../../include/continuumPlasticity.h"
-//THIS METHOD IS UP FOR REMOVAL-- MAY NOT BE NEEDED IN NEW REFACTOR
+
 template <int dim>
-void continuumPlasticity<dim>::init(unsigned int num_quad_points)
+void continuumPlasticity<dim>::initcont(unsigned int num_quad_points)
 {
   this->pcout << "continuumPlasticity<dim>::init "<<"\n";
+    //std::cout << "continuumPlasticity<dim>::init "<<"\n";
   //Get the total numbers of elements for this processor (num_local_cells)
   unsigned int num_local_cells = this->triangulation.n_locally_owned_active_cells();
   //Initiate the enhanced strain object with the number elements
@@ -111,7 +112,7 @@ void continuumPlasticity<dim>::init(unsigned int num_quad_points)
   projectVonMisesStress.resize(num_local_cells,std::vector<double>(num_quad_points,0));
 
   //Initialize projection of post process parameters???
-  ellipticBVP<dim>::initProjection();
+  //ellipticBVP<dim>::initProjection();
   //Initialize the "plasticOnset" marker
   plasticOnset = false;
   //Change "initCalled" to "true" to show that the "init" function has now been called

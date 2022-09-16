@@ -29,12 +29,13 @@ class continuumPlasticity : public ellipticBVP<dim>
    *Structure to hold the material parameters and model names.
    */
   materialProperties properties;
- private:
-  /**
+    /**
    *Initialize and resize class data structures.
    */
-  void init(unsigned int num_quad_points);
-  void setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value);
+   void initcont(unsigned int num_quad_points);
+ private:
+
+  //void setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value);
   //void mesh();
   //void markBoundaries();
   //void applyDirichletBCs();

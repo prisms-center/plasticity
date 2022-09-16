@@ -42,7 +42,6 @@ int main (int argc, char **argv)
 
       //Copy to properties the convergence criteria
       problem.properties.stopOnConvergenceFailure = userInputs.stopOnConvergenceFailure;
-
       problem.run();
     }
   catch (std::exception &exc)

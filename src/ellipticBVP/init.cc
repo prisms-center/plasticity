@@ -267,7 +267,7 @@ void ellipticBVP<dim>::init(){
       if(userInputs.readExternalMesh){
           // Set which (if any) faces of the triangulation are indentation
           QGaussLobatto<dim - 1> face_quadrature_formula(FE.degree + 1);
-          FEFaceValues<dim> fe_values_face(FE,face_quadrature_formula,update_values | update_JxW_values);
+          FEFaceValues<dim> fe_face_values(FE,face_quadrature_formula,update_values | update_JxW_values);
           const unsigned int dofs_per_cell   = FE.n_dofs_per_cell();
           std::vector<types::global_dof_index> local_dof_indices(dofs_per_cell);
           Vector<double> externalMeshParameterBCs(dim);
@@ -279,25 +279,33 @@ void ellipticBVP<dim>::init(){
           for (const auto &cell : dofHandler.active_cell_iterators()){
             if (cell->is_locally_owned()) {
               //std::cout << "cell locally owned! "<< std::endl;
-              for (const auto &face: cell->face_iterators()){
-                if (face->at_boundary()) {
-                  fe_values_face.reinit(cell, face);
+              for (unsigned int faceID = 0; faceID < GeometryInfo<dim>::faces_per_cell; faceID++) { //(const auto &face: cell->face_iterators()){
+                if (cell->face(faceID)->at_boundary()) { //(face->at_boundary() && face->boundary_id()==indenterFace) {
+                    fe_face_values.reinit(cell, faceID);
                   cell->get_dof_indices (local_dof_indices);
                   for (unsigned int i=0; i<dofs_per_cell; ++i) {
-                    if (fe_values_face.shape_value(i, 0)!=0){
+                    if (fe_face_values.shape_value(i, 0)!=0){ //skip cell support points not on face
                       globalDOF=local_dof_indices[i];
                       node_BoundaryID=this->supportPoints[globalDOF];
+                      unsigned int boundary= dim * 2 + 1;
                       for (unsigned int i2=0; i2<dim; ++i2)
                       {
                           if (node_BoundaryID[i2] <= externalMeshParameterBCs(0)) {
-                              face->set_boundary_id(2 * i2);
-                              break;
+                              if (boundary == dim * 2 + 1) boundary = 2 * i2;
+                              else boundary = 2 * dim;
+                              //cell->face(faceID)->set_boundary_id(2 * i2);
+                              //break;
                           }
 
                           if (node_BoundaryID[i2] >= (this->userInputs.span[i2]-externalMeshParameterBCs(0))) {
-                              face->set_boundary_id(2 * i2 + 1);
-                              break;
+                              if (boundary == dim * 2 + 1) boundary = 2 * i2 + 1;
+                              else boundary = 2 * dim;
+                              //break;
                           }
+                      }
+                      if (boundary < dim * 2){
+                          cell->face(faceID)->set_boundary_id(boundary);
+                          break;
                       }
 
                     }

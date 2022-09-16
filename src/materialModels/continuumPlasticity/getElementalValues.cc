@@ -10,7 +10,7 @@ void continuumPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 
   //Initialized history variables and pfunction variables if unititialized
   if(initCalled == false){
-    init(num_quad_points);
+    initcont(num_quad_points);
   }
   //std::cout<<"sanity check in continuumPlasticity<dim>::getElementalValues\n";
   //Get the element number.

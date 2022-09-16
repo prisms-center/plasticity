@@ -60,7 +60,7 @@ ADD_EXECUTABLE(${TARGET} ${TARGET}.cc)
 DEAL_II_SETUP_TARGET(${TARGET})
 
 TARGET_LINK_LIBRARIES(${TARGET} ${DEAL_II_LIBRARIES} PLibrary)
-TARGET_LINK_LIBRARIES(main ${CMAKE_SOURCE_DIR}/../../cmake-build-debug/libprisms_cp_debug.a)
+TARGET_LINK_LIBRARIES(main ${CMAKE_SOURCE_DIR}/../../libprisms_cp_debug.a)
 
 ADD_CUSTOM_TARGET(run
   COMMAND ${TARGET} -pc_type jacobi
