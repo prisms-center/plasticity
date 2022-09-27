@@ -472,7 +472,7 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
     for(unsigned int i=0;i<n_Tslip_systems_MultiPhase[0];i++){
       m_norm = 0 ; n_norm = 0 ;
       for(unsigned int j=0;j<dim;j++){
-        m_alpha_MultiPhase[i][j]=m_alpha_SinglePhase[i][j];   
+        m_alpha_MultiPhase[i][j]=m_alpha_SinglePhase[i][j];
         n_alpha_MultiPhase[i][j]=n_alpha_SinglePhase[i][j];
         m_norm += m_alpha_MultiPhase[i][j]*m_alpha_MultiPhase[i][j] ;
         n_norm += n_alpha_MultiPhase[i][j]*n_alpha_MultiPhase[i][j] ;
@@ -522,7 +522,7 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
           n_norm = 0 ;
           n_norm = n_norm + n_alpha_MultiPhase[id][0]*n_alpha_MultiPhase[id][0] ;
           n_norm = n_norm + n_alpha_MultiPhase[id][1]*n_alpha_MultiPhase[id][1] ;
-          n_norm = n_norm + n_alpha_MultiPhase[id][2]*n_alpha_MultiPhase[id][2] ; 
+          n_norm = n_norm + n_alpha_MultiPhase[id][2]*n_alpha_MultiPhase[id][2] ;
           n_norm = sqrt(n_norm) ;
           n_alpha_MultiPhase[id][0] = n_alpha_MultiPhase[id][0]/n_norm ;
           n_alpha_MultiPhase[id][1] = n_alpha_MultiPhase[id][1]/n_norm ;

@@ -554,6 +554,105 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 		}
 	}
 
+	if (this->userInputs.writeGrainAveragedOutput) {
+		if (((!this->userInputs.tabularOutput)&&((this->currentIncrement+1)%this->userInputs.skipGrainAveragedOutputSteps == 0))||((this->userInputs.tabularOutput)&& (std::count(tabularTimeInputIncInt.begin(), tabularTimeInputIncInt.end(), (this->currentIncrement+1))==1))){
+			//loop over elements
+			unsigned int numberOfGrainAverageDataOutput=this->userInputs.numberOfGrainAverageDataOutput;
+			cellID=0;
+			FullMatrix<double> grainAveragaData(orientations.numberOfGrains,numberOfGrainAverageDataOutput);
+			FullMatrix<double> global_grainAveragaData(orientations.numberOfGrains,numberOfGrainAverageDataOutput);
+
+			grainAveragaData=0;
+			global_grainAveragaData=0;
+		  unsigned int grainID;
+			cell = this->dofHandler.begin_active(), endc = this->dofHandler.end();
+			for (; cell!=endc; ++cell) {
+				if (cell->is_locally_owned()){
+					fe_values.reinit(cell);
+
+					if (this->userInputs.flagBufferLayer){
+						pnt2=cell->center();
+						dimBuffer=this->userInputs.dimBufferLayer;
+						lowerBuffer=this->userInputs.lowerBufferLayer;
+						upperBuffer=this->userInputs.upperBufferLayer;
+						if ((pnt2[dimBuffer]>=lowerBuffer)&&(pnt2[dimBuffer]<=upperBuffer)){
+							CheckBufferRegion=1;
+						}
+						else{
+							CheckBufferRegion=0;
+						}
+					}
+					else{
+						CheckBufferRegion=1;
+					}
+
+					if (CheckBufferRegion==1) {
+						grainID=cellOrientationMap[cellID]-1;
+
+						//loop over quadrature points
+						for (unsigned int q=0; q<num_quad_points; ++q){
+							std::vector<double> temp;
+
+							temp.push_back(fe_values.JxW(q));
+
+							temp.push_back(CauchyStress[cellID][q][0][0]*fe_values.JxW(q));
+							temp.push_back(CauchyStress[cellID][q][1][1]*fe_values.JxW(q));
+							temp.push_back(CauchyStress[cellID][q][2][2]*fe_values.JxW(q));
+							temp.push_back(CauchyStress[cellID][q][0][1]*fe_values.JxW(q));
+							temp.push_back(CauchyStress[cellID][q][0][2]*fe_values.JxW(q));
+							temp.push_back(CauchyStress[cellID][q][1][2]*fe_values.JxW(q));
+
+							if (temp.size()!=numberOfGrainAverageDataOutput){
+								this->pcout << "The size of numberOfGrainAverageDataOutput defined in prm.prm is not correct\n";
+				      	exit(1);
+							}
+
+							for (unsigned int i=0;i<numberOfGrainAverageDataOutput;i++){
+								grainAveragaData(grainID,i)=grainAveragaData(grainID,i)+temp[i];
+							}
+						}
+					}
+					cellID++;
+				}
+			}
+
+
+			for(unsigned int i=0;i<orientations.numberOfGrains;i++){
+				for(unsigned int j=0;j<numberOfGrainAverageDataOutput;j++){
+					global_grainAveragaData[i][j]=Utilities::MPI::sum(grainAveragaData[i][j],this->mpi_communicator);
+				}
+			}
+
+			for(unsigned int i=0;i<orientations.numberOfGrains;i++){
+				if (fabs(global_grainAveragaData[i][0])>1e-15){
+					for(unsigned int j=1;j<numberOfGrainAverageDataOutput;j++){
+						global_grainAveragaData[i][j]=global_grainAveragaData[i][j]/global_grainAveragaData[i][0];
+					}
+				}
+			}
+
+			std::string dir_GrainAverage(this->userInputs.outputDirectory);
+
+			if(Utilities::MPI::this_mpi_process(this->mpi_communicator)==0){
+				dir_GrainAverage+="/";
+				std::ofstream outputFile_GrainAverage;
+				dir_GrainAverage += std::string("GrainAverage");
+				dir_GrainAverage += std::to_string(this->currentIncrement);
+				dir_GrainAverage += std::string(".csv");
+				outputFile_GrainAverage.open(dir_GrainAverage.c_str(),std::fstream::app);
+				for(unsigned int i=0;i<orientations.numberOfGrains;i++){
+					for(unsigned int j=0;j<numberOfGrainAverageDataOutput-1;j++){
+						outputFile_GrainAverage<< std::setprecision(9) <<global_grainAveragaData[i][j]<<",";
+					}
+					outputFile_GrainAverage<< std::setprecision(9) <<global_grainAveragaData[i][numberOfGrainAverageDataOutput-1];
+					outputFile_GrainAverage <<'\n';
+				}
+				outputFile_GrainAverage.close();
+			}
+		}
+	}
+
+
 	microvol=Utilities::MPI::sum(local_microvol,this->mpi_communicator);
 
 	for(unsigned int i=0;i<dim;i++){

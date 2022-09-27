@@ -99,10 +99,11 @@ public:
   /*Solution output parameters*/
   bool writeOutput; // flag to write output vtu and pvtu files
   bool writeQuadratureOutput; // flag to write quadrature points output
+  bool writeGrainAveragedOutput; // flag to write Grain Average output
   bool tabularOutput; // flag to write outputs based on a time table
   std::vector<double> tabularTimeOutput; // 	Periodic BCs Input
   std::string outputDirectory;
-  unsigned int skipOutputSteps, skipQuadratureOutputSteps;
+  unsigned int skipOutputSteps, skipQuadratureOutputSteps, skipGrainAveragedOutputSteps, numberOfGrainAverageDataOutput;
   bool output_Eqv_strain;
   bool output_Eqv_stress;
   bool output_Grain_ID;

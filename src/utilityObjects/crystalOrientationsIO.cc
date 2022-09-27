@@ -33,7 +33,7 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
       unsigned int numberOfAdditionalVoxelInfo=_numVoxelData;
       while (getline (eulerDataFile,line)){
         std::stringstream ss(line);
-        unsigned int id;
+
         ss >> id;
         //double temp;
         //ss >> temp;
@@ -56,6 +56,9 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
       pcout << "Unable to open eulerDataFile\n";
       exit(1);
     }
+
+///////////Number Of Grains In The Microstructure/////////
+    numberOfGrains=id;
   }
 
   //loadOrientations reads the voxel data file and orientations file

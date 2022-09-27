@@ -54,7 +54,10 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
 
   skipOutputSteps=parameter_handler.get_integer("Skip Output Steps");
   writeQuadratureOutput = parameter_handler.get_bool("Write Quadrature Output");
+  writeGrainAveragedOutput = parameter_handler.get_bool("Write Grain Averaged Output");
   skipQuadratureOutputSteps=parameter_handler.get_integer("Skip Quadrature Output Steps");
+  skipGrainAveragedOutputSteps=parameter_handler.get_integer("Skip Grain Averaged Output Steps");
+  numberOfGrainAverageDataOutput=parameter_handler.get_integer("Number of Grain Averaged Output Variables");
 
   if(skipOutputSteps<=0)
   skipOutputSteps=1;
@@ -582,7 +585,10 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
 
   parameter_handler.declare_entry("Skip Output Steps","-1",dealii::Patterns::Integer(),"Skip Output Steps");
   parameter_handler.declare_entry("Write Quadrature Output","false",dealii::Patterns::Bool(),"Flag to write quadrature output");
+  parameter_handler.declare_entry("Write Grain Averaged Output","false",dealii::Patterns::Bool(),"Flag to Write Grain Averaged Output");
   parameter_handler.declare_entry("Skip Quadrature Output Steps","-1",dealii::Patterns::Integer(),"Skip Quadrature Output Steps");
+  parameter_handler.declare_entry("Skip Grain Averaged Output Steps","-1",dealii::Patterns::Integer(),"Skip Grain Averaged Output Steps");
+  parameter_handler.declare_entry("Number of Grain Averaged Output Variables","-1",dealii::Patterns::Integer(),"Number of Grain Averaged Output Variables");
   parameter_handler.declare_entry("Output Equivalent strain","false",dealii::Patterns::Bool(),"Output Equivalent strain");
   parameter_handler.declare_entry("Output Equivalent stress","false",dealii::Patterns::Bool(),"Output Equivalent stress");
   parameter_handler.declare_entry("Output Grain ID","false",dealii::Patterns::Bool(),"Output Grain ID");
