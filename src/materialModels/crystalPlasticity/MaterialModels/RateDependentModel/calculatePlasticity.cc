@@ -776,6 +776,10 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
       for (unsigned int j = 0;j < dim;j++) {
         for (unsigned int k = 0;k < dim;k++) {
           temp7[j][k]=SCHMID_TENSOR1[dim*i + j][k];
+        }
+      }
+      for (unsigned int j = 0;j < dim;j++) {
+        for (unsigned int k = 0;k < dim;k++) {
           del_Ep_tau[j][k]=del_Ep_tau[j][k]+ delgam_tau(i)*0.5*(temp7[j][k]+temp7[k][j]);
         }
       }
