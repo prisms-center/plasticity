@@ -37,7 +37,7 @@ set Domain size Z                                = 1
 set Use external mesh                            = true
 
 #Name of external mesh file
-set Name of file containing external mesh        = t2.msh
+set Name of file containing external mesh        = t3b.msh
 
 #The external mesh parameter: The ratio of defiend region size to the Domain size
 set External mesh parameter        = 1e-3
@@ -50,7 +50,7 @@ set Write Output                                 = true
 
 # Output Directory
 # Need to create directory before using this. Will be corrected in future versions of the software
-set Output Directory                             = results_test_2
+set Output Directory                             = results_test_3bs
 
 # Skip Output Steps
 set Skip Output Steps                            = 0
@@ -116,7 +116,7 @@ set Active Set Lambda Tolerance 		   = 0.1
 
 set Debug Indentation Active Set 		   = true
 
-set Indentation Key Frame Increment Numbers      = 0, 80, 180, 300
+set Indentation Key Frame Increment Numbers      = 0, 40, 90, 150
 
 set Indentation Boundary condition Constraint filename      = IndentationBCsConstraints.txt
 
@@ -132,7 +132,7 @@ set Refinement Factor			   	   = 0, 0, 0
 # Solver parameters
 ####################################
 #delta T for every increment
-set Time increments                              = 0.005
+set Time increments                              = 0.01
 
 #Total simulation time
 set Total time                                   = 1.5

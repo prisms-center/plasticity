@@ -23,7 +23,7 @@ void continuumPlasticity<dim>::updateAfterIteration()
       enhStrain.updateAlpha(dUlocal, cell->user_index());
     }
   }
-    //this->pcout << "continuum::updateAfterIteration 2\n";
+
 }
 
 #include "../../../include/continuumPlasticity_template_instantiations.h"

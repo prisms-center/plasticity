@@ -18,6 +18,11 @@ void ellipticBVP<dim>::updateBeforeIncrement(){
 template <int dim>
 void ellipticBVP<dim>::updateAfterIncrement(){
     pcout << "updateAfterIncrement eBVP\n";
+    if (userInputs.enableIndentationBCs)
+    {
+        measureIndentationLoad();
+        indenterLoad = Utilities::MPI::sum(indenterLoad, mpi_communicator);
+    }
   //default method does nothing
 }
 

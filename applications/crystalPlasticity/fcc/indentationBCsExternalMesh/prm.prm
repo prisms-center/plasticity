@@ -55,7 +55,7 @@ set Use external mesh                            = true
 set Name of file containing external mesh        = t1.msh
 
 #The external mesh parameter: The ratio of defiend region size to the Domain size
-set External mesh parameter        = 1e-2
+set External mesh parameter        = 3e-2
 
 ####################################
 # Solver output parameters
@@ -65,7 +65,7 @@ set Write Output                                 = true
 
 # Output Directory
 
-set Output Directory                             = res2
+set Output Directory                             = res5
 
 # Skip Output Steps
 set Skip Output Steps                            = 0
@@ -121,11 +121,13 @@ set Indentation Key Frame Number = 3
 
 set Indentation Active Set Freeze Iterations = 1
 
+set Active Set Lambda Tolerance 		   = 0.1
+
 set Active Set Criterion Coefficient = 100
 
-set Debug Indentation Active Set = false
+set Debug Indentation Active Set = true
 
-set Indentation Key Frame Increment Numbers = 0, 40, 80
+set Indentation Key Frame Increment Numbers = 0, 4, 8
 
 set Indentation Boundary condition Constraint filename      = IndentationBCsConstraints.txt
 
@@ -156,7 +158,7 @@ set Refinement Factor			      = 0,0, 0
 # Solver parameters
 ####################################
 #delta T for every increment
-set Time increments                              = 0.005
+set Time increments                              = 0.05
 
 set Number of Taylor Substeps                    = 1
 #Total simulation time

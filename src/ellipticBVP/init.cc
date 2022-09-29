@@ -261,8 +261,14 @@ void ellipticBVP<dim>::init(){
                 currentPosIndenter[i] = KeyPosIndenter[0](i);
                 prevPosIndenter[i] = KeyPosIndenter[0](i);
             }
-        }
 
+        }
+      if (indenterFace == 5) loadFace = 4;
+      if (indenterFace == 4) loadFace = 5;
+      if (indenterFace == 3) loadFace = 2;
+      if (indenterFace == 2) loadFace = 3;
+      if (indenterFace == 1) loadFace = 0;
+      if (indenterFace == 0) loadFace = 1;
 
       if(userInputs.readExternalMesh){
           // Set which (if any) faces of the triangulation are indentation

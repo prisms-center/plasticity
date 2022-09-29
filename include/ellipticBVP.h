@@ -64,7 +64,7 @@ protected:
   std::vector<double> deluNodalDisplacement,initPosIndenter,finalPosIndenter, prevPosIndenter, currentPosIndenter;
   std::vector<Point<dim>> KeyPosIndenter;
   double indenterSize, indenterTolerance, indenterLoad;// depthRefinementMultiple;
-  unsigned int indenterShape, indenterFace, indentDof, indentationKeyFrames;//, refinementFactor;
+  unsigned int indenterShape, indenterFace, loadFace, indentDof, indentationKeyFrames;//, refinementFactor;
   bool roughIndenter;
   std::vector<std::vector<unsigned int> >  vertices_Constraints_Matrix,edges_Constraints_Matrix,faces_Constraints_Matrix, global_Edges_DOFs_Vector_Array;
   std::vector<std::vector<double>>  vertices_Constraints_Coef,edges_Constraints_Coef,faces_Constraints_Coef, global_Edges_DOFs_Coord_Vector_Array,nodalDisplacement;
@@ -169,6 +169,7 @@ protected:
       bool flagActiveSetLambda(const Point<dim> & p, double& criterion);
       bool flagActiveSetLambda2(const Point<dim> & p, double& criterion);
       void updateActiveSet();
+      void measureIndentationLoad();
       void setActiveSet();
       void setActiveSet2();
       void setFrozenSet();

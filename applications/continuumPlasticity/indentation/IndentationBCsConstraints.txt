@@ -2,9 +2,9 @@
 # shape_id string: sphere 0, octahedron 1, cylinder 2;  indenter size (radius); indenter face ID; tolerance for active set; frictionless = 0, rough = 1;
 # indenter position for each "key frame" of tabular positions, separated by /n
 # final indenter position
-0 0.25 6 1e-8 0
-0 0 1.25
-0 0 1.242
-0 0 1.2
-0 0 1.1
+0 0.1 6 1e-8 0
+-0.05 -0.05 1.0707
+-0.05 -0.05 1.06
+-0.05 -0.05 1.04
+-0.05 -0.05 1.0
 

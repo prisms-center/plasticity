@@ -624,6 +624,54 @@ void ellipticBVP<dim>::setActiveSet(){
 }
 
 template <int dim>
+void ellipticBVP<dim>::measureIndentationLoad(){
+    vectorType lambda2(locally_owned_dofs,locally_relevant_ghost_dofs,mpi_communicator);
+    std::vector<bool> dof_touched(dofHandler.n_dofs(), false);
+    const unsigned int   dofs_per_cell   = FE.dofs_per_cell;
+    std::vector<types::global_dof_index> local_dof_indices (dofs_per_cell);
+    FEValues<dim> fe_values (FE, QGauss<dim>(userInputs.quadOrder), update_values);
+    FEFaceValues<dim> fe_face_values (FE, QGauss<dim-1>(userInputs.quadOrder), update_values);
+    Quadrature<dim - 1> face_quadrature(FE.get_unit_face_support_points());
+    const unsigned int n_face_q_points = face_quadrature.size();
+    solution.compress(VectorOperation::add);
+    newton_rhs_uncondensed_inc.compress(VectorOperation::add);
+    vectorType distributed_solution(locally_owned_dofs,
+                                    mpi_communicator);
+    distributed_solution = solution;
+    lambda2 = newton_rhs_uncondensed_inc; //NEED THIS COMPUTED PRIOR TO CALL Done
+    vectorType diag_mass_matrix_vector_relevant(locally_owned_dofs,
+                                                locally_relevant_ghost_dofs, mpi_communicator); // this is needed for petsc to work (not needed in step-42 trilinos)
+    diag_mass_matrix_vector_relevant = diag_mass_matrix_vector;
+    active_set.clear();
+    indenterLoad = 0.;
+    typename DoFHandler<dim>::active_cell_iterator cell = dofHandler.begin_active(), endc = dofHandler.end();
+    for (; cell!=endc; ++cell) {
+        if (cell->is_locally_owned()){
+            cell->get_dof_indices (local_dof_indices);
+            fe_values.reinit (cell);
+            for (unsigned int faceID=0; faceID<GeometryInfo<dim>::faces_per_cell; faceID++){ //(const auto &face: cell->face_iterators()){
+                if (cell->face(faceID)->at_boundary() && (cell->face(faceID)->boundary_id()==loadFace || userInputs.readExternalMesh)){ //(face->at_boundary() && face->boundary_id()==indenterFace) {
+                    fe_face_values.reinit(cell, faceID); //face);
+                    for (unsigned int i = 0; i < dofs_per_cell; ++i) {
+                        if (fe_face_values.shape_value(i, 0) != 0) {
+                            const unsigned int dof = fe_values.get_fe().system_to_component_index(i).first;
+                            unsigned int globalDOF = local_dof_indices[i];
+                            //setIndentation(nodeU, dof, flag, value);
+                            if (dof == indentDof) {
+                                if (!dof_touched[globalDOF]) {
+                                    dof_touched[globalDOF] = true;
+                                    indenterLoad = indenterLoad + lambda2(globalDOF);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+template <int dim>
 void ellipticBVP<dim>::setActiveSet2(){
     vectorType lambda2(locally_owned_dofs,locally_relevant_ghost_dofs,mpi_communicator);
     std::vector<bool> dof_touched(dofHandler.n_dofs(), false);
@@ -762,11 +810,11 @@ void ellipticBVP<dim>::setActiveSet2(){
                                 //active_set.set_inhomogeneity(globalDOF, value);
                                 if (dof == indentDof) {
                                     if (active_set_empty) {
-                                        indenterLoad = lambda2(index_z);
+                                        //indenterLoad = lambda2(index_z);
                                         active_set_empty = false;
                                     }
                                     else
-                                        indenterLoad = indenterLoad + lambda2(index_z);
+                                        //indenterLoad = indenterLoad + lambda2(index_z);
                                     active_set.add_index(globalDOF);
                                     //std::cout<<"load of indenter += "<<lambda2(index_z)<<"\n";
                                     //std::cout<<"indenterLoad = "<<indenterLoad<<"\n";
@@ -906,10 +954,10 @@ void ellipticBVP<dim>::setFrozenSet(){
                                     //active_set.set_inhomogeneity(globalDOF, value);
                                     if (dof == indentDof) {
                                         if (active_set_empty) {
-                                            indenterLoad = lambda2(index_z);
+                                            //indenterLoad = lambda2(index_z);
                                             active_set_empty = false;
                                         } else
-                                            indenterLoad = indenterLoad + lambda2(index_z);
+                                            //indenterLoad = indenterLoad + lambda2(index_z);
                                         active_set.add_index(globalDOF);
                                     }
                                     indentation_constraints.add_line(globalDOF);
