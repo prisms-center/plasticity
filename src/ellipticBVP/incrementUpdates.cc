@@ -29,4 +29,11 @@ void ellipticBVP<dim>::updateAfterIncrementBase(){
   //default method does nothing
 }
 
+template <int dim>
+void ellipticBVP<dim>::updateAfterIncrement(){
+
+    //default method does nothing
+}
+
+
 #include "../../include/ellipticBVP_template_instantiations.h"
