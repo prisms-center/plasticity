@@ -7,6 +7,7 @@ template <int dim>
 void continuumPlasticity<dim>::updateAfterIncrement()
 {
   this->pcout << "continuum::updateAfterIncrement \n";
+  this->updateAfterIncrement();
 	unsigned int CheckBufferRegion,dimBuffer;
 	double lowerBuffer,upperBuffer;
 	Point<dim> pnt2;

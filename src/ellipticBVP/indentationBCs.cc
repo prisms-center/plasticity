@@ -700,13 +700,8 @@ void ellipticBVP<dim>::setActiveSet2(){
     diag_mass_matrix_vector_relevant = diag_mass_matrix_vector;
     active_set.clear();
     indenterLoad = 0.;
-    //updateIndentationSet();
-    //parallel loop over all elements
-    //pcout << "in setIndentationConstraints\n";
-    //pcout << "in updateActiveSet2 4\n";
     indentation_constraints.clear ();
     indentation_constraints.reinit (locally_relevant_dofs);
-    //pcout << "in updateActiveSet2 5\n";
     double criterion;
     double solve_for_c;
     double stiffness;
@@ -873,10 +868,6 @@ void ellipticBVP<dim>::setFrozenSet(){
             for (unsigned int faceID = 0; faceID < GeometryInfo<dim>::faces_per_cell; faceID++) { //(const auto &face: cell->face_iterators()){
                 if (cell->face(faceID)->at_boundary() && (cell->face(faceID)->boundary_id()==indenterFace || userInputs.readExternalMesh)){ // && cell->face(faceID)->boundary_id() ==indenterFace) { //(face->at_boundary() && face->boundary_id()==indenterFace) {
                     fe_face_values.reinit(cell, faceID); //face);
-//                for (unsigned int i = 0; i < dofs_per_cell; i++) {
-//                    Ulocal[i] = 0;
-//                    Ulocal[i] = solutionWithGhosts[local_dof_indices[i]];
-//                }
 
                     for (unsigned int i = 0; i < dofs_per_cell; ++i) {
                         if (fe_face_values.shape_value(i, 0) != 0) {
@@ -907,15 +898,6 @@ void ellipticBVP<dim>::setFrozenSet(){
                             //setIndentation(nodeU, dof, flag, value);
 
                             if ((dof == indentDof) || (roughIndenter == true)) {
-//                                std::cout << "flag true, value " << value << "dof " << dof << "\n";
-//                                std::cout << " " << "point " << node(0) << " " << node(1) << " " << node(2) << " " <<"\n";
-//                                std::cout << " " << "U at point " << nodeU(0) << " " << nodeU(1) << " " << nodeU(2) << " " <<"\n";
-//                                std::cout << i << " " << '\n';
-//                                //std::cout << oldSolution[globalDOF](2) <<"\n";
-//                            }
-
-
-                                //if (currentIteration == 0) {
                                 criterion = (lambda2(index_z) /
                                              diag_mass_matrix_vector_relevant(index_z) +
                                              userInputs.activeSetLambdaTolerance +
@@ -929,12 +911,6 @@ void ellipticBVP<dim>::setFrozenSet(){
                                         double arbitrary = 100;
                                         setIndentation2(nodeU, dof, flag, value, arbitrary);
                                     }
-
-//                                if ((criterion > -10) && ((dof == indentDof) && (solutionWithGhosts[index_z] < 0))) //currently prints many nodes away from indenter, due to lack of categorical value for missed nodes in Obstacle()
-//                                    std::cout<<"dof# "<<globalDOF<<" value: "<<value<<" nodeU: "<<nodeU<<" soln:"<<
-//                                             solutionWithGhosts[globalDOF]<<" next? "<<value+nodeU[dof]<<" crit: "<<criterion<<"\n";
-//                                if (solutionWithGhosts[globalDOF]<-1e-3)
-//                                    std::cout<<"dof# "<<globalDOF<<" value: "<<value<<" nodeU: "<<nodeU<<" soln:"<<solutionWithGhosts[globalDOF]<<" gap "<<Obstacle(nodedU, indentDof, currentPosIndenter)<<"\n";
                                 } else
                                     flag = false;
                                 if (flag) {
@@ -989,9 +965,7 @@ void ellipticBVP<dim>::setIndentationConstraints(){
     pcout << "         Size of active set: "
           << active_set_size
           << std::endl;
-    pcout << "         Indenter Load: "
-          << indenterLoad
-          << std::endl;
+
 }
 
 #include "../../include/ellipticBVP_template_instantiations.h"

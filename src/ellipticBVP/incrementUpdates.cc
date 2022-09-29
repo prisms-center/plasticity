@@ -22,6 +22,9 @@ void ellipticBVP<dim>::updateAfterIncrement(){
     {
         measureIndentationLoad();
         indenterLoad = Utilities::MPI::sum(indenterLoad, mpi_communicator);
+        pcout << "         Indenter Load: "
+              << indenterLoad
+              << std::endl;
     }
   //default method does nothing
 }

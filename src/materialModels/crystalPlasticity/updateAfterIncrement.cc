@@ -5,6 +5,7 @@
 template <int dim>
 void crystalPlasticity<dim>::updateAfterIncrement()
 {
+    this->updateAfterIncrement();
 	local_F_r=0.0;
 	local_F_s=0.0;
 	local_F_e = 0.0;
