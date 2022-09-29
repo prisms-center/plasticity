@@ -793,27 +793,16 @@ void ellipticBVP<dim>::setActiveSet2(){
                             }
                             else
                                 flag = false;
-//                            if (dof == indentDof) std::cout<<"solution: "<<solution(index_z)<<" obs(node): "<<Obstacle(node, indentDof, currentPosIndenter)
-//                            <<" obs(nodeU): "<<Obstacle(nodeU, indentDof, currentPosIndenter)<<" lambda/mass: "<<lambda(index_z) / diag_mass_matrix_vector_relevant(index_z)<<
-//                            "\n";
-//                                if (flag) active_set.add_index(index_z);
-//                                    value=Obstacle(node, i);
-//                                    value*=loadFactorSetByModel;
-//                            } else {
-//                                setIndentation2(nodeU, dof, flag, value);
-//                                    value=Obstacle(node, i);
-//                            }
 
                             if (flag) {
 
                                 //active_set.add_line(globalDOF);
                                 //active_set.set_inhomogeneity(globalDOF, value);
                                 if (dof == indentDof) {
-                                    if (active_set_empty) {
+                                    if (active_set_empty) active_set_empty = false;
                                         //indenterLoad = lambda2(index_z);
-                                        active_set_empty = false;
-                                    }
-                                    else
+
+
                                         //indenterLoad = indenterLoad + lambda2(index_z);
                                     active_set.add_index(globalDOF);
                                     //std::cout<<"load of indenter += "<<lambda2(index_z)<<"\n";
@@ -953,11 +942,7 @@ void ellipticBVP<dim>::setFrozenSet(){
                                     //active_set.add_line(globalDOF);
                                     //active_set.set_inhomogeneity(globalDOF, value);
                                     if (dof == indentDof) {
-                                        if (active_set_empty) {
-                                            //indenterLoad = lambda2(index_z);
-                                            active_set_empty = false;
-                                        } else
-                                            //indenterLoad = indenterLoad + lambda2(index_z);
+                                        if (active_set_empty) active_set_empty = false;
                                         active_set.add_index(globalDOF);
                                     }
                                     indentation_constraints.add_line(globalDOF);

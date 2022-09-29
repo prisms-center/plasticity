@@ -43,7 +43,7 @@ set Subdivisions Y                               = 1
 set Subdivisions Z                               = 1
 
 # The number of initial refinements of the coarse mesh.
-set Refine factor                                = 2
+set Refine factor                                = 3
 
 # Only written for serial runs and if number of elements < 10000
 set Write Mesh To EPS                            = false
@@ -56,7 +56,7 @@ set Write Output                                 = true
 
 # Output Directory
 # Need to create directory before using this. Will be corrected in future versions of the software
-set Output Directory                             = frictionless_check
+set Output Directory                             = load_face_check
 
 # Skip Output Steps
 set Skip Output Steps                            = 0
