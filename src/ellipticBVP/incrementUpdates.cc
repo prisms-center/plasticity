@@ -16,7 +16,7 @@ void ellipticBVP<dim>::updateBeforeIncrement(){
 
 //method called after each increment
 template <int dim>
-void ellipticBVP<dim>::updateAfterIncrement(){
+void ellipticBVP<dim>::updateAfterIncrementBase(){
     pcout << "updateAfterIncrement eBVP\n";
     if (userInputs.enableIndentationBCs)
     {

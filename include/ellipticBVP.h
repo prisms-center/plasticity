@@ -142,7 +142,7 @@ protected:
       virtual bool testConvergenceAfterIteration();
       //methods to allow for pre/post increment updates
       virtual void updateBeforeIncrement();
-      virtual void updateAfterIncrement();
+      virtual void updateAfterIncrementBase();
 
       //methods to apply dirichlet BC's and initial conditions
       void applyDirichletBCs();
