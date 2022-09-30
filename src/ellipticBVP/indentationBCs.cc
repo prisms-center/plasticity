@@ -629,6 +629,8 @@ void ellipticBVP<dim>::measureIndentationLoad(){
     std::vector<bool> dof_touched(dofHandler.n_dofs(), false);
     const unsigned int   dofs_per_cell   = FE.dofs_per_cell;
     std::vector<types::global_dof_index> local_dof_indices (dofs_per_cell);
+    //std::vector<types::global_dof_index> own_dofs(dofHandler.n_locally_owned_dofs());
+    IndexSet own_dofs = dofHandler.locally_owned_dofs();
     FEValues<dim> fe_values (FE, QGauss<dim>(userInputs.quadOrder), update_values);
     FEFaceValues<dim> fe_face_values (FE, QGauss<dim-1>(userInputs.quadOrder), update_values);
     Quadrature<dim - 1> face_quadrature(FE.get_unit_face_support_points());
@@ -644,6 +646,7 @@ void ellipticBVP<dim>::measureIndentationLoad(){
     diag_mass_matrix_vector_relevant = diag_mass_matrix_vector;
     active_set.clear();
     indenterLoad = 0.;
+    //own_dofs = dofHandler.locally_owned_dofs();
     typename DoFHandler<dim>::active_cell_iterator cell = dofHandler.begin_active(), endc = dofHandler.end();
     for (; cell!=endc; ++cell) {
         if (cell->is_locally_owned()){
@@ -660,7 +663,13 @@ void ellipticBVP<dim>::measureIndentationLoad(){
                             if (dof == indentDof) {
                                 if (!dof_touched[globalDOF]) {
                                     dof_touched[globalDOF] = true;
-                                    indenterLoad = indenterLoad + lambda2(globalDOF);
+
+                                    if (own_dofs.is_element(globalDOF)){
+                                        indenterLoad = indenterLoad + lambda2(globalDOF);
+                                    }
+
+
+
                                 }
                             }
                         }
