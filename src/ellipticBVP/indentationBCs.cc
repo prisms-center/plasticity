@@ -551,11 +551,12 @@ void ellipticBVP<dim>::setActiveSet(){
     FEValues<dim> fe_values (FE, QGauss<dim>(userInputs.quadOrder), update_values);
     FEFaceValues<dim> fe_face_values (FE, QGauss<dim-1>(userInputs.quadOrder), update_values);
     Quadrature<dim - 1> face_quadrature(FE.get_unit_face_support_points());
+    IndexSet own_dofs = dofHandler.locally_owned_dofs();
     Vector<double> Ulocal(dofs_per_cell);
     const unsigned int n_face_q_points = face_quadrature.size();
     //updateIndentationSet();
     //parallel loop over all elements
-    pcout << "in setActiveSet\n";
+    //pcout << "in setActiveSet\n";
     indentation_constraints.clear ();
     indentation_constraints.reinit (locally_relevant_dofs);
     typename DoFHandler<dim>::active_cell_iterator cell = dofHandler.begin_active(), endc = dofHandler.end();
@@ -604,7 +605,7 @@ void ellipticBVP<dim>::setActiveSet(){
                             }
                             else
                                 flag = false;
-                            if (flag) {
+                            if (flag && own_dofs.is_element(globalDOF)) {
                                 std::cout<<"dof# "<<globalDOF<<" value: "<<value<<" nodeU: "<<nodeU<<" soln:"<<solutionWithGhosts[globalDOF]<<" next? "<<value+nodeU[dof]<<"\n";
                                 //active_set.add_line(globalDOF);
                                 //active_set.set_inhomogeneity(globalDOF, value);
@@ -690,6 +691,7 @@ void ellipticBVP<dim>::setActiveSet2(){
     FEValues<dim> fe_values (FE, QGauss<dim>(userInputs.quadOrder), update_values);
     FEFaceValues<dim> fe_face_values (FE, QGauss<dim-1>(userInputs.quadOrder), update_values);
     Quadrature<dim - 1> face_quadrature(FE.get_unit_face_support_points());
+    IndexSet own_dofs = dofHandler.locally_owned_dofs();
     Vector<double> Ulocal(dofs_per_cell);
     const unsigned int n_face_q_points = face_quadrature.size();
     solution.compress(VectorOperation::add);
@@ -772,7 +774,7 @@ void ellipticBVP<dim>::setActiveSet2(){
                             if (!dof_touched[globalDOF]) {
                                 dof_touched[globalDOF] = true;
                                 setIndentation2(nodeU, dof, flag, value, criterion);
-                                if (userInputs.debugIndentation)
+                                if (userInputs.debugIndentation && own_dofs.is_element(globalDOF))
                                 {
                                     std::vector<unsigned int> arr1={globalDOF};
                                     if (std::includes(debug_set.begin(), debug_set.end(), arr1.begin(), arr1.end())) {
@@ -798,7 +800,7 @@ void ellipticBVP<dim>::setActiveSet2(){
                             else
                                 flag = false;
 
-                            if (flag) {
+                            if (flag && own_dofs.is_element(globalDOF)) {
 
                                 //active_set.add_line(globalDOF);
                                 //active_set.set_inhomogeneity(globalDOF, value);
