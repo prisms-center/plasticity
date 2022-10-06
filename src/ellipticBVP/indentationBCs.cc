@@ -438,7 +438,7 @@ void ellipticBVP<dim>::assemble_mass_matrix_diagonal()
 
 }
 
-template <int dim>
+/*template <int dim>
 void ellipticBVP<dim>::updateActiveSet(){
 //    pcout << "in updateActiveSet\n";
     solution.compress(VectorOperation::add);
@@ -516,7 +516,7 @@ void ellipticBVP<dim>::updateActiveSet(){
                         }
                     }
                 }
-}
+}*/
 
 //INDENTATION
 template <int dim>
@@ -605,8 +605,12 @@ void ellipticBVP<dim>::setActiveSet(){
                             }
                             else
                                 flag = false;
-                            if (flag && own_dofs.is_element(globalDOF)) {
-                                std::cout<<"dof# "<<globalDOF<<" value: "<<value<<" nodeU: "<<nodeU<<" soln:"<<solutionWithGhosts[globalDOF]<<" next? "<<value+nodeU[dof]<<"\n";
+                            if (flag) {
+                                if (userInputs.debugIndentation && own_dofs.is_element(globalDOF)) {
+                                    std::cout << "dof# " << globalDOF << " value: " << value << " nodeU: " << nodeU
+                                              << " soln:" << solutionWithGhosts[globalDOF] << " next? "
+                                              << value + nodeU[dof] << "\n";
+                                }
                                 //active_set.add_line(globalDOF);
                                 //active_set.set_inhomogeneity(globalDOF, value);
                                 if (dof == indentDof) active_set.add_index(globalDOF);
@@ -800,7 +804,7 @@ void ellipticBVP<dim>::setActiveSet2(){
                             else
                                 flag = false;
 
-                            if (flag && own_dofs.is_element(globalDOF)) {
+                            if (flag) {
 
                                 //active_set.add_line(globalDOF);
                                 //active_set.set_inhomogeneity(globalDOF, value);

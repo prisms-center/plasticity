@@ -168,7 +168,7 @@ protected:
       bool flagActiveSet(const Point<dim> & p);
       bool flagActiveSetLambda(const Point<dim> & p, double& criterion);
       bool flagActiveSetLambda2(const Point<dim> & p, double& criterion);
-      void updateActiveSet();
+      //void updateActiveSet();
       void measureIndentationLoad();
       void setActiveSet();
       void setActiveSet2();
