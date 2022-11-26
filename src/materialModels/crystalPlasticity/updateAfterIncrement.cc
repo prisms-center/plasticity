@@ -223,6 +223,31 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 			}
 			if (this->userInputs.writeOutput){
 				this->postprocessValuesAtCellCenters(cellID,0)=cellOrientationMap[cellID];
+////////User Defined Variables for visualization outputs for cell_centers (outputoutputCellCenters_Var1 to outputoutputCellCenters_Var24)////////
+				this->postprocessValuesAtCellCenters(cellID,1)=0;
+				this->postprocessValuesAtCellCenters(cellID,2)=0;
+				this->postprocessValuesAtCellCenters(cellID,3)=0;
+				this->postprocessValuesAtCellCenters(cellID,4)=0;
+				this->postprocessValuesAtCellCenters(cellID,5)=0;
+				this->postprocessValuesAtCellCenters(cellID,6)=0;
+				this->postprocessValuesAtCellCenters(cellID,7)=0;
+				this->postprocessValuesAtCellCenters(cellID,8)=0;
+				this->postprocessValuesAtCellCenters(cellID,9)=0;
+				this->postprocessValuesAtCellCenters(cellID,10)=0;
+				this->postprocessValuesAtCellCenters(cellID,11)=0;
+				this->postprocessValuesAtCellCenters(cellID,12)=0;
+				this->postprocessValuesAtCellCenters(cellID,13)=0;
+				this->postprocessValuesAtCellCenters(cellID,14)=0;
+				this->postprocessValuesAtCellCenters(cellID,15)=0;
+				this->postprocessValuesAtCellCenters(cellID,16)=0;
+				this->postprocessValuesAtCellCenters(cellID,17)=0;
+				this->postprocessValuesAtCellCenters(cellID,18)=0;
+				this->postprocessValuesAtCellCenters(cellID,19)=0;
+				this->postprocessValuesAtCellCenters(cellID,20)=0;
+				this->postprocessValuesAtCellCenters(cellID,21)=0;
+				this->postprocessValuesAtCellCenters(cellID,22)=0;
+				this->postprocessValuesAtCellCenters(cellID,23)=0;
+				this->postprocessValuesAtCellCenters(cellID,24)=0;
 			}
 
 			cellID++;
