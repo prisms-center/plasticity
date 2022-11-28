@@ -124,7 +124,7 @@ set Refinement Zone Center	      = 0, 0, 0.99
 
 set Refinement Zone Size	      = 0.25,0.13,0.065
 
-set Refinement Factor			      = 1, 1, 2
+set Refinement Factor			      = 1, 1, 1
 
 #set Number of Vertices Constraints                       = 12
 
