@@ -14,7 +14,7 @@ void ellipticBVP<dim>::output(){
 			    nodal_solution_names,
 			    DataOut<dim>::type_dof_data,
 			    nodal_data_component_interpretation);
-  pcout<<"step0/n";
+
   //add postprocessing fields
   unsigned int numPostProcessedFieldsWritten=0;
   for (unsigned int field=0; field<numPostProcessedFields; field++){
@@ -85,11 +85,101 @@ void ellipticBVP<dim>::output(){
 
 
 
-//pcout<<"field="<<field<<"step2\n";
 
-  data_out_Scalar.add_data_vector (*postFieldsWithGhosts[field],
+  //if(!userInputs.output_alpha)
+    //if (postprocessed_solution_names[field].compare(std::string("alpha"))==0) continue;
+  //if(!userInputs.output_tau_vm)
+    //if (postprocessed_solution_names[field].compare(std::string("tau_vm"))==0) continue;
+    //
+    data_out_Scalar.add_data_vector (*postFieldsWithGhosts[field],
 				     postprocessed_solution_names[field].c_str());
     numPostProcessedFieldsWritten++;
+  }
+
+
+  //add material id to output file
+  Vector<float> material (triangulation.n_active_cells());
+  unsigned int matID=0;
+  unsigned int cellID=0;
+  typename parallel::distributed::Triangulation<dim>::active_cell_iterator cell = triangulation.begin_active(), endc = triangulation.end();
+  if(userInputs.readExternalMesh){
+    for (; cell!=endc; ++cell){
+      material(matID) = cell->material_id(); matID++;}
+  }
+  else{
+    for (; cell!=endc; ++cell){
+      if(cell->is_locally_owned()){
+        material(cell->active_cell_index())=postprocessValuesAtCellCenters(cellID,0);
+        cellID++;
+      }
+    }
+  }
+
+  data_out.add_data_vector (material, "meshGrain_ID");
+
+  Vector<float> FieldsAtCellCenters (triangulation.n_active_cells());
+  for (unsigned int field=1; field<numPostProcessedFieldsAtCellCenters; field++){
+
+    if(!userInputs.outputCellCenters_Var1)
+      if (postprocessedFieldsAtCellCenters_solution_names[field].compare(std::string("outputCellCenters_Var1"))==0) continue;
+    if(!userInputs.outputCellCenters_Var2)
+      if (postprocessedFieldsAtCellCenters_solution_names[field].compare(std::string("outputCellCenters_Var2"))==0) continue;
+    if(!userInputs.outputCellCenters_Var3)
+      if (postprocessedFieldsAtCellCenters_solution_names[field].compare(std::string("outputCellCenters_Var3"))==0) continue;
+    if(!userInputs.outputCellCenters_Var4)
+      if (postprocessedFieldsAtCellCenters_solution_names[field].compare(std::string("outputCellCenters_Var4"))==0) continue;
+    if(!userInputs.outputCellCenters_Var5)
+      if (postprocessedFieldsAtCellCenters_solution_names[field].compare(std::string("outputCellCenters_Var5"))==0) continue;
+    if(!userInputs.outputCellCenters_Var6)
+      if (postprocessedFieldsAtCellCenters_solution_names[field].compare(std::string("outputCellCenters_Var6"))==0) continue;
+    if(!userInputs.outputCellCenters_Var7)
+      if (postprocessedFieldsAtCellCenters_solution_names[field].compare(std::string("outputCellCenters_Var7"))==0) continue;
+    if(!userInputs.outputCellCenters_Var8)
+      if (postprocessedFieldsAtCellCenters_solution_names[field].compare(std::string("outputCellCenters_Var8"))==0) continue;
+    if(!userInputs.outputCellCenters_Var9)
+      if (postprocessedFieldsAtCellCenters_solution_names[field].compare(std::string("outputCellCenters_Var9"))==0) continue;
+    if(!userInputs.outputCellCenters_Var10)
+      if (postprocessedFieldsAtCellCenters_solution_names[field].compare(std::string("outputCellCenters_Var10"))==0) continue;
+    if(!userInputs.outputCellCenters_Var11)
+      if (postprocessedFieldsAtCellCenters_solution_names[field].compare(std::string("outputCellCenters_Var11"))==0) continue;
+    if(!userInputs.outputCellCenters_Var12)
+      if (postprocessedFieldsAtCellCenters_solution_names[field].compare(std::string("outputCellCenters_Var12"))==0) continue;
+    if(!userInputs.outputCellCenters_Var13)
+      if (postprocessedFieldsAtCellCenters_solution_names[field].compare(std::string("outputCellCenters_Var13"))==0) continue;
+    if(!userInputs.outputCellCenters_Var14)
+      if (postprocessedFieldsAtCellCenters_solution_names[field].compare(std::string("outputCellCenters_Var14"))==0) continue;
+    if(!userInputs.outputCellCenters_Var15)
+      if (postprocessedFieldsAtCellCenters_solution_names[field].compare(std::string("outputCellCenters_Var15"))==0) continue;
+    if(!userInputs.outputCellCenters_Var16)
+      if (postprocessedFieldsAtCellCenters_solution_names[field].compare(std::string("outputCellCenters_Var16"))==0) continue;
+    if(!userInputs.outputCellCenters_Var17)
+      if (postprocessedFieldsAtCellCenters_solution_names[field].compare(std::string("outputCellCenters_Var17"))==0) continue;
+    if(!userInputs.outputCellCenters_Var18)
+      if (postprocessedFieldsAtCellCenters_solution_names[field].compare(std::string("outputCellCenters_Var18"))==0) continue;
+    if(!userInputs.outputCellCenters_Var19)
+      if (postprocessedFieldsAtCellCenters_solution_names[field].compare(std::string("outputCellCenters_Var19"))==0) continue;
+    if(!userInputs.outputCellCenters_Var20)
+      if (postprocessedFieldsAtCellCenters_solution_names[field].compare(std::string("outputCellCenters_Var20"))==0) continue;
+    if(!userInputs.outputCellCenters_Var21)
+      if (postprocessedFieldsAtCellCenters_solution_names[field].compare(std::string("outputCellCenters_Var21"))==0) continue;
+    if(!userInputs.outputCellCenters_Var22)
+      if (postprocessedFieldsAtCellCenters_solution_names[field].compare(std::string("outputCellCenters_Var22"))==0) continue;
+    if(!userInputs.outputCellCenters_Var23)
+      if (postprocessedFieldsAtCellCenters_solution_names[field].compare(std::string("outputCellCenters_Var23"))==0) continue;
+    if(!userInputs.outputCellCenters_Var24)
+      if (postprocessedFieldsAtCellCenters_solution_names[field].compare(std::string("outputCellCenters_Var24"))==0) continue;
+
+    cellID=0;
+    cell = triangulation.begin_active(), endc = triangulation.end();
+    for (; cell!=endc; ++cell){
+      if(cell->is_locally_owned()){
+        FieldsAtCellCenters(cell->active_cell_index())=postprocessValuesAtCellCenters(cellID,field);
+        cellID++;
+      }
+    }
+
+    data_out.add_data_vector (FieldsAtCellCenters,
+				     postprocessedFieldsAtCellCenters_solution_names[field].c_str());
   }
 
   //add subdomain id to output file
@@ -100,48 +190,14 @@ void ellipticBVP<dim>::output(){
   if (numPostProcessedFieldsWritten>0){
     data_out_Scalar.add_data_vector (subdomain, "subdomain");
   }
-//pcout<<"field="<<"step3 \n";
-   //add material id to output file
-   Vector<float> material (triangulation.n_active_cells());
-   unsigned int matID=0;
-   typename parallel::distributed::Triangulation<dim>::active_cell_iterator cell = triangulation.begin_active(), endc = triangulation.end();
-   if(userInputs.readExternalMesh){
-     for (; cell!=endc; ++cell){
-       material(matID) = cell->material_id(); matID++;}
-   }
-   else{
-     unsigned int cellID=0;
-     for (; cell!=endc; ++cell){
-       if(cell->is_locally_owned()){
-         //if (Utilities::MPI::this_mpi_process(mpi_communicator) == 0)
-         {material(cell->active_cell_index())=postprocessValuesAtCellCenters(cellID,0);}
-        //if (Utilities::MPI::this_mpi_process(mpi_communicator) == 1){material(cell->active_cell_index())=-25;}
-         //if (Utilities::MPI::this_mpi_process(mpi_communicator) == 1)
-         //{std::cout<<cell->active_cell_index()<<" "<<material(cell->active_cell_index())<<"\n";}
-         cellID++;
-       }
-       //else{material(cellID)=-10;}
-     }
-   }
-   if (userInputs.continuum_Isotropic){
-       data_out.add_data_vector(material, "meshGrain_ID");
-       data_out.build_patches();
 
-       if (numPostProcessedFieldsWritten > 0) {
-           data_out_Scalar.add_data_vector(material, "meshGrain_ID");
-           data_out_Scalar.build_patches();
-       }
-   }
-   else {
-       data_out.add_data_vector(material, "meshGrain_ID");
-       data_out.build_patches();
+   data_out.build_patches ();
 
-       if (numPostProcessedFieldsWritten > 0) {
-           data_out_Scalar.add_data_vector(material, "meshGrain_ID");
-           data_out_Scalar.build_patches();
-       }
+   if (numPostProcessedFieldsWritten>0){
+     data_out_Scalar.add_data_vector (material, "meshGrain_ID");
+     data_out_Scalar.build_patches ();
    }
-   //pcout<<"field="<<"step5 \n";
+
   //write to results file
   std::string dir(userInputs.outputDirectory);
   dir+="/";

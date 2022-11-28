@@ -120,10 +120,11 @@ public:
   /*Solution output parameters*/
   bool writeOutput; // flag to write output vtu and pvtu files
   bool writeQuadratureOutput; // flag to write quadrature points output
+  bool writeGrainAveragedOutput; // flag to write Grain Average output
   bool tabularOutput; // flag to write outputs based on a time table
   std::vector<double> tabularTimeOutput; // 	Periodic BCs Input
   std::string outputDirectory;
-  unsigned int skipOutputSteps, skipQuadratureOutputSteps;
+  unsigned int skipOutputSteps, skipQuadratureOutputSteps, skipGrainAveragedOutputSteps, numberOfGrainAverageDataOutput;
   bool output_Eqv_strain;
   bool output_Eqv_stress;
   bool output_Time;
@@ -138,6 +139,10 @@ public:
   bool output_Var1,output_Var2,output_Var3,output_Var4,output_Var5,output_Var6,output_Var7,output_Var8,output_Var9,output_Var10;
   bool output_Var11,output_Var12,output_Var13,output_Var14,output_Var15,output_Var16,output_Var17,output_Var18,output_Var19,output_Var20;
   bool output_Var21,output_Var22,output_Var23,output_Var24;
+
+  bool outputCellCenters_Var1,outputCellCenters_Var2,outputCellCenters_Var3,outputCellCenters_Var4,outputCellCenters_Var5,outputCellCenters_Var6,outputCellCenters_Var7,outputCellCenters_Var8,outputCellCenters_Var9,outputCellCenters_Var10;
+  bool outputCellCenters_Var11,outputCellCenters_Var12,outputCellCenters_Var13,outputCellCenters_Var14,outputCellCenters_Var15,outputCellCenters_Var16,outputCellCenters_Var17,outputCellCenters_Var18,outputCellCenters_Var19,outputCellCenters_Var20;
+  bool outputCellCenters_Var21,outputCellCenters_Var22,outputCellCenters_Var23,outputCellCenters_Var24;
 
   bool flagBufferLayer; //flag to exclude the data inside the buffer layers and only output the results from the real specimen.
   // This is specifically good for HEDM characterization when you're adding buffer layers to exclude the BCs effects, but one doesn't want to include the data inside the buffer layers.

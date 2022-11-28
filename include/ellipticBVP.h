@@ -232,7 +232,7 @@ protected:
       unsigned int numPostProcessedFields;
       unsigned int numPostProcessedFieldsAtCellCenters;
       //postprocessed scalar variable name array (only scalar variables supported currently, will be extended later to vectors and tensors, if required.)
-      std::vector<std::string> postprocessed_solution_names;
+      std::vector<std::string> postprocessed_solution_names, postprocessedFieldsAtCellCenters_solution_names;
       //postprocessing data structures
       std::vector<vectorType*> postFields, postFieldsWithGhosts, postResidual;
       matrixType massMatrix;

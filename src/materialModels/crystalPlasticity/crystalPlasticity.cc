@@ -42,7 +42,32 @@ P(dim,dim)
     ellipticBVP<dim>::postprocessed_solution_names.push_back("output_Var24");
     ellipticBVP<dim>::numPostProcessedFields=27;
 
-    ellipticBVP<dim>::numPostProcessedFieldsAtCellCenters=1; //grainID
+    ellipticBVP<dim>::postprocessedFieldsAtCellCenters_solution_names.push_back("meshGrain_ID");
+    ellipticBVP<dim>::postprocessedFieldsAtCellCenters_solution_names.push_back("outputCellCenters_Var1");
+    ellipticBVP<dim>::postprocessedFieldsAtCellCenters_solution_names.push_back("outputCellCenters_Var2");
+    ellipticBVP<dim>::postprocessedFieldsAtCellCenters_solution_names.push_back("outputCellCenters_Var3");
+    ellipticBVP<dim>::postprocessedFieldsAtCellCenters_solution_names.push_back("outputCellCenters_Var4");
+    ellipticBVP<dim>::postprocessedFieldsAtCellCenters_solution_names.push_back("outputCellCenters_Var5");
+    ellipticBVP<dim>::postprocessedFieldsAtCellCenters_solution_names.push_back("outputCellCenters_Var6");
+    ellipticBVP<dim>::postprocessedFieldsAtCellCenters_solution_names.push_back("outputCellCenters_Var7");
+    ellipticBVP<dim>::postprocessedFieldsAtCellCenters_solution_names.push_back("outputCellCenters_Var8");
+    ellipticBVP<dim>::postprocessedFieldsAtCellCenters_solution_names.push_back("outputCellCenters_Var9");
+    ellipticBVP<dim>::postprocessedFieldsAtCellCenters_solution_names.push_back("outputCellCenters_Var10");
+    ellipticBVP<dim>::postprocessedFieldsAtCellCenters_solution_names.push_back("outputCellCenters_Var11");
+    ellipticBVP<dim>::postprocessedFieldsAtCellCenters_solution_names.push_back("outputCellCenters_Var12");
+    ellipticBVP<dim>::postprocessedFieldsAtCellCenters_solution_names.push_back("outputCellCenters_Var13");
+    ellipticBVP<dim>::postprocessedFieldsAtCellCenters_solution_names.push_back("outputCellCenters_Var14");
+    ellipticBVP<dim>::postprocessedFieldsAtCellCenters_solution_names.push_back("outputCellCenters_Var15");
+    ellipticBVP<dim>::postprocessedFieldsAtCellCenters_solution_names.push_back("outputCellCenters_Var16");
+    ellipticBVP<dim>::postprocessedFieldsAtCellCenters_solution_names.push_back("outputCellCenters_Var17");
+    ellipticBVP<dim>::postprocessedFieldsAtCellCenters_solution_names.push_back("outputCellCenters_Var18");
+    ellipticBVP<dim>::postprocessedFieldsAtCellCenters_solution_names.push_back("outputCellCenters_Var19");
+    ellipticBVP<dim>::postprocessedFieldsAtCellCenters_solution_names.push_back("outputCellCenters_Var20");
+    ellipticBVP<dim>::postprocessedFieldsAtCellCenters_solution_names.push_back("outputCellCenters_Var21");
+    ellipticBVP<dim>::postprocessedFieldsAtCellCenters_solution_names.push_back("outputCellCenters_Var22");
+    ellipticBVP<dim>::postprocessedFieldsAtCellCenters_solution_names.push_back("outputCellCenters_Var23");
+    ellipticBVP<dim>::postprocessedFieldsAtCellCenters_solution_names.push_back("outputCellCenters_Var24");
+    ellipticBVP<dim>::numPostProcessedFieldsAtCellCenters=25; //grainID
 
 }
 

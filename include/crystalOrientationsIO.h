@@ -17,6 +17,7 @@ public:
   void loadOrientationVector(std::string _eulerFileName, bool _enableMultiphase, unsigned int _numVoxelData);
   unsigned int getMaterialID(double _coords[]);
   std::map<unsigned int, std::vector<double> > eulerAngles;
+  unsigned int numberOfGrains;
 private:
   std::map<double,std::map<double, std::map<double, unsigned int> > > inputVoxelData;
   dealii::ConditionalOStream  pcout;

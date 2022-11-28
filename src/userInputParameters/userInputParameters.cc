@@ -54,7 +54,10 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
 
   skipOutputSteps=parameter_handler.get_integer("Skip Output Steps");
   writeQuadratureOutput = parameter_handler.get_bool("Write Quadrature Output");
+  writeGrainAveragedOutput = parameter_handler.get_bool("Write Grain Averaged Output");
   skipQuadratureOutputSteps=parameter_handler.get_integer("Skip Quadrature Output Steps");
+  skipGrainAveragedOutputSteps=parameter_handler.get_integer("Skip Grain Averaged Output Steps");
+  numberOfGrainAverageDataOutput=parameter_handler.get_integer("Number of Grain Averaged Output Variables");
 
   if(skipOutputSteps<=0)
   skipOutputSteps=1;
@@ -190,6 +193,31 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
   output_Var22 = parameter_handler.get_bool("Output Variable 22");
   output_Var23 = parameter_handler.get_bool("Output Variable 23");
   output_Var24 = parameter_handler.get_bool("Output Variable 24");
+
+  outputCellCenters_Var1 = parameter_handler.get_bool("Output CellCenters Variable 1");
+  outputCellCenters_Var2 = parameter_handler.get_bool("Output CellCenters Variable 2");
+  outputCellCenters_Var3 = parameter_handler.get_bool("Output CellCenters Variable 3");
+  outputCellCenters_Var4 = parameter_handler.get_bool("Output CellCenters Variable 4");
+  outputCellCenters_Var5 = parameter_handler.get_bool("Output CellCenters Variable 5");
+  outputCellCenters_Var6 = parameter_handler.get_bool("Output CellCenters Variable 6");
+  outputCellCenters_Var7 = parameter_handler.get_bool("Output CellCenters Variable 7");
+  outputCellCenters_Var8 = parameter_handler.get_bool("Output CellCenters Variable 8");
+  outputCellCenters_Var9 = parameter_handler.get_bool("Output CellCenters Variable 9");
+  outputCellCenters_Var10 = parameter_handler.get_bool("Output CellCenters Variable 10");
+  outputCellCenters_Var11 = parameter_handler.get_bool("Output CellCenters Variable 11");
+  outputCellCenters_Var12 = parameter_handler.get_bool("Output CellCenters Variable 12");
+  outputCellCenters_Var13 = parameter_handler.get_bool("Output CellCenters Variable 13");
+  outputCellCenters_Var14 = parameter_handler.get_bool("Output CellCenters Variable 14");
+  outputCellCenters_Var15 = parameter_handler.get_bool("Output CellCenters Variable 15");
+  outputCellCenters_Var16 = parameter_handler.get_bool("Output CellCenters Variable 16");
+  outputCellCenters_Var17 = parameter_handler.get_bool("Output CellCenters Variable 17");
+  outputCellCenters_Var18 = parameter_handler.get_bool("Output CellCenters Variable 18");
+  outputCellCenters_Var19 = parameter_handler.get_bool("Output CellCenters Variable 19");
+  outputCellCenters_Var20 = parameter_handler.get_bool("Output CellCenters Variable 20");
+  outputCellCenters_Var21 = parameter_handler.get_bool("Output CellCenters Variable 21");
+  outputCellCenters_Var22 = parameter_handler.get_bool("Output CellCenters Variable 22");
+  outputCellCenters_Var23 = parameter_handler.get_bool("Output CellCenters Variable 23");
+  outputCellCenters_Var24 = parameter_handler.get_bool("Output CellCenters Variable 24");
 
   flagBufferLayer = parameter_handler.get_bool("Output Buffer Layer Removal Feature");
   dimBufferLayer=parameter_handler.get_integer("Output Buffer Layer Removal dimension x0 y1 z2");
@@ -633,7 +661,10 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
 
   parameter_handler.declare_entry("Skip Output Steps","-1",dealii::Patterns::Integer(),"Skip Output Steps");
   parameter_handler.declare_entry("Write Quadrature Output","false",dealii::Patterns::Bool(),"Flag to write quadrature output");
+  parameter_handler.declare_entry("Write Grain Averaged Output","false",dealii::Patterns::Bool(),"Flag to Write Grain Averaged Output");
   parameter_handler.declare_entry("Skip Quadrature Output Steps","-1",dealii::Patterns::Integer(),"Skip Quadrature Output Steps");
+  parameter_handler.declare_entry("Skip Grain Averaged Output Steps","-1",dealii::Patterns::Integer(),"Skip Grain Averaged Output Steps");
+  parameter_handler.declare_entry("Number of Grain Averaged Output Variables","-1",dealii::Patterns::Integer(),"Number of Grain Averaged Output Variables");
   parameter_handler.declare_entry("Output Equivalent strain","false",dealii::Patterns::Bool(),"Output Equivalent strain");
   parameter_handler.declare_entry("Output Equivalent stress","false",dealii::Patterns::Bool(),"Output Equivalent stress");
   parameter_handler.declare_entry("Output Time","false",dealii::Patterns::Bool(),"Output Time in stressstrain");
@@ -672,6 +703,31 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Output Variable 22","false",dealii::Patterns::Bool(),"Output Variable 22");
   parameter_handler.declare_entry("Output Variable 23","false",dealii::Patterns::Bool(),"Output Variable 23");
   parameter_handler.declare_entry("Output Variable 24","false",dealii::Patterns::Bool(),"Output Variable 24");
+
+  parameter_handler.declare_entry("Output CellCenters Variable 1","false",dealii::Patterns::Bool(),"Output CellCenters Variable 1");
+  parameter_handler.declare_entry("Output CellCenters Variable 2","false",dealii::Patterns::Bool(),"Output CellCenters Variable 2");
+  parameter_handler.declare_entry("Output CellCenters Variable 3","false",dealii::Patterns::Bool(),"Output CellCenters Variable 3");
+  parameter_handler.declare_entry("Output CellCenters Variable 4","false",dealii::Patterns::Bool(),"Output CellCenters Variable 4");
+  parameter_handler.declare_entry("Output CellCenters Variable 5","false",dealii::Patterns::Bool(),"Output CellCenters Variable 5");
+  parameter_handler.declare_entry("Output CellCenters Variable 6","false",dealii::Patterns::Bool(),"Output CellCenters Variable 6");
+  parameter_handler.declare_entry("Output CellCenters Variable 7","false",dealii::Patterns::Bool(),"Output CellCenters Variable 7");
+  parameter_handler.declare_entry("Output CellCenters Variable 8","false",dealii::Patterns::Bool(),"Output CellCenters Variable 8");
+  parameter_handler.declare_entry("Output CellCenters Variable 9","false",dealii::Patterns::Bool(),"Output CellCenters Variable 9");
+  parameter_handler.declare_entry("Output CellCenters Variable 10","false",dealii::Patterns::Bool(),"Output CellCenters Variable 10");
+  parameter_handler.declare_entry("Output CellCenters Variable 11","false",dealii::Patterns::Bool(),"Output CellCenters Variable 11");
+  parameter_handler.declare_entry("Output CellCenters Variable 12","false",dealii::Patterns::Bool(),"Output CellCenters Variable 12");
+  parameter_handler.declare_entry("Output CellCenters Variable 13","false",dealii::Patterns::Bool(),"Output CellCenters Variable 13");
+  parameter_handler.declare_entry("Output CellCenters Variable 14","false",dealii::Patterns::Bool(),"Output CellCenters Variable 14");
+  parameter_handler.declare_entry("Output CellCenters Variable 15","false",dealii::Patterns::Bool(),"Output CellCenters Variable 15");
+  parameter_handler.declare_entry("Output CellCenters Variable 16","false",dealii::Patterns::Bool(),"Output CellCenters Variable 16");
+  parameter_handler.declare_entry("Output CellCenters Variable 17","false",dealii::Patterns::Bool(),"Output CellCenters Variable 17");
+  parameter_handler.declare_entry("Output CellCenters Variable 18","false",dealii::Patterns::Bool(),"Output CellCenters Variable 18");
+  parameter_handler.declare_entry("Output CellCenters Variable 19","false",dealii::Patterns::Bool(),"Output CellCenters Variable 19");
+  parameter_handler.declare_entry("Output CellCenters Variable 20","false",dealii::Patterns::Bool(),"Output CellCenters Variable 20");
+  parameter_handler.declare_entry("Output CellCenters Variable 21","false",dealii::Patterns::Bool(),"Output CellCenters Variable 21");
+  parameter_handler.declare_entry("Output CellCenters Variable 22","false",dealii::Patterns::Bool(),"Output CellCenters Variable 22");
+  parameter_handler.declare_entry("Output CellCenters Variable 23","false",dealii::Patterns::Bool(),"Output CellCenters Variable 23");
+  parameter_handler.declare_entry("Output CellCenters Variable 24","false",dealii::Patterns::Bool(),"Output CellCenters Variable 24");
 
   parameter_handler.declare_entry("Output Buffer Layer Removal Feature","false",dealii::Patterns::Bool(),"Output Buffer Layer Removal Feature");
   parameter_handler.declare_entry("Output Buffer Layer Removal dimension x0 y1 z2","0",dealii::Patterns::Integer(), "MOutput Buffer Layer Removal dimension x0 y1 z2");
