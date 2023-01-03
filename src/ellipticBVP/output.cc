@@ -108,7 +108,7 @@ void ellipticBVP<dim>::output(){
 
   data_out.add_data_vector (material, "meshGrain_ID");
 
-  Vector<float> FieldsAtCellCenters (triangulation.n_active_cells());
+  Vector<double> FieldsAtCellCenters (triangulation.n_active_cells());
   for (unsigned int field=1; field<numPostProcessedFieldsAtCellCenters; field++){
 
     if(!userInputs.outputCellCenters_Var1)
