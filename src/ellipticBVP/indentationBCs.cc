@@ -565,7 +565,7 @@ void ellipticBVP<dim>::setActiveSet(){
             cell->get_dof_indices (local_dof_indices);
             fe_values.reinit (cell);
             for (unsigned int faceID=0; faceID<GeometryInfo<dim>::faces_per_cell; faceID++){ //(const auto &face: cell->face_iterators()){
-                if (cell->face(faceID)->at_boundary() && (cell->face(faceID)->boundary_id() == indenterFace || userInputs.readExternalMesh)){ //&& cell->face(faceID)->boundary_id()==indenterFace){ //(face->at_boundary() && face->boundary_id()==indenterFace) {
+                if (cell->face(faceID)->at_boundary() && (cell->face(faceID)->boundary_id() == indenterFace )){ //|| userInputs.readExternalMesh && cell->face(faceID)->boundary_id()==indenterFace){ //(face->at_boundary() && face->boundary_id()==indenterFace) {
                     fe_face_values.reinit(cell, faceID); //face);
                     //cell->get_dof_indices (local_dof_indices);
                     //std::cout<<"cell "<<cell<<" boundary_id "<<face->boundary_id()<<"\n";
@@ -658,7 +658,7 @@ void ellipticBVP<dim>::measureIndentationLoad(){
             cell->get_dof_indices (local_dof_indices);
             fe_values.reinit (cell);
             for (unsigned int faceID=0; faceID<GeometryInfo<dim>::faces_per_cell; faceID++){ //(const auto &face: cell->face_iterators()){
-                if (cell->face(faceID)->at_boundary() && (cell->face(faceID)->boundary_id()==loadFace || userInputs.readExternalMesh)){ //(face->at_boundary() && face->boundary_id()==indenterFace) {
+                if (cell->face(faceID)->at_boundary() && (cell->face(faceID)->boundary_id()==loadFace)){ //|| userInputs.readExternalMesh //(face->at_boundary() && face->boundary_id()==indenterFace) {
                     fe_face_values.reinit(cell, faceID); //face);
                     for (unsigned int i = 0; i < dofs_per_cell; ++i) {
                         if (fe_face_values.shape_value(i, 0) != 0) {
@@ -731,7 +731,7 @@ void ellipticBVP<dim>::setActiveSet2(){
             cell->get_dof_indices (local_dof_indices);
             fe_values.reinit (cell);
             for (unsigned int faceID=0; faceID<GeometryInfo<dim>::faces_per_cell; faceID++){ //(const auto &face: cell->face_iterators()){
-                if (cell->face(faceID)->at_boundary() && (cell->face(faceID)->boundary_id()==indenterFace || userInputs.readExternalMesh)){ //(face->at_boundary() && face->boundary_id()==indenterFace) {
+                if (cell->face(faceID)->at_boundary() && (cell->face(faceID)->boundary_id()==indenterFace )){ //|| userInputs.readExternalMesh(face->at_boundary() && face->boundary_id()==indenterFace) {
                     fe_face_values.reinit(cell, faceID); //face);
                     //cell->get_dof_indices (local_dof_indices);
                     //fe_face_values.reinit(cell, indenterFace);
@@ -810,7 +810,7 @@ void ellipticBVP<dim>::setActiveSet2(){
                                 //active_set.set_inhomogeneity(globalDOF, value);
                                 if (dof == indentDof) {
                                     if (active_set_empty) active_set_empty = false;
-                                        //indenterLoad = lambda2(index_z);
+                                    //indenterLoad = lambda2(index_z);
 
 
                                         //indenterLoad = indenterLoad + lambda2(index_z);
@@ -881,7 +881,7 @@ void ellipticBVP<dim>::setFrozenSet(){
             cell->get_dof_indices(local_dof_indices);
             fe_values.reinit(cell);
             for (unsigned int faceID = 0; faceID < GeometryInfo<dim>::faces_per_cell; faceID++) { //(const auto &face: cell->face_iterators()){
-                if (cell->face(faceID)->at_boundary() && (cell->face(faceID)->boundary_id()==indenterFace || userInputs.readExternalMesh)){ // && cell->face(faceID)->boundary_id() ==indenterFace) { //(face->at_boundary() && face->boundary_id()==indenterFace) {
+                if (cell->face(faceID)->at_boundary() && (cell->face(faceID)->boundary_id()==indenterFace )){ //|| userInputs.readExternalMesh && cell->face(faceID)->boundary_id() ==indenterFace) { //(face->at_boundary() && face->boundary_id()==indenterFace) {
                     fe_face_values.reinit(cell, faceID); //face);
 
                     for (unsigned int i = 0; i < dofs_per_cell; ++i) {

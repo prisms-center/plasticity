@@ -270,7 +270,7 @@ void ellipticBVP<dim>::init(){
       if (indenterFace == 1) loadFace = 0;
       if (indenterFace == 0) loadFace = 1;
 
-      if(userInputs.readExternalMesh){
+      if(userInputs.readExternalMesh && false){ // DISABLE FOR IMPORTING BOUNDARIES AS PHYSICAL SURFACES
           // Set which (if any) faces of the triangulation are indentation
           QGaussLobatto<dim - 1> face_quadrature_formula(FE.degree + 1);
           FEFaceValues<dim> fe_face_values(FE,face_quadrature_formula,update_values | update_JxW_values);

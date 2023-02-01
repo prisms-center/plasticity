@@ -56,7 +56,7 @@ set Write Output                                 = true
 
 # Output Directory
 
-set Output Directory                             = res_dep0_0001
+set Output Directory                             = run_out_2
 
 # Skip Output Steps
 set Skip Output Steps                            = 0
@@ -114,13 +114,15 @@ set Indentation Active Set Freeze Iterations = 1
 
 set Active Set Criterion Coefficient = 100
 
+set Active Set Lambda Tolerance 		   = 0.1
+
 set Debug Indentation Active Set = false
 
-set Indentation Key Frame Increment Numbers = 0, 40, 80
+set Indentation Key Frame Increment Numbers = 0, 200, 400
 
 set Indentation Boundary condition Constraint filename      = IndentationBCsConstraints.txt
 
-set Refinement Zone Center	      = 0, 0, 0.99
+set Refinement Zone Center	      = 0.5, 0.5, 0.99
 
 set Refinement Zone Size	      = 0.25,0.13,0.065
 
@@ -147,7 +149,7 @@ set Refinement Factor			      = 1, 1, 1
 # Solver parameters
 ####################################
 #delta T for every increment
-set Time increments                              = 0.005
+set Time increments                              = 0.001
 
 set Number of Taylor Substeps                    = 1
 #Total simulation time
@@ -262,19 +264,19 @@ set Max Solver Iterations                        = 1
 # Input microstructure
 ####################################
 # Number of voxels in x direction
-set Voxels in X direction                        = 1 #32
+set Voxels in X direction                        = 32
 
 # Number of voxels in y direction
-set Voxels in Y direction                        = 1 #32
+set Voxels in Y direction                        = 32
 
 # Number of voxels in z direction
-set Voxels in Z direction                        = 1 #32
+set Voxels in Z direction                        = 32
 
 # Grain ID file name
-set Grain ID file name                           = grainID1.txt #grainID.txt
+set Grain ID file name                           = grainID.txt #grainID.txt
 
 # Number of header Lines in grain ID file
 set Header Lines GrainID File                    = 1
 
 # Grain orientations file name
-set Orientations file name                       = orientations1.txt #orientations.txt
+set Orientations file name                       = orientations.txt #orientations.txt

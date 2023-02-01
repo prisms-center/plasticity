@@ -52,8 +52,8 @@ set Write Mesh To EPS                            = true
 set Use external mesh                            = true
 
 #Name of external mesh file
-#set Name of file containing external mesh        = n10-id2_hex.msh
-set Name of file containing external mesh        = t5.msh
+#set Name of file containing external mesh        = n10-id2_hex.msh ts1_test.msh
+set Name of file containing external mesh        = t10-100ph.msh
 
 #The external mesh parameter: The ratio of defiend region size to the Domain size
 set External mesh parameter        = 0.01
@@ -67,7 +67,7 @@ set Write Output                                 = true
 
 # Output Directory
 
-set Output Directory                             = res_6
+set Output Directory                             = res_ph_2
 
 # Skip Output Steps
 set Skip Output Steps                            = 0
@@ -125,9 +125,11 @@ set Indentation Active Set Freeze Iterations = 1
 
 set Active Set Criterion Coefficient = 100
 
-set Debug Indentation Active Set = false
+set Active Set Lambda Tolerance 		   = 0.1
 
-set Indentation Key Frame Increment Numbers = 0, 40, 80
+set Debug Indentation Active Set = true
+
+set Indentation Key Frame Increment Numbers = 0, 100, 200
 
 set Indentation Boundary condition Constraint filename      = IndentationBCsConstraints.txt
 
