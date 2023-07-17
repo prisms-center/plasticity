@@ -28,10 +28,10 @@ odf = calcODF(ori,'kernel',psi) ;
 %odf = calcODF(ori,'halfwidth',2*degree) ;
 
 %% Calculate pole figure
-pf1 = calcPoleFigure(odf,Miller({0,0,1},ori.CS),'resolution',2*degree,'complete') ;
-pf2 = calcPoleFigure(odf,Miller({0,1,1},ori.CS),'resolution',2*degree,'complete') ;
-pf3 = calcPoleFigure(odf,Miller({1,1,1},ori.CS),'resolution',2*degree,'complete') ;
-pf4 = calcPoleFigure(odf,Miller({0,0,1},{0,1,1},{1,1,1},ori.CS),'resolution',2*degree,'complete') ;
+pf1 = calcPoleFigure(odf,Miller({0,0,1},ori.CS),'resolution',5*degree,'complete') ;
+pf2 = calcPoleFigure(odf,Miller({0,1,1},ori.CS),'resolution',5*degree,'complete') ;
+pf3 = calcPoleFigure(odf,Miller({1,1,1},ori.CS),'resolution',5*degree,'complete') ;
+%%pf4 = calcPoleFigure(odf,Miller({0,0,1},{0,1,1},{1,1,1},ori.CS),'resolution',5*degree,'complete') ;
 %% Plot pole figures
 figure ;
 plot(pf1,'smooth','colorrange','equal') ;
@@ -42,6 +42,6 @@ colorbar  ;
 figure ;
 plot(pf3,'smooth','colorrange','equal') ;
 colorbar ;
-figure ;
-plot(pf4,'smooth','colorrange','equal') ;
-colorbar ;
+%%figure ;
+%%plot(pf4,'smooth','colorrange','equal') ;
+%%colorbar ;
