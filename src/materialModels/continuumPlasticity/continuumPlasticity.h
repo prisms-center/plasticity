@@ -635,7 +635,7 @@ void continuumPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
   enhStrain.staticCondensationData[cellID].reset();
 
   //Vector relating local to global degree of freedom numbers
-  std::vector<unsigned int> local_dof_indices(dofs_per_cell);
+  std::vector<types::global_dof_index> local_dof_indices(dofs_per_cell);
   //Local displacement vector
   Vector<double> Ulocal(dofs_per_cell);
 
@@ -692,7 +692,7 @@ template <int dim>
 void continuumPlasticity<dim>::updateAfterIteration()
 {
   //After solving for the nodal values, calculate the enhanced degrees of freedom.
-  std::vector<unsigned int> local_dof_indices(this->FE.dofs_per_cell);
+  std::vector<types::global_dof_index> local_dof_indices(this->FE.dofs_per_cell);
   Vector<double> dUlocal(this->FE.dofs_per_cell);
   typename DoFHandler<dim>::active_cell_iterator cell = this->dofHandler.begin_active(),
     endc = this->dofHandler.end();
