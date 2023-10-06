@@ -971,7 +971,7 @@ void ellipticBVP<dim>::setIndentationConstraints(){
             frozen_set = active_set;
         }
         //pcout << "debug set indentation constraints 2\n";
-        indenterLoad = Utilities::MPI::sum(indenterLoad, mpi_communicator);
+        indenterLoad = Utilities::MPI::sum(indenterLoad, mpi_communicator); // Zero before the measurement elsewhere
         //updateActiveSet();
     }
     active_set_size = Utilities::MPI::sum((active_set & locally_owned_dofs).n_elements(),

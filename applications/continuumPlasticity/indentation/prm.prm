@@ -43,7 +43,7 @@ set Subdivisions Y                               = 1
 set Subdivisions Z                               = 1
 
 # The number of initial refinements of the coarse mesh.
-set Refine factor                                = 6
+set Refine factor                                = 5
 
 # Only written for serial runs and if number of elements < 10000
 set Write Mesh To EPS                            = false
