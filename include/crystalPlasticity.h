@@ -205,6 +205,11 @@ public:
               FullMatrix<double> P;
 
               /**
+              * Second Piola-Kirchhoff stress
+              */
+              FullMatrix<double> S;
+
+              /**
               * volume weighted Cauchy stress per core
               */
               FullMatrix<double> local_stress;
@@ -272,6 +277,16 @@ public:
               * Stores Cauchy Stress by element number and quadratureID at each increment
               */
               std::vector< std::vector< FullMatrix<double> > > CauchyStress;
+
+              std::vector< std::vector< FullMatrix<double> > > F_lastIter_Global;
+
+              std::vector< std::vector< FullMatrix<double> > > FirstPiolaStress;
+
+              std::vector< std::vector< FullMatrix<double> > > SecondPiolaStress;
+
+              Vector<double> workDensity1,workDensity2,workDensityTotal1,workDensityTotal2;
+
+              Vector<double> workDensity1_Tr,workDensity2_Tr,workDensityTotal1_Tr,workDensityTotal2_Tr;
 
               std::vector< std::vector< FullMatrix<double> > > TinterStress;
 
