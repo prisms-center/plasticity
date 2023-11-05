@@ -5,14 +5,16 @@
 template <int dim>
 void crystalPlasticity<dim>::updateAfterIncrement()
 {
-    this->updateAfterIncrementBase();
+  this->updateAfterIncrementBase();
 	local_F_r=0.0;
 	local_F_s=0.0;
 	local_F_e = 0.0;
 	unsigned int CheckBufferRegion,dimBuffer;
-	double lowerBuffer,upperBuffer;
+	double lowerBuffer,upperBuffer,workDensity_Element1,workDensity_Element2,workDensity_Element1_Tr,workDensity_Element2_Tr,det_Fe,det_Fp;
 	Point<dim> pnt2;
 	Vector<double> userDefinedAverageOutput,local_userDefinedAverageOutput;
+  FullMatrix<double> F_pl(dim,dim),F_el(dim,dim),C_pl(dim,dim),E_pl(dim,dim),temp1(dim,dim),CauchyStress_cell(dim,dim),P_LastIter(dim,dim),S_LastIter(dim,dim),E_pl_cell(dim,dim),E_cell(dim,dim),dE_cell(dim,dim);
+  FullMatrix<double> F_lastIter(dim,dim),deltaF(dim,dim),deltaE(dim,dim);
 
 	if (this->userInputs.flagUserDefinedAverageOutput){
 		userDefinedAverageOutput.reinit(this->userInputs.numberUserDefinedAverageOutput);
@@ -26,6 +28,8 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 	const unsigned int num_quad_points = quadrature.size();
 	const unsigned int   dofs_per_cell = this->FE.dofs_per_cell;
 	std::vector<unsigned int> local_dof_indices(dofs_per_cell);
+  Vector<double> Ulocal(dofs_per_cell);
+  //Vector<double> Ulocal_lastIter(dofs_per_cell), Rlocal (dofs_per_cell)
 	if (this->userInputs.flagTaylorModel){
 		if(initCalled == false){
 			if(this->userInputs.enableAdvancedTwinModel){
@@ -64,13 +68,16 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 			}
 			/////////////////////////////////////////////////////
 
-			Vector<double> Ulocal(dofs_per_cell);
-
+      Ulocal = 0.0;
+      //Rlocal = 0.0; Ulocal_lastIter = 0.0;
 			if (!this->userInputs.flagTaylorModel){
 				for (unsigned int i = 0; i < dofs_per_cell; i++) {
 					Ulocal[i] = this->solutionWithGhosts[local_dof_indices[i]];
 				}
 			}
+      CauchyStress_cell=0;E_pl_cell=0;E_cell=0;dE_cell=0;P_LastIter=0;S_LastIter=0;workDensity_Element1=0;workDensity_Element2=0;workDensity_Element1_Tr=0;workDensity_Element2_Tr=0;
+      det_Fp=0;det_Fe=0;
+
 			for (unsigned int q = 0; q < num_quad_points; ++q) {
 				//Get deformation gradient
 				F = 0.0;
@@ -88,18 +95,56 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 						F[i][i] += 1;
 					}
 				}
+
+        F_lastIter = 0.0;deltaF=0.0;deltaE=0.0;
+        F_lastIter=F_lastIter_Global[cellID][q];
+
+        for (unsigned int i = 0; i < dim; ++i) {
+          for (unsigned int j = 0; j < dim; ++j) {
+            deltaF[i][j]=F[i][j]-F_lastIter[i][j];
+          }
+        }
+
 				//Update strain, stress, and tangent for current time step/quadrature point
 				calculatePlasticity(cellID, q, 0);
 
-				FullMatrix<double> temp,temp3,temp4, C_tau(dim, dim), E_tau(dim, dim), b_tau(dim, dim);
+        /////////I assigned Fe to F just for postprocessing output for Aaron
+        stateVar_iter[cellID][q][62]=deltaF[0][0];
+        stateVar_iter[cellID][q][63]=deltaF[0][1];
+        stateVar_iter[cellID][q][64]=deltaF[0][2];
+        stateVar_iter[cellID][q][65]=deltaF[1][0];
+        stateVar_iter[cellID][q][66]=deltaF[1][1];
+        stateVar_iter[cellID][q][67]=deltaF[1][2];
+        stateVar_iter[cellID][q][68]=deltaF[2][0];
+        stateVar_iter[cellID][q][69]=deltaF[2][1];
+        stateVar_iter[cellID][q][70]=deltaF[2][2];
+
+        stateVar_iter[cellID][q][71]=F[0][0];
+        stateVar_iter[cellID][q][72]=F[0][1];
+        stateVar_iter[cellID][q][73]=F[0][2];
+        stateVar_iter[cellID][q][74]=F[1][0];
+        stateVar_iter[cellID][q][75]=F[1][1];
+        stateVar_iter[cellID][q][76]=F[1][2];
+        stateVar_iter[cellID][q][77]=F[2][0];
+        stateVar_iter[cellID][q][78]=F[2][1];
+        stateVar_iter[cellID][q][79]=F[2][2];
+        /////////I assigned Fe to F just for postprocessing output for Aaron
+
+				FullMatrix<double> temp,temp_lastIter,temp3,temp4, C_tau(dim, dim), E_tau(dim, dim), b_tau(dim, dim), C_tau_lastIter(dim, dim), E_tau_lastIter(dim, dim);
 				Vector<double> temp2;
 				temp.reinit(dim, dim); temp = 0.0;
+        temp_lastIter.reinit(dim, dim); temp_lastIter = 0.0;
 				temp2.reinit(dim); temp2 = 0.0;
 				temp3.reinit(dim, dim); temp3 = 0.0;
 				temp4.reinit(dim, dim); temp4 = 0.0;
-				C_tau = 0.0;
+				C_tau_lastIter = 0.0;
+        E_tau_lastIter= 0.0;
+        C_tau = 0.0;
+        E_tau= 0.0;
 				temp = F;
-				F.Tmmult(C_tau, temp);
+        temp_lastIter = F_lastIter;
+        F.Tmmult(C_tau, temp);
+				F_lastIter.Tmmult(C_tau_lastIter, temp_lastIter);
 				F.mTmult(b_tau, temp);
 				//E_tau = CE_tau;
 				temp = IdentityMatrix(dim);
@@ -107,13 +152,65 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 					temp2[i] = 0.5*log(b_tau[i][i])*fe_values.JxW(q);
 					for (unsigned int j = 0;j<dim;j++) {
 						E_tau[i][j] = 0.5*(C_tau[i][j] - temp[i][j]);
+            E_tau_lastIter[i][j] = 0.5*(C_tau_lastIter[i][j] - temp[i][j]);
 						temp3[i][j] = T[i][j] * fe_values.JxW(q);
 						temp4[i][j] = E_tau[i][j]*fe_values.JxW(q);
 					}
 				}
 
+        for (unsigned int i = 0; i < dim; ++i) {
+          for (unsigned int j = 0; j < dim; ++j) {
+            deltaE[i][j]=E_tau[i][j]-E_tau_lastIter[i][j];
+          }
+        }
+/////////This CauchyStress is First Piola now
 				CauchyStress[cellID][q]=T;
 
+///////////Calculation of plastic components of Green strain tensor
+        F_pl=0;C_pl=0;E_pl=0;temp1=0;F_el=0;
+        F_pl=Fp_iter[cellID][q];
+        det_Fp += F_pl.determinant()/8;  //The cell value of det_Fp=1/8*Sum(det_Fp for all quadratures) where 8 is the number of quadrature we used for first order elements.
+        F_pl.Tmmult(C_pl,F_pl);
+        temp1= IdentityMatrix(dim) ;
+        E_pl.add(0.5,C_pl,-0.5,temp1) ;
+
+        F_el=Fe_iter[cellID][q];
+        det_Fe += F_el.determinant()/8; //The cell value of det_Fe=1/8*Sum(det_Fe for all quadratures) where 8 is the number of quadrature we used for first order elements.
+
+/////////////////////////////////////////////////
+
+////////////////Calculation of element nodal force -> To be use in work density calculation////////
+        P_LastIter=FirstPiolaStress[cellID][q];
+        S_LastIter=SecondPiolaStress[cellID][q];
+      //  for (unsigned int d=0; d<dofs_per_cell; ++d) {
+      //    unsigned int i = fe_values.get_fe().system_to_component_index(d).first;
+      //    for (unsigned int j = 0; j < dim; j++){
+      //      Rlocal(d) +=  fe_values.shape_grad(d, q)[j]*((P[i][j]+P_LastIter[i][j])/2)*fe_values.JxW(q);
+      //    }
+      //  }
+
+        for (unsigned int i = 0; i < dim; ++i) {
+          for (unsigned int j = 0; j < dim; ++j) {
+////////////////////////Rectangular integration rule////////////
+            workDensity_Element1+=P[i][j]*deltaF[i][j]*fe_values.JxW(q);
+            workDensity_Element2+=S[i][j]*deltaE[i][j]*fe_values.JxW(q);
+/////////////////////Trapezoidal integration rule///////////////
+            workDensity_Element1_Tr+=((P[i][j]+P_LastIter[i][j])/2)*deltaF[i][j]*fe_values.JxW(q);
+            workDensity_Element2_Tr+=((S[i][j]+S_LastIter[i][j])/2)*deltaE[i][j]*fe_values.JxW(q);
+          }
+        }
+
+        FirstPiolaStress[cellID][q]=P;
+        SecondPiolaStress[cellID][q]=S;
+///////////////////////////////////////////
+
+        //CauchyStress_cell.add(1,CauchyStress_cell,0.125,T) ;
+        //E_pl_cell.add(1,E_pl_cell,0.125,E_pl) ;
+        //E_cell.add(1,E_cell,0.125,E_tau) ;
+        CauchyStress_cell.add(0.125,T) ;
+        E_pl_cell.add(0.125,E_pl) ;
+        E_cell.add(0.125,E_tau) ;
+        dE_cell.add(0.125,deltaE) ;
 
 				if (this->userInputs.enableAdvRateDepModel){
 					for(unsigned int i=0; i<dim ; i++){
@@ -221,34 +318,65 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 					}
 				}
 
+        F_lastIter_Global[cellID][q]=F;
 			}
 			if (this->userInputs.writeOutput){
+
+//////////////////Calculation of work density for the cell//////////
+      //  workDensity=0;
+        //for (unsigned int i = 0; i < dofs_per_cell; i++) {
+				//	workDensity[cellID]+=Rlocal[i]*(Ulocal[i]-Ulocal_lastIter[i]);
+				//}
+
+        workDensity1[cellID]=workDensity_Element1;
+        workDensity2[cellID]=workDensity_Element2;
+
+        workDensity1_Tr[cellID]=workDensity_Element1_Tr;
+        workDensity2_Tr[cellID]=workDensity_Element2_Tr;
+
+        workDensityTotal1[cellID]+=workDensity_Element1;
+        workDensityTotal2[cellID]+=workDensity_Element2;
+
+        workDensityTotal1_Tr[cellID]+=workDensity_Element1_Tr;
+        workDensityTotal2_Tr[cellID]+=workDensity_Element2_Tr;
+///////////////////////////////////////////////////////////////////
+
+
 				this->postprocessValuesAtCellCenters(cellID,0)=cellOrientationMap[cellID];
 ////////User Defined Variables for visualization outputs for cell_centers (outputoutputCellCenters_Var1 to outputoutputCellCenters_Var24)////////
-				this->postprocessValuesAtCellCenters(cellID,1)=0;
-				this->postprocessValuesAtCellCenters(cellID,2)=0;
-				this->postprocessValuesAtCellCenters(cellID,3)=0;
-				this->postprocessValuesAtCellCenters(cellID,4)=0;
-				this->postprocessValuesAtCellCenters(cellID,5)=0;
-				this->postprocessValuesAtCellCenters(cellID,6)=0;
-				this->postprocessValuesAtCellCenters(cellID,7)=0;
-				this->postprocessValuesAtCellCenters(cellID,8)=0;
-				this->postprocessValuesAtCellCenters(cellID,9)=0;
-				this->postprocessValuesAtCellCenters(cellID,10)=0;
-				this->postprocessValuesAtCellCenters(cellID,11)=0;
-				this->postprocessValuesAtCellCenters(cellID,12)=0;
-				this->postprocessValuesAtCellCenters(cellID,13)=0;
-				this->postprocessValuesAtCellCenters(cellID,14)=0;
-				this->postprocessValuesAtCellCenters(cellID,15)=0;
-				this->postprocessValuesAtCellCenters(cellID,16)=0;
-				this->postprocessValuesAtCellCenters(cellID,17)=0;
-				this->postprocessValuesAtCellCenters(cellID,18)=0;
-				this->postprocessValuesAtCellCenters(cellID,19)=0;
-				this->postprocessValuesAtCellCenters(cellID,20)=0;
-				this->postprocessValuesAtCellCenters(cellID,21)=0;
-				this->postprocessValuesAtCellCenters(cellID,22)=0;
-				this->postprocessValuesAtCellCenters(cellID,23)=0;
-				this->postprocessValuesAtCellCenters(cellID,24)=0;
+
+				//this->postprocessValuesAtCellCenters(cellID,1)= 1;
+        this->postprocessValuesAtCellCenters(cellID,1)= CauchyStress_cell[0][0];
+				this->postprocessValuesAtCellCenters(cellID,2)= CauchyStress_cell[1][1];
+//        this->postprocessValuesAtCellCenters(cellID,2)= 2;
+				this->postprocessValuesAtCellCenters(cellID,3)= CauchyStress_cell[2][2];
+				this->postprocessValuesAtCellCenters(cellID,4)= CauchyStress_cell[1][2];
+				this->postprocessValuesAtCellCenters(cellID,5)= CauchyStress_cell[0][2];
+				this->postprocessValuesAtCellCenters(cellID,6)= CauchyStress_cell[0][1];
+				this->postprocessValuesAtCellCenters(cellID,7)= E_cell[0][0];
+				this->postprocessValuesAtCellCenters(cellID,8)= E_cell[1][1];
+				this->postprocessValuesAtCellCenters(cellID,9)= E_cell[2][2];
+				this->postprocessValuesAtCellCenters(cellID,10)=E_cell[1][2];
+				this->postprocessValuesAtCellCenters(cellID,11)=E_cell[0][2];
+				this->postprocessValuesAtCellCenters(cellID,12)=E_cell[0][1];
+				this->postprocessValuesAtCellCenters(cellID,13)=E_pl_cell[0][0];
+				this->postprocessValuesAtCellCenters(cellID,14)=E_pl_cell[1][1];
+				this->postprocessValuesAtCellCenters(cellID,15)=E_pl_cell[2][2];
+				this->postprocessValuesAtCellCenters(cellID,16)=E_pl_cell[1][2];
+				this->postprocessValuesAtCellCenters(cellID,17)=E_pl_cell[0][2];
+				this->postprocessValuesAtCellCenters(cellID,18)=E_pl_cell[0][1];
+				this->postprocessValuesAtCellCenters(cellID,19)=workDensity1[cellID];
+				this->postprocessValuesAtCellCenters(cellID,20)=workDensity2[cellID];
+				this->postprocessValuesAtCellCenters(cellID,21)=workDensityTotal1[cellID];
+				this->postprocessValuesAtCellCenters(cellID,22)=workDensityTotal2[cellID];
+        this->postprocessValuesAtCellCenters(cellID,23)=workDensity1_Tr[cellID];
+				this->postprocessValuesAtCellCenters(cellID,24)=workDensity2_Tr[cellID];
+				this->postprocessValuesAtCellCenters(cellID,25)=workDensityTotal1_Tr[cellID];
+				this->postprocessValuesAtCellCenters(cellID,26)=workDensityTotal2_Tr[cellID];
+				this->postprocessValuesAtCellCenters(cellID,27)=det_Fe;
+				this->postprocessValuesAtCellCenters(cellID,28)=det_Fp;
+				//this->postprocessValuesAtCellCenters(cellID,29)=Ulocal(0);
+				//this->postprocessValuesAtCellCenters(cellID,30)=Ulocal_lastIter(0);
 			}
 
 			cellID++;
@@ -333,241 +461,253 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 
 						temp.push_back(fe_values.JxW(q));
 
-						temp.push_back(twin_ouput[cellID][q]);
+			//			temp.push_back(twin_ouput[cellID][q]);
 
 						temp.push_back(fe_values.get_quadrature_points()[q][0]);
 						temp.push_back(fe_values.get_quadrature_points()[q][1]);
 						temp.push_back(fe_values.get_quadrature_points()[q][2]);
 
-						temp.push_back(rotnew_conv[cellID][q][0]);
-						temp.push_back(rotnew_conv[cellID][q][1]);
-						temp.push_back(rotnew_conv[cellID][q][2]);
+		//				temp.push_back(rotnew_conv[cellID][q][0]);
+		//				temp.push_back(rotnew_conv[cellID][q][1]);
+		//				temp.push_back(rotnew_conv[cellID][q][2]);
+            temp.push_back(CauchyStress[cellID][q][0][0]);
+            temp.push_back(CauchyStress[cellID][q][0][1]);
+            temp.push_back(CauchyStress[cellID][q][0][2]);
+            temp.push_back(CauchyStress[cellID][q][1][0]);
+            temp.push_back(CauchyStress[cellID][q][1][1]);
+            temp.push_back(CauchyStress[cellID][q][1][2]);
+            temp.push_back(CauchyStress[cellID][q][2][0]);
+            temp.push_back(CauchyStress[cellID][q][2][1]);
+            temp.push_back(CauchyStress[cellID][q][2][2]);
 
-						temp.push_back(Fe_conv[cellID][q][0][0]);
-						temp.push_back(Fe_conv[cellID][q][1][1]);
-						temp.push_back(Fe_conv[cellID][q][2][2]);
-						temp.push_back(Fe_conv[cellID][q][0][1]);
-						temp.push_back(Fe_conv[cellID][q][0][2]);
-						temp.push_back(Fe_conv[cellID][q][1][0]);
-						temp.push_back(Fe_conv[cellID][q][1][2]);
-						temp.push_back(Fe_conv[cellID][q][2][0]);
-						temp.push_back(Fe_conv[cellID][q][2][1]);
+            temp.push_back(stateVar_conv[cellID][q][62]);
+						temp.push_back(stateVar_conv[cellID][q][63]);
+						temp.push_back(stateVar_conv[cellID][q][64]);
+						temp.push_back(stateVar_conv[cellID][q][65]);
+						temp.push_back(stateVar_conv[cellID][q][66]);
+						temp.push_back(stateVar_conv[cellID][q][67]);
+						temp.push_back(stateVar_conv[cellID][q][68]);
+						temp.push_back(stateVar_conv[cellID][q][69]);
+						temp.push_back(stateVar_conv[cellID][q][70]);
 
-						temp.push_back(Fp_conv[cellID][q][0][0]);
-						temp.push_back(Fp_conv[cellID][q][1][1]);
-						temp.push_back(Fp_conv[cellID][q][2][2]);
-						temp.push_back(Fp_conv[cellID][q][0][1]);
-						temp.push_back(Fp_conv[cellID][q][0][2]);
-						temp.push_back(Fp_conv[cellID][q][1][0]);
-						temp.push_back(Fp_conv[cellID][q][1][2]);
-						temp.push_back(Fp_conv[cellID][q][2][0]);
-						temp.push_back(Fp_conv[cellID][q][2][1]);
+            temp.push_back(stateVar_conv[cellID][q][71]);
+						temp.push_back(stateVar_conv[cellID][q][72]);
+						temp.push_back(stateVar_conv[cellID][q][73]);
+						temp.push_back(stateVar_conv[cellID][q][74]);
+						temp.push_back(stateVar_conv[cellID][q][75]);
+						temp.push_back(stateVar_conv[cellID][q][76]);
+						temp.push_back(stateVar_conv[cellID][q][77]);
+						temp.push_back(stateVar_conv[cellID][q][78]);
+						temp.push_back(stateVar_conv[cellID][q][79]);
 
-						temp.push_back(CauchyStress[cellID][q][0][0]);
-						temp.push_back(CauchyStress[cellID][q][1][1]);
-						temp.push_back(CauchyStress[cellID][q][2][2]);
-						temp.push_back(CauchyStress[cellID][q][0][1]);
-						temp.push_back(CauchyStress[cellID][q][0][2]);
-						temp.push_back(CauchyStress[cellID][q][1][0]);
-						temp.push_back(CauchyStress[cellID][q][1][2]);
-						temp.push_back(CauchyStress[cellID][q][2][0]);
-						temp.push_back(CauchyStress[cellID][q][2][1]);
-
-						if (this->userInputs.enableAdvRateDepModel){
-							temp.push_back(TinterStress[cellID][q][0][0]);
-							temp.push_back(TinterStress[cellID][q][1][1]);
-							temp.push_back(TinterStress[cellID][q][2][2]);
-							temp.push_back(TinterStress[cellID][q][0][1]);
-							temp.push_back(TinterStress[cellID][q][0][2]);
-							temp.push_back(TinterStress[cellID][q][1][0]);
-							temp.push_back(TinterStress[cellID][q][1][1]);
-							temp.push_back(TinterStress[cellID][q][2][0]);
-							temp.push_back(TinterStress[cellID][q][2][1]);
-
-							temp.push_back(TinterStress_diff[cellID][q][0][0]);
-							temp.push_back(TinterStress_diff[cellID][q][1][1]);
-							temp.push_back(TinterStress_diff[cellID][q][2][2]);
-							temp.push_back(TinterStress_diff[cellID][q][0][1]);
-							temp.push_back(TinterStress_diff[cellID][q][0][2]);
-							temp.push_back(TinterStress_diff[cellID][q][1][0]);
-							temp.push_back(TinterStress_diff[cellID][q][1][1]);
-							temp.push_back(TinterStress_diff[cellID][q][2][0]);
-							temp.push_back(TinterStress_diff[cellID][q][2][1]);
-						}
-
-						temp.push_back(slipfraction_conv[cellID][q][0]);
-						temp.push_back(slipfraction_conv[cellID][q][1]);
-						temp.push_back(slipfraction_conv[cellID][q][2]);
-						temp.push_back(slipfraction_conv[cellID][q][3]);
-						temp.push_back(slipfraction_conv[cellID][q][4]);
-						temp.push_back(slipfraction_conv[cellID][q][5]);
-						temp.push_back(slipfraction_conv[cellID][q][6]);
-						temp.push_back(slipfraction_conv[cellID][q][7]);
-						temp.push_back(slipfraction_conv[cellID][q][8]);
-						temp.push_back(slipfraction_conv[cellID][q][9]);
-						temp.push_back(slipfraction_conv[cellID][q][10]);
-						temp.push_back(slipfraction_conv[cellID][q][11]);
-						temp.push_back(slipfraction_conv[cellID][q][12]);
-						temp.push_back(slipfraction_conv[cellID][q][13]);
-						temp.push_back(slipfraction_conv[cellID][q][14]);
-						temp.push_back(slipfraction_conv[cellID][q][15]);
-						temp.push_back(slipfraction_conv[cellID][q][16]);
-						temp.push_back(slipfraction_conv[cellID][q][17]);
-						temp.push_back(slipfraction_conv[cellID][q][18]);
-						temp.push_back(slipfraction_conv[cellID][q][19]);
-						temp.push_back(slipfraction_conv[cellID][q][20]);
-						temp.push_back(slipfraction_conv[cellID][q][21]);
-						temp.push_back(slipfraction_conv[cellID][q][22]);
-						temp.push_back(slipfraction_conv[cellID][q][23]);
-						temp.push_back(slipfraction_conv[cellID][q][24]);
-						temp.push_back(slipfraction_conv[cellID][q][25]);
-						temp.push_back(slipfraction_conv[cellID][q][26]);
-						temp.push_back(slipfraction_conv[cellID][q][27]);
-						temp.push_back(slipfraction_conv[cellID][q][28]);
-						temp.push_back(slipfraction_conv[cellID][q][29]);
-						temp.push_back(slipfraction_conv[cellID][q][30]);
-						temp.push_back(slipfraction_conv[cellID][q][31]);
-						temp.push_back(slipfraction_conv[cellID][q][32]);
-						temp.push_back(slipfraction_conv[cellID][q][33]);
-						temp.push_back(slipfraction_conv[cellID][q][34]);
-						temp.push_back(slipfraction_conv[cellID][q][35]);
-						temp.push_back(slipfraction_conv[cellID][q][36]);
-						temp.push_back(slipfraction_conv[cellID][q][37]);
-						temp.push_back(slipfraction_conv[cellID][q][38]);
-						temp.push_back(slipfraction_conv[cellID][q][39]);
-						temp.push_back(slipfraction_conv[cellID][q][40]);
-						temp.push_back(slipfraction_conv[cellID][q][41]);
-						temp.push_back(slipfraction_conv[cellID][q][42]);
-						temp.push_back(slipfraction_conv[cellID][q][43]);
-						temp.push_back(slipfraction_conv[cellID][q][44]);
-						temp.push_back(slipfraction_conv[cellID][q][45]);
-						temp.push_back(slipfraction_conv[cellID][q][46]);
-						temp.push_back(slipfraction_conv[cellID][q][47]);
-						temp.push_back(slipfraction_conv[cellID][q][48]);
-						temp.push_back(slipfraction_conv[cellID][q][49]);
-						temp.push_back(slipfraction_conv[cellID][q][50]);
-						temp.push_back(slipfraction_conv[cellID][q][51]);
-						temp.push_back(slipfraction_conv[cellID][q][52]);
-						temp.push_back(slipfraction_conv[cellID][q][53]);
-						temp.push_back(slipfraction_conv[cellID][q][54]);
-						temp.push_back(slipfraction_conv[cellID][q][55]);
-						temp.push_back(slipfraction_conv[cellID][q][56]);
-						temp.push_back(slipfraction_conv[cellID][q][57]);
-						temp.push_back(slipfraction_conv[cellID][q][58]);
-						temp.push_back(slipfraction_conv[cellID][q][59]);
-						temp.push_back(slipfraction_conv[cellID][q][60]);
-						temp.push_back(slipfraction_conv[cellID][q][61]);
-						temp.push_back(slipfraction_conv[cellID][q][62]);
-						temp.push_back(slipfraction_conv[cellID][q][63]);
-						temp.push_back(slipfraction_conv[cellID][q][64]);
-						temp.push_back(slipfraction_conv[cellID][q][65]);
-						temp.push_back(slipfraction_conv[cellID][q][66]);
-						temp.push_back(slipfraction_conv[cellID][q][67]);
-						temp.push_back(slipfraction_conv[cellID][q][68]);
-						temp.push_back(slipfraction_conv[cellID][q][69]);
-						temp.push_back(slipfraction_conv[cellID][q][70]);
-						temp.push_back(slipfraction_conv[cellID][q][71]);
-						temp.push_back(slipfraction_conv[cellID][q][72]);
-						temp.push_back(slipfraction_conv[cellID][q][73]);
-						temp.push_back(slipfraction_conv[cellID][q][74]);
-						temp.push_back(slipfraction_conv[cellID][q][75]);
-						temp.push_back(slipfraction_conv[cellID][q][76]);
-						temp.push_back(slipfraction_conv[cellID][q][77]);
-						temp.push_back(slipfraction_conv[cellID][q][78]);
-						temp.push_back(slipfraction_conv[cellID][q][79]);
-						temp.push_back(slipfraction_conv[cellID][q][80]);
-						temp.push_back(slipfraction_conv[cellID][q][81]);
-						temp.push_back(slipfraction_conv[cellID][q][82]);
-						temp.push_back(slipfraction_conv[cellID][q][83]);
+			//			temp.push_back(Fp_conv[cellID][q][0][0]);
+			//			temp.push_back(Fp_conv[cellID][q][1][1]);
+			//			temp.push_back(Fp_conv[cellID][q][2][2]);
+			//			temp.push_back(Fp_conv[cellID][q][0][1]);
+			//			temp.push_back(Fp_conv[cellID][q][0][2]);
+			//			temp.push_back(Fp_conv[cellID][q][1][0]);
+			//			temp.push_back(Fp_conv[cellID][q][1][2]);
+			//			temp.push_back(Fp_conv[cellID][q][2][0]);
+			//			temp.push_back(Fp_conv[cellID][q][2][1]);
 
 
-						temp.push_back(twinfraction_conv[cellID][q][0]);
-						temp.push_back(twinfraction_conv[cellID][q][1]);
-						temp.push_back(twinfraction_conv[cellID][q][2]);
-						temp.push_back(twinfraction_conv[cellID][q][3]);
-						temp.push_back(twinfraction_conv[cellID][q][4]);
-						temp.push_back(twinfraction_conv[cellID][q][5]);
 
-						if (this->userInputs.enableAdvancedTwinModel){
-							temp.push_back(TwinOutputfraction_conv[cellID][q][0]);
-							temp.push_back(TwinOutputfraction_conv[cellID][q][1]);
-							temp.push_back(TwinOutputfraction_conv[cellID][q][2]);
-							temp.push_back(TwinOutputfraction_conv[cellID][q][3]);
-							temp.push_back(TwinOutputfraction_conv[cellID][q][4]);
-							temp.push_back(TwinOutputfraction_conv[cellID][q][5]);
-							temp.push_back(TwinOutputfraction_conv[cellID][q][6]);
-							temp.push_back(TwinOutputfraction_conv[cellID][q][7]);
-							temp.push_back(TwinOutputfraction_conv[cellID][q][8]);
-							temp.push_back(TwinOutputfraction_conv[cellID][q][9]);
-							temp.push_back(TwinOutputfraction_conv[cellID][q][10]);
-							temp.push_back(TwinOutputfraction_conv[cellID][q][11]);
-							temp.push_back(TwinOutputfraction_conv[cellID][q][12]);
-							temp.push_back(TwinOutputfraction_conv[cellID][q][13]);
-							temp.push_back(TwinOutputfraction_conv[cellID][q][14]);
-							temp.push_back(TwinOutputfraction_conv[cellID][q][15]);
-							temp.push_back(TwinOutputfraction_conv[cellID][q][16]);
-							temp.push_back(TwinOutputfraction_conv[cellID][q][17]);
-							temp.push_back(TwinOutputfraction_conv[cellID][q][18]);
-							temp.push_back(TwinOutputfraction_conv[cellID][q][19]);
-							temp.push_back(TwinOutputfraction_conv[cellID][q][20]);
-							temp.push_back(TwinOutputfraction_conv[cellID][q][21]);
-							temp.push_back(TwinOutputfraction_conv[cellID][q][22]);
-							temp.push_back(TwinOutputfraction_conv[cellID][q][23]);
-						}
 
-						if (this->userInputs.enableUserMaterialModel){
-							temp.push_back(stateVar_conv[cellID][q][0]);
-							temp.push_back(stateVar_conv[cellID][q][1]);
-							temp.push_back(stateVar_conv[cellID][q][2]);
-							temp.push_back(stateVar_conv[cellID][q][3]);
-							temp.push_back(stateVar_conv[cellID][q][4]);
-							temp.push_back(stateVar_conv[cellID][q][5]);
-							temp.push_back(stateVar_conv[cellID][q][6]);
-							temp.push_back(stateVar_conv[cellID][q][7]);
-							temp.push_back(stateVar_conv[cellID][q][8]);
-							temp.push_back(stateVar_conv[cellID][q][9]);
-							temp.push_back(stateVar_conv[cellID][q][10]);
-							temp.push_back(stateVar_conv[cellID][q][11]);
-							temp.push_back(stateVar_conv[cellID][q][12]);
-							temp.push_back(stateVar_conv[cellID][q][13]);
-							temp.push_back(stateVar_conv[cellID][q][14]);
-							temp.push_back(stateVar_conv[cellID][q][15]);
-							temp.push_back(stateVar_conv[cellID][q][16]);
-							temp.push_back(stateVar_conv[cellID][q][17]);
-							temp.push_back(stateVar_conv[cellID][q][18]);
-							temp.push_back(stateVar_conv[cellID][q][19]);
-							temp.push_back(stateVar_conv[cellID][q][20]);
-							temp.push_back(stateVar_conv[cellID][q][21]);
-							temp.push_back(stateVar_conv[cellID][q][22]);
-							temp.push_back(stateVar_conv[cellID][q][23]);
-							temp.push_back(stateVar_conv[cellID][q][24]);
-							temp.push_back(stateVar_conv[cellID][q][25]);
-							temp.push_back(stateVar_conv[cellID][q][26]);
-							temp.push_back(stateVar_conv[cellID][q][27]);
-							temp.push_back(stateVar_conv[cellID][q][28]);
-							temp.push_back(stateVar_conv[cellID][q][29]);
-							temp.push_back(stateVar_conv[cellID][q][30]);
-							temp.push_back(stateVar_conv[cellID][q][31]);
-							temp.push_back(stateVar_conv[cellID][q][32]);
-							temp.push_back(stateVar_conv[cellID][q][33]);
-							temp.push_back(stateVar_conv[cellID][q][34]);
-							temp.push_back(stateVar_conv[cellID][q][35]);
-							temp.push_back(stateVar_conv[cellID][q][36]);
-							temp.push_back(stateVar_conv[cellID][q][37]);
-							temp.push_back(stateVar_conv[cellID][q][38]);
-							temp.push_back(stateVar_conv[cellID][q][39]);
-							temp.push_back(stateVar_conv[cellID][q][40]);
-							temp.push_back(stateVar_conv[cellID][q][41]);
-							temp.push_back(stateVar_conv[cellID][q][42]);
-							temp.push_back(stateVar_conv[cellID][q][43]);
-							temp.push_back(stateVar_conv[cellID][q][44]);
-							temp.push_back(stateVar_conv[cellID][q][45]);
-							temp.push_back(stateVar_conv[cellID][q][46]);
-							temp.push_back(stateVar_conv[cellID][q][47]);
-							temp.push_back(stateVar_conv[cellID][q][48]);
-							temp.push_back(stateVar_conv[cellID][q][49]);
-							temp.push_back(stateVar_conv[cellID][q][50]);
-						}
+					//	if (this->userInputs.enableAdvRateDepModel){
+			//				temp.push_back(TinterStress[cellID][q][0][0]);
+			//				temp.push_back(TinterStress[cellID][q][1][1]);
+			//				temp.push_back(TinterStress[cellID][q][2][2]);
+			//				temp.push_back(TinterStress[cellID][q][0][1]);
+			//				temp.push_back(TinterStress[cellID][q][0][2]);
+			//				temp.push_back(TinterStress[cellID][q][1][0]);
+			//				temp.push_back(TinterStress[cellID][q][1][1]);
+			//				temp.push_back(TinterStress[cellID][q][2][0]);
+			//				temp.push_back(TinterStress[cellID][q][2][1]);
+
+			//				temp.push_back(TinterStress_diff[cellID][q][0][0]);
+			//				temp.push_back(TinterStress_diff[cellID][q][1][1]);
+			//				temp.push_back(TinterStress_diff[cellID][q][2][2]);
+			//				temp.push_back(TinterStress_diff[cellID][q][0][1]);
+			//				temp.push_back(TinterStress_diff[cellID][q][0][2]);
+			//				temp.push_back(TinterStress_diff[cellID][q][1][0]);
+			//				temp.push_back(TinterStress_diff[cellID][q][1][1]);
+			//				temp.push_back(TinterStress_diff[cellID][q][2][0]);
+			//				temp.push_back(TinterStress_diff[cellID][q][2][1]);
+			//			}
+
+			//		//	temp.push_back(slipfraction_conv[cellID][q][0]);
+			//		//	temp.push_back(slipfraction_conv[cellID][q][1]);
+			//		//	temp.push_back(slipfraction_conv[cellID][q][2]);
+			//		//	temp.push_back(slipfraction_conv[cellID][q][3]);
+			//		//	temp.push_back(slipfraction_conv[cellID][q][4]);
+			//		//	temp.push_back(slipfraction_conv[cellID][q][5]);
+			//		//	temp.push_back(slipfraction_conv[cellID][q][6]);
+			//		//	temp.push_back(slipfraction_conv[cellID][q][7]);
+					//	temp.push_back(slipfraction_conv[cellID][q][8]);
+					//	temp.push_back(slipfraction_conv[cellID][q][9]);
+					//	temp.push_back(slipfraction_conv[cellID][q][10]);
+					//	temp.push_back(slipfraction_conv[cellID][q][11]);
+					//	temp.push_back(slipfraction_conv[cellID][q][12]);
+					//	temp.push_back(slipfraction_conv[cellID][q][13]);
+					//	temp.push_back(slipfraction_conv[cellID][q][14]);
+					//	temp.push_back(slipfraction_conv[cellID][q][15]);
+					//	temp.push_back(slipfraction_conv[cellID][q][16]);
+					//	temp.push_back(slipfraction_conv[cellID][q][17]);
+					//	temp.push_back(slipfraction_conv[cellID][q][18]);
+					//	temp.push_back(slipfraction_conv[cellID][q][19]);
+					//	temp.push_back(slipfraction_conv[cellID][q][20]);
+					//	temp.push_back(slipfraction_conv[cellID][q][21]);
+					//	temp.push_back(slipfraction_conv[cellID][q][22]);
+					//	temp.push_back(slipfraction_conv[cellID][q][23]);
+					//	temp.push_back(slipfraction_conv[cellID][q][24]);
+					//	temp.push_back(slipfraction_conv[cellID][q][25]);
+					//	temp.push_back(slipfraction_conv[cellID][q][26]);
+					//	temp.push_back(slipfraction_conv[cellID][q][27]);
+					//	temp.push_back(slipfraction_conv[cellID][q][28]);
+					//	temp.push_back(slipfraction_conv[cellID][q][29]);
+					//	temp.push_back(slipfraction_conv[cellID][q][30]);
+					//	temp.push_back(slipfraction_conv[cellID][q][31]);
+					//	temp.push_back(slipfraction_conv[cellID][q][32]);
+					//	temp.push_back(slipfraction_conv[cellID][q][33]);
+					//	temp.push_back(slipfraction_conv[cellID][q][34]);
+					//	temp.push_back(slipfraction_conv[cellID][q][35]);
+					//	temp.push_back(slipfraction_conv[cellID][q][36]);
+					//	temp.push_back(slipfraction_conv[cellID][q][37]);
+					//	temp.push_back(slipfraction_conv[cellID][q][38]);
+					//	temp.push_back(slipfraction_conv[cellID][q][39]);
+					//	temp.push_back(slipfraction_conv[cellID][q][40]);
+					//	temp.push_back(slipfraction_conv[cellID][q][41]);
+					//	temp.push_back(slipfraction_conv[cellID][q][42]);
+					//	temp.push_back(slipfraction_conv[cellID][q][43]);
+					//	temp.push_back(slipfraction_conv[cellID][q][44]);
+					//	temp.push_back(slipfraction_conv[cellID][q][45]);
+					//	temp.push_back(slipfraction_conv[cellID][q][46]);
+					//	temp.push_back(slipfraction_conv[cellID][q][47]);
+					//	temp.push_back(slipfraction_conv[cellID][q][48]);
+					//	temp.push_back(slipfraction_conv[cellID][q][49]);
+					//	temp.push_back(slipfraction_conv[cellID][q][50]);
+					//	temp.push_back(slipfraction_conv[cellID][q][51]);
+					//	temp.push_back(slipfraction_conv[cellID][q][52]);
+					//	temp.push_back(slipfraction_conv[cellID][q][53]);
+					//	temp.push_back(slipfraction_conv[cellID][q][54]);
+					//	temp.push_back(slipfraction_conv[cellID][q][55]);
+					//	temp.push_back(slipfraction_conv[cellID][q][56]);
+					//	temp.push_back(slipfraction_conv[cellID][q][57]);
+					//	temp.push_back(slipfraction_conv[cellID][q][58]);
+					//	temp.push_back(slipfraction_conv[cellID][q][59]);
+					//	temp.push_back(slipfraction_conv[cellID][q][60]);
+					//	temp.push_back(slipfraction_conv[cellID][q][61]);
+					//	temp.push_back(slipfraction_conv[cellID][q][62]);
+					//	temp.push_back(slipfraction_conv[cellID][q][63]);
+					//	temp.push_back(slipfraction_conv[cellID][q][64]);
+					//	temp.push_back(slipfraction_conv[cellID][q][65]);
+					//	temp.push_back(slipfraction_conv[cellID][q][66]);
+					//	temp.push_back(slipfraction_conv[cellID][q][67]);
+					//	temp.push_back(slipfraction_conv[cellID][q][68]);
+					//	temp.push_back(slipfraction_conv[cellID][q][69]);
+					//	temp.push_back(slipfraction_conv[cellID][q][70]);
+					//	temp.push_back(slipfraction_conv[cellID][q][71]);
+					//	temp.push_back(slipfraction_conv[cellID][q][72]);
+					//	temp.push_back(slipfraction_conv[cellID][q][73]);
+					//	temp.push_back(slipfraction_conv[cellID][q][74]);
+					//	temp.push_back(slipfraction_conv[cellID][q][75]);
+					//	temp.push_back(slipfraction_conv[cellID][q][76]);
+					//	temp.push_back(slipfraction_conv[cellID][q][77]);
+					//	temp.push_back(slipfraction_conv[cellID][q][78]);
+					//	temp.push_back(slipfraction_conv[cellID][q][79]);
+					//	temp.push_back(slipfraction_conv[cellID][q][80]);
+					//	temp.push_back(slipfraction_conv[cellID][q][81]);
+					//	temp.push_back(slipfraction_conv[cellID][q][82]);
+					//	temp.push_back(slipfraction_conv[cellID][q][83]);
+
+
+					//	temp.push_back(twinfraction_conv[cellID][q][0]);
+					//	temp.push_back(twinfraction_conv[cellID][q][1]);
+					//	temp.push_back(twinfraction_conv[cellID][q][2]);
+					//	temp.push_back(twinfraction_conv[cellID][q][3]);
+					//	temp.push_back(twinfraction_conv[cellID][q][4]);
+					//	temp.push_back(twinfraction_conv[cellID][q][5]);
+
+					//	if (this->userInputs.enableAdvancedTwinModel){
+					//		temp.push_back(TwinOutputfraction_conv[cellID][q][0]);
+					//		temp.push_back(TwinOutputfraction_conv[cellID][q][1]);
+					//		temp.push_back(TwinOutputfraction_conv[cellID][q][2]);
+					//		temp.push_back(TwinOutputfraction_conv[cellID][q][3]);
+					//		temp.push_back(TwinOutputfraction_conv[cellID][q][4]);
+					//		temp.push_back(TwinOutputfraction_conv[cellID][q][5]);
+					//		temp.push_back(TwinOutputfraction_conv[cellID][q][6]);
+					//		temp.push_back(TwinOutputfraction_conv[cellID][q][7]);
+					//		temp.push_back(TwinOutputfraction_conv[cellID][q][8]);
+					//		temp.push_back(TwinOutputfraction_conv[cellID][q][9]);
+					//		temp.push_back(TwinOutputfraction_conv[cellID][q][10]);
+					//		temp.push_back(TwinOutputfraction_conv[cellID][q][11]);
+					//		temp.push_back(TwinOutputfraction_conv[cellID][q][12]);
+					//		temp.push_back(TwinOutputfraction_conv[cellID][q][13]);
+					//		temp.push_back(TwinOutputfraction_conv[cellID][q][14]);
+					//		temp.push_back(TwinOutputfraction_conv[cellID][q][15]);
+					//		temp.push_back(TwinOutputfraction_conv[cellID][q][16]);
+					//		temp.push_back(TwinOutputfraction_conv[cellID][q][17]);
+					//		temp.push_back(TwinOutputfraction_conv[cellID][q][18]);
+					//		temp.push_back(TwinOutputfraction_conv[cellID][q][19]);
+					//		temp.push_back(TwinOutputfraction_conv[cellID][q][20]);
+					//		temp.push_back(TwinOutputfraction_conv[cellID][q][21]);
+					//		temp.push_back(TwinOutputfraction_conv[cellID][q][22]);
+					//		temp.push_back(TwinOutputfraction_conv[cellID][q][23]);
+					//	}
+
+				////		if (this->userInputs.enableUserMaterialModel){
+		//					temp.push_back(stateVar_conv[cellID][q][0]);
+		//					temp.push_back(stateVar_conv[cellID][q][1]);
+		//					temp.push_back(stateVar_conv[cellID][q][2]);
+		//					temp.push_back(stateVar_conv[cellID][q][3]);
+		//					temp.push_back(stateVar_conv[cellID][q][4]);
+		//					temp.push_back(stateVar_conv[cellID][q][5]);
+		//					temp.push_back(stateVar_conv[cellID][q][6]);
+		//					temp.push_back(stateVar_conv[cellID][q][7]);
+		//					temp.push_back(stateVar_conv[cellID][q][8]);
+		//					temp.push_back(stateVar_conv[cellID][q][9]);
+		//					temp.push_back(stateVar_conv[cellID][q][10]);
+		//					temp.push_back(stateVar_conv[cellID][q][11]);
+		//					temp.push_back(stateVar_conv[cellID][q][12]);
+		//					temp.push_back(stateVar_conv[cellID][q][13]);
+		//					temp.push_back(stateVar_conv[cellID][q][14]);
+		//					temp.push_back(stateVar_conv[cellID][q][15]);
+		//					temp.push_back(stateVar_conv[cellID][q][16]);
+		//					temp.push_back(stateVar_conv[cellID][q][17]);
+		//					temp.push_back(stateVar_conv[cellID][q][18]);
+		//					temp.push_back(stateVar_conv[cellID][q][19]);
+		//					temp.push_back(stateVar_conv[cellID][q][20]);
+		//					temp.push_back(stateVar_conv[cellID][q][21]);
+		//					temp.push_back(stateVar_conv[cellID][q][22]);
+		//					temp.push_back(stateVar_conv[cellID][q][23]);
+		//					temp.push_back(stateVar_conv[cellID][q][24]);
+		//					temp.push_back(stateVar_conv[cellID][q][25]);
+		//					temp.push_back(stateVar_conv[cellID][q][26]);
+		//					temp.push_back(stateVar_conv[cellID][q][27]);
+		//					temp.push_back(stateVar_conv[cellID][q][28]);
+		//					temp.push_back(stateVar_conv[cellID][q][29]);
+		//					temp.push_back(stateVar_conv[cellID][q][30]);
+		//					temp.push_back(stateVar_conv[cellID][q][31]);
+		//					temp.push_back(stateVar_conv[cellID][q][32]);
+		//					temp.push_back(stateVar_conv[cellID][q][33]);
+		//					temp.push_back(stateVar_conv[cellID][q][34]);
+		//					temp.push_back(stateVar_conv[cellID][q][35]);
+		//					temp.push_back(stateVar_conv[cellID][q][36]);
+		//					temp.push_back(stateVar_conv[cellID][q][37]);
+		//					temp.push_back(stateVar_conv[cellID][q][38]);
+		//					temp.push_back(stateVar_conv[cellID][q][39]);
+		//					temp.push_back(stateVar_conv[cellID][q][40]);
+		//					temp.push_back(stateVar_conv[cellID][q][41]);
+		//					temp.push_back(stateVar_conv[cellID][q][42]);
+		//					temp.push_back(stateVar_conv[cellID][q][43]);
+		//					temp.push_back(stateVar_conv[cellID][q][44]);
+		//					temp.push_back(stateVar_conv[cellID][q][45]);
+		//					temp.push_back(stateVar_conv[cellID][q][46]);
+		//					temp.push_back(stateVar_conv[cellID][q][47]);
+		//					temp.push_back(stateVar_conv[cellID][q][48]);
+		//					temp.push_back(stateVar_conv[cellID][q][49]);
+		//					temp.push_back(stateVar_conv[cellID][q][50]);
+		//				}
 
 						addToQuadratureOutput(temp);
 
