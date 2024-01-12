@@ -25,7 +25,7 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 	FEValues<dim> fe_values(this->FE, quadrature, update_quadrature_points | update_gradients | update_JxW_values);
 	const unsigned int num_quad_points = quadrature.size();
 	const unsigned int   dofs_per_cell = this->FE.dofs_per_cell;
-	std::vector<unsigned int> local_dof_indices(dofs_per_cell);
+	std::vector<types::global_dof_index> local_dof_indices(dofs_per_cell);
 	if (this->userInputs.flagTaylorModel){
 		if(initCalled == false){
 			if(this->userInputs.enableAdvancedTwinModel){

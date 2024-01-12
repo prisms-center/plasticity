@@ -19,7 +19,7 @@ void crystalPlasticity<dim>::getElementalValues(FEValues<dim>& fe_values,
 		}
 
 		unsigned int cellID = fe_values.get_cell()->user_index();
-		std::vector<unsigned int> local_dof_indices(dofs_per_cell);
+		std::vector<types::global_dof_index> local_dof_indices(dofs_per_cell);
 		Vector<double> Ulocal(dofs_per_cell);
 
 		typename DoFHandler<dim>::active_cell_iterator cell(& this->triangulation,
