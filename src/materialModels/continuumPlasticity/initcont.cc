@@ -3,8 +3,7 @@
 template <int dim>
 void continuumPlasticity<dim>::initcont(unsigned int num_quad_points)
 {
-  this->pcout << "continuumPlasticity<dim>::initcont "<<"\n";
-    //std::cout << "continuumPlasticity<dim>::init "<<"\n";
+  // this->pcout << "continuumPlasticity<dim>::initcont "<<"\n";
   //Get the total numbers of elements for this processor (num_local_cells)
   unsigned int num_local_cells = this->triangulation.n_locally_owned_active_cells();
   //Initiate the enhanced strain object with the number elements
