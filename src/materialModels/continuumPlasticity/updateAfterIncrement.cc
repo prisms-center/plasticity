@@ -126,18 +126,18 @@ void continuumPlasticity<dim>::updateAfterIncrement()
 					this->postprocessValues(cellID, q, 2, 0) = histAlpha_iter[cellID][q];
 
 					////////User Defined Variables for visualization outputs (output_Var1 to output_Var24)////////
-					this->postprocessValues(cellID, q, 3, 0) = T[0][0];
-					this->postprocessValues(cellID, q, 4, 0) = T[1][1];
-					this->postprocessValues(cellID, q, 5, 0) = T[2][2];
-					this->postprocessValues(cellID, q, 6, 0) = T[2][1];
-					this->postprocessValues(cellID, q, 7, 0) = T[2][0];
-					this->postprocessValues(cellID, q, 8, 0) = T[1][0];
-					this->postprocessValues(cellID, q, 9, 0) = E_tau[0][0];
-					this->postprocessValues(cellID, q, 10, 0) = E_tau[1][1];
-					this->postprocessValues(cellID, q, 11, 0) = E_tau[2][2];
-					this->postprocessValues(cellID, q, 12, 0) = E_tau[2][1];
-					this->postprocessValues(cellID, q, 13, 0) = E_tau[2][0];
-					this->postprocessValues(cellID, q, 14, 0) = E_tau[1][0];
+					this->postprocessValues(cellID, q, 3, 0) = 0;
+					this->postprocessValues(cellID, q, 4, 0) = 0;
+					this->postprocessValues(cellID, q, 5, 0) = 0;
+					this->postprocessValues(cellID, q, 6, 0) = 0;
+					this->postprocessValues(cellID, q, 7, 0) = 0;
+					this->postprocessValues(cellID, q, 8, 0) = 0;
+					this->postprocessValues(cellID, q, 9, 0) = 0;
+					this->postprocessValues(cellID, q, 10, 0) = 0;
+					this->postprocessValues(cellID, q, 11, 0) = 0;
+					this->postprocessValues(cellID, q, 12, 0) = 0;
+					this->postprocessValues(cellID, q, 13, 0) = 0;
+					this->postprocessValues(cellID, q, 14, 0) = 0;
 					this->postprocessValues(cellID, q, 15, 0) = 0;
 					this->postprocessValues(cellID, q, 16, 0) = 0;
 					this->postprocessValues(cellID, q, 17, 0) = 0;

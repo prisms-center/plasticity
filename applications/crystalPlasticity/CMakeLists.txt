@@ -1,5 +1,5 @@
 ##
-#  CMake script for the PRISMS-PF applications:
+#  CMake script for the PRISMS-Plasticity CPFE applications:
 ##
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)

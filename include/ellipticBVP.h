@@ -116,9 +116,6 @@ protected:
   void setFaceConstraints(AffineConstraints<double>& constraintmatrix);
   #endif
 
-
-
-
   bool solveNonLinearSystem();
   void solve();
   void output();
@@ -130,121 +127,102 @@ protected:
   //method to calculate elemental Jacobian and Residual,
   //which should be implemented in the derived material model class
 
-  virtual void getElementalValues(FEValues<dim>& fe_values,
-    unsigned int dofs_per_cell,
-    unsigned int num_quad_points,
-    FullMatrix<double>& elementalJacobian,
-    Vector<double>&     elementalResidual) = 0;
+  virtual void getElementalValues(FEValues<dim>& fe_values, unsigned int dofs_per_cell, unsigned int num_quad_points, FullMatrix<double>& elementalJacobian, Vector<double>&elementalResidual) = 0;
 
-      //methods to allow for pre/post iteration updates
-      virtual void updateBeforeIteration();
-      virtual void updateAfterIteration();
-      virtual bool testConvergenceAfterIteration();
-      //methods to allow for pre/post increment updates
-      virtual void updateBeforeIncrement();
-      virtual void updateAfterIncrement();
-      void updateAfterIncrementBase();
-      //methods to apply dirichlet BC's and initial conditions
-      void applyDirichletBCs();
-      void applyInitialConditions();
-      void setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value);
-
-      ///////These functions are for Periodic BCs Implementation
-      void setPeriodicity();
-      void setPeriodicityConstraintsInit();
-      void setPeriodicityConstraints();
-      void setPeriodicityConstraintsInc0();
-      void setPeriodicityConstraintsIncNot0();
-      void setPeriodicityConstraintsInc0Neg();
-
-    ///////These functions are for Indentation BCs Implementation
-      void updateIndentPos();
-      void setIndentation(const Point<dim>& node, const unsigned int dof, bool& flag, double& value);
-      void setIndentation2(const Point<dim>& node, const unsigned int dof, bool& flag, double& value,
-                           double& criterion);
-      void setIndentationConstraints();
-      void displaceNode(const Point<dim> & p, const Point<dim> & u);
-      void meshRefineIndentation();
-      bool flagActiveSet(const Point<dim> & p);
-      bool flagActiveSetLambda(const Point<dim> & p, double& criterion);
-      bool flagActiveSetLambda2(const Point<dim> & p, double& criterion);
-      //void updateActiveSet();
-      void measureIndentationLoad();
-      void setActiveSet();
-      void setActiveSet2();
-      void setFrozenSet();
-      void assemble_mass_matrix_diagonal();
-      double Obstacle(const Point<dim> & p, const unsigned int & component, const std::vector<double> & ind);
-
-      ///////These functions are for DIC BCs evaluation
-      void bcFunction1(double _yval, double &value_x, double &value_y, double _currentIncr);
-      void bcFunction2(double _yval, double &value_x, double &value_y, double _currentIncr);
-      void bcFunction3(double _yval, double &value_x, double &value_y, double _currentIncr);
-      void bcFunction4(double _yval, double &value_x, double &value_y, double _currentIncr);
-
-
-      std::map<types::global_dof_index, Point<dim> > supportPoints;
-
-      //parallel data structures
-      vectorType solution, oldSolution, residual;
-      vectorType solutionWithGhosts, solutionIncWithGhosts;
-      //INDENTATION
-      vectorType  newton_rhs_uncondensed, newton_rhs_uncondensed_inc, diag_mass_matrix_vector;
-      vectorType  lambda;
-
-      matrixType jacobian;
-
-      // Boundary condition variables
-      std::vector<std::vector<bool>> faceDOFConstrained;
-      std::vector<std::vector<double>> deluConstraint;
-
-      FullMatrix<double> tabularDisplacements,tabularInputNeumannBCs;
-      unsigned int timeCounter,timeCounter_Neumann;
-      double currentTime;
-      /////DIC bc names
-      FullMatrix<double> bc_new1,bc_new2,bc_new3,bc_new4;
-
-      FullMatrix<double> Fprev=IdentityMatrix(dim);
-      FullMatrix<double> F,deltaF;
-      FullMatrix<double> targetVelGrad;
-      //misc variables
-      double delT,totalT,cycleTime;
-      unsigned int currentIteration, currentIncrement;
-      unsigned int totalIncrements,periodicTotalIncrements;
-      bool resetIncrement;
-      double loadFactorSetByModel;
-      double totalLoadFactor;
-      //INDENTATION
-      double currentIndentDisp;
-
-      //parallel message stream
-      ConditionalOStream  pcout;
-
-      //compute-time logger
-      TimerOutput computing_timer;
-
-      //output variables
-      //solution name array
-      std::vector<std::string> nodal_solution_names;
-      std::vector<DataComponentInterpretation::DataComponentInterpretation> nodal_data_component_interpretation;
-
-      //post processing
-      unsigned int numPostProcessedFields;
-      unsigned int numPostProcessedFieldsAtCellCenters;
-      //postprocessed scalar variable name array (only scalar variables supported currently, will be extended later to vectors and tensors, if required.)
-      std::vector<std::string> postprocessed_solution_names, postprocessedFieldsAtCellCenters_solution_names;
-      //postprocessing data structures
-      std::vector<vectorType*> postFields, postFieldsWithGhosts, postResidual;
-      matrixType massMatrix;
-      Table<4,double> postprocessValues;
-      Table<2,double> postprocessValuesAtCellCenters;
-
-      //user model related variables and methods
-      #ifdef enableUserModel
-      unsigned int numQuadHistoryVariables;
-      Table<3, double> quadHistory;
-      virtual void initQuadHistory();
-      #endif
-    };
+  //methods to allow for pre/post iteration updates
+  virtual void updateBeforeIteration();
+  virtual void updateAfterIteration();
+  virtual bool testConvergenceAfterIteration();
+  //methods to allow for pre/post increment updates
+  virtual void updateBeforeIncrement();
+  virtual void updateAfterIncrement();
+  void updateAfterIncrementBase();
+  //methods to apply dirichlet BC's and initial conditions
+  void applyDirichletBCs();
+  void applyInitialConditions();
+  void setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value);
+  ///////These functions are for Periodic BCs Implementation
+  void setPeriodicity();
+  void setPeriodicityConstraintsInit();
+  void setPeriodicityConstraints();
+  void setPeriodicityConstraintsInc0();
+  void setPeriodicityConstraintsIncNot0();
+  void setPeriodicityConstraintsInc0Neg();
+///////These functions are for Indentation BCs Implementation
+  void updateIndentPos();
+  void setIndentation(const Point<dim>& node, const unsigned int dof, bool& flag, double& value);
+  void setIndentation2(const Point<dim>& node, const unsigned int dof, bool& flag, double& value,
+                       double& criterion);
+  void setIndentationConstraints();
+  void displaceNode(const Point<dim> & p, const Point<dim> & u);
+  void meshRefineIndentation();
+  bool flagActiveSet(const Point<dim> & p);
+  bool flagActiveSetLambda(const Point<dim> & p, double& criterion);
+  bool flagActiveSetLambda2(const Point<dim> & p, double& criterion);
+  //void updateActiveSet();
+  void measureIndentationLoad();
+  void setActiveSet();
+  void setActiveSet2();
+  void setFrozenSet();
+  void assemble_mass_matrix_diagonal();
+  double Obstacle(const Point<dim> & p, const unsigned int & component, const std::vector<double> & ind);
+  ///////These functions are for DIC BCs evaluation
+  void bcFunction1(double _yval, double &value_x, double &value_y, double _currentIncr);
+  void bcFunction2(double _yval, double &value_x, double &value_y, double _currentIncr);
+  void bcFunction3(double _yval, double &value_x, double &value_y, double _currentIncr);
+  void bcFunction4(double _yval, double &value_x, double &value_y, double _currentIncr);
+  std::map<types::global_dof_index, Point<dim> > supportPoints;
+  //parallel data structures
+  vectorType solution, oldSolution, residual;
+  vectorType solutionWithGhosts, solutionIncWithGhosts;
+  //INDENTATION
+  vectorType  newton_rhs_uncondensed, newton_rhs_uncondensed_inc, diag_mass_matrix_vector;
+  vectorType  lambda;
+  matrixType jacobian;
+  // Boundary condition variables
+  std::vector<std::vector<bool>> faceDOFConstrained;
+  std::vector<std::vector<double>> deluConstraint;
+  FullMatrix<double> tabularDisplacements,tabularInputNeumannBCs;
+  unsigned int timeCounter,timeCounter_Neumann;
+  double currentTime;
+  /////DIC bc names
+  FullMatrix<double> bc_new1,bc_new2,bc_new3,bc_new4;
+  FullMatrix<double> Fprev=IdentityMatrix(dim);
+  FullMatrix<double> F,deltaF;
+  FullMatrix<double> targetVelGrad;
+  //misc variables
+  double delT,totalT,cycleTime;
+  unsigned int currentIteration, currentIncrement;
+  unsigned int totalIncrements,periodicTotalIncrements;
+  bool resetIncrement;
+  double loadFactorSetByModel;
+  double totalLoadFactor;
+  //INDENTATION
+  double currentIndentDisp;
+  //parallel message stream
+  ConditionalOStream  pcout;
+  //compute-time logger
+  TimerOutput computing_timer;
+  //output variables
+  //solution name array
+  std::vector<std::string> nodal_solution_names;
+  std::vector<DataComponentInterpretation::DataComponentInterpretation> nodal_data_component_interpretation;
+  //post processing
+  unsigned int numPostProcessedFields;
+  unsigned int numPostProcessedFieldsAtCellCenters;
+  //postprocessed scalar variable name array (only scalar variables supported currently, will be extended later to vectors and tensors, if required.)
+  std::vector<std::string> postprocessed_solution_names, postprocessedFieldsAtCellCenters_solution_names;
+  //postprocessing data structures
+  std::vector<vectorType*> postFields, postFieldsWithGhosts, postResidual;
+  matrixType massMatrix;
+  Table<4,double> postprocessValues;
+  Table<2,double> postprocessValuesAtCellCenters;
+  //user model related variables and methods
+  #ifdef enableUserModel
+  unsigned int numQuadHistoryVariables;
+  Table<3, double> quadHistory;
+  virtual void initQuadHistory();
+  #endif
+};
 
     #endif

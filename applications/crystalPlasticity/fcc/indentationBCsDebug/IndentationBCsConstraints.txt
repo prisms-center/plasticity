@@ -1,8 +1,0 @@
-# Indentation boundary conditions (for now assume displacement is -z, position is z + r)
-# shape_id string: sphere 0, octahedron 1, cylinder 2; size (center z to bottom extreme); indenter face ID; indenter tolerance
-# original center position (x, y, z)
-# final position (x, y, z)
-2 0.3 6 1e-4
-0.5 0.5 1.299
-0.5 0.5 1.25
-

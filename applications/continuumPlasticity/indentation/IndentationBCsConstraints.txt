@@ -3,8 +3,7 @@
 # indenter position for each "key frame" of tabular positions, separated by /n
 # final indenter position
 0 2000 6 1e-8 0
-1 1 2002
-1 1 2001.99998
-1 1 2001.9996
-1 1 2001.9995
-
+2.0 2.0 2004
+2.0 2.0 2003.99998
+2.0 2.0 2003.9998
+2.0 2.0 2003.9995

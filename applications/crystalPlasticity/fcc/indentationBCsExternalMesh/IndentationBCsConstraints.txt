@@ -1,8 +1,0 @@
-# Indentation boundary conditions (for now assume displacement is -z, position is z + r)
-# shape_id string: sphere 0, octahedron 1, cylinder 2;  indenter size; indenter face ID; tolerance for active set; frictionless = 0, rough = 1;
-# indenter position for each "key frame" of tabular positions, separated by /n
-# final indenter position
-0 0.20 6 1e-8 0
-0.5 0.5 1.2
-0.5 0.5 1.195
-0.5 0.5 1.19

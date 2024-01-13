@@ -1,5 +1,5 @@
 ##
-#  CMake script for the step-40 tutorial program:
+#  CMake script for the PRISMS-Plasticity continuum applications:
 ##
 
 # Set the name of the project and target:
@@ -15,14 +15,16 @@ SET(TARGET_SRC
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
 
-FIND_PACKAGE(deal.II 8.0 QUIET
-  HINTS ${deal.II_DIR} ${DEAL_II_DIR} ../ ../../ $ENV{DEAL_II_DIR}
-  )
-IF(NOT ${deal.II_FOUND})
+# Find deal.II installation
+FIND_PACKAGE(deal.II 8.3.0 REQUIRED
+	HINTS ${DEAL_II_DIR} ../ ../../ $ENV{DEAL_II_DIR})
+
+# Check to make sure deal.II is configured with p4est
+IF(NOT ${DEAL_II_WITH_P4EST})
   MESSAGE(FATAL_ERROR "\n"
-    "*** Could not locate deal.II. ***\n\n"
-    "You may want to either pass a flag -DDEAL_II_DIR=/path/to/deal.II to cmake\n"
-    "or set an environment variable \"DEAL_II_DIR\" that contains this path."
+    "*** deal.II was not installed with p4est. ***\n\n"
+    “The p4est library is a mandatory prerequisite for PRISMS-PF. Please consult the \n”
+    “user guide to confirm that deal.II and p4est were installed and configured correctly.”
     )
 ENDIF()
 

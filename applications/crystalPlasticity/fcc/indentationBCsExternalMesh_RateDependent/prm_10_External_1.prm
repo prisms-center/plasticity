@@ -1,0 +1,251 @@
+# Listing of Parameters
+# ---------------------
+
+####################################
+# FE parameters
+####################################
+# Basis function interpolation order (1-linear)
+set Order of finite elements                     = 1
+
+# Quadrature point order n^3 (2->8 quadrature points)
+set Order of quadrature                          = 2
+
+####################################
+# Domain parameters
+####################################
+# Number of physical dimensions for the simulation
+set Number of dimensions                         = 3
+
+# The size of the domain in the x direction.
+set Domain size X                                = 1
+
+# The size of the domain in the y direction.
+set Domain size Y                                = 1
+
+# The size of the domain in the z direction.
+set Domain size Z                                = 1
+
+####################################
+# Mesh parameters
+####################################
+
+#Flag to indicate whether to use external mesh
+set Use external mesh                            = true
+
+#Name of external mesh file
+set Name of file containing external mesh        = mesh10_18at90p.msh
+
+#The external mesh parameter: The ratio of defiend region size to the Domain size
+set External mesh parameter        = 0.0001
+
+####################################
+# Solver output parameters
+####################################
+# Flag to write output vtu and pvtu files
+set Write Output                                 = true
+
+# Output Directory
+
+set Output Directory                             = _Indentation_Frictionless_10_External_mesh10_18at90p
+
+# Skip Output Steps
+set Skip Output Steps                            = 10
+
+# Output Equivalent strain
+set Output Equivalent strain                     = false
+
+# Output Equivalent stress
+set Output Equivalent stress                     = false
+
+# Output Indenter Load
+set Output Indenter Load						 = false
+
+# Output Grain ID
+set Output Grain ID                              = true
+
+# Output Twin fractions
+set Output Twin fractions                        = false
+
+# Output Extra Variables
+set Output CellCenters Variable 1 = true
+set Output CellCenters Variable 2 = true
+set Output CellCenters Variable 3 = true
+set Output CellCenters Variable 4 = true
+set Output CellCenters Variable 5 = true
+set Output CellCenters Variable 6 = true
+set Output CellCenters Variable 7 = true
+set Output CellCenters Variable 8 = true
+set Output CellCenters Variable 9 = true
+set Output CellCenters Variable 10 = true
+set Output CellCenters Variable 11 = true
+set Output CellCenters Variable 12 = true
+set Output CellCenters Variable 13 = true
+set Output CellCenters Variable 14 = true
+set Output CellCenters Variable 15 = true
+set Output CellCenters Variable 16 = true
+set Output CellCenters Variable 17 = true
+set Output CellCenters Variable 18 = true
+set Output CellCenters Variable 19 = true
+set Output CellCenters Variable 20 = true
+set Output CellCenters Variable 21 = true
+set Output CellCenters Variable 22 = true
+set Output CellCenters Variable 23 = true
+set Output CellCenters Variable 24 = true
+set Output CellCenters Variable 25 = true
+set Output CellCenters Variable 26 = true
+set Output CellCenters Variable 27 = true
+set Output CellCenters Variable 28 = true
+
+####################################
+# Boundary condition information
+####################################
+#Flag to indicate whether to use Simple (Basic) BCs
+set Use Simple BCs                               = true
+#File name containing BC information
+set Boundary condition filename                  = BCinfo.txt
+
+#BC file number of header lines
+set BC file number of header lines               = 2
+
+#Number of boundary conditions
+set Number of boundary conditions                = 5
+
+set Use Indentation BCs            		   = true
+
+set Indentation Key Frame Number		   = 2
+
+set Indentation Active Set Freeze Iterations 	   = 1
+
+set Indentation Active Set Freeze on Iteration 1   = false
+
+set Active Set Criterion Coefficient 		   = 100
+
+set Active Set Lambda Tolerance 		   = 0.1
+
+
+set Debug Indentation Active Set 		   = false
+
+set Indentation Key Frame Increment Numbers      = 0, 1250
+
+set Indentation Boundary condition Constraint filename      = Indentation_Frictionless.txt
+
+set Refinement Zone Center	      		   = 0.5, 0.5, 1
+
+set Refinement Zone Size	      		   = 0.5,0.25,0.1
+
+set Refinement Factor			   	   = 0, 0, 0
+
+
+####################################
+# Solver parameters
+####################################
+#delta T for every increment
+set Time increments                              = 0.002
+
+#Total simulation time
+set Total time                                   = 2.5
+
+# Maximum iterations for linear solver
+set Maximum linear solver iterations             = 100000
+
+# Relative linear solver tolerance
+set Relative linear solver tolerance             = 1.0e-11
+
+# Maximum no. of non-linear iterations
+set Maximum non linear iterations                = 6
+
+####################################
+# Elasticity parameters
+####################################
+# Flag to indicate if User Material Model is enabled
+set Enable User Material Model                   = true
+
+# Flag to indicate if User Material Model is enabled Phase 1
+set Enable User Material Model 1                  = true
+
+# Initial guess stress flag
+set Advanced Rate Dependent Model enabled  = false
+
+# Number of User Material Constants in a Material model Phase 1
+set Number of User Material Constants 1              = 12
+
+# Number of User Material State Variables in a Material model Phase 1
+set Number of User Material State Variables 1        = 80
+
+# Material Constants in a Material model Phase 1
+set User Material Constants 1             = 1.0e-3, 0.04 , 1.0e-6 , 1.0e-6 ,  10000 , 10000,  0, 0, 0, 0 , 0.0, 0.0
+
+# Material State Variables in a Material model Phase 1
+set User Material State Variables Initial Values 1        = 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 , 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 , 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 , 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+####################################
+# Elasticity parameters
+####################################
+
+#   Elastic Stiffness Matrix -Voigt Notation (MPa)
+set Elastic Stiffness row 1                      = 170.0e3, 124.0e3, 124.0e3, 0, 0, 0
+
+# 	Elastic Stiffness Matrix -Voigt Notation (MPa)
+set Elastic Stiffness row 2                      = 124.0e3, 170.0e3, 124.0e3, 0, 0, 0
+
+# 	Elastic Stiffness Matrix -Voigt Notation (MPa)
+set Elastic Stiffness row 3                      = 124.0e3, 124.0e3, 170.0e3, 0, 0, 0
+
+# 	Elastic Stiffness Matrix -Voigt Notation (MPa)
+set Elastic Stiffness row 4                      = 0, 0, 0, 75.0e3, 0, 0
+
+# 	Elastic Stiffness Matrix -Voigt Notation (MPa)
+set Elastic Stiffness row 5                      = 0, 0, 0, 0, 75.0e3, 0
+
+# 	Elastic Stiffness Matrix -Voigt Notation (MPa)
+set Elastic Stiffness row 6                      = 0, 0, 0, 0, 0, 75.0e3
+
+####################################
+# Slip parameters
+####################################
+# Number of Slip Systems
+set Number of Slip Systems                       = 12
+
+# Latent Hardening Ratio
+set Latent Hardening Ratio filename                       = LatentHardeningRatio.txt
+
+# RSS of the slip sytems
+set Initial Slip Resistance                      = 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0
+
+#set Initial Slip Resistance                      = 16.0e8, 16.0e8, 16.0e8, 16.0e8, 16.0e8, 16.0e8, 16.0e8, 16.0e8, 16.0e8, 16.0e8, 16.0e8, 16.0e8
+
+# Heardening moduli of slip systems
+
+
+set Initial Hardening Modulus                    = 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0
+
+#set Initial Hardening Modulus                    = 0,0,0,0,0,0,0,0,0,0,0,0
+
+# Power law coefficient
+set Power Law Exponent                           = 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25
+
+# Saturation stress
+set Saturation Stress                            = 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0
+#set Saturation Stress                            = 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0
+#set Saturation Stress                            = 16.0e9, 16.0e9, 16.0e9, 16.0e9, 16.0e9, 16.0e9, 16.0e9, 16.0e9, 16.0e9, 16.0e9, 16.0e9, 16.0e9
+# Slip Directions File
+set Slip Directions File                         = slipDirections.txt
+
+# Slip Normals File
+set Slip Normals File                            = slipNormals.txt
+####################################
+# Constitutive model parameters
+####################################
+# Stress tolerance for the yield surface (MPa)
+set Stress Tolerance                             = 1.0e-9
+
+# Maximum no. of active slip search iterations
+set Max Slip Search Iterations                   = 1
+
+# Maximum no. of iterations to achieve non-linear convergence
+set Max Solver Iterations                        = 1
+
+####################################
+# Input microstructure
+####################################
+# Grain orientations file name
+set Orientations file name                       = orientations_10.txt

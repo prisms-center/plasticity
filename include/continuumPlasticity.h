@@ -31,10 +31,10 @@ class continuumPlasticity : public ellipticBVP<dim>
   materialProperties properties;
 
  private:
-    /**
-   *Initialize and resize class data structures.
-   */
-    void initcont(unsigned int num_quad_points);
+  /**
+  *Initialize and resize class data structures.
+  */
+  void initcont(unsigned int num_quad_points);
   //void setBoundaryValues(const Point<dim>& node, const unsigned int dof, bool& flag, double& value);
   //void mesh();
   //void markBoundaries();
@@ -45,13 +45,8 @@ class continuumPlasticity : public ellipticBVP<dim>
    *and the plastic variables for the previous increment to calculate the
    *current values for the plastic variables, as well as the stress and tangent modulus.
    */
-  void calculatePlasticity(unsigned int cellID,
-			   unsigned int quadPtID);
-  void getElementalValues(FEValues<dim>& fe_values,
-			  unsigned int dofs_per_cell,
-			  unsigned int num_quad_points,
-			  FullMatrix<double>& elementalJacobian,
-			  Vector<double>&     elementalResidual);
+  void calculatePlasticity(unsigned int cellID, unsigned int quadPtID);
+  void getElementalValues(FEValues<dim>& fe_values, unsigned int dofs_per_cell, unsigned int num_quad_points, FullMatrix<double>& elementalJacobian, Vector<double>&elementalResidual);
   void updateAfterIteration();
   void updateAfterIncrement();
   void updateBeforeIteration();
@@ -158,10 +153,10 @@ class continuumPlasticity : public ellipticBVP<dim>
    *Marker to show if the function "init" has been called.
    */
   bool initCalled;
-    /**
-   *Marker to show if the plasticity should be neglected in the current iteration.
-   */
-   bool pausePlastic;
+  /**
+  *Marker to show if the plasticity should be neglected in the current iteration.
+  */
+  bool pausePlastic;
   /**
    *Vector of variables/parameters for the elastic strain energy density function (pfunction).
    */
