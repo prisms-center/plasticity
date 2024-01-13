@@ -7,7 +7,10 @@
 #include "parameters.h"
 
 //dealIIheaders
+#include "../../../include/ellipticBVP.h"
+#include "../../../include/userInputParameters.h"
 #include "../../../src/materialModels/continuumPlasticity/continuumPlasticity.h"
+
 
 //Specify Dirichlet boundary conditions 
 template <int dim>
@@ -38,7 +41,32 @@ int main (int argc, char **argv)
   try
     {
       deallog.depth_console(0);
-      continuumPlasticity<3> problem;
+      //std::list<std::string> args;
+      ParameterHandler parameter_handler;
+      //const std::string parameter_file = args.front ();
+      //userInputParameters userInputs(parameter_file,parameter_handler);"prm.prm"
+      userInputParameters userInputs("prm.prm",parameter_handler);
+
+      //copy parameter values to userInputs to properly initialize problem
+      // ultimately, it would be nice to unify parameter inputs in prm.prm
+      userInputs.feOrder = feOrder;
+      userInputs.quadOrder = quadOrder;
+      userInputs.span[0] = spanX;
+      userInputs.span[1] = spanY;
+      userInputs.span[2] = spanZ;
+      userInputs.subdivisions[0] = subdivisionsX;
+      userInputs.subdivisions[1] = subdivisionsY;
+      userInputs.subdivisions[2] = subdivisionsZ;
+      userInputs.meshRefineFactor = meshRefineFactor;
+      userInputs.writeMeshToEPS = writeMeshToEPS;
+      userInputs.writeOutput = writeOutput;
+      userInputs.maxLinearSolverIterations = maxLinearSolverIterations;
+      userInputs.maxNonLinearIterations = maxNonLinearIterations;
+      userInputs.skipOutputSteps = skipOutputSteps;
+
+
+
+      continuumPlasticity<3> problem(userInputs); //error here (1)
 			
       //Read material parameters
       problem.properties.lambda = lame_lambda;
@@ -51,8 +79,9 @@ int main (int argc, char **argv)
       problem.properties.strainEnergyModel = strain_energy_function;
       problem.properties.yieldModel = yield_function;
       problem.properties.isoHardeningModel = iso_hardening_function;
+      problem.properties.stopOnConvergenceFailure = stopOnConvergenceFailure;
 
-      problem.run ();
+      problem.run();
     }
   catch (std::exception &exc)
     {

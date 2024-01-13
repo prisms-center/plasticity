@@ -451,16 +451,18 @@ void ellipticBVP<dim>::bcFunction4(double xval, double &value_x, double &value_y
 //methods to apply dirichlet BC's
 template <int dim>
 void ellipticBVP<dim>::applyDirichletBCs(){
-
+    //pcout<<"debug setDirichlet 0\n";
   if(!userInputs.enablePeriodicBCs){
+     // pcout<<"debug setDirichlet b1\n";
     constraints.clear();
     constraints.reinit (locally_relevant_dofs);
     DoFTools::make_hanging_node_constraints (dofHandler, constraints);
     const unsigned int   dofs_per_cell   = FE.dofs_per_cell;
+     // pcout<<"debug setDirichlet b2\n";
     std::vector<types::global_dof_index> local_dof_indices (dofs_per_cell);
     FEValues<dim> fe_values (FE, QGauss<dim>(userInputs.quadOrder), update_values);
     FEFaceValues<dim> fe_face_values (FE, QGauss<dim-1>(userInputs.quadOrder), update_values);
-
+     // pcout<<"debug setDirichlet b3\n";
     //parallel loop over all elements
     typename DoFHandler<dim>::active_cell_iterator cell = dofHandler.begin_active(), endc = dofHandler.end();
     for (; cell!=endc; ++cell) {
@@ -498,7 +500,16 @@ void ellipticBVP<dim>::applyDirichletBCs(){
   else{
     setPeriodicityConstraints();
   }
-
+  if (userInputs.enableIndentationBCs){
+      //pcout<<"debug setDirichlet c1\n";
+      setIndentationConstraints();
+      //pcout<<"debug setDirichlet c2\n";
+      constraints.merge(indentation_constraints,dealii::AffineConstraints<>::right_object_wins);
+      //pcout<<"debug setDirichlet c3\n";
+      //indentation conditions will overwrite dirichlet conditions from other sources (as we prefer)
+  }
   constraints.close ();
+  //pcout<<"debug setDirichlet 4\n";
+
 }
 #include "../../include/ellipticBVP_template_instantiations.h"

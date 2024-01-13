@@ -26,7 +26,6 @@ void ellipticBVP<dim>::run(){
   computing_timer.leave_subsection("mesh and initialization");
   #endif
 
-  //solve();
   solve();
 }
 #include "../../include/ellipticBVP_template_instantiations.h"

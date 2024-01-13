@@ -197,7 +197,132 @@ void ellipticBVP<dim>::init(){
       jacobian.reinit (locally_owned_dofs, locally_owned_dofs, dsp, mpi_communicator);
     #endif
     }
+//INDENTATION
+    if(userInputs.enableIndentationBCs){
 
+      locally_relevant_ghost_dofs = locally_relevant_dofs;
+      locally_relevant_ghost_dofs.subtract_set(locally_owned_dofs);
+
+      std::ifstream IndentationBCfile(userInputs.Indentation_BCfilename);
+
+      //read 5 header lines for documentation for now!!!
+      // read 4 data lines for now!!
+
+      if (IndentationBCfile.is_open()){
+            KeyPosIndenter.resize(userInputs.indentationKeyFrames);
+            initPosIndenter.resize(dim);
+            finalPosIndenter.resize(dim);
+            currentPosIndenter.resize(dim);
+            prevPosIndenter.resize(dim);
+            pcout << "Reading Indentation boundary conditions\n";
+            for (unsigned int i=0; i<4; i++) std::getline (IndentationBCfile,line);
+            //pcout << "After Header lines\n";
+
+            unsigned int temp;
+            unsigned int roughTemp;
+            unsigned int lines =userInputs.indentationKeyFrames + 1;
+            for (unsigned int i=0; i < lines; i++){
+                std::getline (IndentationBCfile,line);
+                std::stringstream ss(line);
+                if (i == 0) {
+                        ss>>indenterShape>>indenterSize>>temp>>indenterTolerance>>roughTemp;
+                        indenterFace = temp - 1;
+                        indentDof = (int)(temp - 1) / (int)2;
+                        if (roughTemp == 0) {
+                            roughIndenter = false;
+                        }
+                        else {
+                            roughIndenter = true;
+                        }
+                    }
+                else {
+                    if (dim==3){
+                        double tem1=0;
+                        double tem2=0;
+                        double tem3=0;
+                        std::string debugstring;
+                        ss>>tem1>>tem2>>tem3;
+                        KeyPosIndenter[i-1](0)=tem1;
+                        KeyPosIndenter[i-1](1)=tem2;
+                        KeyPosIndenter[i-1](2)=tem3;
+                    }
+                    else if (dim==2){
+                        double tem1=0, tem2=0;
+                        ss>>tem1>>tem2;
+                        KeyPosIndenter[i-1](0)=tem1;
+                        KeyPosIndenter[i-1](1)=tem2;
+                    }
+                    pcout<<KeyPosIndenter[i-1](0)<<" "<<KeyPosIndenter[i-1](1)<<" "<<KeyPosIndenter[i-1](2)<<"\n";
+                }
+            }
+            for (unsigned int i=0; i<3; i++){
+//                currentPosIndenter[i] = initPosIndenter[i];
+//                prevPosIndenter[i] = initPosIndenter[i];
+                currentPosIndenter[i] = KeyPosIndenter[0](i);
+                prevPosIndenter[i] = KeyPosIndenter[0](i);
+            }
+
+        }
+      if (indenterFace == 5) loadFace = 4;
+      if (indenterFace == 4) loadFace = 5;
+      if (indenterFace == 3) loadFace = 2;
+      if (indenterFace == 2) loadFace = 3;
+      if (indenterFace == 1) loadFace = 0;
+      if (indenterFace == 0) loadFace = 1;
+
+      if(userInputs.readExternalMesh && false){ // DISABLE FOR IMPORTING BOUNDARIES AS PHYSICAL SURFACES
+          // Set which (if any) faces of the triangulation are indentation
+          QGaussLobatto<dim - 1> face_quadrature_formula(FE.degree + 1);
+          FEFaceValues<dim> fe_face_values(FE,face_quadrature_formula,update_values | update_JxW_values);
+          const unsigned int dofs_per_cell   = FE.n_dofs_per_cell();
+          std::vector<types::global_dof_index> local_dof_indices(dofs_per_cell);
+          Vector<double> externalMeshParameterBCs(dim);
+          Point<dim> node_BoundaryID;
+          unsigned int globalDOF;
+          for (unsigned int i=0; i<dim; ++i) {
+            externalMeshParameterBCs(i)=this->userInputs.externalMeshParameter*this->userInputs.span[i];
+          }
+          for (const auto &cell : dofHandler.active_cell_iterators()){
+            if (cell->is_locally_owned()) {
+              //std::cout << "cell locally owned! "<< std::endl;
+              for (unsigned int faceID = 0; faceID < GeometryInfo<dim>::faces_per_cell; faceID++) { //(const auto &face: cell->face_iterators()){
+                if (cell->face(faceID)->at_boundary()) { //(face->at_boundary() && face->boundary_id()==indenterFace) {
+                    fe_face_values.reinit(cell, faceID);
+                  cell->get_dof_indices (local_dof_indices);
+                  for (unsigned int i=0; i<dofs_per_cell; ++i) {
+                    if (fe_face_values.shape_value(i, 0)!=0){ //skip cell support points not on face
+                      globalDOF=local_dof_indices[i];
+                      node_BoundaryID=this->supportPoints[globalDOF];
+                      unsigned int boundary= dim * 2 + 1;
+                      for (unsigned int i2=0; i2<dim; ++i2)
+                      {
+                          if (node_BoundaryID[i2] <= externalMeshParameterBCs(0)) {
+                              if (boundary == dim * 2 + 1) boundary = 2 * i2;
+                              else boundary = 2 * dim;
+                              //cell->face(faceID)->set_boundary_id(2 * i2);
+                              //break;
+                          }
+
+                          if (node_BoundaryID[i2] >= (this->userInputs.span[i2]-externalMeshParameterBCs(0))) {
+                              if (boundary == dim * 2 + 1) boundary = 2 * i2 + 1;
+                              else boundary = 2 * dim;
+                              //break;
+                          }
+                      }
+                      if (boundary < dim * 2){
+                          cell->face(faceID)->set_boundary_id(boundary);
+                          break;
+                      }
+
+                    }
+
+                  }
+                }
+              }
+            }
+          }
+        }
+    }
     // Read boundary conditions
     if((userInputs.enableSimpleBCs)||(userInputs.enableCyclicLoading)){
       std::ifstream BCfile(userInputs.BCfilename);
@@ -224,6 +349,8 @@ void ellipticBVP<dim>::init(){
 
 
     if(userInputs.enableNodalDisplacementBCs){
+
+
       std::ifstream BCfileNodal(userInputs.nodalDisplacement_BCfilename);
       nodalDisplacement.resize(userInputs.numberOfNodalBCs,std::vector<double>(3,0));
       dofNodalDisplacement.resize(userInputs.numberOfNodalBCs);
@@ -242,7 +369,11 @@ void ellipticBVP<dim>::init(){
       }
     }
 
-
+// Isotropic Continuum
+//    if(userInputs.continuum_Isotropic){
+//        numPostProcessedFields = 2;
+//        numPostProcessedFieldsAtCellCenters = 1;
+//    }
 
     if(userInputs.useVelocityGrad){
       targetVelGrad.reinit(3,3); targetVelGrad=0.0;
@@ -423,5 +554,6 @@ void ellipticBVP<dim>::init(){
     applyInitialConditions();
     solutionWithGhosts=solution;
     oldSolution=solution;
+
   }
   #include "../../include/ellipticBVP_template_instantiations.h"

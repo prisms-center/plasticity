@@ -18,12 +18,21 @@ void ellipticBVP<dim>::output(){
   //add postprocessing fields
   unsigned int numPostProcessedFieldsWritten=0;
   for (unsigned int field=0; field<numPostProcessedFields; field++){
-  if(!userInputs.output_Eqv_strain)
-    if (postprocessed_solution_names[field].compare(std::string("Eqv_strain"))==0) continue;
-  if(!userInputs.output_Eqv_stress)
-    if (postprocessed_solution_names[field].compare(std::string("Eqv_stress"))==0) continue;
-  if(!userInputs.output_Twin)
-    if (postprocessed_solution_names[field].compare(std::string("Twin"))==0) continue;
+    if(!userInputs.output_Eqv_strain)
+        if (postprocessed_solution_names[field].compare(std::string("Eqv_strain"))==0) continue;
+    if(!userInputs.output_Eqv_stress)
+        if (postprocessed_solution_names[field].compare(std::string("Eqv_stress"))==0) continue;
+    if (userInputs.continuum_Isotropic){
+      if(!userInputs.output_alpha)
+        if (postprocessed_solution_names[field].compare(std::string("alpha"))==0) continue;
+    }
+    else {
+      if(!userInputs.output_Twin)
+        if (postprocessed_solution_names[field].compare(std::string("Twin"))==0) continue;
+    }
+
+
+//pcout<<"field="<<field<<"step1\n";
 
   if(!userInputs.output_Var1)
     if (postprocessed_solution_names[field].compare(std::string("output_Var1"))==0) continue;

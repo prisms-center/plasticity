@@ -29,7 +29,12 @@ void crystalPlasticity<dim>::updateBeforeIncrement()
     this->deltaF.add(-1,this->Fprev); //deltaF=F-Fprev
 
     this->Fprev=this->F;
+    if (this->userInputs.enableIndentationBCs){
+        this->pcout << "enableIndentationBCs\n";
+        this->updateIndentPos();
+    }
   }
+
   //call base class project() function to project post processed fields
   //ellipticBVP<dim>::project();
 }

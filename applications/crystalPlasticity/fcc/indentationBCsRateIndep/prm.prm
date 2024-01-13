@@ -1,0 +1,224 @@
+# Listing of Parameters
+# ---------------------
+
+####################################
+# FE parameters
+####################################
+# Basis function interpolation order (1-linear)
+set Order of finite elements                     = 1
+
+# Quadrature point order n^3 (2->8 quadrature points)
+set Order of quadrature                          = 2
+
+####################################
+# Domain parameters
+####################################
+# Number of physical dimensions for the simulation
+set Number of dimensions                         = 3
+
+# The size of the domain in the x direction.
+set Domain size X                                = 1
+
+# The size of the domain in the y direction.
+set Domain size Y                                = 1
+
+# The size of the domain in the z direction.
+set Domain size Z                                = 1
+
+####################################
+# Mesh parameters
+####################################
+
+##############Important Note for Periodic BCs Mesh###############
+#Note: set Refine factor must always be zero and one must use Subdivisions to refine mesh.
+##############Important Note for Periodic BCs Mesh###############
+
+# The number of mesh subdivisions in the x direction.
+set Subdivisions X                               = 1
+
+# The number of mesh subdivisions in the y direction.
+set Subdivisions Y                               = 1
+
+# The number of mesh subdivisions in the z direction.
+set Subdivisions Z                               = 1
+
+# The number of initial refinements of the coarse mesh.
+set Refine factor                                = 4
+
+# Only written for serial runs and if number of elements < 10000
+set Write Mesh To EPS                            = true
+
+####################################
+# Solver output parameters
+####################################
+# Flag to write output vtu and pvtu files
+set Write Output                                 = true
+
+# Output Directory
+
+set Output Directory                             = results_test_ratedep1
+
+# Skip Output Steps
+set Skip Output Steps                            = 0
+
+# Output Equivalent strain
+set Output Equivalent strain                     = true
+
+# Output Equivalent stress
+set Output Equivalent stress                     = true
+
+# Output Indenter Load
+set Output Indenter Load						 = true
+
+# Output Grain ID
+set Output Grain ID                              = true
+
+# Output Twin fractions
+set Output Twin fractions                        = false
+
+####################################
+# Boundary condition information
+####################################
+#Flag to indicate whether to use Simple (Basic) BCs
+set Use Simple BCs                               = true
+#File name containing BC information
+set Boundary condition filename                  = BCinfo.txt
+
+#BC file number of header lines
+set BC file number of header lines               = 2
+
+#Number of boundary conditions
+set Number of boundary conditions                = 5
+
+set Use Indentation BCs               = true
+
+set Indentation Boundary condition Constraint filename      = IndentationBCsConstraints.txt
+
+set Indentation Refinement Zone Depth Multiplier	      = 5
+
+set Indentation Refinement Zone Radius Multiplier	      = 1.2
+
+set Indentation Refinement Factor			      = 3
+
+set Indenter Position Initial                               = 0, 0, 1.15
+
+set Indenter Position Final                                 = 0, 0, 1.1499
+
+set Indenter Size                                           = 0.15
+
+#set Number of Vertices Constraints                       = 12
+
+#set Number of Edges Constraints                          = 27
+
+#set Number of Faces Constraints                          = 9
+
+#set Vertices Periodic BCs row order:
+# 0=V000_1;1=V000_2;2=V000_3; 3=V100_1;4=V100_2;5=V100_3; 6=V010_1;7=V010_2;8=V010_3; 9=V001_1;10=V001_2;11=V001_3;
+# 12=V110_1;13=V110_2;14=V110_3; 15=V101_1;16=V101_2;17=V101_3; 18=V011_1;19=V011_2;20=V011_3; 21=V111_1;22=V111_2;23=V111_3;
+#set Vertices Periodic BCs row 1 = 1,1,1, 1,1,1, 1,0,1, 1,1,0, 1,0,0, 1,0,0, 0,0,0, 1,0,0
+#set Vertices Periodic BCs row 2 = 0,0,0, 0.05,0,0, 0,0,0, 0,0,0, 0.05,0,0, 0.05,0,0, 0,0,0, 0.05,0,0
+
+#set Enable Nodal Displacement BCs =true
+#set Number of Nodal Displacement BCs = 4
+#set Tolerance for Nodal Displacement BCs=1e-8
+#set Nodal Displacement BCs filename= NodalBCs.txt
+
+####################################
+# Solver parameters
+####################################
+#delta T for every increment
+set Time increments                              = 0.005
+
+#Total simulation time
+set Total time                                   = 0.02
+
+# Maximum iterations for linear solver
+set Maximum linear solver iterations             = 4000
+
+# Relative linear solver tolerance
+set Relative linear solver tolerance             = 1.0e-11
+
+# Maximum no. of non-linear iterations
+set Maximum non linear iterations                = 4
+
+####################################
+# Elasticity parameters
+####################################
+
+#   Elastic Stiffness Matrix -Voigt Notation (MPa)
+set Elastic Stiffness row 1                      = 107.30e3, 60.90e3, 60.90e3, 0, 0, 0
+
+# 	Elastic Stiffness Matrix -Voigt Notation (MPa)
+set Elastic Stiffness row 2                      = 60.90e3, 107.30e3, 60.90e3, 0, 0, 0
+
+# 	Elastic Stiffness Matrix -Voigt Notation (MPa)
+set Elastic Stiffness row 3                      = 60.90e3, 60.90e3, 107.30e3, 0, 0, 0
+
+# 	Elastic Stiffness Matrix -Voigt Notation (MPa)
+set Elastic Stiffness row 4                      = 0, 0, 0, 28.30e3, 0, 0
+
+# 	Elastic Stiffness Matrix -Voigt Notation (MPa)
+set Elastic Stiffness row 5                      = 0, 0, 0, 0, 28.30e3, 0
+
+# 	Elastic Stiffness Matrix -Voigt Notation (MPa)
+set Elastic Stiffness row 6                      = 0, 0, 0, 0, 0, 28.30e3
+
+####################################
+# Slip parameters
+####################################
+# Number of Slip Systems
+set Number of Slip Systems                       = 12
+
+# Latent Hardening Ratio
+set Latent Hardening Ratio filename                       = LatentHardeningRatio.txt
+
+# RSS of the slip sytems
+#set Initial Slip Resistance                      = 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0, 16.0
+set Initial Slip Resistance                      = 16.0e8, 16.0e8, 16.0e8, 16.0e8, 16.0e8, 16.0e8, 16.0e8, 16.0e8, 16.0e8, 16.0e8, 16.0e8, 16.0e8
+
+# Heardening moduli of slip systems
+set Initial Hardening Modulus                    = 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0
+
+# Power law coefficient
+set Power Law Exponent                           = 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25, 2.25
+
+# Saturation stress
+set Saturation Stress                            = 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0, 148.0
+
+# Slip Directions File
+set Slip Directions File                         = slipDirections.txt
+
+# Slip Normals File
+set Slip Normals File                            = slipNormals.txt
+####################################
+# Constitutive model parameters
+####################################
+# Stress tolerance for the yield surface (MPa)
+set Stress Tolerance                             = 1.0e-9
+
+# Maximum no. of active slip search iterations
+set Max Slip Search Iterations                   = 1
+
+# Maximum no. of iterations to achieve non-linear convergence
+set Max Solver Iterations                        = 1
+
+####################################
+# Input microstructure
+####################################
+# Number of voxels in x direction
+set Voxels in X direction                        = 32
+
+# Number of voxels in y direction
+set Voxels in Y direction                        = 32
+
+# Number of voxels in z direction
+set Voxels in Z direction                        = 32
+
+# Grain ID file name
+set Grain ID file name                           = grainID.txt
+
+# Number of header Lines in grain ID file
+set Header Lines GrainID File                    = 5
+
+# Grain orientations file name
+set Orientations file name                       = orientations.txt

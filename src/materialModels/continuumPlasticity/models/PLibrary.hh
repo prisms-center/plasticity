@@ -7,8 +7,9 @@
 #define PLIBRARY_HH
 
 #include<cstring>
-#include "IntegrationTools/PFunction.hh"
-#include "IntegrationTools/PPieceWise.hh"
+#include "../../../../utils/IntegrationTools/PFunction.hh"
+#include "../../../../utils/IntegrationTools/PPieceWise.hh"
+//#include "../../../../src/ellipticBVP/ellipticBVP.cc"
 
 namespace PRISMS
 {

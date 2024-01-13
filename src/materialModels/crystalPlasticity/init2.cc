@@ -291,6 +291,18 @@ void crystalPlasticity<dim>::init2(unsigned int num_quad_points)
   Fp_iter.resize(num_local_cells, std::vector<FullMatrix<double> >(num_quad_points, Fp_conv_init));
   Fe_iter.resize(num_local_cells, std::vector<FullMatrix<double> >(num_quad_points, Fp_conv_init));
   CauchyStress.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,CauchyStress_init));
+  F_lastIter_Global.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,IdentityMatrix(dim)));
+
+  FirstPiolaStress.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,CauchyStress_init));
+  SecondPiolaStress.resize(num_local_cells,std::vector<FullMatrix<double> >(num_quad_points,CauchyStress_init));
+  workDensity1.reinit(num_local_cells); workDensity1 = 0.0;
+  workDensity2.reinit(num_local_cells); workDensity2 = 0.0;
+  workDensityTotal1.reinit(num_local_cells); workDensityTotal1 = 0.0;
+  workDensityTotal2.reinit(num_local_cells); workDensityTotal2 = 0.0;
+  workDensity1_Tr.reinit(num_local_cells); workDensity1_Tr = 0.0;
+  workDensity2_Tr.reinit(num_local_cells); workDensity2_Tr = 0.0;
+  workDensityTotal1_Tr.reinit(num_local_cells); workDensityTotal1_Tr = 0.0;
+  workDensityTotal2_Tr.reinit(num_local_cells); workDensityTotal2_Tr = 0.0;
   s_alpha_conv.resize(num_local_cells, std::vector<Vector<double> >(num_quad_points, s0_init));
   s_alpha_iter.resize(num_local_cells, std::vector<Vector<double> >(num_quad_points, s0_init));
   slipfraction_iter.resize(num_local_cells, std::vector<std::vector<double> >(num_quad_points, slip_init));

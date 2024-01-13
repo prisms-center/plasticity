@@ -53,7 +53,12 @@ void ellipticBVP<dim>::assemble(){
   jacobian=0.0;
   residual.compress(VectorOperation::add);
   residual=0.0;
-
+  if (userInputs.enableIndentationBCs){
+      newton_rhs_uncondensed_inc.compress(VectorOperation::add);
+      newton_rhs_uncondensed_inc = 0.0;
+      newton_rhs_uncondensed.compress(VectorOperation::add);
+      newton_rhs_uncondensed = 0.0;
+  }
   try{
     //parallel loop over all elements
     typename DoFHandler<dim>::active_cell_iterator cell = dofHandler.begin_active(), endc = dofHandler.end();
@@ -76,6 +81,10 @@ void ellipticBVP<dim>::assemble(){
           jacobian,
           residual);
 
+        if (userInputs.enableIndentationBCs)
+            for (unsigned int i = 0; i < dofs_per_cell; ++i)
+                newton_rhs_uncondensed_inc(local_dof_indices[i]) += elementalResidual(i);
+
           cellID++;
         }
       }
@@ -89,7 +98,6 @@ void ellipticBVP<dim>::assemble(){
       resetIncrement=true;
       loadFactorSetByModel=Utilities::MPI::min(loadFactorSetByModel, mpi_communicator);
     }
-
     //MPI operation to sync data
     residual.compress(VectorOperation::add);
     jacobian.compress(VectorOperation::add);

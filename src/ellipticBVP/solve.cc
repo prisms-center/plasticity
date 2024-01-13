@@ -45,7 +45,7 @@ void ellipticBVP<dim>::solve(){
         #if ((DEAL_II_VERSION_MAJOR < 9)||((DEAL_II_VERSION_MINOR < 3)&&(DEAL_II_VERSION_MAJOR==9)))
         computing_timer.enter_section("postprocess");
         #else
-	computing_timer.enter_subsection("postprocess");
+	    computing_timer.enter_subsection("postprocess");
         #endif
 
         if (currentIncrement%userInputs.skipOutputSteps==0)
@@ -54,9 +54,9 @@ void ellipticBVP<dim>::solve(){
         #if ((DEAL_II_VERSION_MAJOR < 9)||((DEAL_II_VERSION_MINOR < 3)&&(DEAL_II_VERSION_MAJOR==9)))
         computing_timer.exit_section("postprocess");
         #else
-	computing_timer.leave_subsection("postprocess");
+	    computing_timer.leave_subsection("postprocess");
         #endif
-        
+
       }
       else{
         successiveIncs=0;
@@ -67,10 +67,18 @@ void ellipticBVP<dim>::solve(){
     pcout << buffer;
   }
   else
-  for (;currentIncrement<totalIncrements; ++currentIncrement){
+    for (;currentIncrement<totalIncrements; ++currentIncrement){
     pcout << "\nincrement: "  << currentIncrement << std::endl;
+    if (userInputs.enableIndentationBCs){
+        ellipticBVP<dim>::updateBeforeIncrement();
+        if (!userInputs.continuum_Isotropic)
+            updateBeforeIncrement();
+    }
+    else{
+        updateBeforeIncrement();
+    }
     //call updateBeforeIncrement, if any
-    updateBeforeIncrement();
+
 
     if (!userInputs.flagTaylorModel){
       //solve time increment
