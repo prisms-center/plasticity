@@ -46,10 +46,10 @@ set Write Output                                 = true
 
 # Output Directory
 
-set Output Directory                             = _Indentation_Frictionless_10_External_mesh10_18at90p
+set Output Directory                             = _Indentation_Frictionless_External_mesh10_18at90p
 
 # Skip Output Steps
-set Skip Output Steps                            = 10
+set Skip Output Steps                            = 25
 
 # Output Equivalent strain
 set Output Equivalent strain                     = false
@@ -66,37 +66,7 @@ set Output Grain ID                              = true
 # Output Twin fractions
 set Output Twin fractions                        = false
 
-# Output Extra Variables
-set Output CellCenters Variable 1 = true
-set Output CellCenters Variable 2 = true
-set Output CellCenters Variable 3 = true
-set Output CellCenters Variable 4 = true
-set Output CellCenters Variable 5 = true
-set Output CellCenters Variable 6 = true
-set Output CellCenters Variable 7 = true
-set Output CellCenters Variable 8 = true
-set Output CellCenters Variable 9 = true
-set Output CellCenters Variable 10 = true
-set Output CellCenters Variable 11 = true
-set Output CellCenters Variable 12 = true
-set Output CellCenters Variable 13 = true
-set Output CellCenters Variable 14 = true
-set Output CellCenters Variable 15 = true
-set Output CellCenters Variable 16 = true
-set Output CellCenters Variable 17 = true
-set Output CellCenters Variable 18 = true
-set Output CellCenters Variable 19 = true
-set Output CellCenters Variable 20 = true
-set Output CellCenters Variable 21 = true
-set Output CellCenters Variable 22 = true
-set Output CellCenters Variable 23 = true
-set Output CellCenters Variable 24 = true
-set Output CellCenters Variable 25 = true
-set Output CellCenters Variable 26 = true
-set Output CellCenters Variable 27 = true
-set Output CellCenters Variable 28 = true
-
-####################################
+###################################
 # Boundary condition information
 ####################################
 #Flag to indicate whether to use Simple (Basic) BCs
@@ -248,4 +218,4 @@ set Max Solver Iterations                        = 1
 # Input microstructure
 ####################################
 # Grain orientations file name
-set Orientations file name                       = orientations_10.txt
+set Orientations file name                       = orientations.txt

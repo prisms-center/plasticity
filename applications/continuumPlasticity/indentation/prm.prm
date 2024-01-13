@@ -43,7 +43,7 @@ set Subdivisions Y                               = 1
 set Subdivisions Z                               = 1
 
 # The number of initial refinements of the coarse mesh.
-set Refine factor                                = 5
+set Refine factor                                = 4
 
 # Only written for serial runs and if number of elements < 10000
 set Write Mesh To EPS                            = false
@@ -56,7 +56,7 @@ set Write Output                                 = true
 
 # Output Directory
 # Need to create directory before using this. Will be corrected in future versions of the software
-set Output Directory                             = stven_a4_r5
+set Output Directory                             = indentation_continuum
 
 # Skip Output Steps
 set Skip Output Steps                            = 0
@@ -73,26 +73,6 @@ set Output Time                    		   = true
 # Output Indenter Load
 set Output Indenter Load			   = true
 set Output Equivalent plastic strain alpha 	   = true
-# Output Grain ID
-#set Output Grain ID                             = true
-
-# Output Twin fractions
-#set Output Twin fractions                       = false
-
-# Output Extra Variables
-set Output Variable 1 = true
-set Output Variable 2 = true
-set Output Variable 3 = true
-set Output Variable 4 = true
-set Output Variable 5 = true
-set Output Variable 6 = true
-
-set Output Variable 7 = true
-set Output Variable 8 = true
-set Output Variable 9 = true
-set Output Variable 10 = true
-set Output Variable 11 = true
-set Output Variable 12 = true
 
 ####################################
 # Boundary condition information
