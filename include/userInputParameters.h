@@ -142,7 +142,7 @@ public:
 
   bool outputCellCenters_Var1,outputCellCenters_Var2,outputCellCenters_Var3,outputCellCenters_Var4,outputCellCenters_Var5,outputCellCenters_Var6,outputCellCenters_Var7,outputCellCenters_Var8,outputCellCenters_Var9,outputCellCenters_Var10;
   bool outputCellCenters_Var11,outputCellCenters_Var12,outputCellCenters_Var13,outputCellCenters_Var14,outputCellCenters_Var15,outputCellCenters_Var16,outputCellCenters_Var17,outputCellCenters_Var18,outputCellCenters_Var19,outputCellCenters_Var20;
-  bool outputCellCenters_Var21,outputCellCenters_Var22,outputCellCenters_Var23,outputCellCenters_Var24;
+  bool outputCellCenters_Var21,outputCellCenters_Var22,outputCellCenters_Var23,outputCellCenters_Var24,outputCellCenters_Var25,outputCellCenters_Var26,outputCellCenters_Var27,outputCellCenters_Var28;
 
   bool flagBufferLayer; //flag to exclude the data inside the buffer layers and only output the results from the real specimen.
   // This is specifically good for HEDM characterization when you're adding buffer layers to exclude the BCs effects, but one doesn't want to include the data inside the buffer layers.

@@ -168,6 +168,14 @@ void ellipticBVP<dim>::output(){
       if (postprocessedFieldsAtCellCenters_solution_names[field].compare(std::string("outputCellCenters_Var23"))==0) continue;
     if(!userInputs.outputCellCenters_Var24)
       if (postprocessedFieldsAtCellCenters_solution_names[field].compare(std::string("outputCellCenters_Var24"))==0) continue;
+    if(!userInputs.outputCellCenters_Var25)
+      if (postprocessedFieldsAtCellCenters_solution_names[field].compare(std::string("outputCellCenters_Var25"))==0) continue;
+    if(!userInputs.outputCellCenters_Var26)
+      if (postprocessedFieldsAtCellCenters_solution_names[field].compare(std::string("outputCellCenters_Var26"))==0) continue;
+    if(!userInputs.outputCellCenters_Var27)
+      if (postprocessedFieldsAtCellCenters_solution_names[field].compare(std::string("outputCellCenters_Var27"))==0) continue;
+    if(!userInputs.outputCellCenters_Var28)
+      if (postprocessedFieldsAtCellCenters_solution_names[field].compare(std::string("outputCellCenters_Var28"))==0) continue;
 
     cellID=0;
     cell = triangulation.begin_active(), endc = triangulation.end();

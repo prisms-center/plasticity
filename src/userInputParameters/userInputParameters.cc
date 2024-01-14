@@ -218,6 +218,10 @@ pcout (std::cout, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD)==0)
   outputCellCenters_Var22 = parameter_handler.get_bool("Output CellCenters Variable 22");
   outputCellCenters_Var23 = parameter_handler.get_bool("Output CellCenters Variable 23");
   outputCellCenters_Var24 = parameter_handler.get_bool("Output CellCenters Variable 24");
+  outputCellCenters_Var25 = parameter_handler.get_bool("Output CellCenters Variable 25");
+  outputCellCenters_Var26 = parameter_handler.get_bool("Output CellCenters Variable 26");
+  outputCellCenters_Var27 = parameter_handler.get_bool("Output CellCenters Variable 27");
+  outputCellCenters_Var28 = parameter_handler.get_bool("Output CellCenters Variable 28");
 
   flagBufferLayer = parameter_handler.get_bool("Output Buffer Layer Removal Feature");
   dimBufferLayer=parameter_handler.get_integer("Output Buffer Layer Removal dimension x0 y1 z2");
@@ -728,6 +732,10 @@ void userInputParameters::declare_parameters(dealii::ParameterHandler & paramete
   parameter_handler.declare_entry("Output CellCenters Variable 22","false",dealii::Patterns::Bool(),"Output CellCenters Variable 22");
   parameter_handler.declare_entry("Output CellCenters Variable 23","false",dealii::Patterns::Bool(),"Output CellCenters Variable 23");
   parameter_handler.declare_entry("Output CellCenters Variable 24","false",dealii::Patterns::Bool(),"Output CellCenters Variable 24");
+  parameter_handler.declare_entry("Output CellCenters Variable 25","false",dealii::Patterns::Bool(),"Output CellCenters Variable 25");
+  parameter_handler.declare_entry("Output CellCenters Variable 26","false",dealii::Patterns::Bool(),"Output CellCenters Variable 26");
+  parameter_handler.declare_entry("Output CellCenters Variable 27","false",dealii::Patterns::Bool(),"Output CellCenters Variable 27");
+  parameter_handler.declare_entry("Output CellCenters Variable 28","false",dealii::Patterns::Bool(),"Output CellCenters Variable 28");
 
   parameter_handler.declare_entry("Output Buffer Layer Removal Feature","false",dealii::Patterns::Bool(),"Output Buffer Layer Removal Feature");
   parameter_handler.declare_entry("Output Buffer Layer Removal dimension x0 y1 z2","0",dealii::Patterns::Integer(), "MOutput Buffer Layer Removal dimension x0 y1 z2");
