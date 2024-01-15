@@ -1058,33 +1058,63 @@ void ellipticBVP<dim>::setFaceConstraints(AffineConstraints<double>& constraintm
     currentIndexSet=faces_dof_Index_vector[faces_Constraints_Matrix[i][0]];
     nb_dofs_CurrentFace=currentIndexSet.n_elements();
     if (nb_dofs_CurrentFace>0){
-      if (faces_Constraints_Matrix[i][0]==3){
-        DoFTools::make_periodicity_constraints<DoFHandler<dim> >(periodicity_vectorX, constraintmatrix, FE.component_mask(displacementX));
-      }
-      if (faces_Constraints_Matrix[i][0]==4){
-        DoFTools::make_periodicity_constraints<DoFHandler<dim> >(periodicity_vectorX, constraintmatrix, FE.component_mask(displacementY));
-      }
-      if (faces_Constraints_Matrix[i][0]==5){
-        DoFTools::make_periodicity_constraints<DoFHandler<dim> >(periodicity_vectorX, constraintmatrix, FE.component_mask(displacementZ));
-      }
-      if (faces_Constraints_Matrix[i][0]==9){
-        DoFTools::make_periodicity_constraints<DoFHandler<dim> >(periodicity_vectorY, constraintmatrix, FE.component_mask(displacementX));
-      }
-      if (faces_Constraints_Matrix[i][0]==10){
-        DoFTools::make_periodicity_constraints<DoFHandler<dim> >(periodicity_vectorY, constraintmatrix, FE.component_mask(displacementY));
-      }
-      if (faces_Constraints_Matrix[i][0]==11){
-        DoFTools::make_periodicity_constraints<DoFHandler<dim> >(periodicity_vectorY, constraintmatrix, FE.component_mask(displacementZ));
-      }
-      if (faces_Constraints_Matrix[i][0]==15){
-        DoFTools::make_periodicity_constraints<DoFHandler<dim> >(periodicity_vectorZ, constraintmatrix, FE.component_mask(displacementX));
-      }
-      if (faces_Constraints_Matrix[i][0]==16){
-        DoFTools::make_periodicity_constraints<DoFHandler<dim> >(periodicity_vectorZ, constraintmatrix, FE.component_mask(displacementY));
-      }
-      if (faces_Constraints_Matrix[i][0]==17){
-        DoFTools::make_periodicity_constraints<DoFHandler<dim> >(periodicity_vectorZ, constraintmatrix, FE.component_mask(displacementZ));
-      }
+      #if (DEAL_II_VERSION_MAJOR == 9 && DEAL_II_VERSION_MINOR >= 4)
+        if (faces_Constraints_Matrix[i][0]==3){
+          DoFTools::make_periodicity_constraints<dim, dim>(periodicity_vectorX, constraintmatrix, FE.component_mask(displacementX));
+        }
+        if (faces_Constraints_Matrix[i][0]==4){
+          DoFTools::make_periodicity_constraints<dim, dim>(periodicity_vectorX, constraintmatrix, FE.component_mask(displacementY));
+        }
+        if (faces_Constraints_Matrix[i][0]==5){
+          DoFTools::make_periodicity_constraints<dim, dim>(periodicity_vectorX, constraintmatrix, FE.component_mask(displacementZ));
+        }
+        if (faces_Constraints_Matrix[i][0]==9){
+          DoFTools::make_periodicity_constraints<dim, dim>(periodicity_vectorY, constraintmatrix, FE.component_mask(displacementX));
+        }
+        if (faces_Constraints_Matrix[i][0]==10){
+          DoFTools::make_periodicity_constraints<dim, dim>(periodicity_vectorY, constraintmatrix, FE.component_mask(displacementY));
+        }
+        if (faces_Constraints_Matrix[i][0]==11){
+          DoFTools::make_periodicity_constraints<dim, dim>(periodicity_vectorY, constraintmatrix, FE.component_mask(displacementZ));
+        }
+        if (faces_Constraints_Matrix[i][0]==15){
+          DoFTools::make_periodicity_constraints<dim, dim>(periodicity_vectorZ, constraintmatrix, FE.component_mask(displacementX));
+        }
+        if (faces_Constraints_Matrix[i][0]==16){
+          DoFTools::make_periodicity_constraints<dim, dim>(periodicity_vectorZ, constraintmatrix, FE.component_mask(displacementY));
+        }
+        if (faces_Constraints_Matrix[i][0]==17){
+          DoFTools::make_periodicity_constraints<dim, dim>(periodicity_vectorZ, constraintmatrix, FE.component_mask(displacementZ));
+        }
+      #else
+        if (faces_Constraints_Matrix[i][0]==3){
+          DoFTools::make_periodicity_constraints<DoFHandler<dim> >(periodicity_vectorX, constraintmatrix, FE.component_mask(displacementX));
+        }
+        if (faces_Constraints_Matrix[i][0]==4){
+          DoFTools::make_periodicity_constraints<DoFHandler<dim> >(periodicity_vectorX, constraintmatrix, FE.component_mask(displacementY));
+        }
+        if (faces_Constraints_Matrix[i][0]==5){
+          DoFTools::make_periodicity_constraints<DoFHandler<dim> >(periodicity_vectorX, constraintmatrix, FE.component_mask(displacementZ));
+        }
+        if (faces_Constraints_Matrix[i][0]==9){
+          DoFTools::make_periodicity_constraints<DoFHandler<dim> >(periodicity_vectorY, constraintmatrix, FE.component_mask(displacementX));
+        }
+        if (faces_Constraints_Matrix[i][0]==10){
+          DoFTools::make_periodicity_constraints<DoFHandler<dim> >(periodicity_vectorY, constraintmatrix, FE.component_mask(displacementY));
+        }
+        if (faces_Constraints_Matrix[i][0]==11){
+          DoFTools::make_periodicity_constraints<DoFHandler<dim> >(periodicity_vectorY, constraintmatrix, FE.component_mask(displacementZ));
+        }
+        if (faces_Constraints_Matrix[i][0]==15){
+          DoFTools::make_periodicity_constraints<DoFHandler<dim> >(periodicity_vectorZ, constraintmatrix, FE.component_mask(displacementX));
+        }
+        if (faces_Constraints_Matrix[i][0]==16){
+          DoFTools::make_periodicity_constraints<DoFHandler<dim> >(periodicity_vectorZ, constraintmatrix, FE.component_mask(displacementY));
+        }
+        if (faces_Constraints_Matrix[i][0]==17){
+          DoFTools::make_periodicity_constraints<DoFHandler<dim> >(periodicity_vectorZ, constraintmatrix, FE.component_mask(displacementZ));
+        }
+      #endif
     }
     currentIndexSet.clear();
   }

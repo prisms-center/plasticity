@@ -7,7 +7,7 @@ void ellipticBVP<dim>::applyInitialConditions(){
   //pcout << "applying the default zero initial condition\n";
   //default method to apply zero initial conditions on all fields
   VectorTools::interpolate (dofHandler,
-			    ZeroFunction<dim>(dim),
+			    Functions::ZeroFunction<dim>(dim),
 			    solution);
 }
 #include "../../include/ellipticBVP_template_instantiations.h"
