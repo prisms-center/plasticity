@@ -3,7 +3,9 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-using namespace std;
+
+// Using namespace std gets GCC confused in the Boost geometry point_xy.hpp
+//using namespace std;
 
 #include "../../include/crystalPlasticity.h"
 
