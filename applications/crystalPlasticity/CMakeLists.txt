@@ -73,3 +73,6 @@ elseif(${CMAKE_BUILD_TYPE} STREQUAL "DebugRelease")
 else()
 	TARGET_LINK_LIBRARIES(main ${CMAKE_SOURCE_DIR}/../../libprisms_cp_debug.a)
 endif()
+
+set_target_properties(main PROPERTIES OUTPUT_NAME "crystalPlasticity")
+install(TARGETS main RUNTIME)
