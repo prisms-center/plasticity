@@ -41,11 +41,11 @@ PRISMS-Plasticity
   + $ make release <br>
 
 <B>Running an example simulation</B>
-  + $ cd applications/crystalPlasticity/fcc/simpleTension <br>
+  + $ cd fcc/simpleTension <br>
   Making results directory  <br>  
   + $ mkdir results  <br>
   Execution (parallel runs): <br>
-  + $ mpirun -np nprocs $PLAS_DIR/applications/crystalPlasticity/main prm.in<br>
+  + $ mpirun -np nprocs $PLAS_DIR/applications/crystalPlasticity/main prm.prm<br>
   [here nprocs denotes the number of processors]
 
   Updates: Since plasticity code is still under active development,
