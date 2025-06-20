@@ -164,26 +164,27 @@ void ellipticBVP<dim>::setPeriodicityConstraintsInit(){
   const FEValuesExtractors::Scalar  displacementY(1);
   const FEValuesExtractors::Scalar  displacementZ(2);
 
-  std::set< types::boundary_id > boundary_ids1;
+  std::set<types::boundary_id> boundary_ids1;
   boundary_ids1.insert(1);
-  DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementX),dof_FXP_1,boundary_ids1);
-  DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementY),dof_FXP_2,boundary_ids1);
-  DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementZ),dof_FXP_3,boundary_ids1);
-  DoFTools::extract_boundary_dofs(dofHandler, ComponentMask(),dof_FXP,boundary_ids1);
+  dof_FXP_1 = DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementX), boundary_ids1);
+  dof_FXP_2 = DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementY), boundary_ids1);
+  dof_FXP_3 = DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementZ), boundary_ids1);
+  dof_FXP   = DoFTools::extract_boundary_dofs(dofHandler, ComponentMask(), boundary_ids1);
 
-  std::set< types::boundary_id > boundary_ids2;
+  std::set<types::boundary_id> boundary_ids2;
   boundary_ids2.insert(3);
-  DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementX),dof_FYP_1,boundary_ids2);
-  DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementY),dof_FYP_2,boundary_ids2);
-  DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementZ),dof_FYP_3,boundary_ids2);
-  DoFTools::extract_boundary_dofs(dofHandler, ComponentMask(),dof_FYP,boundary_ids2);
+  dof_FYP_1 = DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementX), boundary_ids2);
+  dof_FYP_2 = DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementY), boundary_ids2);
+  dof_FYP_3 = DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementZ), boundary_ids2);
+  dof_FYP   = DoFTools::extract_boundary_dofs(dofHandler, ComponentMask(), boundary_ids2);
 
-  std::set< types::boundary_id > boundary_ids3;
+  std::set<types::boundary_id> boundary_ids3;
   boundary_ids3.insert(5);
-  DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementX),dof_FZP_1,boundary_ids3);
-  DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementY),dof_FZP_2,boundary_ids3);
-  DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementZ),dof_FZP_3,boundary_ids3);
-  DoFTools::extract_boundary_dofs(dofHandler, ComponentMask(),dof_FZP,boundary_ids3);
+  dof_FZP_1 = DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementX), boundary_ids3);
+  dof_FZP_2 = DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementY), boundary_ids3);
+  dof_FZP_3 = DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementZ), boundary_ids3);
+  dof_FZP   = DoFTools::extract_boundary_dofs(dofHandler, ComponentMask(), boundary_ids3);
+
 
 //Here, We merge dof_FXP,dof_FYP, and dof_FZP as dof_FP to include all dofs of positive faces.
   dof_FP=dof_FXP;
@@ -216,28 +217,28 @@ void ellipticBVP<dim>::setPeriodicityConstraintsInit(){
 
 
 //Here, we are doing the same for negative faces.
-  std::set< types::boundary_id > boundary_ids4;
-  boundary_ids4.insert(0);
-  DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementX),dof_FXN_1,boundary_ids4);
-  DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementY),dof_FXN_2,boundary_ids4);
-  DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementZ),dof_FXN_3,boundary_ids4);
-  DoFTools::extract_boundary_dofs(dofHandler, ComponentMask(),dof_FXN,boundary_ids4);
+std::set<types::boundary_id> boundary_ids4;
+boundary_ids4.insert(0);
+dof_FXN_1 = DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementX), boundary_ids4);
+dof_FXN_2 = DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementY), boundary_ids4);
+dof_FXN_3 = DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementZ), boundary_ids4);
+dof_FXN   = DoFTools::extract_boundary_dofs(dofHandler, ComponentMask(), boundary_ids4);
 
-  std::set< types::boundary_id > boundary_ids5;
-  boundary_ids5.insert(2);
-  // const FEValuesExtractors::Scalar  displacementY(1);
-  DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementX),dof_FYN_1,boundary_ids5);
-  DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementY),dof_FYN_2,boundary_ids5);
-  DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementZ),dof_FYN_3,boundary_ids5);
-  DoFTools::extract_boundary_dofs(dofHandler, ComponentMask(),dof_FYN,boundary_ids5);
+std::set<types::boundary_id> boundary_ids5;
+boundary_ids5.insert(2);
+// const FEValuesExtractors::Scalar displacementY(1);
+dof_FYN_1 = DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementX), boundary_ids5);
+dof_FYN_2 = DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementY), boundary_ids5);
+dof_FYN_3 = DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementZ), boundary_ids5);
+dof_FYN   = DoFTools::extract_boundary_dofs(dofHandler, ComponentMask(), boundary_ids5);
 
-  std::set< types::boundary_id > boundary_ids6;
-  boundary_ids6.insert(4);
-  // const FEValuesExtractors::Scalar  displacementZ(2);
-  DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementX),dof_FZN_1,boundary_ids6);
-  DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementY),dof_FZN_2,boundary_ids6);
-  DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementZ),dof_FZN_3,boundary_ids6);
-  DoFTools::extract_boundary_dofs(dofHandler, ComponentMask(),dof_FZN,boundary_ids6);
+std::set<types::boundary_id> boundary_ids6;
+boundary_ids6.insert(4);
+// const FEValuesExtractors::Scalar displacementZ(2);
+dof_FZN_1 = DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementX), boundary_ids6);
+dof_FZN_2 = DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementY), boundary_ids6);
+dof_FZN_3 = DoFTools::extract_boundary_dofs(dofHandler, FE.component_mask(displacementZ), boundary_ids6);
+dof_FZN   = DoFTools::extract_boundary_dofs(dofHandler, ComponentMask(), boundary_ids6);
 
 //Here, We merge dof_FXN,dof_FYN, and dof_FZN as dof_FN to include all dofs of negative faces.
   dof_FN=dof_FXN;
