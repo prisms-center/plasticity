@@ -116,8 +116,8 @@ PRISMS-Plasticity
  
  <B>Current Developers:</B>
 
- + Mohammadreza Yaghoobi Yaghoobi@umich.edu 
- + Aaditya Lakshmanan aadityal@umich.edu
++ Abhishek Kumar abhiks@umich.edu
++ Mohammadreza Yaghoobi yaghoobi@umich.edu 
 
 <B>Further information, questions, issues and bugs:</B>
 
