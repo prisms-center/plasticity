@@ -1115,8 +1115,8 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
                 for (unsigned int i=0;i<n_UserMatStateVar_MultiPhase[3];i++){
                   stateVar_init4(i)=this->userInputs.UserMatStateVar4[i];
                   if (this->userInputs.numberofUserMatStateVar4 != 0){
-                  for (unsigned int i=0;i<n_UserMatStateVar_MultiPhase[3];i++){
-                    stateVar_init4(i)=this->userInputs.UserMatStateVar4[i];
+                    for (unsigned int i=0;i<n_UserMatStateVar_MultiPhase[3];i++){
+                      stateVar_init4(i)=this->userInputs.UserMatStateVar4[i];
 				  }
 				}
               }
