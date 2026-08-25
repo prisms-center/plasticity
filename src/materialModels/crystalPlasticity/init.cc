@@ -1042,19 +1042,9 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
         for (unsigned int i=0;i<Max_n_UserMatStateVar_MultiPhase;i++){
           stateVar_init2(i)=0.0;
         }
-
-	   
-
-
-		  
-        if (this->userInputs.numberofUserMatStateVar2=0){
+        if (this->userInputs.numberofUserMatStateVar2 != 0){
           for (unsigned int i=0;i<n_UserMatStateVar_MultiPhase[1];i++){
             stateVar_init2(i)=this->userInputs.UserMatStateVar2[i];
-            if (this->userInputs.numberofUserMatStateVar2 != 0){
-              for (unsigned int i=0;i<n_UserMatStateVar_MultiPhase[1];i++){
-              stateVar_init2(i)=this->userInputs.UserMatStateVar2[i];
-			  }
-            }
           }
         }
       }
@@ -1079,15 +1069,10 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
           for (unsigned int i=0;i<Max_n_UserMatStateVar_MultiPhase;i++){
             stateVar_init3(i)=0.0;
           }
-          if (this->userInputs.numberofUserMatStateVar3=0){
+          if (this->userInputs.numberofUserMatStateVar3 != 0){
             for (unsigned int i=0;i<n_UserMatStateVar_MultiPhase[2];i++){
               stateVar_init3(i)=this->userInputs.UserMatStateVar3[i];
-			}
-			if (this->userInputs.numberofUserMatStateVar3 != 0){
-              for (unsigned int i=0;i<n_UserMatStateVar_MultiPhase[2];i++){
-                stateVar_init3(i)=this->userInputs.UserMatStateVar3[i];
-			  }
-			}
+            }
           }
         }
 
@@ -1111,14 +1096,9 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
             for (unsigned int i=0;i<Max_n_UserMatStateVar_MultiPhase;i++){
               stateVar_init4(i)=0.0;
             }
-            if (this->userInputs.numberofUserMatStateVar4=0){
-                for (unsigned int i=0;i<n_UserMatStateVar_MultiPhase[3];i++){
-                  stateVar_init4(i)=this->userInputs.UserMatStateVar4[i];
-                  if (this->userInputs.numberofUserMatStateVar4 != 0){
-                    for (unsigned int i=0;i<n_UserMatStateVar_MultiPhase[3];i++){
-                      stateVar_init4(i)=this->userInputs.UserMatStateVar4[i];
-				  }
-				}
+            if (this->userInputs.numberofUserMatStateVar4 != 0){
+              for (unsigned int i=0;i<n_UserMatStateVar_MultiPhase[3];i++){
+                stateVar_init4(i)=this->userInputs.UserMatStateVar4[i];
               }
             }
           }
