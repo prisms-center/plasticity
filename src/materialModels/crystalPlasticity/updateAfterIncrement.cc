@@ -219,19 +219,19 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 					local_strain.add(1.0, temp4);
 					local_stress.add(1.0, temp3);
 					local_microvol = local_microvol + fe_values.JxW(q);
-					for(unsigned int i=0;i<this->userInputs.numTwinSystems1;i++){
-						local_F_r=local_F_r+twinfraction_iter[cellID][q][i]*fe_values.JxW(q);
+					for(unsigned int i=0;i<twinfraction_iter[cellID][q].size();i++){
+						local_F_r = local_F_r + twinfraction_iter[cellID][q][i] * fe_values.JxW(q);
 					}
 
 					if (!this->userInputs.enableAdvancedTwinModel){
 						local_F_e = local_F_e + twin_ouput[cellID][q] * fe_values.JxW(q);
 					}
 					else{
-						local_F_e=local_F_e+ TotaltwinvfK[cellID][q]*fe_values.JxW(q);
+						local_F_e = local_F_e + TotaltwinvfK[cellID][q] * fe_values.JxW(q);
 					}
 
-					for(unsigned int i=0;i<this->userInputs.numSlipSystems1;i++){
-						local_F_s=local_F_s+slipfraction_iter[cellID][q][i]*fe_values.JxW(q);
+					for(unsigned int i=0;i<slipfraction_iter[cellID][q].size();i++){
+						local_F_s = local_F_s + slipfraction_iter[cellID][q][i] * fe_values.JxW(q);
 					}
 
 					if (this->userInputs.flagUserDefinedAverageOutput){
@@ -715,14 +715,10 @@ void crystalPlasticity<dim>::updateAfterIncrement()
 			global_stress[i][j]=Utilities::MPI::sum(local_stress[i][j],this->mpi_communicator)/microvol;
 		}
 	}
-	if (!this->userInputs.enableMultiphase){
-		F_e = Utilities::MPI::sum(local_F_e , this->mpi_communicator)/ microvol;
-		F_r=Utilities::MPI::sum(local_F_r,this->mpi_communicator)/microvol;
-		F_s=Utilities::MPI::sum(local_F_s,this->mpi_communicator)/microvol;
-	}
-	else {
-		F_e=0;F_r=0;F_s=0;
-	}
+	
+	F_e = Utilities::MPI::sum(local_F_e, this->mpi_communicator) / microvol;
+	F_r = Utilities::MPI::sum(local_F_r, this->mpi_communicator) / microvol;
+	F_s = Utilities::MPI::sum(local_F_s, this->mpi_communicator) / microvol;
 
 	if (this->userInputs.flagUserDefinedAverageOutput){
 		for(unsigned int i=0;i<this->userInputs.numberUserDefinedAverageOutput;i++){
