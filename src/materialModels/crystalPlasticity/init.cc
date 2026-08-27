@@ -451,22 +451,20 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
       n_Tslip_systems_Total=n_Tslip_systems_Total+n_Tslip_systems_MultiPhase[i];
     }
 
-    Max_n_slip_systems_MultiPhase=std::max(n_slip_systems_MultiPhase[0],n_slip_systems_MultiPhase[1]);
-    Max_n_slip_systems_MultiPhase=std::max(Max_n_slip_systems_MultiPhase,n_slip_systems_MultiPhase[2]);
-    Max_n_slip_systems_MultiPhase=std::max(Max_n_slip_systems_MultiPhase,n_slip_systems_MultiPhase[3]);
-
-    Max_n_Tslip_systems_MultiPhase=std::max(n_Tslip_systems_MultiPhase[0],n_Tslip_systems_MultiPhase[1]);
-    Max_n_Tslip_systems_MultiPhase=std::max(Max_n_Tslip_systems_MultiPhase,n_Tslip_systems_MultiPhase[2]);
-    Max_n_Tslip_systems_MultiPhase=std::max(Max_n_Tslip_systems_MultiPhase,n_Tslip_systems_MultiPhase[3]);
-
-    Max_n_twin_systems_MultiPhase=std::max(n_twin_systems_MultiPhase[0],n_twin_systems_MultiPhase[1]);
-    Max_n_twin_systems_MultiPhase=std::max(Max_n_twin_systems_MultiPhase,n_twin_systems_MultiPhase[2]);
-    Max_n_twin_systems_MultiPhase=std::max(Max_n_twin_systems_MultiPhase,n_twin_systems_MultiPhase[3]);
-
-    if (this->userInputs.enableUserMaterialModel){
-      Max_n_UserMatStateVar_MultiPhase=std::max(n_UserMatStateVar_MultiPhase[0],n_UserMatStateVar_MultiPhase[1]);
-      Max_n_UserMatStateVar_MultiPhase=std::max(Max_n_UserMatStateVar_MultiPhase,n_UserMatStateVar_MultiPhase[2]);
-      Max_n_UserMatStateVar_MultiPhase=std::max(Max_n_UserMatStateVar_MultiPhase,n_UserMatStateVar_MultiPhase[3]);
+	  
+    Max_n_slip_systems_MultiPhase=n_slip_systems_MultiPhase[0];
+    Max_n_Tslip_systems_MultiPhase=n_Tslip_systems_MultiPhase[0];
+    Max_n_twin_systems_MultiPhase=n_twin_systems_MultiPhase[0];
+    for(unsigned int i=1;i<this->userInputs.numberofPhases;i++){
+      Max_n_slip_systems_MultiPhase=std::max(Max_n_slip_systems_MultiPhase,n_slip_systems_MultiPhase[i]);
+      Max_n_Tslip_systems_MultiPhase=std::max(Max_n_Tslip_systems_MultiPhase,n_Tslip_systems_MultiPhase[i]);
+      Max_n_twin_systems_MultiPhase=std::max(Max_n_twin_systems_MultiPhase,n_twin_systems_MultiPhase[i]);
+    }
+    
+    if (this->userInputs.enableUserMaterialModel){Max_n_UserMatStateVar_MultiPhase=n_UserMatStateVar_MultiPhase[0];
+      for(unsigned int i=1;i<this->userInputs.numberofPhases;i++){
+       	Max_n_UserMatStateVar_MultiPhase=std::max(Max_n_UserMatStateVar_MultiPhase,n_UserMatStateVar_MultiPhase[i]);
+      }
     }
 
     n_alpha_MultiPhase.reinit(n_Tslip_systems_Total,3);
@@ -1044,14 +1042,9 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
         for (unsigned int i=0;i<Max_n_UserMatStateVar_MultiPhase;i++){
           stateVar_init2(i)=0.0;
         }
-        if (this->userInputs.enableUserMaterialModel2){
-          if (this->userInputs.numberofUserMatStateVar2==0){
-            stateVar_init2(1)=0;
-          }
-          else{
-            for (unsigned int i=0;i<n_UserMatStateVar_MultiPhase[1];i++){
-              stateVar_init2(i)=this->userInputs.UserMatStateVar2[i];
-            }
+        if (this->userInputs.numberofUserMatStateVar2 != 0){
+          for (unsigned int i=0;i<n_UserMatStateVar_MultiPhase[1];i++){
+            stateVar_init2(i)=this->userInputs.UserMatStateVar2[i];
           }
         }
       }
@@ -1076,14 +1069,9 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
           for (unsigned int i=0;i<Max_n_UserMatStateVar_MultiPhase;i++){
             stateVar_init3(i)=0.0;
           }
-          if (this->userInputs.enableUserMaterialModel3){
-            if (this->userInputs.numberofUserMatStateVar3==0){
-              stateVar_init3(1)=0;
-            }
-            else{
-              for (unsigned int i=0;i<n_UserMatStateVar_MultiPhase[2];i++){
-                stateVar_init3(i)=this->userInputs.UserMatStateVar3[i];
-              }
+          if (this->userInputs.numberofUserMatStateVar3 != 0){
+            for (unsigned int i=0;i<n_UserMatStateVar_MultiPhase[2];i++){
+              stateVar_init3(i)=this->userInputs.UserMatStateVar3[i];
             }
           }
         }
@@ -1108,14 +1096,9 @@ void crystalPlasticity<dim>::init(unsigned int num_quad_points)
             for (unsigned int i=0;i<Max_n_UserMatStateVar_MultiPhase;i++){
               stateVar_init4(i)=0.0;
             }
-            if (this->userInputs.enableUserMaterialModel4){
-              if (this->userInputs.numberofUserMatStateVar4==0){
-                stateVar_init4(1)=0;
-              }
-              else{
-                for (unsigned int i=0;i<n_UserMatStateVar_MultiPhase[3];i++){
-                  stateVar_init4(i)=this->userInputs.UserMatStateVar4[i];
-                }
+            if (this->userInputs.numberofUserMatStateVar4 != 0){
+              for (unsigned int i=0;i<n_UserMatStateVar_MultiPhase[3];i++){
+                stateVar_init4(i)=this->userInputs.UserMatStateVar4[i];
               }
             }
           }
