@@ -349,7 +349,7 @@ void crystalPlasticity<dim>::calculatePlasticity(unsigned int cellID,
       det_FP_tau=FP_tau.determinant();
       for (unsigned int j=0;j<dim;j++){
         for (unsigned int k=0;k<dim;k++){
-          FP_tau[j][k]=FP_tau[j][k]*pow(det_FP_tau,-1/3);
+          FP_tau[j][k]=FP_tau[j][k]*pow(det_FP_tau,-1.0/3.0);
         }
       }
 
